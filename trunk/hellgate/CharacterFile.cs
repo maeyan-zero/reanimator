@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Runtime.InteropServices;
 using Revival.Common;
+using System.IO;
 
 namespace Hellgate
 {
@@ -66,6 +67,26 @@ namespace Hellgate
         public override byte[] ExportAsDocument()
         {
             throw new NotImplementedException();
+        }
+
+        public CharacterFile()
+        {
+        }
+
+        public void LoadCharacterFromFile(string filePath)
+        {
+            Path = filePath;
+
+            byte[] charBytes = File.ReadAllBytes(Path);
+            ParseFileBytes(charBytes);
+        }
+
+        public static CharacterFile LoadCharacter(string filePath)
+        {
+            CharacterFile character = new CharacterFile();
+            character.LoadCharacterFromFile(filePath);
+
+            return character;
         }
     }
 }

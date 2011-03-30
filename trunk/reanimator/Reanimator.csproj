@@ -173,6 +173,7 @@
       <DependentUpon>SkillPanelControl.cs</DependentUpon>
     </Compile>
     <Compile Include="Forms\HeroEditorFunctions\UnitWrapper.cs" />
+    <Compile Include="Forms\HeroEditorFunctions\UnitWrapper2.cs" />
     <Compile Include="Forms\HeroEditorFunctions\UserValues.cs">
       <SubType>UserControl</SubType>
     </Compile>
@@ -203,6 +204,24 @@
     <Compile Include="Forms\PatchForm.Designer.cs">
       <DependentUpon>PatchForm.cs</DependentUpon>
     </Compile>
+    <Compile Include="Forms\SavegameOverviewControl.cs">
+      <SubType>UserControl</SubType>
+    </Compile>
+    <Compile Include="Forms\SavegameOverviewControl.Designer.cs">
+      <DependentUpon>SavegameOverviewControl.cs</DependentUpon>
+    </Compile>
+    <Compile Include="Forms\SavegameOverviewEntry.cs">
+      <SubType>UserControl</SubType>
+    </Compile>
+    <Compile Include="Forms\SavegameOverviewEntry.Designer.cs">
+      <DependentUpon>SavegameOverviewEntry.cs</DependentUpon>
+    </Compile>
+    <Compile Include="Forms\SavegameOverviewForm.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="Forms\SavegameOverviewForm.Designer.cs">
+      <DependentUpon>SavegameOverviewForm.cs</DependentUpon>
+    </Compile>
     <Compile Include="Forms\ScriptEditor.cs">
       <SubType>Form</SubType>
     </Compile>
@@ -211,7 +230,7 @@
     </Compile>
     <Compile Include="MemoryReader.cs" />
     <Compile Include="Patches.cs" />
-    <Compile Include="Forms\HeroEditorFunctions\Atlas_functions.cs" />
+    <Compile Include="Forms\HeroEditorFunctions\AtlasFunctions.cs" />
     <Compile Include="Forms\HeroEditorFunctions\AttributesControl.cs">
       <SubType>UserControl</SubType>
     </Compile>
@@ -259,7 +278,7 @@
     <Compile Include="Forms\HeroEditorFunctions\ParentStatusControl.Designer.cs">
       <DependentUpon>ParentStatusControl.cs</DependentUpon>
     </Compile>
-    <Compile Include="Forms\HeroEditorFunctions\GetImagesFromTextureFiles.cs">
+    <Compile Include="Forms\HeroEditorFunctions\AtlasImageLoader.cs">
     </Compile>
     <Compile Include="Forms\HeroEditorFunctions\XmlUtilities.cs" />
     <Compile Include="Forms\ItemDisplay.cs">
@@ -385,6 +404,15 @@
     </EmbeddedResource>
     <EmbeddedResource Include="Forms\ItemQualityCalculatorForm\ItemQualityCalculator.resx">
       <DependentUpon>ItemQualityCalculator.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Forms\SavegameOverviewControl.resx">
+      <DependentUpon>SavegameOverviewControl.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Forms\SavegameOverviewEntry.resx">
+      <DependentUpon>SavegameOverviewEntry.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Forms\SavegameOverviewForm.resx">
+      <DependentUpon>SavegameOverviewForm.cs</DependentUpon>
     </EmbeddedResource>
     <EmbeddedResource Include="Forms\TableEditorForm.resx">
       <DependentUpon>TableEditorForm.cs</DependentUpon>

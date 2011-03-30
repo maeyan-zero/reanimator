@@ -705,5 +705,29 @@ namespace Hellgate
              select Path.GetDirectoryName(fileEntry.Directory));
             return stringDirs.ToArray();
         }
+
+
+        /// <summary>
+        /// Allows pre-loading of the specified table(s) to decrease loading times during execution.
+        /// If the table is already loaded nothing will happen.
+        /// </summary>
+        /// <param name="tableIds">A list of tables that should be pre-loaded</param>
+        public void PreLoadTable(List<string> tableIds)
+        {
+            foreach (string tableId in tableIds)
+            {
+                PreLoadTable(tableId);
+            }
+        }
+
+        /// <summary>
+        /// Allows pre-loading of the specified table(s) to decrease loading times during execution.
+        /// If the table is already loaded nothing will happen.
+        /// </summary>
+        /// <param name="tableId">A table that should be pre-loaded</param>
+        public void PreLoadTable(string tableId)
+        {
+            this.GetDataTable(tableId);
+        }
     }
 }

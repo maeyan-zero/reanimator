@@ -7,49 +7,49 @@ using Hellgate;
 
 namespace Reanimator.Forms.HeroEditorFunctions
 {
-    public abstract class CharacterProperty
-    {
-        protected UnitObject _hero;
+    //public abstract class CharacterProperty
+    //{
+    //    protected UnitObject _hero;
 
-        // todo: rewrite protected TableDataSet _dataSet;
-        protected DataTable _statsTable;
+    //    // todo: rewrite protected TableDataSet _dataSet;
+    //    protected DataTable _statsTable;
 
 
-        //// todo: rewrite public CharacterProperty(Unit heroUnit, TableDataSet dataSet)
-        //{
-        //    _hero = heroUnit;
-        //    _dataSet = dataSet;
+    //    //// todo: rewrite public CharacterProperty(Unit heroUnit, TableDataSet dataSet)
+    //    //{
+    //    //    _hero = heroUnit;
+    //    //    _dataSet = dataSet;
 
-        //    _statsTable = _dataSet.GetExcelTableFromStringId("STATS");
-        //}
+    //    //    _statsTable = _dataSet.GetExcelTableFromStringId("STATS");
+    //    //}
 
-        public UnitObject BaseUnit
-        {
-            get { return _hero; }
-            set { _hero = value; }
-        }
+    //    public UnitObject BaseUnit
+    //    {
+    //        get { return _hero; }
+    //        set { _hero = value; }
+    //    }
 
-        public int GetBitCount(string value)
-        {
-            try
-            {
-                DataRow[] row = _statsTable.Select("stat = " + value);
-                int bitCount = (int)row[0]["valbits"];
-                return bitCount;
-            }
-            catch (Exception ex)
-            {
-                throw (ex);
-            }
-        }
+    //    public int GetBitCount(string value)
+    //    {
+    //        try
+    //        {
+    //            DataRow[] row = _statsTable.Select("stat = " + value);
+    //            int bitCount = (int)row[0]["valbits"];
+    //            return bitCount;
+    //        }
+    //        catch (Exception ex)
+    //        {
+    //            throw (ex);
+    //        }
+    //    }
 
-        public int GetBitCount(int code)
-        {
-            DataRow[] row = _statsTable.Select("code = " + code);
-            int bitCount = (int)row[0]["valbits"];
-            return bitCount;
-        }
-    }
+    //    public int GetBitCount(int code)
+    //    {
+    //        DataRow[] row = _statsTable.Select("code = " + code);
+    //        int bitCount = (int)row[0]["valbits"];
+    //        return bitCount;
+    //    }
+    //}
 
     public class UnitWrapper
     {
@@ -308,408 +308,396 @@ namespace Reanimator.Forms.HeroEditorFunctions
         }
     }
 
-    public enum CharacterClass
-    {
-        Guardian_Male = 31354,
-        Guardian_Female = 31098,
-        Blademaster_Male = 30842,
-        Blademaster_Female = 30586,
-        Engineer_Male = 30840,
-        Engineer_Female = 30584,
-        Marksman_Male = 30328,
-        Marksman_Female = 30072,
-        Evoker_Male = 30841,
-        Evoker_Female = 30585,
-        Summoner_Male = 30329,
-        Summoner_Female = 30073,
-        Drone = 29797
-    }
+    //public class CharacterGameMode : CharacterProperty
+    //{
+    //    //public CharacterGameMode(Unit heroUnit, TableDataSet dataSet) : base(heroUnit, dataSet)
+    //    //{
+    //    //}
 
-    public enum GameMode
-    {
-        Elite = 21062,
-        Hardcore = 18243,
-        HardcoreDead = 18499
-    }
+    //    public bool IsElite
+    //    {
+    //        get
+    //        {
+    //            return BaseUnit.PlayerFlags1.Contains((int)GameMode.Elite) || BaseUnit.PlayerFlags2.Contains((int)GameMode.Elite);
+    //        }
+    //        set
+    //        {
+    //            if (value)
+    //            {
+    //                if (!BaseUnit.PlayerFlags1.Contains((int)GameMode.Elite))
+    //                {
+    //                    BaseUnit.PlayerFlags1.Add((int)GameMode.Elite);
+    //                }
+    //                if (!BaseUnit.PlayerFlags2.Contains((int)GameMode.Elite))
+    //                {
+    //                    BaseUnit.PlayerFlags2.Add((int)GameMode.Elite);
+    //                }
+    //            }
+    //            else
+    //            {
+    //                BaseUnit.PlayerFlags1.Remove((int)GameMode.Elite);
+    //                BaseUnit.PlayerFlags2.Remove((int)GameMode.Elite);
+    //            }
+    //        }
+    //    }
 
-    public class CharacterGameMode : CharacterProperty
-    {
-        //public CharacterGameMode(Unit heroUnit, TableDataSet dataSet) : base(heroUnit, dataSet)
-        //{
-        //}
+    //    public bool IsHardcore
+    //    {
+    //        get
+    //        {
+    //            return BaseUnit.PlayerFlags1.Contains((int)GameMode.Hardcore) || BaseUnit.PlayerFlags2.Contains((int)GameMode.Hardcore);
+    //        }
+    //        set
+    //        {
+    //            if (value)
+    //            {
+    //                if (!BaseUnit.PlayerFlags1.Contains((int)GameMode.Hardcore))
+    //                {
+    //                    BaseUnit.PlayerFlags1.Add((int)GameMode.Hardcore);
+    //                }
+    //                if (!BaseUnit.PlayerFlags2.Contains((int)GameMode.Hardcore))
+    //                {
+    //                    BaseUnit.PlayerFlags2.Add((int)GameMode.Hardcore);
+    //                }
+    //            }
+    //            else
+    //            {
+    //                BaseUnit.PlayerFlags1.Remove((int)GameMode.Hardcore);
+    //                BaseUnit.PlayerFlags2.Remove((int)GameMode.Hardcore);
+    //            }
+    //        }
+    //    }
 
-        public bool IsElite
-        {
-            get
-            {
-                return BaseUnit.PlayerFlags1.Contains((int)GameMode.Elite) || BaseUnit.PlayerFlags2.Contains((int)GameMode.Elite);
-            }
-            set
-            {
-                if (value)
-                {
-                    if (!BaseUnit.PlayerFlags1.Contains((int)GameMode.Elite))
-                    {
-                        BaseUnit.PlayerFlags1.Add((int)GameMode.Elite);
-                    }
-                    if (!BaseUnit.PlayerFlags2.Contains((int)GameMode.Elite))
-                    {
-                        BaseUnit.PlayerFlags2.Add((int)GameMode.Elite);
-                    }
-                }
-                else
-                {
-                    BaseUnit.PlayerFlags1.Remove((int)GameMode.Elite);
-                    BaseUnit.PlayerFlags2.Remove((int)GameMode.Elite);
-                }
-            }
-        }
+    //    public bool IsHardcoreDead
+    //    {
+    //        get
+    //        {
+    //            return BaseUnit.PlayerFlags1.Contains((int)GameMode.HardcoreDead) || BaseUnit.PlayerFlags2.Contains((int)GameMode.HardcoreDead);
+    //        }
+    //        set
+    //        {
+    //            if (value)
+    //            {
+    //                if (!BaseUnit.PlayerFlags1.Contains((int)GameMode.HardcoreDead))
+    //                {
+    //                    BaseUnit.PlayerFlags1.Add((int)GameMode.HardcoreDead);
+    //                }
+    //                if (!BaseUnit.PlayerFlags2.Contains((int)GameMode.HardcoreDead))
+    //                {
+    //                    BaseUnit.PlayerFlags2.Add((int)GameMode.HardcoreDead);
+    //                }
+    //            }
+    //            else
+    //            {
+    //                BaseUnit.PlayerFlags1.Remove((int)GameMode.HardcoreDead);
+    //                BaseUnit.PlayerFlags2.Remove((int)GameMode.HardcoreDead);
+    //            }
+    //        }
+    //    }
+    //}
 
-        public bool IsHardcore
-        {
-            get
-            {
-                return BaseUnit.PlayerFlags1.Contains((int)GameMode.Hardcore) || BaseUnit.PlayerFlags2.Contains((int)GameMode.Hardcore);
-            }
-            set
-            {
-                if (value)
-                {
-                    if (!BaseUnit.PlayerFlags1.Contains((int)GameMode.Hardcore))
-                    {
-                        BaseUnit.PlayerFlags1.Add((int)GameMode.Hardcore);
-                    }
-                    if (!BaseUnit.PlayerFlags2.Contains((int)GameMode.Hardcore))
-                    {
-                        BaseUnit.PlayerFlags2.Add((int)GameMode.Hardcore);
-                    }
-                }
-                else
-                {
-                    BaseUnit.PlayerFlags1.Remove((int)GameMode.Hardcore);
-                    BaseUnit.PlayerFlags2.Remove((int)GameMode.Hardcore);
-                }
-            }
-        }
+    //public class CharacterValues : CharacterProperty
+    //{
+    //    int _maxPalladium;
+    //    int _maxLevel;
 
-        public bool IsHardcoreDead
-        {
-            get
-            {
-                return BaseUnit.PlayerFlags1.Contains((int)GameMode.HardcoreDead) || BaseUnit.PlayerFlags2.Contains((int)GameMode.HardcoreDead);
-            }
-            set
-            {
-                if (value)
-                {
-                    if (!BaseUnit.PlayerFlags1.Contains((int)GameMode.HardcoreDead))
-                    {
-                        BaseUnit.PlayerFlags1.Add((int)GameMode.HardcoreDead);
-                    }
-                    if (!BaseUnit.PlayerFlags2.Contains((int)GameMode.HardcoreDead))
-                    {
-                        BaseUnit.PlayerFlags2.Add((int)GameMode.HardcoreDead);
-                    }
-                }
-                else
-                {
-                    BaseUnit.PlayerFlags1.Remove((int)GameMode.HardcoreDead);
-                    BaseUnit.PlayerFlags2.Remove((int)GameMode.HardcoreDead);
-                }
-            }
-        }
-    }
+    //    //public CharacterValues(Unit heroUnit, TableDataSet dataSet)
+    //    //    : base(heroUnit, dataSet)
+    //    //{
+    //    //    DataTable statsTable = dataSet.GetExcelTableFromStringId("STATS");
+    //    //    //could also use "stat" column and "gold" entry
+    //    //    DataRow[] goldRow = statsTable.Select("code = " + (int)ItemValueNames.gold);
+    //    //    int maxPalladium = (int)goldRow[0]["maxSet"];
 
-    public class CharacterValues : CharacterProperty
-    {
-        int _maxPalladium;
-        int _maxLevel;
+    //    //    _maxPalladium = maxPalladium;
 
-        //public CharacterValues(Unit heroUnit, TableDataSet dataSet)
-        //    : base(heroUnit, dataSet)
-        //{
-        //    DataTable statsTable = dataSet.GetExcelTableFromStringId("STATS");
-        //    //could also use "stat" column and "gold" entry
-        //    DataRow[] goldRow = statsTable.Select("code = " + (int)ItemValueNames.gold);
-        //    int maxPalladium = (int)goldRow[0]["maxSet"];
+    //    //    DataTable playersTable = _dataSet.GetExcelTableFromStringId("PLAYERS");
+    //    //    DataRow[] playerRows = playersTable.Select("code = " + BaseUnit.unitCode);
+    //    //    int maxLevel = (int)playerRows[0]["maxLevel"];
 
-        //    _maxPalladium = maxPalladium;
+    //    //    _maxLevel = maxLevel;
+    //    //}
 
-        //    DataTable playersTable = _dataSet.GetExcelTableFromStringId("PLAYERS");
-        //    DataRow[] playerRows = playersTable.Select("code = " + BaseUnit.unitCode);
-        //    int maxLevel = (int)playerRows[0]["maxLevel"];
+    //    public int Level
+    //    {
+    //        get
+    //        {
+    //            return UnitHelpFunctions.GetSimpleValue(BaseUnit, (int)ItemValueNames.level) - GetBitCount((int)ItemValueNames.level);
+    //            //return UnitHelpFunctions.GetSimpleValue(_hero, (int)ItemValueNames.level) - GetBitCount(12336);
+    //        }
+    //        set
+    //        {
+    //            if (value > MaxLevel)
+    //            {
+    //                value = MaxLevel;
+    //            }
+    //            if(value < 0)
+    //            {
+    //                value = 0;
+    //            }
 
-        //    _maxLevel = maxLevel;
-        //}
+    //            UnitHelpFunctions.SetSimpleValue(BaseUnit, (int)ItemValueNames.level, value + GetBitCount((int)ItemValueNames.level));
+    //        }
+    //    }
 
-        public int Level
-        {
-            get
-            {
-                return UnitHelpFunctions.GetSimpleValue(BaseUnit, (int)ItemValueNames.level) - GetBitCount((int)ItemValueNames.level);
-                //return UnitHelpFunctions.GetSimpleValue(_hero, (int)ItemValueNames.level) - GetBitCount(12336);
-            }
-            set
-            {
-                if (value > MaxLevel)
-                {
-                    value = MaxLevel;
-                }
-                if(value < 0)
-                {
-                    value = 0;
-                }
+    //    public int MaxLevel
+    //    {
+    //        get
+    //        {
+    //            return _maxLevel;
+    //        }
+    //    }
 
-                UnitHelpFunctions.SetSimpleValue(BaseUnit, (int)ItemValueNames.level, value + GetBitCount((int)ItemValueNames.level));
-            }
-        }
+    //    public int Palladium
+    //    {
+    //        get
+    //        {
+    //            int palladium = UnitHelpFunctions.GetSimpleValue(BaseUnit, (int)ItemValueNames.gold);
 
-        public int MaxLevel
-        {
-            get
-            {
-                return _maxLevel;
-            }
-        }
+    //            //if the character doesn't have palladium on him, there's also no palladium entry, so let's add it
+    //            if(palladium == 0)
+    //            {
+    //                //maximum Palladium value is 9.999.999 which is 100110001001011001111111 = 24 bit = bitCount
+    //                UnitHelpFunctions.AddSimpleValue(BaseUnit, ItemValueNames.gold, 0, GetBitCount((int)ItemValueNames.gold));
+    //            }
 
-        public int Palladium
-        {
-            get
-            {
-                int palladium = UnitHelpFunctions.GetSimpleValue(BaseUnit, (int)ItemValueNames.gold);
+    //            return palladium;
+    //        }
+    //        set
+    //        {
+    //            if (value > MaxPalladium)
+    //            {
+    //                value = MaxPalladium;
+    //            }
+    //            if (value < 0)
+    //            {
+    //                value = 0;
+    //            }
 
-                //if the character doesn't have palladium on him, there's also no palladium entry, so let's add it
-                if(palladium == 0)
-                {
-                    //maximum Palladium value is 9.999.999 which is 100110001001011001111111 = 24 bit = bitCount
-                    UnitHelpFunctions.AddSimpleValue(BaseUnit, ItemValueNames.gold, 0, GetBitCount((int)ItemValueNames.gold));
-                }
+    //            UnitHelpFunctions.SetSimpleValue(BaseUnit, (int)ItemValueNames.gold, value);
+    //        }
+    //    }
 
-                return palladium;
-            }
-            set
-            {
-                if (value > MaxPalladium)
-                {
-                    value = MaxPalladium;
-                }
-                if (value < 0)
-                {
-                    value = 0;
-                }
+    //    public int MaxPalladium
+    //    {
+    //        get
+    //        {
+    //            return _maxPalladium;
+    //        }
+    //    }
 
-                UnitHelpFunctions.SetSimpleValue(BaseUnit, (int)ItemValueNames.gold, value);
-            }
-        }
+    //    public int AttributePoints
+    //    {
+    //        get
+    //        {
+    //            int attributePoints = UnitHelpFunctions.GetSimpleValue(BaseUnit, (int)ItemValueNames.stat_points);
 
-        public int MaxPalladium
-        {
-            get
-            {
-                return _maxPalladium;
-            }
-        }
+    //            //if the character doesn't have palladium on him, there's also no palladium entry, so let's add it
+    //            if (attributePoints == 0)
+    //            {
+    //                //bitCount = 10 taken from other saves => max value = 1023
+    //                UnitHelpFunctions.AddSimpleValue(BaseUnit, ItemValueNames.stat_points, 0, GetBitCount((int)ItemValueNames.stat_points));
+    //            }
 
-        public int AttributePoints
-        {
-            get
-            {
-                int attributePoints = UnitHelpFunctions.GetSimpleValue(BaseUnit, (int)ItemValueNames.stat_points);
+    //            return attributePoints;
+    //        }
+    //        set
+    //        {
+    //            if (value > MaxAttributePoints)
+    //            {
+    //                value = MaxAttributePoints;
+    //            }
+    //            if (value < 0)
+    //            {
+    //                value = 0;
+    //            }
 
-                //if the character doesn't have palladium on him, there's also no palladium entry, so let's add it
-                if (attributePoints == 0)
-                {
-                    //bitCount = 10 taken from other saves => max value = 1023
-                    UnitHelpFunctions.AddSimpleValue(BaseUnit, ItemValueNames.stat_points, 0, GetBitCount((int)ItemValueNames.stat_points));
-                }
+    //            UnitHelpFunctions.SetSimpleValue(BaseUnit, (int)ItemValueNames.stat_points, value);
+    //        }
+    //    }
 
-                return attributePoints;
-            }
-            set
-            {
-                if (value > MaxAttributePoints)
-                {
-                    value = MaxAttributePoints;
-                }
-                if (value < 0)
-                {
-                    value = 0;
-                }
+    //    public int MaxAttributePoints
+    //    {
+    //        get
+    //        {
+    //            return 1000;
+    //        }
+    //    }
 
-                UnitHelpFunctions.SetSimpleValue(BaseUnit, (int)ItemValueNames.stat_points, value);
-            }
-        }
+    //    public int SkillPoints
+    //    {
+    //        get
+    //        {
+    //            int skillPoints = UnitHelpFunctions.GetSimpleValue(BaseUnit, (int)ItemValueNames.skill_points);
 
-        public int MaxAttributePoints
-        {
-            get
-            {
-                return 1000;
-            }
-        }
+    //            //if the character doesn't have palladium on him, there's also no palladium entry, so let's add it
+    //            if (skillPoints == 0)
+    //            {
+    //                //bitCount = 12 taken from other saves => max value = 4095
+    //                UnitHelpFunctions.AddSimpleValue(BaseUnit, ItemValueNames.skill_points, 0, GetBitCount((int)ItemValueNames.skill_points));
+    //            }
 
-        public int SkillPoints
-        {
-            get
-            {
-                int skillPoints = UnitHelpFunctions.GetSimpleValue(BaseUnit, (int)ItemValueNames.skill_points);
+    //            return skillPoints;
+    //        }
+    //        set
+    //        {
+    //            if (value > MaxSkillPoints)
+    //            {
+    //                value = MaxSkillPoints;
+    //            }
+    //            if (value < 0)
+    //            {
+    //                value = 0;
+    //            }
 
-                //if the character doesn't have palladium on him, there's also no palladium entry, so let's add it
-                if (skillPoints == 0)
-                {
-                    //bitCount = 12 taken from other saves => max value = 4095
-                    UnitHelpFunctions.AddSimpleValue(BaseUnit, ItemValueNames.skill_points, 0, GetBitCount((int)ItemValueNames.skill_points));
-                }
+    //            UnitHelpFunctions.SetSimpleValue(BaseUnit, (int)ItemValueNames.skill_points, value);
+    //        }
+    //    }
 
-                return skillPoints;
-            }
-            set
-            {
-                if (value > MaxSkillPoints)
-                {
-                    value = MaxSkillPoints;
-                }
-                if (value < 0)
-                {
-                    value = 0;
-                }
+    //    public int MaxSkillPoints
+    //    {
+    //        get
+    //        {
+    //            return 4000;
+    //        }
+    //    }
 
-                UnitHelpFunctions.SetSimpleValue(BaseUnit, (int)ItemValueNames.skill_points, value);
-            }
-        }
+    //    public int Accuracy
+    //    {
+    //        get
+    //        {
+    //            return UnitHelpFunctions.GetSimpleValue(BaseUnit, (int)ItemValueNames.accuracy);
+    //        }
+    //        set
+    //        {
+    //            UnitHelpFunctions.SetSimpleValue(BaseUnit, (int)ItemValueNames.accuracy, value);
+    //        }
+    //    }
 
-        public int MaxSkillPoints
-        {
-            get
-            {
-                return 4000;
-            }
-        }
+    //    public int Stamina
+    //    {
+    //        get
+    //        {
+    //            return UnitHelpFunctions.GetSimpleValue(BaseUnit, (int)ItemValueNames.stamina);
+    //        }
+    //        set
+    //        {
+    //            UnitHelpFunctions.SetSimpleValue(BaseUnit, (int)ItemValueNames.stamina, value);
+    //        }
+    //    }
 
-        public int Accuracy
-        {
-            get
-            {
-                return UnitHelpFunctions.GetSimpleValue(BaseUnit, (int)ItemValueNames.accuracy);
-            }
-            set
-            {
-                UnitHelpFunctions.SetSimpleValue(BaseUnit, (int)ItemValueNames.accuracy, value);
-            }
-        }
+    //    public int Strength
+    //    {
+    //        get
+    //        {
+    //            return UnitHelpFunctions.GetSimpleValue(BaseUnit, (int)ItemValueNames.strength);
+    //        }
+    //        set
+    //        {
+    //            UnitHelpFunctions.SetSimpleValue(BaseUnit, (int)ItemValueNames.strength, value);
+    //        }
+    //    }
 
-        public int Stamina
-        {
-            get
-            {
-                return UnitHelpFunctions.GetSimpleValue(BaseUnit, (int)ItemValueNames.stamina);
-            }
-            set
-            {
-                UnitHelpFunctions.SetSimpleValue(BaseUnit, (int)ItemValueNames.stamina, value);
-            }
-        }
+    //    public int Willpower
+    //    {
+    //        get
+    //        {
+    //            return UnitHelpFunctions.GetSimpleValue(BaseUnit, (int)ItemValueNames.willpower);
+    //        }
+    //        set
+    //        {
+    //            UnitHelpFunctions.SetSimpleValue(BaseUnit, (int)ItemValueNames.willpower, value);
+    //        }
+    //    }
 
-        public int Strength
-        {
-            get
-            {
-                return UnitHelpFunctions.GetSimpleValue(BaseUnit, (int)ItemValueNames.strength);
-            }
-            set
-            {
-                UnitHelpFunctions.SetSimpleValue(BaseUnit, (int)ItemValueNames.strength, value);
-            }
-        }
+    //    public int AchievementPointsCur
+    //    {
+    //        get
+    //        {
+    //            int achievementPointsCur = UnitHelpFunctions.GetSimpleValue(BaseUnit, (int)ItemValueNames.achievement_points_cur);
 
-        public int Willpower
-        {
-            get
-            {
-                return UnitHelpFunctions.GetSimpleValue(BaseUnit, (int)ItemValueNames.willpower);
-            }
-            set
-            {
-                UnitHelpFunctions.SetSimpleValue(BaseUnit, (int)ItemValueNames.willpower, value);
-            }
-        }
+    //            if (achievementPointsCur == 0)
+    //            {
+    //                //bitCount = 12 taken from other saves => max value = 4095
+    //                UnitHelpFunctions.AddSimpleValue(BaseUnit, ItemValueNames.skill_points, 0, GetBitCount((int)ItemValueNames.achievement_points_cur));
+    //            }
 
-        public int AchievementPointsCur
-        {
-            get
-            {
-                int achievementPointsCur = UnitHelpFunctions.GetSimpleValue(BaseUnit, (int)ItemValueNames.achievement_points_cur);
+    //            return achievementPointsCur;
+    //        }
+    //        set
+    //        {
+    //            UnitHelpFunctions.SetSimpleValue(BaseUnit, (int)ItemValueNames.achievement_points_cur, value);
+    //        }
+    //    }
 
-                if (achievementPointsCur == 0)
-                {
-                    //bitCount = 12 taken from other saves => max value = 4095
-                    UnitHelpFunctions.AddSimpleValue(BaseUnit, ItemValueNames.skill_points, 0, GetBitCount((int)ItemValueNames.achievement_points_cur));
-                }
+    //    public int AchievementPointsTotal
+    //    {
+    //        get
+    //        {
+    //            int achievementPointsTotal = UnitHelpFunctions.GetSimpleValue(BaseUnit, (int)ItemValueNames.achievement_points_total);
 
-                return achievementPointsCur;
-            }
-            set
-            {
-                UnitHelpFunctions.SetSimpleValue(BaseUnit, (int)ItemValueNames.achievement_points_cur, value);
-            }
-        }
+    //            if (achievementPointsTotal == 0)
+    //            {
+    //                //bitCount = 12 taken from other saves => max value = 4095
+    //                UnitHelpFunctions.AddSimpleValue(BaseUnit, ItemValueNames.skill_points, 0, GetBitCount((int)ItemValueNames.achievement_points_total));
+    //            }
 
-        public int AchievementPointsTotal
-        {
-            get
-            {
-                int achievementPointsTotal = UnitHelpFunctions.GetSimpleValue(BaseUnit, (int)ItemValueNames.achievement_points_total);
+    //            return achievementPointsTotal;
+    //        }
+    //        set
+    //        {
+    //            UnitHelpFunctions.SetSimpleValue(BaseUnit, (int)ItemValueNames.achievement_points_cur, value);
+    //        }
+    //    }
 
-                if (achievementPointsTotal == 0)
-                {
-                    //bitCount = 12 taken from other saves => max value = 4095
-                    UnitHelpFunctions.AddSimpleValue(BaseUnit, ItemValueNames.skill_points, 0, GetBitCount((int)ItemValueNames.achievement_points_total));
-                }
+    //    public int Experience
+    //    {
+    //        get
+    //        {
+    //            return UnitHelpFunctions.GetSimpleValue(BaseUnit, (int)ItemValueNames.experience);
+    //        }
+    //        set
+    //        {
+    //            UnitHelpFunctions.SetSimpleValue(BaseUnit, (int)ItemValueNames.experience, value);
+    //        }
+    //    }
 
-                return achievementPointsTotal;
-            }
-            set
-            {
-                UnitHelpFunctions.SetSimpleValue(BaseUnit, (int)ItemValueNames.achievement_points_cur, value);
-            }
-        }
+    //    public int Experience_Prev
+    //    {
+    //        get
+    //        {
+    //            return UnitHelpFunctions.GetSimpleValue(BaseUnit, (int)ItemValueNames.experience_prev);
+    //        }
+    //        set
+    //        {
+    //            UnitHelpFunctions.SetSimpleValue(BaseUnit, (int)ItemValueNames.experience_prev, value);
+    //        }
+    //    }
 
-        public int Experience
-        {
-            get
-            {
-                return UnitHelpFunctions.GetSimpleValue(BaseUnit, (int)ItemValueNames.experience);
-            }
-            set
-            {
-                UnitHelpFunctions.SetSimpleValue(BaseUnit, (int)ItemValueNames.experience, value);
-            }
-        }
+    //    public int Experience_Next
+    //    {
+    //        get
+    //        {
+    //            return UnitHelpFunctions.GetSimpleValue(BaseUnit, (int)ItemValueNames.experience_next);
+    //        }
+    //        set
+    //        {
+    //            UnitHelpFunctions.SetSimpleValue(BaseUnit, (int)ItemValueNames.experience_next, value);
+    //        }
+    //    }
 
-        public int Experience_Prev
-        {
-            get
-            {
-                return UnitHelpFunctions.GetSimpleValue(BaseUnit, (int)ItemValueNames.experience_prev);
-            }
-            set
-            {
-                UnitHelpFunctions.SetSimpleValue(BaseUnit, (int)ItemValueNames.experience_prev, value);
-            }
-        }
-
-        public int Experience_Next
-        {
-            get
-            {
-                return UnitHelpFunctions.GetSimpleValue(BaseUnit, (int)ItemValueNames.experience_next);
-            }
-            set
-            {
-                UnitHelpFunctions.SetSimpleValue(BaseUnit, (int)ItemValueNames.experience_next, value);
-            }
-        }
-    }
+    //    public int PlayTime
+    //    {
+    //        get
+    //        {
+    //            return UnitHelpFunctions.GetSimpleValue(BaseUnit, (int)ItemValueNames.played_time_in_seconds);
+    //        }
+    //        //set
+    //        //{
+    //        //    UnitHelpFunctions.SetSimpleValue(_hero, (int)ItemValueNames.played_time_in_seconds, value);
+    //        //}
+    //    }
+    //}
 
     public class CharacterSkills : CharacterProperty
     {
@@ -907,13 +895,13 @@ namespace Reanimator.Forms.HeroEditorFunctions
 
         public void Apply()
         {
-            _hero.Items.Clear();
+            UnitObject.Items.Clear();
 
             foreach (CharacterInventoryType type in _inventoryList)
             {
                 foreach(CharacterItems item in type.Items)
                 {
-                    _hero.Items.Add(item.BaseUnit);
+                    UnitObject.Items.Add(item.UnitObject);
                 }
             }
         }
@@ -1046,7 +1034,7 @@ namespace Reanimator.Forms.HeroEditorFunctions
 
         private string CreateImagePath()
         {
-            DataRow[] itemsRows = _itemTable.Select(String.Format("code = '{0}'", BaseUnit.UnitCode));
+            DataRow[] itemsRows = _itemTable.Select(String.Format("code = '{0}'", UnitObject.UnitCode));
             if (itemsRows.Length == 0)
             {
                 return null;
@@ -1070,7 +1058,7 @@ namespace Reanimator.Forms.HeroEditorFunctions
         {
             get
             {
-                return BaseUnit.Name;
+                return UnitObject.Name;
             }
         }
 
@@ -1119,12 +1107,12 @@ namespace Reanimator.Forms.HeroEditorFunctions
         {
             get
             {
-                return BaseUnit.Items;
+                return UnitObject.Items;
             }
 
             set
             {
-                BaseUnit.Items = value;
+                UnitObject.Items = value;
 
             }
         }
@@ -1147,7 +1135,7 @@ namespace Reanimator.Forms.HeroEditorFunctions
                 }
 
                 _stackSize = value;
-                UnitHelpFunctions.SetSimpleValue(BaseUnit, (int)ItemValueNames.item_quantity, value);
+                UnitHelpFunctions.SetSimpleValue(UnitObject, (int)ItemValueNames.item_quantity, value);
             }
         }
 
@@ -1234,11 +1222,11 @@ namespace Reanimator.Forms.HeroEditorFunctions
         {
             get
             {
-                return (InventoryTypes)Enum.Parse(typeof(InventoryTypes), BaseUnit.InventoryType.ToString());
+                return (InventoryTypes)Enum.Parse(typeof(InventoryTypes), UnitObject.InventoryType.ToString());
             }
             set
             {
-                BaseUnit.InventoryType = (int)value;
+                UnitObject.InventoryType = (int)value;
             }
         }
 
@@ -1246,12 +1234,12 @@ namespace Reanimator.Forms.HeroEditorFunctions
         {
             get
             {
-                return new Point(BaseUnit.InventoryPositionX, BaseUnit.InventoryPositionY);
+                return new Point(UnitObject.InventoryPositionX, UnitObject.InventoryPositionY);
             }
             set
             {
-                BaseUnit.InventoryPositionX = value.X;
-                BaseUnit.InventoryPositionY = value.Y;
+                UnitObject.InventoryPositionX = value.X;
+                UnitObject.InventoryPositionY = value.Y;
             }
         }
 
@@ -1259,8 +1247,8 @@ namespace Reanimator.Forms.HeroEditorFunctions
         {
             get
             {
-                int width = UnitHelpFunctions.GetSimpleValue(BaseUnit, (int)ItemValueNames.inventory_width);
-                int height =  UnitHelpFunctions.GetSimpleValue(BaseUnit, (int)ItemValueNames.inventory_height);
+                int width = UnitHelpFunctions.GetSimpleValue(UnitObject, (int)ItemValueNames.inventory_width);
+                int height = UnitHelpFunctions.GetSimpleValue(UnitObject, (int)ItemValueNames.inventory_height);
 
                 if (width < 1)
                 {
@@ -1275,8 +1263,8 @@ namespace Reanimator.Forms.HeroEditorFunctions
             }
             set
             {
-                UnitHelpFunctions.SetSimpleValue(BaseUnit, (int)ItemValueNames.inventory_width, value.Width);
-                UnitHelpFunctions.SetSimpleValue(BaseUnit, (int)ItemValueNames.inventory_height, value.Height);
+                UnitHelpFunctions.SetSimpleValue(UnitObject, (int)ItemValueNames.inventory_width, value.Width);
+                UnitHelpFunctions.SetSimpleValue(UnitObject, (int)ItemValueNames.inventory_height, value.Height);
             }
         }
 
@@ -1284,7 +1272,7 @@ namespace Reanimator.Forms.HeroEditorFunctions
         {
             get
             {
-                return (ItemQuality)UnitHelpFunctions.GetSimpleValue(BaseUnit, (int)ItemValueNames.item_quality);
+                return (ItemQuality)UnitHelpFunctions.GetSimpleValue(UnitObject, (int)ItemValueNames.item_quality);
             }
         }
 
@@ -1316,9 +1304,9 @@ namespace Reanimator.Forms.HeroEditorFunctions
         {
             List<UnitObject> tmp = new List<UnitObject>();
 
-            foreach (UnitObject item in BaseUnit.Items)
+            foreach (UnitObject item in UnitObject.Items)
             {
-                if (UnitHelpFunctions.GetSimpleValue(BaseUnit, (int)ItemValueNames.item_quality) == (int)quality)
+                if (UnitHelpFunctions.GetSimpleValue(UnitObject, (int)ItemValueNames.item_quality) == (int)quality)
                 {
                     tmp.Add(item);
                 }
@@ -1330,7 +1318,7 @@ namespace Reanimator.Forms.HeroEditorFunctions
         {
             List<UnitObject> tmp = new List<UnitObject>();
 
-            foreach (UnitObject item in BaseUnit.Items)
+            foreach (UnitObject item in UnitObject.Items)
             {
                 if (item.InventoryType == (int)type)
                 {
@@ -1343,26 +1331,26 @@ namespace Reanimator.Forms.HeroEditorFunctions
 
         public void AddItem(UnitObject item)
         {
-            BaseUnit.Items.Add(item);
+            UnitObject.Items.Add(item);
             // todo: rewrite _items.Add(new CharacterItems(item, _dataSet));
         }
 
         public void RemoveItem(UnitObject item)
         {
-            BaseUnit.Items.Remove(item);
-            CharacterItems tmpItem = _items.Find(tmp => tmp.BaseUnit == item);
+            UnitObject.Items.Remove(item);
+            CharacterItems tmpItem = _items.Find(tmp => tmp.UnitObject == item);
             _items.Remove(tmpItem);
         }
 
         public void AddItem(CharacterItems item)
         {
             _items.Add(item);
-            BaseUnit.Items.Add(item.BaseUnit);
+            UnitObject.Items.Add(item.UnitObject);
         }
 
         public void RemoveItem(CharacterItems item)
         {
-            BaseUnit.Items.Remove(item.BaseUnit);
+            UnitObject.Items.Remove(item.UnitObject);
             _items.Remove(item);
         }
 
@@ -1370,7 +1358,7 @@ namespace Reanimator.Forms.HeroEditorFunctions
         {
             get
             {
-                return UnitHelpFunctions.GetSimpleValue(BaseUnit, (int)ItemValueNames.played_time_in_seconds);
+                return UnitHelpFunctions.GetSimpleValue(UnitObject, (int)ItemValueNames.played_time_in_seconds);
             }
             //set
             //{
@@ -1501,12 +1489,12 @@ namespace Reanimator.Forms.HeroEditorFunctions
         {
             get
             {
-                return new Size(BaseUnit.CharacterWidth, BaseUnit.CharacterHeight);
+                return new Size(UnitObject.CharacterWidth, UnitObject.CharacterHeight);
             }
             set
             {
-                BaseUnit.CharacterWidth = value.Width;
-                BaseUnit.CharacterHeight = value.Height;
+                UnitObject.CharacterWidth = value.Width;
+                UnitObject.CharacterHeight = value.Height;
             }
         }
     }
@@ -1537,8 +1525,8 @@ namespace Reanimator.Forms.HeroEditorFunctions
             }
             set
             {
-                BaseUnit.Items.Remove(_drone);
-                BaseUnit.Items.Add(value);
+                UnitObject.Items.Remove(_drone);
+                UnitObject.Items.Add(value);
                 _drone = value;
             }
         }
@@ -1557,7 +1545,7 @@ namespace Reanimator.Forms.HeroEditorFunctions
             {
                 List<UnitObject> _weapons = new List<UnitObject>();
 
-                foreach(UnitObject item in BaseUnit.Items)
+                foreach (UnitObject item in UnitObject.Items)
                 {
                     if (item.InventoryType == (int)InventoryTypes.CurrentWeaponSet)
                     {
@@ -1575,7 +1563,7 @@ namespace Reanimator.Forms.HeroEditorFunctions
             {
                 List<UnitObject> _weapons = new List<UnitObject>();
 
-                foreach (UnitObject item in BaseUnit.Items)
+                foreach (UnitObject item in UnitObject.Items)
                 {
                     if (item.InventoryType == (int)InventoryTypes.CurrentWeaponSet)
                     {
@@ -1593,7 +1581,7 @@ namespace Reanimator.Forms.HeroEditorFunctions
             {
                 List<UnitObject> _weapons = new List<UnitObject>();
 
-                foreach (UnitObject item in BaseUnit.Items)
+                foreach (UnitObject item in UnitObject.Items)
                 {
                     if (item.InventoryType == (int)InventoryTypes.CurrentWeaponSet)
                     {
