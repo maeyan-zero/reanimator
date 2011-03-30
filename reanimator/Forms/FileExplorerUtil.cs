@@ -386,7 +386,7 @@ namespace Reanimator.Forms
             {
                 byte[] idxData = idx.ToByteArray();
                 Crypt.Encrypt(idxData);
-                File.WriteAllBytes(idx.FilePath, idxData);
+                File.WriteAllBytes(idx.Path, idxData);
             }
             MessageBox.Show("Index modification process completed sucessfully!", "Complete", MessageBoxButtons.OK, MessageBoxIcon.Information);
 
