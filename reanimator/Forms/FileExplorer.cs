@@ -716,7 +716,32 @@ namespace Reanimator.Forms
         /// <param name="e">The Click event args.</param>
         private void _RevertRestoreButton_Click(object sender, EventArgs e)
         {
-            MessageBox.Show("Todo");
+            bool pass = true;
+            foreach (IndexFile file in _fileManager.IndexFiles)
+            {
+                file.Repair();
+                try
+                {
+                    File.WriteAllBytes(file.Path, file.ToByteArray());
+                }
+                catch (Exception ex)
+                {
+                    ExceptionLogger.LogException(ex);
+                    pass = false;
+                }
+            }
+            if (pass)
+            {
+                string title = "Success";
+                string message = "Your installation was repaired without error. Please restart Reanimator.";
+                MessageBox.Show(message, title, MessageBoxButtons.OK);
+            }
+            else
+            {
+                string title = "Failure";
+                string message = "The repair is finished but one or more errors occured. Your installation may or may not have been repaired.";
+                MessageBox.Show(message, title, MessageBoxButtons.OK);
+            }
         }
 
         /// <summary>

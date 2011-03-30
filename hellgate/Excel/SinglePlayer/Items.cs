@@ -611,7 +611,9 @@ namespace Hellgate.Excel
         public Int32 startingTreasure;//index                       // 232  0x0000000000000A04  XLS_ReadIndex,65
         public Int32 invWidth;                                      // 256  0x0000000000000A08  XLS_ReadInt32
         public Int32 invHeight;                                     // 257  0x0000000000000A0C  XLS_ReadInt32
-        public Int64 qualities;                                     // 123  0x0000000000000A10  XLS_ReadBits - I think this reads 8 bytes (64 bits); input = 0x40 = 64
+        [ExcelOutput(IsBitmask = true, TableStringId="ITEM_QUALITY")]
+        public UInt32 qualities;                                     // 123  0x0000000000000A10  XLS_ReadBits - I think this reads 8 bytes (64 bits); input = 0x40 = 64
+        UInt32 qualities2; // I SPLIT THIS IN TWO (FROM A 64 WORD), just so it would work with other 'bitmasks'
         [ExcelOutput(IsTableIndex = true, TableStringId = "ITEM_QUALITY")]
         public Int32 requiredQuality;//index                        // 124  0x0000000000000A18  XLS_ReadIndex
         public Int32 qualityName; // XLS_InternalIndex_QualityName (XLS_UNIT_DATA+91E), 0x04  // 125  0x0000000000000A1C  XLS_ReadInternalIndex
