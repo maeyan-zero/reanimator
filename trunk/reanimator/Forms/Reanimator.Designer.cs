@@ -60,6 +60,7 @@
             this.extrasToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.dropTableOverviewToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.toolStripMenuItem1 = new System.Windows.Forms.ToolStripMenuItem();
+            this.savegameOverviewToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.toolStripSeparator1 = new System.Windows.Forms.ToolStripSeparator();
             this.statusBarToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.windowsMenu = new System.Windows.Forms.ToolStripMenuItem();
@@ -78,7 +79,6 @@
             this.statusStrip = new System.Windows.Forms.StatusStrip();
             this.toolStripStatusLabel = new System.Windows.Forms.ToolStripStatusLabel();
             this.toolTip = new System.Windows.Forms.ToolTip(this.components);
-            this.savegameOverviewToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.menuStrip.SuspendLayout();
             this.statusStrip.SuspendLayout();
             this.SuspendLayout();
@@ -319,6 +319,7 @@
             this.tradeItemsToolStripMenuItem.Name = "tradeItemsToolStripMenuItem";
             this.tradeItemsToolStripMenuItem.Size = new System.Drawing.Size(152, 22);
             this.tradeItemsToolStripMenuItem.Text = "&Item Trading";
+            this.tradeItemsToolStripMenuItem.Click += new System.EventHandler(this.tradeItemsToolStripMenuItem_Click);
             // 
             // extrasToolStripMenuItem
             // 
@@ -343,6 +344,13 @@
             this.toolStripMenuItem1.Size = new System.Drawing.Size(192, 22);
             this.toolStripMenuItem1.Text = "Item quality calculator";
             this.toolStripMenuItem1.Click += new System.EventHandler(this.toolStripMenuItem1_Click);
+            // 
+            // savegameOverviewToolStripMenuItem
+            // 
+            this.savegameOverviewToolStripMenuItem.Name = "savegameOverviewToolStripMenuItem";
+            this.savegameOverviewToolStripMenuItem.Size = new System.Drawing.Size(192, 22);
+            this.savegameOverviewToolStripMenuItem.Text = "Savegame overview";
+            this.savegameOverviewToolStripMenuItem.Click += new System.EventHandler(this.savegameOverviewToolStripMenuItem_Click);
             // 
             // toolStripSeparator1
             // 
@@ -478,13 +486,6 @@
             this.toolStripStatusLabel.Name = "toolStripStatusLabel";
             this.toolStripStatusLabel.Size = new System.Drawing.Size(214, 17);
             this.toolStripStatusLabel.Text = "Reanimator (c) Revival Team 2009-2011";
-            // 
-            // savegameOverviewToolStripMenuItem
-            // 
-            this.savegameOverviewToolStripMenuItem.Name = "savegameOverviewToolStripMenuItem";
-            this.savegameOverviewToolStripMenuItem.Size = new System.Drawing.Size(192, 22);
-            this.savegameOverviewToolStripMenuItem.Text = "Savegame overview";
-            this.savegameOverviewToolStripMenuItem.Click += new System.EventHandler(this.savegameOverviewToolStripMenuItem_Click);
             // 
             // Reanimator
             // 

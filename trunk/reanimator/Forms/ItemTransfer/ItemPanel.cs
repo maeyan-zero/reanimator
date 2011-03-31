@@ -7,6 +7,7 @@ using System.Xml.Serialization;
 using Reanimator.Forms.HeroEditorFunctions;
 using Config = Revival.Common.Config;
 using ExceptionLogger = Revival.Common.ExceptionLogger;
+using Hellgate;
 
 namespace Reanimator.Forms.ItemTransfer
 {
@@ -15,7 +16,7 @@ namespace Reanimator.Forms.ItemTransfer
         public delegate void NewItemSelected(ItemPanel sender, InventoryItem item);
         public event NewItemSelected NewItemSelected_Event;
 
-        FileExplorer _fileExplorer;
+        FileManager fileManager;
         PreviewManager _manager;
         bool _displayItemIcons;
         int _itemUnitSize = 40;
@@ -33,12 +34,12 @@ namespace Reanimator.Forms.ItemTransfer
             set { _itemUnitSize = value; }
         }
 
-        public ItemPanel(bool displayItemIcons, PreviewManager iconPreview, FileExplorer fileExplorer)
+        public ItemPanel(bool displayItemIcons, PreviewManager iconPreview, FileManager fileManager)
         {
             InitializeComponent();
             _displayItemIcons = displayItemIcons;
             _manager = iconPreview;
-            _fileExplorer = fileExplorer;
+            this.fileManager = fileManager;
         }
 
         private void RegisterItemEvents(InventoryItem item)
@@ -364,14 +365,14 @@ namespace Reanimator.Forms.ItemTransfer
 
     public class PreviewManager
     {
-        FileExplorer _fileExplorer;
+        FileManager fileManager;
         List<ImageHolder> _imageHolder;
         string _basePath = Path.Combine(Config.HglDir, @"Data\mp_hellgate_1.10.180.3416_1.0.86.4580\data\units\items");
 
-        public PreviewManager(FileExplorer fileExplorer)
+        public PreviewManager(FileManager fileManager)
         {
             _imageHolder = new List<ImageHolder>();
-            _fileExplorer = fileExplorer;
+            this.fileManager = fileManager;
         }
 
         public Image GetImage(int unitType)
@@ -385,7 +386,7 @@ namespace Reanimator.Forms.ItemTransfer
                     return image.Image;
                 }
 
-                image = new ImageHolder(new Size(8, 8), _fileExplorer);
+                image = new ImageHolder(new Size(8, 8), fileManager);
                 if (image.Load("items", unitType))
                 {
                     _imageHolder.Add(image);
@@ -411,7 +412,7 @@ namespace Reanimator.Forms.ItemTransfer
                     return image.Image;
                 }
 
-                image = new ImageHolder(size, _fileExplorer);
+                image = new ImageHolder(size, fileManager);
                 if (image.Load(_basePath, imagePath))
                 {
                     _imageHolder.Add(image);
@@ -437,7 +438,7 @@ namespace Reanimator.Forms.ItemTransfer
 
     public class ImageHolder
     {
-        FileExplorer _fileExplorer;
+        FileManager fileManager;
         Size _size;
         string _imagePath;
         int _unitType;
@@ -461,10 +462,10 @@ namespace Reanimator.Forms.ItemTransfer
             set { _image = value; }
         }
 
-        public ImageHolder(Size size, FileExplorer fileExplorer)
+        public ImageHolder(Size size, FileManager fileManager)
         {
             _size = size;
-            _fileExplorer = fileExplorer;
+            this.fileManager = fileManager;
         }
 
         public bool Load(string folder, int unitType)

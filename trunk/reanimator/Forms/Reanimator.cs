@@ -420,7 +420,7 @@ namespace Reanimator.Forms
         }
 
 
-        private void OpemXmlFile(String filePath)
+        private void OpenXmlFile(String filePath)
         {
             byte[] xmlCookedBytes;
             try
@@ -965,6 +965,18 @@ namespace Reanimator.Forms
             }
 
             savegameForm.Show(this);
+        }
+
+        private void tradeItemsToolStripMenuItem_Click(object sender, EventArgs e)
+        {
+            _fileManager.PreLoadTable("AFFIXES");
+            _fileManager.PreLoadTable("ITEMS");
+            _fileManager.PreLoadTable("STATS");
+            _fileManager.PreLoadTable("Strings_Affix");
+            _fileManager.PreLoadTable("GAME_GLOBALS");
+
+            ItemTransfer.ItemTransferForm itemTransfer = new ItemTransfer.ItemTransferForm(_fileManager);
+            itemTransfer.Show(this);
         }
 
         //private void saveSinglePlayerFilesToolStripMenuItem_Click(object sender, EventArgs e)

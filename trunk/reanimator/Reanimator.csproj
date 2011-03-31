@@ -172,6 +172,7 @@
     <Compile Include="Forms\HeroEditorFunctions\SkillPanelControl.Designer.cs">
       <DependentUpon>SkillPanelControl.cs</DependentUpon>
     </Compile>
+    <Compile Include="Forms\HeroEditorFunctions\TableHelper.cs" />
     <Compile Include="Forms\HeroEditorFunctions\UnitWrapper.cs" />
     <Compile Include="Forms\HeroEditorFunctions\UnitWrapper2.cs" />
     <Compile Include="Forms\HeroEditorFunctions\UserValues.cs">
