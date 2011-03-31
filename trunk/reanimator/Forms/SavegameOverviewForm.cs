@@ -27,12 +27,63 @@ namespace Reanimator.Forms
             treeViewSkills.Nodes.Clear();
             CharacterSkills skills = unit.CharacterWrapper.CharacterSkills;
             CharacterValues values = unit.CharacterWrapper.CharacterValues;
+            CharacterInventory inventory = unit.CharacterWrapper.CharacterInventory;
 
             AddCharacterStats(values);
 
             AddGeneralSkills(skills);
 
             AddCharacterSkills(skills);
+
+            AddCharacterItems(inventory);
+        }
+
+        private void AddCharacterItems(CharacterInventory inventory)
+        {
+            TreeNode inventoryNode = new TreeNode("Complete inventory");
+
+            //CharacterInventoryType type = inventory.GetInventoryById((int)InventoryTypes.Inventory);
+            foreach (CharacterInventoryType inventoryType in inventory.InventoryType)
+            {
+                InventoryTypesComplete tmp = (InventoryTypesComplete)inventoryType.InventoryType;
+                TreeNode inventoryTypeNode = new TreeNode(tmp.ToString());
+                inventoryTypeNode.ForeColor = Color.Red;
+
+                foreach (CharacterItems item in inventoryType.Items)
+                {
+                    TreeNode node = CreateItemNode(item);
+                    inventoryTypeNode.Nodes.Add(node);
+                }
+
+                inventoryNode.Nodes.Add(inventoryTypeNode);
+            }
+
+            treeViewSkills.Nodes.Add(inventoryNode);
+        }
+
+        private TreeNode CreateItemNode(CharacterItems item)
+        {
+            TreeNode node = new TreeNode(item.Name);
+
+            node.Nodes.Add("Quest item: " + item.IsQuestItem);
+            node.Nodes.Add("Consumable: " + item.IsConsumable);
+            node.Nodes.Add("Affixes: " + item.NumberOfAffixes + "/" + item.MaxNumberOfAffixes);
+            node.Nodes.Add("Augmentations: " + item.NumberOfAugmentations + "/" + item.MaxNumberOfAugmentations);
+            node.Nodes.Add("Upgrades: " + item.NumberOfUpgrades + "/" + item.MaxNumberOfUpgrades);
+            node.Nodes.Add("Quality: " + item.Quality);
+            node.Nodes.Add("Quality Color: " + item.QualityColor.R + "," + item.QualityColor.G + "," + item.QualityColor.B);
+            node.Nodes.Add("Stack size: " + item.StackSize + "/" + item.MaxStackSize);
+            node.Nodes.Add("Has mods: " + item.WrappedItems.Count);
+
+            TreeNode inventory = new TreeNode("Inventory");
+
+            inventory.Nodes.Add("Type: " + item.InventoryType);
+            inventory.Nodes.Add("Position: " + item.InventoryPosition.X + "," + item.InventoryPosition.Y);
+            inventory.Nodes.Add("Size: " + item.InventorySize.Width + "," + item.InventorySize.Height);
+
+            node.Nodes.Add(inventory);
+
+            return node;
         }
 
         private void AddCharacterStats(CharacterValues values)
