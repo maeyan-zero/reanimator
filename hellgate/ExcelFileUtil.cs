@@ -18,6 +18,8 @@ namespace Hellgate
         public const String ExtensionDeserialised = ".txt";
         private const byte CSVDelimiter = (byte)'\t';
 
+        private List<object> backupRows; // required for prescedence hack
+
         #region Excel Types
         [StructLayout(LayoutKind.Sequential, Pack = 1)]
         private struct ExcelHeader
@@ -256,7 +258,7 @@ namespace Hellgate
             return (found) ? row : -1;
         }
 
-        public static String _CodeToString(int code)
+        public static String CodeToString(int code)
         {
             if (code == 0) return String.Empty;
 
@@ -275,7 +277,7 @@ namespace Hellgate
             return charStr;
         }
 
-        public static int _StringToCode(String codeStr)
+        public static int StringToCode(String codeStr)
         {
             if (String.IsNullOrEmpty(codeStr)) return 0;
 
@@ -602,6 +604,8 @@ namespace Hellgate
             const char dashReplace = '0';
             const char scoreReplace = '9';
 
+            // back it up, these changes can't be undone
+            backupRows = new List<object>(Rows);
 
             if (fieldInfo.FieldType == typeof(string))
             {
@@ -638,12 +642,13 @@ namespace Hellgate
             }
         }
 
-        void UndoPrecedenceHack(FieldInfo fieldInfo)
+        private void _UndoPrecedenceHack()
         {
-            throw new NotImplementedException();
+            Rows = new List<object>(backupRows);
+            backupRows.Clear();
         }
 
-        IEnumerable<int[]> _GenerateSortedIndexArrays()
+        private IEnumerable<int[]> _GenerateSortedIndexArrays()
         {
             //if (StringId == "SOUNDS")
             //{
@@ -657,8 +662,7 @@ namespace Hellgate
                 OutputAttribute attribute = GetExcelAttribute(fieldInfo);
                 if (attribute == null || attribute.SortColumnOrder == 0) continue;
 
-                // Precedence Hack
-                // excel files order special characters differently to convention
+                // Precedence Hack - excel files order special characters differently to convention
                 _DoPrecedenceHack(fieldInfo, attribute);
 
                 int pos = attribute.SortColumnOrder - 1;
@@ -724,7 +728,7 @@ namespace Hellgate
                 }
 
                 // Remove precedence hack
-                // UndoPrecedenceHack(fieldInfo);
+                _UndoPrecedenceHack();
             }
 
             return sortedIndexArrays;

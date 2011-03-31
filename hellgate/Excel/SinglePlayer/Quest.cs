@@ -14,7 +14,7 @@ namespace Hellgate.Excel
         public string name;
         [ExcelOutput(SortColumnOrder = 2)]
         public Int32 code;
-        public Int32 style;
+        public Style style;
         [ExcelOutput(IsStringIndex = true)]
         public Int32 nameStringKey;
         [ExcelOutput(IsBool = true)]
@@ -379,5 +379,14 @@ namespace Hellgate.Excel
         [ExcelOutput(IsTableIndex = true, TableStringId = "GLOBAL_THEMES")]
         public Int32 globalthemeRequired;//idx
         public Int32 undefined8;
+
+        public enum Style : uint
+        {
+            StoryLine,
+            Optional,
+            _2,
+            Truth,
+            Adventure
+        }
     }
 }

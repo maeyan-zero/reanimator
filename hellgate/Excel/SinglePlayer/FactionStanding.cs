@@ -20,6 +20,13 @@ namespace Hellgate.Excel
         public Int32 displayStringNumbers;
         public Int32 minScore;
         public Int32 maxScore;
-        public Int32 mood;
+        public Mood mood;
+
+        public enum Mood : uint
+        {
+            Apprehensive,
+            Neutral,
+            Fiendly
+        }
     }
 }
