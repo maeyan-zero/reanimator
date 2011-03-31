@@ -12,6 +12,7 @@ namespace Hellgate.Excel
         [ExcelOutput(SortColumnOrder = 1)]
         [MarshalAs(UnmanagedType.ByValTStr, SizeConst = 64)]
         public string regionLong;
+        [ExcelOutput(IsBool = true)]
         public Int32 isDefault;
         [MarshalAs(UnmanagedType.ByValTStr, SizeConst = 64)]
         public string regionShort;

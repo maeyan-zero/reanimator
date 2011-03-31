@@ -57,10 +57,15 @@ namespace Hellgate.Excel
         [ExcelOutput(IsBool = true)]
         public Int32 forceExitBranch;
         public Int32 timerIndex;
+        [ExcelOutput(IsBool = true)]
         public Int32 usesOnce;
+        [ExcelOutput(IsBool = true)]
         public Int32 usesRun;
+        [ExcelOutput(IsBool = true)]
         public Int32 usesFly;
+        [ExcelOutput(IsBool = true)]
         public Int32 usesDontStop;
+        [ExcelOutput(IsBool = true)]
         public Int32 usesWarp;
         public Int32 undefined2;
     }

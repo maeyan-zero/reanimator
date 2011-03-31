@@ -304,7 +304,7 @@ namespace Hellgate
 
                     if (fieldDelegate.Name == "code")
                     {
-                        int code = (StringId == "REGION") ? int.Parse(value) : _StringToCode(value);
+                        int code = (StringId == "REGION") ? int.Parse(value) : StringToCode(value);
 
                         if (fieldDelegate.FieldType == typeof(short))
                         {
@@ -375,7 +375,7 @@ namespace Hellgate
                                 {
                                     if (hasCodeColumn && value.Length <= 4)
                                     {
-                                        int code = _StringToCode(value);
+                                        int code = StringToCode(value);
                                         rowIndex = fileManager.GetExcelRowIndexFromStringId(tableStringId, code, "code");
                                     }
                                     else
@@ -880,7 +880,7 @@ namespace Hellgate
                                 {
                                     if (hasCodeColumn && strValue.Length <= 4)
                                     {
-                                        int code = _StringToCode(strValue);
+                                        int code = StringToCode(strValue);
                                         rowIndex = fileManager.GetExcelRowIndexFromStringId(tableStringId, code, "code");
                                     }
                                     else
@@ -1292,7 +1292,7 @@ namespace Hellgate
                         }
                         else
                         {
-                            rowStr[col] = "\"" + _CodeToString(code) + "\"";
+                            rowStr[col] = "\"" + CodeToString(code) + "\"";
                         }
 
                         continue;
@@ -1335,7 +1335,7 @@ namespace Hellgate
                                 if (fileManager.DataTableHasColumn(tableStringId, "code"))
                                 {
                                     int code = fileManager.GetExcelIntFromStringId(tableStringId, "code", indexValues[i]);
-                                    if (code != 0) indexStr = _CodeToString(code);
+                                    if (code != 0) indexStr = CodeToString(code);
                                 }
 
                                 if (indexStr == null)

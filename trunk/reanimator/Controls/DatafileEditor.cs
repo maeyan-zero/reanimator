@@ -204,10 +204,10 @@ namespace Reanimator.Controls
                         Text = String.Empty,
                         Parent = _rows_LayoutPanel,
                         AutoSize = true,
-                        Dock = DockStyle.Fill
+                        Dock = DockStyle.Fill,
+                        Name = dc.ColumnName
                     };
                     tb.DataBindings.Add("Text", _dataTable, dc.ColumnName);
-                    //tb.TextChanged += new EventHandler(_RowView_TextBox_Changed);
 
                     if ((dc.ExtendedProperties.ContainsKey(ExcelFile.ColumnTypeKeys.IsRelationGenerated) && (bool)dc.ExtendedProperties[ExcelFile.ColumnTypeKeys.IsRelationGenerated]) || column == 0)
                     {
@@ -225,8 +225,6 @@ namespace Reanimator.Controls
                         relationTextBox = null;
                     }
                 }
-                column++;
-
             }
 
             new Label
@@ -518,16 +516,6 @@ namespace Reanimator.Controls
             DataRow dr = _dataTable.Rows[_tableData_DataGridView.CurrentRow.Index];
             dr[cb.Name] = cb.SelectedIndex;
         }
-
-        private void _RowView_TextBox_Changed(object sender, EventArgs e)
-        {
-            if (_selectedIndexChange) return;
-
-            TextBox tb = (TextBox)sender;
-            DataRow dr = _dataTable.Rows[_tableData_DataGridView.CurrentRow.Index];
-            dr[tb.Name] = tb.Text;
-        }
-
 
         private void _RowView_CheckBox_ItemCheck(object sender, EventArgs e)
         {
