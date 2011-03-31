@@ -14,6 +14,11 @@ namespace Reanimator.Forms.ItemTransfer
 {
     public partial class ItemTransferForm : Form
     {
+        InventoryTypes INVENTORYTYPE = InventoryTypes.Cube;
+        const int INVENTORYWIDTH = 6;
+        int INVENTORYHEIGHT = 6;
+        int ITEMUNITSIZE = 40;
+
         FileManager fileManager;
         UnitHelpFunctions _itemHelpFunctions;
         DataTable _items;
@@ -39,11 +44,6 @@ namespace Reanimator.Forms.ItemTransfer
         bool _displayItemIcons = Directory.Exists(Path.Combine(Config.HglDir, @"Data\mp_hellgate_1.10.180.3416_1.0.86.4580\data\units\items"));
         //specifies wether the item name and quantity is displayed
         bool _displayNamesAndQuantity = true;
-
-        InventoryTypes INVENTORYTYPE = InventoryTypes.Cube;
-        const int INVENTORYWIDTH = 6;
-        int INVENTORYHEIGHT = 6;
-        int ITEMUNITSIZE = 40;
 
         string _characterFolder;
 
@@ -334,7 +334,7 @@ namespace Reanimator.Forms.ItemTransfer
         {
             if (_enableItemPreview)
             {
-                // todo: rewrite b_loadCharacter1_Click(sender, e);
+                b_loadCharacter1_Click(sender, e);
             }
         }
 
@@ -378,9 +378,9 @@ namespace Reanimator.Forms.ItemTransfer
             {
                 _characterUnit1 = new UnitWrapper2(_characterPath1, fileManager);
 
-                //if (character != null && character.IsGood)
+                if (_characterUnit1 != null)// && character.IsGood)
                 {
-                    _itemHelpFunctions.LoadCharacterValues(_characterUnit1.BaseCharacter.Character);
+                    //_itemHelpFunctions.LoadCharacterValues(_characterUnit1.BaseCharacter.Character);
 
                     gb_characterName1.Text = cb_selectCharacter1.SelectedItem.ToString();
                     int level = _characterUnit1.CharacterWrapper.CharacterValues.Level;
@@ -398,15 +398,15 @@ namespace Reanimator.Forms.ItemTransfer
 
                     InitInventory(_characterUnit1, _characterItemPanel1);
                 }
-                //else
-                //{
-                //    _characterPath1 = null;
-                //    _characterUnit1 = null;
-                //    _characterItemPanel1.Controls.Clear();
-                //    l_palladium1.Text = "-";
-                //    SetCharacterStatus(_characterStatus1, CharacterStatus.Error, p_status1, l_status1);
-                //    //MessageBox.Show("Error while parsing the character file!");
-                //}
+                else
+                {
+                    _characterPath1 = null;
+                    _characterUnit1 = null;
+                    _characterItemPanel1.Controls.Clear();
+                    l_palladium1.Text = "-";
+                    SetCharacterStatus(_characterStatus1, CharacterStatus.Error, p_status1, l_status1);
+                    //MessageBox.Show("Error while parsing the character file!");
+                }
             }
             else
             {
@@ -460,28 +460,12 @@ namespace Reanimator.Forms.ItemTransfer
 
             if (_characterPath1 != _characterPath2)
             {
-                CharacterFile characterFile2 = new CharacterFile(_characterPath2);
-                try
+                _characterUnit2 = new UnitWrapper2(_characterPath2, fileManager);
+
+                if (_characterUnit2 != null)
                 {
-                    byte[] characterBytes2 = File.ReadAllBytes(_characterPath2);
-                    characterFile2.ParseFileBytes(characterBytes2);
-
-                }
-                catch (Exception ex)
-                {
-                    MessageBox.Show("Error while parsing the character file!\n" + ex);
-                    return;
-                }
-
-
-                UnitObject character = characterFile2.Character;
-
-//XmlUtilities<Unit>.Serialize(character, @"F:\before.xml");
-
-                if (character != null)
-                {
-                    _itemHelpFunctions.LoadCharacterValues(character);
-                    _characterUnit2 = null;// todo: rewrite  new UnitWrapper(_dataSet, character);
+                    //_itemHelpFunctions.LoadCharacterValues(character);
+                    //_characterUnit2 = null;// todo: rewrite  new UnitWrapper(_dataSet, character);
 
                     //if (WeaponSlotsPopulated(_characterUnit2))
                     //{
