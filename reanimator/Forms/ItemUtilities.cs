@@ -17,20 +17,20 @@ namespace Reanimator.Forms
 
     public class UnitHelpFunctions
     {
-        // todo: rewrite private readonly TableDataSet _dataSet;
-        private readonly DataTable _statsTable;
+        FileManager fileManager;
+        private readonly DataTable statsTable;
 
-        //// todo: rewrite public UnitHelpFunctions(TableDataSet dataSet)
-        //{
-        //    _dataSet = dataSet;
-        //    _statsTable = _dataSet.GetExcelTableFromStringId("STATS");
-        //}
+       public UnitHelpFunctions(FileManager fileManager)
+        {
+            this.fileManager = fileManager;
+           statsTable = fileManager.GetDataTable("STATS");
+        }
 
         public void LoadCharacterValues(UnitObject unit)
         {
             GenerateUnitNameStrings(new[] { unit }, null);
 
-            // todo: rewrite PopulateItems(unit);
+            PopulateItems(unit);
         }
 
         private void GenerateUnitNameStrings(UnitObject[] units, Hashtable hash)
@@ -56,7 +56,7 @@ namespace Reanimator.Forms
                         }
                         else
                         {
-                            DataRow[] statRows = _statsTable.Select("code = " + stat.Code);
+                            DataRow[] statRows = statsTable.Select("code = " + stat.Code);
                             name = (string)statRows[0]["stat"];
 
                             if (name != null)
@@ -157,120 +157,120 @@ namespace Reanimator.Forms
         //    return unit;
         //}
 
-        //// todo: rewrite private void PopulateItems(Unit unit)
-        //{
-        //    try
-        //    {
-        //        bool canGetItemNames = true;
-        //        DataTable itemsTable = _dataSet.GetExcelTableFromStringId("ITEMS");
-        //        DataTable affixTable = _dataSet.GetExcelTableFromStringId("AFFIXES");
-        //        DataTable affixNames = _dataSet.GetExcelTableFromStringId("Strings_Affix");
-        //        if (itemsTable != null && affixTable != null)
-        //        {
-        //            if (!itemsTable.Columns.Contains("code") || !itemsTable.Columns.Contains("String_string"))
-        //                canGetItemNames = false;
-        //            if (!affixTable.Columns.Contains("code") || !affixTable.Columns.Contains("setNameString_string") ||
-        //                !affixTable.Columns.Contains("magicNameString_string"))
-        //                canGetItemNames = false;
-        //        }
-        //        else
-        //        {
-        //            canGetItemNames = false;
-        //        }
+        private void PopulateItems(UnitObject unitObject)
+        {
+            try
+            {
+                bool canGetItemNames = true;
+                DataTable itemsTable = fileManager.GetDataTable("ITEMS");
+                DataTable affixTable = fileManager.GetDataTable("AFFIXES");
+                DataTable affixNames = fileManager.GetDataTable("Strings_Affix");
+                if (itemsTable != null && affixTable != null)
+                {
+                    if (!itemsTable.Columns.Contains("code") || !itemsTable.Columns.Contains("String_string"))
+                        canGetItemNames = false;
+                    if (!affixTable.Columns.Contains("code") || !affixTable.Columns.Contains("setNameString_string") ||
+                        !affixTable.Columns.Contains("magicNameString_string"))
+                        canGetItemNames = false;
+                }
+                else
+                {
+                    canGetItemNames = false;
+                }
 
 
-        //        List<Unit> items = unit.Items;
-        //        for (int i = 0; i < items.Count; i++)
-        //        {
-        //            Unit item = items[i];
-        //            if (item == null) continue;
+                List<UnitObject> items = unitObject.Items;
+                for (int i = 0; i < items.Count; i++)
+                {
+                    UnitObject item = items[i];
+                    if (item == null) continue;
 
-        //            //It's an engineer and his drone
-        //            if (item.unitCode == (int)SpecialItems.Drone)
-        //            {
-        //                item.Name = "Drone";
-        //                continue;
-        //            }
-        //            // assign default name
-        //            item.Name = "Item Id: " + item.unitCode;
-        //            if (!canGetItemNames)
-        //            {
-        //                continue;
-        //            }
-        //            if (item.unitCode == 25393)
-        //            {
-        //                //string a;
-        //            }
+                    //It's an engineer and his drone
+                    if (item.UnitCode == (int)SpecialItems.Drone)
+                    {
+                        item.Name = "Drone";
+                        continue;
+                    }
+                    // assign default name
+                    item.Name = "Item Id: " + item.UnitCode;
+                    if (!canGetItemNames)
+                    {
+                        continue;
+                    }
+                    if (item.UnitCode == 25393)
+                    {
+                        //string a;
+                    }
 
-        //            // get item name
-        //            DataRow[] itemsRows = itemsTable.Select(String.Format("code = '{0}'", item.unitCode));
-        //            if (itemsRows.Length == 0)
-        //            {
-        //                continue;
-        //            }
-        //            item.Name = itemsRows[0]["String_string"] as String;
+                    // get item name
+                    DataRow[] itemsRows = itemsTable.Select(String.Format("code = '{0}'", item.UnitCode));
+                    if (itemsRows.Length == 0)
+                    {
+                        continue;
+                    }
+                    item.Name = itemsRows[0]["String_string"] as String;
 
 
-        //            // does it have an affix/prefix
-        //            String affixString = String.Empty;
-        //            for (int s = 0; s < item.Stats.Length; s++)
-        //            {
-        //                // "applied_affix"
-        //                if (item.Stats[s].Id == (int)ItemValueNames.applied_affix)
-        //                {
-        //                    int affixCode = item.Stats[s].values[0].Stat;
-        //                    DataRow[] affixRows = affixTable.Select(String.Format("code = '{0}'", affixCode));
-        //                    if (affixRows.Length > 0)
-        //                    {
-        //                        //String replaceString = affixRows[0]["setNameString_String"] as String;
-        //                        int index = (int)affixRows[0]["setNameString"];
-        //                        if (index < 0)
-        //                        {
-        //                            index = (int)affixRows[0]["magicNameString"];
+                    // does it have an affix/prefix
+                    String affixString = String.Empty;
+                    for (int s = 0; s < item.Stats.NameCount; s++)
+                    {
+                        // "applied_affix"
+                        if (item.Stats[s].Id == (int)ItemValueNames.applied_affix)
+                        {
+                            int affixCode = item.Stats[s].values[0].StatValue;
+                            DataRow[] affixRows = affixTable.Select(String.Format("code = '{0}'", affixCode));
+                            if (affixRows.Length > 0)
+                            {
+                                //String replaceString = affixRows[0]["setNameString_String"] as String;
+                                int index = (int)affixRows[0]["setNameString"];
+                                if (index < 0)
+                                {
+                                    index = (int)affixRows[0]["magicNameString"];
 
-        //                            //replaceString = affixRows[0]["magicNameString"] as String;
-        //                            if (index < 0)
-        //                            {
-        //                                break;
-        //                            }
-        //                        }
+                                    //replaceString = affixRows[0]["magicNameString"] as String;
+                                    if (index < 0)
+                                    {
+                                        break;
+                                    }
+                                }
 
-        //                        DataRow[] stringRows = affixNames.Select(String.Format("ReferenceId = '{0}'", index));
-        //                        String replaceString = stringRows[0]["String"] as String;
+                                DataRow[] stringRows = affixNames.Select(String.Format("ReferenceId = '{0}'", index));
+                                String replaceString = stringRows[0]["String"] as String;
 
-        //                        affixString = replaceString;
-        //                    }
-        //                }
+                                affixString = replaceString;
+                            }
+                        }
 
-        //                // "item_quality"
-        //                if (item.Stats[s].Id == (int)ItemValueNames.item_quality)
-        //                {
-        //                    // is unique || is mutant then no affix
-        //                    int itemQualityCode = item.Stats[s].values[0].Stat;
-        //                    if (itemQualityCode == (int)ItemQuality.Unique || itemQualityCode == (int)ItemQuality.Mutant)
-        //                    {
-        //                        affixString = String.Empty;
-        //                        break;
-        //                    }
-        //                }
-        //            }
+                        // "item_quality"
+                        if (item.Stats[s].Id == (int)ItemValueNames.item_quality)
+                        {
+                            // is unique || is mutant then no affix
+                            int itemQualityCode = item.Stats[s].values[0].StatValue;
+                            if (itemQualityCode == (int)ItemQuality.Unique || itemQualityCode == (int)ItemQuality.Mutant)
+                            {
+                                affixString = String.Empty;
+                                break;
+                            }
+                        }
+                    }
 
-        //            if (affixString.Length > 0)
-        //            {
-        //                item.Name = affixString.Replace("[item]", item.Name);
-        //            }
+                    if (affixString.Length > 0)
+                    {
+                        item.Name = affixString.Replace("[item]", item.Name);
+                    }
 
-        //            if (item.Items.Count > 0)
-        //            {
-        //                PopulateItems(item);
-        //            }
-        //        }
-        //    }
-        //    catch (Exception ex)
-        //    {
-        //        ExceptionLogger.LogException(ex, true);
-        //    }
-        //}
+                    if (item.Items.Count > 0)
+                    {
+                        PopulateItems(item);
+                    }
+                }
+            }
+            catch (Exception ex)
+            {
+                ExceptionLogger.LogException(ex, true);
+            }
+        }
 
         public static bool SetSimpleValue(UnitObject unit, string valueName, int value)
         {

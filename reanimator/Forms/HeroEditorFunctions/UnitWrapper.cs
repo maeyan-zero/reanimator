@@ -833,539 +833,539 @@ namespace Reanimator.Forms.HeroEditorFunctions
     //    }
     //}
 
-    public class CharacterInventory : CharacterProperty
-    {
-        List<CharacterInventoryType> _inventoryList;
-
-        //// todo: rewrite public CharacterInventory(Unit heroUnit, TableDataSet dataSet)
-        //    : base(heroUnit, dataSet)
-        //{
-        //    _inventoryList = new List<CharacterInventoryType>();
-
-        //    foreach (Unit unit in heroUnit.Items)
-        //    {
-        //        CharacterItems item = new CharacterItems(unit, dataSet);
-
-        //        // get the matching inventory entry
-        //        CharacterInventoryType inv = _inventoryList.Find(tmp => tmp.InventoryType == (int)item.InventoryType);
-
-        //        if (inv == null)
-        //        {
-        //            inv = new CharacterInventoryType((int)item.InventoryType);
-        //            _inventoryList.Add(inv);
-        //        }
-
-        //        inv.Items.Add(item);
-        //    }
-        //}
-
-        public CharacterInventoryType GetInventoryById(int inventoryId)
-        {
-            CharacterInventoryType inv = _inventoryList.Find(tmp => tmp.InventoryType == inventoryId);
-
-            if (inv == null)
-            {
-                inv = new CharacterInventoryType(inventoryId);
-                _inventoryList.Add(inv);
-            }
-
-            return inv;
-        }
-
-        public bool CheckIfInventoryIsPopulated(int inventory)
-        {
-            CharacterInventoryType inventorySlot = GetInventoryById(inventory);
-            if (inventorySlot != null && inventorySlot.Items.Count > 0)
-            {
-                return true;
-            }
-            return false;
-        }
-
-        public List<CharacterInventoryType> InventoryType
-        {
-            get { return _inventoryList; }
-        }
-
-        public void Set(CharacterInventoryType inventory)
-        {
-            int index = _inventoryList.FindIndex(tmp => tmp.InventoryType == inventory.InventoryType);
-            _inventoryList[index] = inventory;
-        }
-
-        public void Apply()
-        {
-            UnitObject.Items.Clear();
-
-            foreach (CharacterInventoryType type in _inventoryList)
-            {
-                foreach(CharacterItems item in type.Items)
-                {
-                    UnitObject.Items.Add(item.UnitObject);
-                }
-            }
-        }
-    }
-
-    public class CharacterInventoryType
-    {
-        int _inventoryType;
-        List<CharacterItems> _items;
-
-        public CharacterInventoryType(int inventoryType)
-        {
-            _inventoryType = inventoryType;
-            _items = new List<CharacterItems>();
-        }
-
-        public List<CharacterItems> Items
-        {
-            get { return _items; }
-            set { _items = value; }
-        }
-
-        public int InventoryType
-        {
-            get { return _inventoryType; }
-            set { _inventoryType = value; }
-        }
-
-        public override string ToString()
-        {
-            return _inventoryType.ToString();
-        }
-    }
-
-    public class CharacterItems : CharacterProperty
-    {
-        DataTable _itemTable;
-        List<CharacterItems> _items;
-        bool _isQuestItem;
-        Color _qualityColor;
-        Bitmap _itemImage;
-        string _itemImagePath;
-        bool _isItem;
-        bool _isConsumable;
-        int _numberOfAugmentations;
-        int _numberOfAugmentationsLeft;
-        int _maxNumberOfAugmentations;
-        int _maxNumberOfAffixes;
-        int _numberOfAffixes;
-        int _numberOfUpgrades;
-        int _maxNumberOfUpgrades;
-        int _stackSize;
-        int _maxStackSize;
-
-        //// todo: rewrite public CharacterItems(Unit heroUnit, TableDataSet dataSet)
-        //    : base(heroUnit, dataSet)
-        //{
-        //    _itemTable = _dataSet.GetExcelTableFromStringId("ITEMS");
-        //    DataRow[] itemRow = _itemTable.Select("code = " + BaseUnit.unitCode);
-
-        //    //DataTable colorTable = _dataSet.GetExcelTableFromStringId("ITEMQUALITY");
-        //    //DataRow[] colorRow = colorTable.Select("code = " + _hero.unitCode);
-
-        //    if (itemRow.Length > 0)
-        //    {
-        //        _isItem = true;
-
-        //        uint bitMask = (uint)itemRow[0]["bitmask02"];
-        //        _isQuestItem = (bitMask >> 13 & 1) == 1;
-
-        //        string maxStackSize = (string)itemRow[0]["stackSize"];
-        //        string[] splitResult = maxStackSize.Split(new char[] { ',' });
-        //        if(splitResult.Length == 3)
-        //        {
-        //            _maxStackSize = int.Parse(splitResult[1]);
-        //        }
-        //        if (_maxStackSize <= 0)
-        //        {
-        //            _maxStackSize = 1;
-        //        }
-
-        //        _stackSize = UnitHelpFunctions.GetSimpleValue(heroUnit, ItemValueNames.item_quantity.ToString());
-        //        if (_stackSize <= 0)
-        //        {
-        //            _stackSize = 1;
-        //        }
-
-        //        _itemImagePath = CreateImagePath();
-
-        //        _numberOfAugmentations = UnitHelpFunctions.GetSimpleValue(BaseUnit, ItemValueNames.item_augmented_count.ToString());
-        //        _numberOfUpgrades = UnitHelpFunctions.GetSimpleValue(BaseUnit, ItemValueNames.item_upgraded_count.ToString());
-
-        //        DataTable gameGlobals = _dataSet.GetExcelTableFromStringId("GAME_GLOBALS");
-        //        //DataRow[] globalsRow = gameGlobals.Select("name = " + "max_item_upgrades");
-        //        DataRow[] globalsRow = gameGlobals.Select("Index = " + 16);
-        //        _maxNumberOfUpgrades = (int)globalsRow[0]["intValue"];
-
-        //        //globalsRow = gameGlobals.Select("name = " + "max_item_augmentations");
-        //        globalsRow = gameGlobals.Select("Index = " + 17);
-        //        _maxNumberOfAffixes = (int)globalsRow[0]["intValue"];
-        //        Unit.StatBlock.Stat affixes = UnitHelpFunctions.GetComplexValue(_hero, ItemValueNames.applied_affix.ToString());
-        //        if (affixes != null)
-        //        {
-        //            _numberOfAffixes = affixes.values.Count;
-        //        }
-
-        //        int numberOfInherentAffixes = _numberOfAffixes - _numberOfAugmentations;
-        //        _numberOfAugmentationsLeft = _maxNumberOfAffixes - numberOfInherentAffixes;
-
-        //        if (_numberOfAugmentationsLeft < 0)
-        //        {
-        //            _numberOfAugmentationsLeft = 0;
-        //        }
-
-        //        _maxNumberOfAugmentations = _numberOfAugmentations + _numberOfAugmentationsLeft;
-        //        if (_maxNumberOfAugmentations > _maxNumberOfAffixes)
-        //        {
-        //            _maxNumberOfAugmentations = _maxNumberOfAffixes;
-        //        }
-        //    }
-
-        //    _items = new List<CharacterItems>();
-
-        //    foreach (Unit item in BaseUnit.Items)
-        //    {
-        //        CharacterItems wrapper = new CharacterItems(item, dataSet);
-        //        _items.Add(wrapper);
-        //    }
-        //}
-
-        private string CreateImagePath()
-        {
-            DataRow[] itemsRows = _itemTable.Select(String.Format("code = '{0}'", UnitObject.UnitCode));
-            if (itemsRows.Length == 0)
-            {
-                return null;
-            }
-            int unitType = (int)itemsRows[0]["unitType"];
-            string folder = (string)itemsRows[0]["folder"] + @"\icons";
-            string name = (string)itemsRows[0]["name"];
-            //string unitType = (string)itemsRows[0]["unitType_string"];
-
-            string itemPath = Path.Combine(folder, name);
-
-            return itemPath;
-        }
-
-        public override string ToString()
-        {
-            return Name;
-        }
-
-        public string Name
-        {
-            get
-            {
-                return UnitObject.Name;
-            }
-        }
-
-        public string GetItemImagePath(bool male)
-        {
-            string path = _itemImagePath;
-
-            if (_itemImagePath.StartsWith("armor"))
-            {
-                if (male)
-                {
-                    path += "_m";
-                }
-                else
-                {
-                    path += "_f";
-                }
-            }
-
-            //if (path == null)
-            //{
-            //    return path; 
-            //}
-            //we don't know if we want to load dds or png yet
-            return path;// += ".dds";
-        }
-
-        public bool IsItem
-        {
-            get { return _isItem; }
-            set { _isItem = value; }
-        }
-
-        /// <summary>
-        /// Do NOT use this entry for item adding/removing!
-        /// </summary>
-        public List<CharacterItems> WrappedItems
-        {
-            get
-            {
-                return _items;
-            }
-        }
-
-        public List<UnitObject> Items
-        {
-            get
-            {
-                return UnitObject.Items;
-            }
-
-            set
-            {
-                UnitObject.Items = value;
-
-            }
-        }
-
-        public int StackSize
-        {
-            get
-            {
-                return _stackSize;
-            }
-            set
-            {
-                if (value < 1)
-                {
-                    value = 1;
-                }
-                if (value > MaxStackSize)
-                {
-                    value = MaxStackSize;
-                }
-
-                _stackSize = value;
-                UnitHelpFunctions.SetSimpleValue(UnitObject, (int)ItemValueNames.item_quantity, value);
-            }
-        }
-
-        public int MaxStackSize
-        {
-            get
-            {
-                return _maxStackSize;
-            }
-        }
-
-        public bool IsConsumable
-        {
-            get
-            {
-                return _isConsumable;
-            }
-        }
-
-        /// <summary>
-        /// Number of uses of the Nanoforge up till now
-        /// </summary>
-        public int NumberOfUpgrades
-        {
-            get { return _numberOfUpgrades; }
-        }
-
-        /// <summary>
-        /// Number of uses of the Nanoforge left
-        /// </summary>
-        public int MaxNumberOfUpgrades
-        {
-            get { return _maxNumberOfUpgrades; }
-        }
-
-        /// <summary>
-        /// Maximum number of Augmentrix usages given the inherent affixes
-        /// </summary>
-        public int MaxNumberOfAugmentations
-        {
-            get { return _maxNumberOfAugmentations; }
-        }
-
-        /// <summary>
-        /// Number of Augmentrix usages up till now
-        /// </summary>
-        public int NumberOfAugmentations
-        {
-            get
-            {
-                return _numberOfAugmentations;
-            }
-        }
-
-        /// <summary>
-        /// Number of Augmentrix usages left
-        /// </summary>
-        public int NumberOfAugmentationsLeft
-        {
-            get { return _numberOfAugmentationsLeft; }
-        }
-
-        /// <summary>
-        /// Number of already present affixes 
-        /// </summary>
-        public int NumberOfAffixes
-        {
-            get
-            {
-                return _numberOfAffixes;
-            }
-        }
-
-        /// <summary>
-        /// Maximum number of affixes
-        /// </summary>
-        public int MaxNumberOfAffixes
-        {
-            get { return _maxNumberOfAffixes; }
-            set { _maxNumberOfAffixes = value; }
-        }
-
-        public InventoryTypes InventoryType
-        {
-            get
-            {
-                return (InventoryTypes)Enum.Parse(typeof(InventoryTypes), UnitObject.InventoryType.ToString());
-            }
-            set
-            {
-                UnitObject.InventoryType = (int)value;
-            }
-        }
-
-        public Point InventoryPosition
-        {
-            get
-            {
-                return new Point(UnitObject.InventoryPositionX, UnitObject.InventoryPositionY);
-            }
-            set
-            {
-                UnitObject.InventoryPositionX = value.X;
-                UnitObject.InventoryPositionY = value.Y;
-            }
-        }
-
-        public Size InventorySize
-        {
-            get
-            {
-                int width = UnitHelpFunctions.GetSimpleValue(UnitObject, (int)ItemValueNames.inventory_width);
-                int height = UnitHelpFunctions.GetSimpleValue(UnitObject, (int)ItemValueNames.inventory_height);
-
-                if (width < 1)
-                {
-                    width = 1;
-                }
-                if (height < 1)
-                {
-                    height = 1;
-                }
-
-                return new Size(width, height);
-            }
-            set
-            {
-                UnitHelpFunctions.SetSimpleValue(UnitObject, (int)ItemValueNames.inventory_width, value.Width);
-                UnitHelpFunctions.SetSimpleValue(UnitObject, (int)ItemValueNames.inventory_height, value.Height);
-            }
-        }
-
-        public ItemQuality Quality
-        {
-            get
-            {
-                return (ItemQuality)UnitHelpFunctions.GetSimpleValue(UnitObject, (int)ItemValueNames.item_quality);
-            }
-        }
-
-        public Color QualityColor
-        {
-            get
-            {
-                return _qualityColor;
-            }
-        }
-
-        //public Image ItemImage
-        //{
-        //    get
-        //    {
-        //        return _itemImage;
-        //    }
-        //}
-
-        public bool IsQuestItem
-        {
-            get
-            {
-                return _isQuestItem;
-            }
-        }
-
-        public List<UnitObject> GetItemsOfQuality(ItemQuality quality)
-        {
-            List<UnitObject> tmp = new List<UnitObject>();
-
-            foreach (UnitObject item in UnitObject.Items)
-            {
-                if (UnitHelpFunctions.GetSimpleValue(UnitObject, (int)ItemValueNames.item_quality) == (int)quality)
-                {
-                    tmp.Add(item);
-                }
-            }
-            return tmp;
-        }
-
-        public List<UnitObject> GetItemsOfInventoryType(InventoryTypes type)
-        {
-            List<UnitObject> tmp = new List<UnitObject>();
-
-            foreach (UnitObject item in UnitObject.Items)
-            {
-                if (item.InventoryType == (int)type)
-                {
-                    tmp.Add(item);
-                }
-            }
-
-            return tmp;
-        }
-
-        public void AddItem(UnitObject item)
-        {
-            UnitObject.Items.Add(item);
-            // todo: rewrite _items.Add(new CharacterItems(item, _dataSet));
-        }
-
-        public void RemoveItem(UnitObject item)
-        {
-            UnitObject.Items.Remove(item);
-            CharacterItems tmpItem = _items.Find(tmp => tmp.UnitObject == item);
-            _items.Remove(tmpItem);
-        }
-
-        public void AddItem(CharacterItems item)
-        {
-            _items.Add(item);
-            UnitObject.Items.Add(item.UnitObject);
-        }
-
-        public void RemoveItem(CharacterItems item)
-        {
-            UnitObject.Items.Remove(item.UnitObject);
-            _items.Remove(item);
-        }
-
-        public int PlayTime
-        {
-            get
-            {
-                return UnitHelpFunctions.GetSimpleValue(UnitObject, (int)ItemValueNames.played_time_in_seconds);
-            }
-            //set
-            //{
-            //    UnitHelpFunctions.SetSimpleValue(_hero, (int)ItemValueNames.played_time_in_seconds, value);
-            //}
-        }
-    }
+    //public class CharacterInventory : CharacterProperty
+    //{
+    //    List<CharacterInventoryType> _inventoryList;
+
+    //    //// todo: rewrite public CharacterInventory(Unit heroUnit, TableDataSet dataSet)
+    //    //    : base(heroUnit, dataSet)
+    //    //{
+    //    //    _inventoryList = new List<CharacterInventoryType>();
+
+    //    //    foreach (Unit unit in heroUnit.Items)
+    //    //    {
+    //    //        CharacterItems item = new CharacterItems(unit, dataSet);
+
+    //    //        // get the matching inventory entry
+    //    //        CharacterInventoryType inv = _inventoryList.Find(tmp => tmp.InventoryType == (int)item.InventoryType);
+
+    //    //        if (inv == null)
+    //    //        {
+    //    //            inv = new CharacterInventoryType((int)item.InventoryType);
+    //    //            _inventoryList.Add(inv);
+    //    //        }
+
+    //    //        inv.Items.Add(item);
+    //    //    }
+    //    //}
+
+    //    public CharacterInventoryType GetInventoryById(int inventoryId)
+    //    {
+    //        CharacterInventoryType inv = _inventoryList.Find(tmp => tmp.InventoryType == inventoryId);
+
+    //        if (inv == null)
+    //        {
+    //            inv = new CharacterInventoryType(inventoryId);
+    //            _inventoryList.Add(inv);
+    //        }
+
+    //        return inv;
+    //    }
+
+    //    public bool CheckIfInventoryIsPopulated(int inventory)
+    //    {
+    //        CharacterInventoryType inventorySlot = GetInventoryById(inventory);
+    //        if (inventorySlot != null && inventorySlot.Items.Count > 0)
+    //        {
+    //            return true;
+    //        }
+    //        return false;
+    //    }
+
+    //    public List<CharacterInventoryType> InventoryType
+    //    {
+    //        get { return _inventoryList; }
+    //    }
+
+    //    public void Set(CharacterInventoryType inventory)
+    //    {
+    //        int index = _inventoryList.FindIndex(tmp => tmp.InventoryType == inventory.InventoryType);
+    //        _inventoryList[index] = inventory;
+    //    }
+
+    //    public void Apply()
+    //    {
+    //        UnitObject.Items.Clear();
+
+    //        foreach (CharacterInventoryType type in _inventoryList)
+    //        {
+    //            foreach(CharacterItems item in type.Items)
+    //            {
+    //                UnitObject.Items.Add(item.UnitObject);
+    //            }
+    //        }
+    //    }
+    //}
+
+    //public class CharacterInventoryType
+    //{
+    //    int _inventoryType;
+    //    List<CharacterItems> _items;
+
+    //    public CharacterInventoryType(int inventoryType)
+    //    {
+    //        _inventoryType = inventoryType;
+    //        _items = new List<CharacterItems>();
+    //    }
+
+    //    public List<CharacterItems> Items
+    //    {
+    //        get { return _items; }
+    //        set { _items = value; }
+    //    }
+
+    //    public int InventoryType
+    //    {
+    //        get { return _inventoryType; }
+    //        set { _inventoryType = value; }
+    //    }
+
+    //    public override string ToString()
+    //    {
+    //        return _inventoryType.ToString();
+    //    }
+    //}
+
+    //public class CharacterItems : CharacterProperty
+    //{
+    //    DataTable _itemTable;
+    //    List<CharacterItems> _items;
+    //    bool _isQuestItem;
+    //    Color _qualityColor;
+    //    Bitmap _itemImage;
+    //    string _itemImagePath;
+    //    bool _isItem;
+    //    bool _isConsumable;
+    //    int _numberOfAugmentations;
+    //    int _numberOfAugmentationsLeft;
+    //    int _maxNumberOfAugmentations;
+    //    int _maxNumberOfAffixes;
+    //    int _numberOfAffixes;
+    //    int _numberOfUpgrades;
+    //    int _maxNumberOfUpgrades;
+    //    int _stackSize;
+    //    int _maxStackSize;
+
+    //    //// todo: rewrite public CharacterItems(Unit heroUnit, TableDataSet dataSet)
+    //    //    : base(heroUnit, dataSet)
+    //    //{
+    //    //    _itemTable = _dataSet.GetExcelTableFromStringId("ITEMS");
+    //    //    DataRow[] itemRow = _itemTable.Select("code = " + BaseUnit.unitCode);
+
+    //    //    //DataTable colorTable = _dataSet.GetExcelTableFromStringId("ITEMQUALITY");
+    //    //    //DataRow[] colorRow = colorTable.Select("code = " + _hero.unitCode);
+
+    //    //    if (itemRow.Length > 0)
+    //    //    {
+    //    //        _isItem = true;
+
+    //    //        uint bitMask = (uint)itemRow[0]["bitmask02"];
+    //    //        _isQuestItem = (bitMask >> 13 & 1) == 1;
+
+    //    //        string maxStackSize = (string)itemRow[0]["stackSize"];
+    //    //        string[] splitResult = maxStackSize.Split(new char[] { ',' });
+    //    //        if(splitResult.Length == 3)
+    //    //        {
+    //    //            _maxStackSize = int.Parse(splitResult[1]);
+    //    //        }
+    //    //        if (_maxStackSize <= 0)
+    //    //        {
+    //    //            _maxStackSize = 1;
+    //    //        }
+
+    //    //        _stackSize = UnitHelpFunctions.GetSimpleValue(heroUnit, ItemValueNames.item_quantity.ToString());
+    //    //        if (_stackSize <= 0)
+    //    //        {
+    //    //            _stackSize = 1;
+    //    //        }
+
+    //    //        _itemImagePath = CreateImagePath();
+
+    //    //        _numberOfAugmentations = UnitHelpFunctions.GetSimpleValue(BaseUnit, ItemValueNames.item_augmented_count.ToString());
+    //    //        _numberOfUpgrades = UnitHelpFunctions.GetSimpleValue(BaseUnit, ItemValueNames.item_upgraded_count.ToString());
+
+    //    //        DataTable gameGlobals = _dataSet.GetExcelTableFromStringId("GAME_GLOBALS");
+    //    //        //DataRow[] globalsRow = gameGlobals.Select("name = " + "max_item_upgrades");
+    //    //        DataRow[] globalsRow = gameGlobals.Select("Index = " + 16);
+    //    //        _maxNumberOfUpgrades = (int)globalsRow[0]["intValue"];
+
+    //    //        //globalsRow = gameGlobals.Select("name = " + "max_item_augmentations");
+    //    //        globalsRow = gameGlobals.Select("Index = " + 17);
+    //    //        _maxNumberOfAffixes = (int)globalsRow[0]["intValue"];
+    //    //        Unit.StatBlock.Stat affixes = UnitHelpFunctions.GetComplexValue(_hero, ItemValueNames.applied_affix.ToString());
+    //    //        if (affixes != null)
+    //    //        {
+    //    //            _numberOfAffixes = affixes.values.Count;
+    //    //        }
+
+    //    //        int numberOfInherentAffixes = _numberOfAffixes - _numberOfAugmentations;
+    //    //        _numberOfAugmentationsLeft = _maxNumberOfAffixes - numberOfInherentAffixes;
+
+    //    //        if (_numberOfAugmentationsLeft < 0)
+    //    //        {
+    //    //            _numberOfAugmentationsLeft = 0;
+    //    //        }
+
+    //    //        _maxNumberOfAugmentations = _numberOfAugmentations + _numberOfAugmentationsLeft;
+    //    //        if (_maxNumberOfAugmentations > _maxNumberOfAffixes)
+    //    //        {
+    //    //            _maxNumberOfAugmentations = _maxNumberOfAffixes;
+    //    //        }
+    //    //    }
+
+    //    //    _items = new List<CharacterItems>();
+
+    //    //    foreach (Unit item in BaseUnit.Items)
+    //    //    {
+    //    //        CharacterItems wrapper = new CharacterItems(item, dataSet);
+    //    //        _items.Add(wrapper);
+    //    //    }
+    //    //}
+
+    //    private string CreateImagePath()
+    //    {
+    //        DataRow[] itemsRows = _itemTable.Select(String.Format("code = '{0}'", UnitObject.UnitCode));
+    //        if (itemsRows.Length == 0)
+    //        {
+    //            return null;
+    //        }
+    //        int unitType = (int)itemsRows[0]["unitType"];
+    //        string folder = (string)itemsRows[0]["folder"] + @"\icons";
+    //        string name = (string)itemsRows[0]["name"];
+    //        //string unitType = (string)itemsRows[0]["unitType_string"];
+
+    //        string itemPath = Path.Combine(folder, name);
+
+    //        return itemPath;
+    //    }
+
+    //    public override string ToString()
+    //    {
+    //        return Name;
+    //    }
+
+    //    public string Name
+    //    {
+    //        get
+    //        {
+    //            return UnitObject.Name;
+    //        }
+    //    }
+
+    //    public string GetItemImagePath(bool male)
+    //    {
+    //        string path = _itemImagePath;
+
+    //        if (_itemImagePath.StartsWith("armor"))
+    //        {
+    //            if (male)
+    //            {
+    //                path += "_m";
+    //            }
+    //            else
+    //            {
+    //                path += "_f";
+    //            }
+    //        }
+
+    //        //if (path == null)
+    //        //{
+    //        //    return path; 
+    //        //}
+    //        //we don't know if we want to load dds or png yet
+    //        return path;// += ".dds";
+    //    }
+
+    //    public bool IsItem
+    //    {
+    //        get { return _isItem; }
+    //        set { _isItem = value; }
+    //    }
+
+    //    /// <summary>
+    //    /// Do NOT use this entry for item adding/removing!
+    //    /// </summary>
+    //    public List<CharacterItems> WrappedItems
+    //    {
+    //        get
+    //        {
+    //            return _items;
+    //        }
+    //    }
+
+    //    public List<UnitObject> Items
+    //    {
+    //        get
+    //        {
+    //            return UnitObject.Items;
+    //        }
+
+    //        set
+    //        {
+    //            UnitObject.Items = value;
+
+    //        }
+    //    }
+
+    //    public int StackSize
+    //    {
+    //        get
+    //        {
+    //            return _stackSize;
+    //        }
+    //        set
+    //        {
+    //            if (value < 1)
+    //            {
+    //                value = 1;
+    //            }
+    //            if (value > MaxStackSize)
+    //            {
+    //                value = MaxStackSize;
+    //            }
+
+    //            _stackSize = value;
+    //            UnitHelpFunctions.SetSimpleValue(UnitObject, (int)ItemValueNames.item_quantity, value);
+    //        }
+    //    }
+
+    //    public int MaxStackSize
+    //    {
+    //        get
+    //        {
+    //            return _maxStackSize;
+    //        }
+    //    }
+
+    //    public bool IsConsumable
+    //    {
+    //        get
+    //        {
+    //            return _isConsumable;
+    //        }
+    //    }
+
+    //    /// <summary>
+    //    /// Number of uses of the Nanoforge up till now
+    //    /// </summary>
+    //    public int NumberOfUpgrades
+    //    {
+    //        get { return _numberOfUpgrades; }
+    //    }
+
+    //    /// <summary>
+    //    /// Number of uses of the Nanoforge left
+    //    /// </summary>
+    //    public int MaxNumberOfUpgrades
+    //    {
+    //        get { return _maxNumberOfUpgrades; }
+    //    }
+
+    //    /// <summary>
+    //    /// Maximum number of Augmentrix usages given the inherent affixes
+    //    /// </summary>
+    //    public int MaxNumberOfAugmentations
+    //    {
+    //        get { return _maxNumberOfAugmentations; }
+    //    }
+
+    //    /// <summary>
+    //    /// Number of Augmentrix usages up till now
+    //    /// </summary>
+    //    public int NumberOfAugmentations
+    //    {
+    //        get
+    //        {
+    //            return _numberOfAugmentations;
+    //        }
+    //    }
+
+    //    /// <summary>
+    //    /// Number of Augmentrix usages left
+    //    /// </summary>
+    //    public int NumberOfAugmentationsLeft
+    //    {
+    //        get { return _numberOfAugmentationsLeft; }
+    //    }
+
+    //    /// <summary>
+    //    /// Number of already present affixes 
+    //    /// </summary>
+    //    public int NumberOfAffixes
+    //    {
+    //        get
+    //        {
+    //            return _numberOfAffixes;
+    //        }
+    //    }
+
+    //    /// <summary>
+    //    /// Maximum number of affixes
+    //    /// </summary>
+    //    public int MaxNumberOfAffixes
+    //    {
+    //        get { return _maxNumberOfAffixes; }
+    //        set { _maxNumberOfAffixes = value; }
+    //    }
+
+    //    public InventoryTypes InventoryType
+    //    {
+    //        get
+    //        {
+    //            return (InventoryTypes)Enum.Parse(typeof(InventoryTypes), UnitObject.InventoryType.ToString());
+    //        }
+    //        set
+    //        {
+    //            UnitObject.InventoryType = (int)value;
+    //        }
+    //    }
+
+    //    public Point InventoryPosition
+    //    {
+    //        get
+    //        {
+    //            return new Point(UnitObject.InventoryPositionX, UnitObject.InventoryPositionY);
+    //        }
+    //        set
+    //        {
+    //            UnitObject.InventoryPositionX = value.X;
+    //            UnitObject.InventoryPositionY = value.Y;
+    //        }
+    //    }
+
+    //    public Size InventorySize
+    //    {
+    //        get
+    //        {
+    //            int width = UnitHelpFunctions.GetSimpleValue(UnitObject, (int)ItemValueNames.inventory_width);
+    //            int height = UnitHelpFunctions.GetSimpleValue(UnitObject, (int)ItemValueNames.inventory_height);
+
+    //            if (width < 1)
+    //            {
+    //                width = 1;
+    //            }
+    //            if (height < 1)
+    //            {
+    //                height = 1;
+    //            }
+
+    //            return new Size(width, height);
+    //        }
+    //        set
+    //        {
+    //            UnitHelpFunctions.SetSimpleValue(UnitObject, (int)ItemValueNames.inventory_width, value.Width);
+    //            UnitHelpFunctions.SetSimpleValue(UnitObject, (int)ItemValueNames.inventory_height, value.Height);
+    //        }
+    //    }
+
+    //    public ItemQuality Quality
+    //    {
+    //        get
+    //        {
+    //            return (ItemQuality)UnitHelpFunctions.GetSimpleValue(UnitObject, (int)ItemValueNames.item_quality);
+    //        }
+    //    }
+
+    //    public Color QualityColor
+    //    {
+    //        get
+    //        {
+    //            return _qualityColor;
+    //        }
+    //    }
+
+    //    //public Image ItemImage
+    //    //{
+    //    //    get
+    //    //    {
+    //    //        return _itemImage;
+    //    //    }
+    //    //}
+
+    //    public bool IsQuestItem
+    //    {
+    //        get
+    //        {
+    //            return _isQuestItem;
+    //        }
+    //    }
+
+    //    public List<UnitObject> GetItemsOfQuality(ItemQuality quality)
+    //    {
+    //        List<UnitObject> tmp = new List<UnitObject>();
+
+    //        foreach (UnitObject item in UnitObject.Items)
+    //        {
+    //            if (UnitHelpFunctions.GetSimpleValue(UnitObject, (int)ItemValueNames.item_quality) == (int)quality)
+    //            {
+    //                tmp.Add(item);
+    //            }
+    //        }
+    //        return tmp;
+    //    }
+
+    //    public List<UnitObject> GetItemsOfInventoryType(InventoryTypes type)
+    //    {
+    //        List<UnitObject> tmp = new List<UnitObject>();
+
+    //        foreach (UnitObject item in UnitObject.Items)
+    //        {
+    //            if (item.InventoryType == (int)type)
+    //            {
+    //                tmp.Add(item);
+    //            }
+    //        }
+
+    //        return tmp;
+    //    }
+
+    //    public void AddItem(UnitObject item)
+    //    {
+    //        UnitObject.Items.Add(item);
+    //        // todo: rewrite _items.Add(new CharacterItems(item, _dataSet));
+    //    }
+
+    //    public void RemoveItem(UnitObject item)
+    //    {
+    //        UnitObject.Items.Remove(item);
+    //        CharacterItems tmpItem = _items.Find(tmp => tmp.UnitObject == item);
+    //        _items.Remove(tmpItem);
+    //    }
+
+    //    public void AddItem(CharacterItems item)
+    //    {
+    //        _items.Add(item);
+    //        UnitObject.Items.Add(item.UnitObject);
+    //    }
+
+    //    public void RemoveItem(CharacterItems item)
+    //    {
+    //        UnitObject.Items.Remove(item.UnitObject);
+    //        _items.Remove(item);
+    //    }
+
+    //    public int PlayTime
+    //    {
+    //        get
+    //        {
+    //            return UnitHelpFunctions.GetSimpleValue(UnitObject, (int)ItemValueNames.played_time_in_seconds);
+    //        }
+    //        //set
+    //        //{
+    //        //    UnitHelpFunctions.SetSimpleValue(_hero, (int)ItemValueNames.played_time_in_seconds, value);
+    //        //}
+    //    }
+    //}
 
     //public class CharacterItemList : CharacterProperty
     //{
