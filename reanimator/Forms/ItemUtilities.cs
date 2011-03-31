@@ -667,4 +667,30 @@ namespace Reanimator.Forms
         CurrentWeaponSet = 25904,
         Turret = 17457
     };
+
+    public enum InventoryTypesComplete
+    {
+        Inventory = 19760,
+        Stash = 28208,
+        SharedStash = 26160,
+        QuestRewards = 26928,
+        Cube = 22577,
+        CurrentWeaponSet = 25904,
+        Turret = 17457,
+
+        Belt = 17200,
+        Helmet = 12592,
+        Shoulders = 13360,
+        Gloves = 16944,
+        Armor = 13616,
+        Pants = 17712,
+        Boots = 17456,
+        HandLeft = 14128,
+        HandRight = 14384,
+        DyeKit = 19249,
+
+        Ring,
+        Amulet,
+        Goggles
+    };
 }
