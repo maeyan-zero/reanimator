@@ -34,6 +34,9 @@
             // 
             // treeViewSkills
             // 
+            this.treeViewSkills.Anchor = ((System.Windows.Forms.AnchorStyles)((((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Bottom)
+                        | System.Windows.Forms.AnchorStyles.Left)
+                        | System.Windows.Forms.AnchorStyles.Right)));
             this.treeViewSkills.Location = new System.Drawing.Point(12, 181);
             this.treeViewSkills.Name = "treeViewSkills";
             this.treeViewSkills.Size = new System.Drawing.Size(441, 251);
@@ -41,6 +44,8 @@
             // 
             // savegameOverviewControl1
             // 
+            this.savegameOverviewControl1.Anchor = ((System.Windows.Forms.AnchorStyles)(((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Left)
+                        | System.Windows.Forms.AnchorStyles.Right)));
             this.savegameOverviewControl1.AutoScroll = true;
             this.savegameOverviewControl1.BorderStyle = System.Windows.Forms.BorderStyle.FixedSingle;
             this.savegameOverviewControl1.Location = new System.Drawing.Point(12, 12);
@@ -55,8 +60,12 @@
             this.ClientSize = new System.Drawing.Size(464, 444);
             this.Controls.Add(this.treeViewSkills);
             this.Controls.Add(this.savegameOverviewControl1);
+            this.MaximizeBox = false;
+            this.MinimizeBox = false;
+            this.MinimumSize = new System.Drawing.Size(480, 480);
             this.Name = "SavegameOverviewForm";
-            this.Text = "SavegameOverviewForm";
+            this.ShowIcon = false;
+            this.Text = "Savegame Viewer";
             this.ResumeLayout(false);
 
         }
