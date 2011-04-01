@@ -508,6 +508,32 @@ namespace Reanimator.Forms.ItemTransfer
             }
         }
 
+        /// <summary>
+        /// Loads the bitmap from the in game files
+        /// </summary>
+        /// <param name="imagePath">The path to the image</param>
+        /// <returns>Returns "true" if the image was found, "false" if not.</returns>
+        public bool LoadFromGameFiles(string imagePath)
+        {
+            try
+            {
+                _imagePath = imagePath;
+
+                _image = LoadImage(_imagePath, ".dds");
+                if (_size.Height != _size.Width)
+                {
+                    _image = CropImage(_image, _size);
+                }
+
+                return true;
+            }
+            catch (Exception ex)
+            {
+                ExceptionLogger.LogException(ex);
+                return false;
+            }
+        }
+
         private Bitmap CropImage(Bitmap bmp, Size size)
         {
             try
@@ -557,6 +583,26 @@ namespace Reanimator.Forms.ItemTransfer
             //    return bmp.ToBitmap();
             //}
             //return null;
+        }
+
+        private Bitmap LoadImage(string imagePath, string extension)
+        {
+            string path = string.Empty;
+
+            try
+            {
+                path = Path.Combine(@"data\units\items", imagePath + extension);
+                byte[] image = fileManager.GetFileBytes(path);
+                fileManager.EndAllDatAccess();
+                Stream stream = new MemoryStream(image);
+                FreeImageAPI.FreeImageBitmap bmp = FreeImageAPI.FreeImageBitmap.FromStream(stream);
+                return bmp.ToBitmap();
+            }
+            catch (Exception ex)
+            {
+                MessageBox.Show(string.Format("Item image not found at {0}!", path));
+                return null;
+            }
         }
     }
 }

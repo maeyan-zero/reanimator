@@ -72,79 +72,68 @@ namespace Reanimator.Forms.HeroEditorFunctions
         }
     }
 
-    public class GameIconHandler
-    {
-        List<GameIcon> _icon;
+    //public class GameIconHandler
+    //{
+    //    List<GameIcon> _icon;
+    //    Dictionary<string, Bitmap> _iconDictionary;
 
-        public GameIconHandler()
-        {
-            _icon = new List<GameIcon>();
-        }
+    //    public GameIconHandler()
+    //    {
+    //        _icon = new List<GameIcon>();
+    //        _iconDictionary = new Dictionary<string, Bitmap>();
+    //    }
 
-        public List<GameIcon> Icons
-        {
-            get
-            {
-                return _icon;
-            }
-            set
-            {
-                _icon = value;
-            }
-        }
+    //    public Dictionary<string, Bitmap> IconDictionary
+    //    {
+    //        get { return _iconDictionary; }
+    //        set { _iconDictionary = value; }
+    //    }
 
-        public Bitmap GetIconByName(string name)
-        {
-            try
-            {
-                if (_icon.Count > 0)
-                {
-                    GameIcon icon = _icon.Find(tmp => tmp.Name == name);
-                    if(icon.Image != null)
-                    {
-                        return icon.Image;
-                    }
-                }
-                return null;
-            }
-            catch (Exception ex)
-            {
-                throw (ex);
-            }
-        }
-    }
+    //    public void AddIcon(GameIcon icon)
+    //    {
+    //        _iconDictionary.Add(icon.Name, icon.Image);
+    //    }
+
+    //    public List<GameIcon> Icons
+    //    {
+    //        get { return _icon; }
+    //        set { _icon = value; }
+    //    }
+
+    //    public Bitmap GetIconByName(string name)
+    //    {
+    //        try
+    //        {
+    //            //if (_icon.Count > 0)
+    //            //{
+    //            //    GameIcon icon = _icon.Find(tmp => tmp.Name == name);
+    //            //    if(icon.Image != null)
+    //            //    {
+    //            //        return icon.Image;
+    //            //    }
+    //            //}
+    //            if (_iconDictionary.Count > 0)
+    //            {
+    //                return _iconDictionary[name];
+    //            }
+    //            return null;
+    //        }
+    //        catch (Exception ex)
+    //        {
+    //            throw (ex);
+    //        }
+    //    }
+    //}
 
     public class GameIcon
     {
-        Bitmap _bitmap;
-        string _iconName;
+        public Bitmap Bitmap;
+        public string IconName;
 
-        public GameIcon(string path, string iconName)
+        public GameIcon(string name, Bitmap bmp)
         {
-            _bitmap = new Bitmap(path);
-            _iconName = iconName;
-        }
-
-        public GameIcon(Bitmap bmp, string iconName)
-        {
-            _bitmap = bmp;
-            _iconName = iconName;
-        }
-
-        public Bitmap Image
-        {
-            get
-            {
-                return _bitmap;
-            }
-        }
-
-        public string Name
-        {
-            get
-            {
-                return _iconName;
-            }
+            IconName = name;
+            Bitmap = bmp;
         }
     }
 }

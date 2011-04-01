@@ -969,14 +969,22 @@ namespace Reanimator.Forms
 
         private void tradeItemsToolStripMenuItem_Click(object sender, EventArgs e)
         {
-            _fileManager.PreLoadTable("AFFIXES");
-            _fileManager.PreLoadTable("ITEMS");
-            _fileManager.PreLoadTable("STATS");
-            _fileManager.PreLoadTable("Strings_Affix");
-            _fileManager.PreLoadTable("GAME_GLOBALS");
+            AtlasImageLoader image = new AtlasImageLoader();
+            image.LoadAtlas(@"data\uix\xml\skilltree_atlas.xml", _fileManager);
+            image.SaveImagesToFolder(@"F:\extractedImages\");
+            image.ClearImageList();
+            //image.LoadAtlas(@"data\background\tubestations\charingcross\cc_southbound.m", _fileManager);
 
-            ItemTransfer.ItemTransferForm itemTransfer = new ItemTransfer.ItemTransferForm(_fileManager);
-            itemTransfer.Show(this);
+            ////pre-load the tables to prevent additional waiting times when accessing certain information later on
+            //_fileManager.PreLoadTable("AFFIXES");
+            //_fileManager.PreLoadTable("ITEMS");
+            //_fileManager.PreLoadTable("STATS");
+            //_fileManager.PreLoadTable("Strings_Affix");
+            //_fileManager.PreLoadTable("GAME_GLOBALS");
+
+            //ItemTransfer.ItemTransferForm itemTransfer = new ItemTransfer.ItemTransferForm(_fileManager);
+            //itemTransfer.DisplayWarningMessage(null, null);
+            //itemTransfer.Show(this);
         }
 
         //private void saveSinglePlayerFilesToolStripMenuItem_Click(object sender, EventArgs e)
