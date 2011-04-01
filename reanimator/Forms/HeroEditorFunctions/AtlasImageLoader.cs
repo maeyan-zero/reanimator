@@ -179,16 +179,23 @@ namespace Reanimator.Forms.HeroEditorFunctions
 
         public void SaveImagesToFolder(string folder)
         {
-            if (!Directory.Exists(folder))
+            try
             {
-                Directory.CreateDirectory(folder);
+                if (!Directory.Exists(folder))
+                {
+                    Directory.CreateDirectory(folder);
+                }
+
+                List<string> keys = new List<string>(_iconDictionary.Keys);
+
+                foreach (string key in keys)
+                {
+                    _iconDictionary[key].Save(Path.Combine(folder, key + ".bmp"));
+                }
             }
-
-            List<string> keys = new List<string>(_iconDictionary.Keys);
-
-            foreach (string key in keys)
+            catch (Exception ex)
             {
-                _iconDictionary[key].Save(Path.Combine(folder, key + ".bmp"));
+                MessageBox.Show(ex.Message);
             }
         }
 

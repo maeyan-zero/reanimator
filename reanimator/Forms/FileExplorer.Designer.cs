@@ -52,6 +52,7 @@
             this._date_columnHeader = ((System.Windows.Forms.ColumnHeader)(new System.Windows.Forms.ColumnHeader()));
             this._location_columnHeader = ((System.Windows.Forms.ColumnHeader)(new System.Windows.Forms.ColumnHeader()));
             this._fileActions_groupBox = new System.Windows.Forms.GroupBox();
+            this.checkBoxPreview = new System.Windows.Forms.CheckBox();
             this.pictureBox1 = new System.Windows.Forms.PictureBox();
             this._indexFiles_label = new System.Windows.Forms.Label();
             this._indexFiles_listBox = new System.Windows.Forms.ListBox();
@@ -90,7 +91,6 @@
             this._quickExcelBrowse_button = new System.Windows.Forms.Button();
             this._quickExcelDir_textBox = new System.Windows.Forms.TextBox();
             this._quckExcel_label = new System.Windows.Forms.Label();
-            this.checkBoxPreview = new System.Windows.Forms.CheckBox();
             this._fileEntry_contextMenu.SuspendLayout();
             this.tabControl1.SuspendLayout();
             this.fileExplorer_tabPage.SuspendLayout();
@@ -312,7 +312,7 @@
             this._selectedFile_groupBox.Controls.Add(this._files_listView);
             this._selectedFile_groupBox.Location = new System.Drawing.Point(4, 3);
             this._selectedFile_groupBox.Name = "_selectedFile_groupBox";
-            this._selectedFile_groupBox.Size = new System.Drawing.Size(475, 157);
+            this._selectedFile_groupBox.Size = new System.Drawing.Size(490, 157);
             this._selectedFile_groupBox.TabIndex = 6;
             this._selectedFile_groupBox.TabStop = false;
             this._selectedFile_groupBox.Text = "Selected File Details (Right Click for Options (TODO))";
@@ -335,7 +335,7 @@
             this._files_listView.Location = new System.Drawing.Point(5, 22);
             this._files_listView.Margin = new System.Windows.Forms.Padding(2, 3, 2, 3);
             this._files_listView.Name = "_files_listView";
-            this._files_listView.Size = new System.Drawing.Size(445, 129);
+            this._files_listView.Size = new System.Drawing.Size(460, 129);
             this._files_listView.TabIndex = 5;
             this._files_listView.UseCompatibleStateImageBehavior = false;
             this._files_listView.View = System.Windows.Forms.View.Details;
@@ -381,10 +381,24 @@
             this._fileActions_groupBox.Controls.Add(this._fileActionsPatch_checkBox);
             this._fileActions_groupBox.Location = new System.Drawing.Point(4, 166);
             this._fileActions_groupBox.Name = "_fileActions_groupBox";
-            this._fileActions_groupBox.Size = new System.Drawing.Size(475, 289);
+            this._fileActions_groupBox.Size = new System.Drawing.Size(490, 289);
             this._fileActions_groupBox.TabIndex = 5;
             this._fileActions_groupBox.TabStop = false;
             this._fileActions_groupBox.Text = "Checked File Actions";
+            // 
+            // checkBoxPreview
+            // 
+            this.checkBoxPreview.AutoSize = true;
+            this.checkBoxPreview.BackColor = System.Drawing.Color.Transparent;
+            this.checkBoxPreview.Checked = true;
+            this.checkBoxPreview.CheckState = System.Windows.Forms.CheckState.Checked;
+            this.checkBoxPreview.Location = new System.Drawing.Point(408, 263);
+            this.checkBoxPreview.Name = "checkBoxPreview";
+            this.checkBoxPreview.Size = new System.Drawing.Size(67, 19);
+            this.checkBoxPreview.TabIndex = 12;
+            this.checkBoxPreview.Text = "Preview";
+            this.checkBoxPreview.UseVisualStyleBackColor = false;
+            this.checkBoxPreview.CheckedChanged += new System.EventHandler(this.checkBoxPreview_CheckedChanged);
             // 
             // pictureBox1
             // 
@@ -438,7 +452,7 @@
             // _fileActionsBrowse_button
             // 
             this._fileActionsBrowse_button.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Right)));
-            this._fileActionsBrowse_button.Location = new System.Drawing.Point(374, 49);
+            this._fileActionsBrowse_button.Location = new System.Drawing.Point(389, 49);
             this._fileActionsBrowse_button.Name = "_fileActionsBrowse_button";
             this._fileActionsBrowse_button.Size = new System.Drawing.Size(75, 23);
             this._fileActionsBrowse_button.TabIndex = 3;
@@ -452,7 +466,7 @@
                         | System.Windows.Forms.AnchorStyles.Right)));
             this._fileActionsPath_textBox.Location = new System.Drawing.Point(7, 49);
             this._fileActionsPath_textBox.Name = "_fileActionsPath_textBox";
-            this._fileActionsPath_textBox.Size = new System.Drawing.Size(361, 23);
+            this._fileActionsPath_textBox.Size = new System.Drawing.Size(376, 23);
             this._fileActionsPath_textBox.TabIndex = 2;
             // 
             // _fileActionsExtract_checkBox
@@ -485,7 +499,7 @@
             this.groupBox3.Margin = new System.Windows.Forms.Padding(2, 3, 2, 3);
             this.groupBox3.Name = "groupBox3";
             this.groupBox3.Padding = new System.Windows.Forms.Padding(2, 3, 2, 3);
-            this.groupBox3.Size = new System.Drawing.Size(452, 98);
+            this.groupBox3.Size = new System.Drawing.Size(489, 98);
             this.groupBox3.TabIndex = 3;
             this.groupBox3.TabStop = false;
             this.groupBox3.Text = "Cooking";
@@ -508,7 +522,7 @@
             this.tableLayoutPanel4.RowCount = 2;
             this.tableLayoutPanel4.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Percent, 50F));
             this.tableLayoutPanel4.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Percent, 50F));
-            this.tableLayoutPanel4.Size = new System.Drawing.Size(437, 70);
+            this.tableLayoutPanel4.Size = new System.Drawing.Size(474, 70);
             this.tableLayoutPanel4.TabIndex = 0;
             // 
             // uncook_button
@@ -533,7 +547,7 @@
             this.cook_label.Location = new System.Drawing.Point(163, 0);
             this.cook_label.Margin = new System.Windows.Forms.Padding(2, 0, 2, 0);
             this.cook_label.Name = "cook_label";
-            this.cook_label.Size = new System.Drawing.Size(272, 35);
+            this.cook_label.Size = new System.Drawing.Size(309, 35);
             this.cook_label.TabIndex = 1;
             this.cook_label.Text = "Uncook checked file/folders that can be uncooked.\r\nThey will be placed in their a" +
                 "pplicable \\data\\ location.";
@@ -561,7 +575,7 @@
             this.uncook_label.Location = new System.Drawing.Point(163, 35);
             this.uncook_label.Margin = new System.Windows.Forms.Padding(2, 0, 2, 0);
             this.uncook_label.Name = "uncook_label";
-            this.uncook_label.Size = new System.Drawing.Size(272, 35);
+            this.uncook_label.Size = new System.Drawing.Size(309, 35);
             this.uncook_label.TabIndex = 3;
             this.uncook_label.Text = "Cook checked files/folders that can be cooked.\r\nWARNING: Cooked files will be pla" +
                 "ced in \\data\\ location overwriting previous versions.\r\n(files in .dat will be un" +
@@ -578,7 +592,7 @@
             this.groupBox2.Margin = new System.Windows.Forms.Padding(2, 3, 2, 3);
             this.groupBox2.Name = "groupBox2";
             this.groupBox2.Padding = new System.Windows.Forms.Padding(2, 3, 2, 3);
-            this.groupBox2.Size = new System.Drawing.Size(453, 154);
+            this.groupBox2.Size = new System.Drawing.Size(493, 154);
             this.groupBox2.TabIndex = 2;
             this.groupBox2.TabStop = false;
             this.groupBox2.Text = "Options";
@@ -607,7 +621,7 @@
             this.options_tableLayoutPanel.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Percent, 25F));
             this.options_tableLayoutPanel.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Percent, 25F));
             this.options_tableLayoutPanel.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Percent, 25F));
-            this.options_tableLayoutPanel.Size = new System.Drawing.Size(434, 125);
+            this.options_tableLayoutPanel.Size = new System.Drawing.Size(474, 125);
             this.options_tableLayoutPanel.TabIndex = 1;
             // 
             // revertFile_label
@@ -618,7 +632,7 @@
             this.revertFile_label.Location = new System.Drawing.Point(163, 93);
             this.revertFile_label.Margin = new System.Windows.Forms.Padding(2, 0, 2, 0);
             this.revertFile_label.Name = "revertFile_label";
-            this.revertFile_label.Size = new System.Drawing.Size(269, 32);
+            this.revertFile_label.Size = new System.Drawing.Size(309, 32);
             this.revertFile_label.TabIndex = 9;
             this.revertFile_label.Text = "Re-Patch necessary index files to have the game to load original unmodified check" +
                 "ed files/folders.";
@@ -632,7 +646,7 @@
             this.extractPatch_label.Location = new System.Drawing.Point(163, 31);
             this.extractPatch_label.Margin = new System.Windows.Forms.Padding(2, 0, 2, 0);
             this.extractPatch_label.Name = "extractPatch_label";
-            this.extractPatch_label.Size = new System.Drawing.Size(269, 31);
+            this.extractPatch_label.Size = new System.Drawing.Size(309, 31);
             this.extractPatch_label.TabIndex = 5;
             this.extractPatch_label.Text = "Extract checked files/folders to game data location, then patch necessary index f" +
                 "iles forcing the game to load extracted files.\r\nNote: Non-patchable files (e.g. " +
@@ -647,7 +661,7 @@
             this.extract_label.Location = new System.Drawing.Point(163, 0);
             this.extract_label.Margin = new System.Windows.Forms.Padding(2, 0, 2, 0);
             this.extract_label.Name = "extract_label";
-            this.extract_label.Size = new System.Drawing.Size(269, 31);
+            this.extract_label.Size = new System.Drawing.Size(309, 31);
             this.extract_label.TabIndex = 4;
             this.extract_label.Text = "Extract checked files/folders to a selected location.";
             this.extract_label.TextAlign = System.Drawing.ContentAlignment.MiddleLeft;
@@ -701,7 +715,7 @@
             this.packPatch_label.Location = new System.Drawing.Point(163, 62);
             this.packPatch_label.Margin = new System.Windows.Forms.Padding(2, 0, 2, 0);
             this.packPatch_label.Name = "packPatch_label";
-            this.packPatch_label.Size = new System.Drawing.Size(269, 31);
+            this.packPatch_label.Size = new System.Drawing.Size(309, 31);
             this.packPatch_label.TabIndex = 7;
             this.packPatch_label.Text = "Pack checked files/folders into a custom dat/idx to have the game load the files " +
                 "from an isolated .dat.";
@@ -898,17 +912,6 @@
                 "ucture.\r\nIf applicable, the TCv4 files will be placed in an initial directory /T" +
                 "Cv4/";
             this._quckExcel_label.TextAlign = System.Drawing.ContentAlignment.MiddleLeft;
-            // 
-            // checkBoxPreview
-            // 
-            this.checkBoxPreview.AutoSize = true;
-            this.checkBoxPreview.BackColor = System.Drawing.Color.Transparent;
-            this.checkBoxPreview.Location = new System.Drawing.Point(331, 167);
-            this.checkBoxPreview.Name = "checkBoxPreview";
-            this.checkBoxPreview.Size = new System.Drawing.Size(99, 19);
-            this.checkBoxPreview.TabIndex = 12;
-            this.checkBoxPreview.Text = "Show preview";
-            this.checkBoxPreview.UseVisualStyleBackColor = false;
             // 
             // FileExplorer
             // 
