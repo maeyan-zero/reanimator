@@ -77,6 +77,7 @@ namespace Reanimator.Forms
         /// <summary>
         /// Event Function for Tree View - After Select.
         /// Will update the file details based upon selection.
+        /// Will update the file image preview if .dds file
         /// </summary>
         /// <param name="sender">The TreeView clicked.</param>
         /// <param name="e">The After Select event args.</param>
@@ -89,12 +90,17 @@ namespace Reanimator.Forms
 
             if (selectedNode.Name.EndsWith(".dds"))
             {
+                pictureBox1.Show();
                 _fileManager.BeginAllDatReadAccess();
                 Stream stream = new MemoryStream(_fileManager.GetFileBytes(selectedNode.FullPath));
                 _fileManager.EndAllDatAccess();
                 bmp = FreeImageAPI.FreeImageBitmap.FromStream(stream);
                 pictureBox1.Image = bmp.ToBitmap();
                 stream.Close();
+            }
+            else
+            {
+                pictureBox1.Hide();
             }
 
             _files_listView.Items.Clear();
