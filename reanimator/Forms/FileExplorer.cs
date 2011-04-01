@@ -99,6 +99,7 @@ namespace Reanimator.Forms
                 {
                     _fileManager.BeginAllDatReadAccess();
                     Bitmap bmp = AtlasImageLoader.TextureFromGameFile(selectedNode.FullPath, _fileManager);
+                    bmp.Tag = selectedNode.Text.Replace(Path.GetExtension(selectedNode.Text), string.Empty);
                     _fileManager.EndAllDatAccess();
 
                     pictureBox1.Image = bmp;
@@ -1409,9 +1410,10 @@ namespace Reanimator.Forms
             if (pictureBox1.Tag == null)
             {
                 Bitmap bmp = (Bitmap)pictureBox1.Image;
-                PicturePreview form = new PicturePreview();
-                form.setImage(bmp);
-                form.Show();
+                string text = (string)pictureBox1.Image.Tag;
+                TextureSheetPreview preview = new TextureSheetPreview();
+                preview.SetBitmap(bmp, text);
+                preview.Show();
             }
             else
             {
