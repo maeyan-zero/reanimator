@@ -86,9 +86,18 @@ namespace Reanimator.Forms
             NodeObject nodeObject = (NodeObject)selectedNode.Tag;
             PackFileEntry fileEntry = nodeObject.FileEntry;
 
+            if (selectedNode.Name.EndsWith(".dds"))
+            {
+                _fileManager.BeginAllDatReadAccess();
+                Stream stream = new MemoryStream(_fileManager.GetFileBytes(selectedNode.FullPath));
+                _fileManager.EndAllDatAccess();
+                FreeImageAPI.FreeImageBitmap bmp = FreeImageAPI.FreeImageBitmap.FromStream(stream);
+                Image bmp1 = bmp.ToBitmap();
+                pictureBox1.Image = bmp1;
+            }
+
             _files_listView.Items.Clear();
             if (nodeObject.IsFolder)  return;
-
 
             // no file index means it's either an uncooked file, or a new file
             if (fileEntry == null)
@@ -161,8 +170,6 @@ namespace Reanimator.Forms
 
             // can't do anything with a folder
             if (nodeObject.IsFolder) return;
-
-
 
             if (selectedNode.Name.EndsWith(LevelRulesFile.Extension))
             {
