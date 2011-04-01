@@ -11,6 +11,7 @@ using Hellgate;
 using Config = Revival.Common.Config;
 using ExceptionLogger = Revival.Common.ExceptionLogger;
 using Revival.Common;
+using Reanimator.Forms.HeroEditorFunctions;
 
 namespace Reanimator.Forms
 {
@@ -88,20 +89,40 @@ namespace Reanimator.Forms
             NodeObject nodeObject = (NodeObject)selectedNode.Tag;
             PackFileEntry fileEntry = nodeObject.FileEntry;
 
-            if (selectedNode.Name.EndsWith(".dds"))
+            pictureBox1.Image = null;
+
+            if (checkBoxPreview.Checked)
             {
-                pictureBox1.Show();
-                _fileManager.BeginAllDatReadAccess();
-                Stream stream = new MemoryStream(_fileManager.GetFileBytes(selectedNode.FullPath));
-                _fileManager.EndAllDatAccess();
-                bmp = FreeImageAPI.FreeImageBitmap.FromStream(stream);
-                pictureBox1.Image = bmp.ToBitmap();
-                stream.Close();
+                if (selectedNode.Name.EndsWith(".dds"))
+                {
+                    _fileManager.BeginAllDatReadAccess();
+                    Bitmap bmp = AtlasImageLoader.TextureFromGameFile(selectedNode.FullPath, _fileManager);
+                    _fileManager.EndAllDatAccess();
+
+                    pictureBox1.Image = bmp;
+                }
+                else if (selectedNode.Name.EndsWith("_atlas.xml"))
+                {
+                    try
+                    {
+                        _fileManager.BeginAllDatReadAccess();
+                        AtlasImageLoader loader = new AtlasImageLoader();
+                        loader.LoadAtlas(selectedNode.FullPath, _fileManager);
+                        _fileManager.EndAllDatAccess();
+
+                        if (loader.Count > 0)
+                        {
+                            pictureBox1.Image = loader.GetImage(loader.GetImageNames()[0]);
+                        }
+                        loader.ClearImageList();
+                    }
+                    catch (Exception ex)
+                    {
+                        MessageBox.Show(ex.Message);
+                    }
+                }
             }
-            else
-            {
-                pictureBox1.Hide();
-            }
+
 
             _files_listView.Items.Clear();
             if (nodeObject.IsFolder)  return;
