@@ -1,6 +1,6 @@
 ﻿namespace Reanimator.Forms
 {
-    partial class picturePreview
+    partial class PicturePreview
     {
         /// <summary>
         /// Required designer variable.
@@ -42,13 +42,14 @@
             this.pictureBox1.TabIndex = 0;
             this.pictureBox1.TabStop = false;
             // 
-            // picturePreview
+            // PicturePreview
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
             this.ClientSize = new System.Drawing.Size(434, 412);
             this.Controls.Add(this.pictureBox1);
-            this.Name = "picturePreview";
+            this.Name = "PicturePreview";
+            this.ShowIcon = false;
             this.Text = "Preview";
             ((System.ComponentModel.ISupportInitialize)(this.pictureBox1)).EndInit();
             this.ResumeLayout(false);

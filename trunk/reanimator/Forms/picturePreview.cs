@@ -9,9 +9,9 @@ using System.Windows.Forms;
 
 namespace Reanimator.Forms
 {
-    public partial class picturePreview : Form
+    public partial class PicturePreview : Form
     {
-        public picturePreview()
+        public PicturePreview()
         {
             InitializeComponent();
             

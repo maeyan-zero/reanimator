@@ -21,7 +21,6 @@ namespace Reanimator.Forms
         private readonly FileManager _fileManagerTCv4;
         private TreeView _clonedTreeView;
         private bool _isFiltering;
-        private FreeImageAPI.FreeImageBitmap bmp;
 
         /// <summary>
         /// Main constructor. Initialises the file tree system from a valid FileManager.
@@ -88,8 +87,11 @@ namespace Reanimator.Forms
             TreeNode selectedNode = treeView.SelectedNode;
             NodeObject nodeObject = (NodeObject)selectedNode.Tag;
             PackFileEntry fileEntry = nodeObject.FileEntry;
+            AtlasImageLoader loader = new AtlasImageLoader();
 
             pictureBox1.Image = null;
+            pictureBox1.Tag = null;
+            loader.ClearImageList();
 
             if (checkBoxPreview.Checked)
             {
@@ -106,15 +108,14 @@ namespace Reanimator.Forms
                     try
                     {
                         _fileManager.BeginAllDatReadAccess();
-                        AtlasImageLoader loader = new AtlasImageLoader();
                         loader.LoadAtlas(selectedNode.FullPath, _fileManager);
                         _fileManager.EndAllDatAccess();
 
                         if (loader.Count > 0)
                         {
                             pictureBox1.Image = loader.GetImage(loader.GetImageNames()[0]);
+                            pictureBox1.Tag = loader;
                         }
-                        loader.ClearImageList();
                     }
                     catch (Exception ex)
                     {
@@ -1405,9 +1406,31 @@ namespace Reanimator.Forms
         /// <param name="e"></param>
         private void pictureBox1_Click(object sender, EventArgs e)
         {
-            picturePreview form = new picturePreview();
-            form.setImage(bmp.ToBitmap());
-            form.Show();
+            if (pictureBox1.Tag == null)
+            {
+                Bitmap bmp = (Bitmap)pictureBox1.Image;
+                PicturePreview form = new PicturePreview();
+                form.setImage(bmp);
+                form.Show();
+            }
+            else
+            {
+                AtlasImageLoader loader = (AtlasImageLoader)pictureBox1.Tag;
+
+                if (loader.Count > 0)
+                {
+                    TextureSheetPreview preview = new TextureSheetPreview();
+                    preview.SetAtlasImageLoader(loader);
+                    preview.Show();
+
+                    loader.ClearImageList();
+                }
+            }
+        }
+
+        private void checkBoxPreview_CheckedChanged(object sender, EventArgs e)
+        {
+            pictureBox1.Visible = checkBoxPreview.Enabled;
         }
     }
 }
