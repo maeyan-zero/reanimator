@@ -76,7 +76,7 @@ namespace Reanimator.Forms.HeroEditorFunctions
             }
         }
 
-        private Bitmap BaseTextureFromGameFile(string path, FileManager fileManager)
+        public Bitmap TextureFromGameFile(string path, FileManager fileManager)
         {
             byte[] imageFile = fileManager.GetFileBytes(path);
             Stream stream = new MemoryStream(imageFile);
@@ -102,7 +102,7 @@ namespace Reanimator.Forms.HeroEditorFunctions
             string extension = Path.GetExtension(atlas.file);
             string path = atlas.file.Replace(extension, string.Empty) + ".dds";
 
-            Bitmap bitmap = BaseTextureFromGameFile(path, fileManager);
+            Bitmap bitmap = TextureFromGameFile(path, fileManager);
 
             return LoadImages(atlas, bitmap);
         }
