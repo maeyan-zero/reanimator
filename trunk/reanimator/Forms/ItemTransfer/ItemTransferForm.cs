@@ -20,11 +20,9 @@ namespace Reanimator.Forms.ItemTransfer
         int ITEMUNITSIZE = 40;
 
         FileManager fileManager;
-        UnitHelpFunctions _itemHelpFunctions;
-        DataTable _items;
-        bool _isMale = false;
         PreviewManager _previewManager;
 
+        bool _isMale = false;
         string _characterPath1;
         string _characterPath2;
 
@@ -41,7 +39,7 @@ namespace Reanimator.Forms.ItemTransfer
         bool _backupCharacters = true;
         //specifies wether item icons are loaded to display the item
         //bool _displayItemIcons = true;
-        bool _displayItemIcons = Directory.Exists(Path.Combine(Config.HglDir, @"Data\mp_hellgate_1.10.180.3416_1.0.86.4580\data\units\items"));
+        bool _displayItemIcons = true;//Directory.Exists(Path.Combine(Config.HglDir, @"Data\mp_hellgate_1.10.180.3416_1.0.86.4580\data\units\items"));
         //specifies wether the item name and quantity is displayed
         bool _displayNamesAndQuantity = true;
 
@@ -65,12 +63,6 @@ namespace Reanimator.Forms.ItemTransfer
             InitializeComponent();
 
             this.fileManager = fileManager;
-
-            _itemHelpFunctions = new UnitHelpFunctions(fileManager);
-
-            //preload the tables
-            _items = fileManager.GetDataTable("ITEMS");
-            //_dataSet.GetExcelTableFromStringId("AFFIXES");
 
             _previewManager = new PreviewManager(fileManager);
 
@@ -703,7 +695,7 @@ namespace Reanimator.Forms.ItemTransfer
 
         private void b_undoTransfer_Click(object sender, EventArgs e)
         {
-            // todo: rewrite b_loadCharacter1_Click(null, null);
+            b_loadCharacter1_Click(null, null);
             b_loadCharacter2_Click(null, null);
 
             EnableComboBoxes(true, true);

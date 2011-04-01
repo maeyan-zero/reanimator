@@ -22,5 +22,15 @@ namespace Reanimator.Forms
 
             return type;
         }
+
+        public static T Deserialize(Stream stream)
+        {
+            XmlSerializer serializer = new XmlSerializer(typeof(T));
+            TextReader tr = new StreamReader(stream);
+            T type = (T)serializer.Deserialize(tr);
+            tr.Close();
+
+            return type;
+        }
     }
 }

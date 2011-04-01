@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using System.Drawing;
 using Hellgate;
+using Reanimator.Forms.HeroEditorFunctions;
 
 namespace Reanimator.Forms.ItemTransfer
 {
@@ -52,6 +53,13 @@ namespace Reanimator.Forms.ItemTransfer
             InitInventories(items);
         }
 
+        public void Initialize2(List<CharacterItems> items)
+        {
+            InitArray();
+
+            InitInventories2(items);
+        }
+
         private void InitArray()
         {
             _charInventory = new bool[Enum.GetNames(typeof(TradeInventoryTypes)).Length][,];
@@ -97,6 +105,27 @@ namespace Reanimator.Forms.ItemTransfer
             }
         }
 
+        private void InitInventories2(List<CharacterItems> items)
+        {
+            foreach (CharacterItems item in items)
+            {
+                AddItem2(item);
+
+                //if (item.inventoryType == (int)InventoryTypes.Cube)
+                //{
+                //}
+                //else if (item.inventoryType == (int)InventoryTypes.Inventory)
+                //{
+                //}
+                //else if (item.inventoryType == (int)InventoryTypes.Stash)
+                //{
+                //}
+                //else //equipped
+                //{
+                //}
+            }
+        }
+
         public void AddItem(UnitObject item)
         {
             // get inventory type that the item uses
@@ -122,6 +151,31 @@ namespace Reanimator.Forms.ItemTransfer
             AddOrRemoveItem(type, item, false);
         }
 
+        public void AddItem2(CharacterItems item)
+        {
+            // get inventory type that the item uses
+            TradeInventoryTypes type = TradeInventoryTypes.Inventory;
+
+            if (item.InventoryType == InventoryTypes.Cube)
+            {
+                type = TradeInventoryTypes.Cube;
+            }
+            else if (item.InventoryType == InventoryTypes.Stash)
+            {
+                type = TradeInventoryTypes.Stash;
+            }
+            else if (item.InventoryType == InventoryTypes.Inventory)
+            {
+                type = TradeInventoryTypes.Inventory;
+            }
+            else
+            {
+                return;
+            }
+
+            AddOrRemoveItem2(type, item, false);
+        }
+
         public void RemoveItem(UnitObject item)
         {
             // get inventory type that the item uses
@@ -145,6 +199,29 @@ namespace Reanimator.Forms.ItemTransfer
             }
 
             AddOrRemoveItem(type, item, true);
+        }
+
+        private void AddOrRemoveItem2(TradeInventoryTypes type, CharacterItems item, bool removeItem)
+        {
+            // get corresponding inventory
+            bool[,] inventory = _charInventory[(int)type];
+
+            int x = item.InventoryPosition.X;
+            int y = item.InventoryPosition.Y;
+
+            int width = item.InventorySize.Width;
+            int height = item.InventorySize.Height;
+
+            if (width <= 0)
+            {
+                width = 1;
+            }
+            if (height <= 0)
+            {
+                height = 1;
+            }
+
+            AllocateInventorySpace(inventory, x, y, width, height, removeItem);
         }
 
         private void AddOrRemoveItem(TradeInventoryTypes type, UnitObject item, bool removeItem)
@@ -237,24 +314,47 @@ namespace Reanimator.Forms.ItemTransfer
 
     public class ItemInfo
     {
+        CharacterItems itemWrapper;
         UnitObject _item;
         Size _itemSize;
 
         public Point Location
         {
-            get { return GetLocation(); }
-            set { SetLocation(value); }
+            get { return itemWrapper.InventoryPosition; }
+            set { itemWrapper.InventoryPosition = value; }
         }
+
+        //public Point Location
+        //{
+        //    get { return GetLocation(); }
+        //    set { SetLocation(value); }
+        //}
 
         public Size ItemSize
         {
-            get { return _itemSize; }
+            get { return itemWrapper.InventorySize; }
         }
 
-        public UnitObject Item
+        //public Size ItemSize
+        //{
+        //    get { return _itemSize; }
+        //}
+
+        public CharacterItems Item
         {
-            get { return _item; }
-            set { _item = value; }
+            get { return itemWrapper; }
+            set { itemWrapper = value; }
+        }
+
+        //public UnitObject Item
+        //{
+        //    get { return _item; }
+        //    set { _item = value; }
+        //}
+
+        public ItemInfo(CharacterItems item)
+        {
+            itemWrapper = item;
         }
 
         public ItemInfo(UnitObject item)

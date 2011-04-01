@@ -7,18 +7,19 @@ using System.Windows.Forms;
 using System.IO;
 using System.Drawing.Imaging;
 using Config = Revival.Common.Config;
+using Hellgate;
 
 namespace Reanimator.Forms.HeroEditorFunctions
 {
     public class AtlasImageLoader
     {
         List<string> _loadedAtlas;
-        GameIconHandler _images;
+        Dictionary<string, Bitmap> _iconDictionary;
 
         public AtlasImageLoader()
         {
-            _images = new GameIconHandler();
             _loadedAtlas = new List<string>();
+            _iconDictionary = new Dictionary<string, Bitmap>();
         }
 
         public void LoadAtlas(string filePath)
@@ -27,8 +28,15 @@ namespace Reanimator.Forms.HeroEditorFunctions
             {
                 if (!_loadedAtlas.Contains(filePath))
                 {
+                    Atlas atlas = XmlUtilities<Atlas>.Deserialize(filePath);
+
                     _loadedAtlas.Add(filePath);
-                    _images.Icons.AddRange(LoadImages(filePath));
+                    GameIcon[] icons = LoadImagesFromLocalFiles(atlas);
+
+                    foreach(GameIcon icon in icons)
+                    {
+                        _iconDictionary.Add(icon.IconName, icon.Bitmap);
+                    }
                 }
             }
             catch (Exception ex)
@@ -37,14 +45,72 @@ namespace Reanimator.Forms.HeroEditorFunctions
             }
         }
 
-        private GameIcon[] LoadImages(string xmlPath)
+        public void LoadAtlas(string filePath, FileManager fileManager)
         {
             try
             {
-                Atlas atlas = XmlUtilities<Atlas>.Deserialize(xmlPath);
+                if (!_loadedAtlas.Contains(filePath))
+                {
+                    fileManager.BeginAllDatReadAccess();
 
-                string path = Path.Combine(Config.HglDir, atlas.file);
-                Bitmap bitmap = new Bitmap(path);
+                    byte[] xmlFile = fileManager.GetFileBytes(filePath);
+                    
+                    Stream stream = new MemoryStream(xmlFile);
+                    Atlas atlas = XmlUtilities<Atlas>.Deserialize(stream);
+                    stream.Close();
+
+                    _loadedAtlas.Add(filePath);
+                    GameIcon[] icons = LoadImagesFromGameFiles(atlas, fileManager);
+
+                    foreach (GameIcon icon in icons)
+                    {
+                        _iconDictionary.Add(icon.IconName, icon.Bitmap);
+                    }
+
+                    fileManager.EndAllDatAccess();
+                }
+            }
+            catch (Exception ex)
+            {
+                throw (ex);
+            }
+        }
+
+        private Bitmap BaseTextureFromGameFile(string path, FileManager fileManager)
+        {
+            byte[] imageFile = fileManager.GetFileBytes(path);
+            Stream stream = new MemoryStream(imageFile);
+            FreeImageAPI.FreeImageBitmap bmp = new FreeImageAPI.FreeImageBitmap(stream);
+            stream.Close();
+
+            Bitmap image = bmp.ToBitmap();
+            bmp.Dispose();
+
+            return image;
+        }
+
+        private GameIcon[] LoadImagesFromLocalFiles(Atlas atlas)
+        {
+            string path = Path.Combine(Config.HglDir, atlas.file);
+            Bitmap bitmap = new Bitmap(path);
+
+            return LoadImages(atlas, bitmap);
+        }
+
+        private GameIcon[] LoadImagesFromGameFiles(Atlas atlas, FileManager fileManager)
+        {
+            string extension = Path.GetExtension(atlas.file);
+            string path = atlas.file.Replace(extension, string.Empty) + ".dds";
+
+            Bitmap bitmap = BaseTextureFromGameFile(path, fileManager);
+
+            return LoadImages(atlas, bitmap);
+        }
+
+        private GameIcon[] LoadImages(Atlas atlas, Bitmap bitmap)
+        {
+            try
+            {
                 List<GameIcon> icons = new List<GameIcon>();
 
                 foreach (Frame frame in atlas.frames)
@@ -60,10 +126,8 @@ namespace Reanimator.Forms.HeroEditorFunctions
                         g.DrawImage(bitmap, toDraw, frame.x, frame.y, frame.w, frame.h, GraphicsUnit.Pixel);
                         g.Dispose();
 
-                        GameIcon icon = new GameIcon(bmp, frame.name);
+                        GameIcon icon = new GameIcon(frame.name, bmp);
                         icons.Add(icon);
-
-                        //bmp.Save(@"F:\icons\" + frame.name + ".bmp");
                     }
                 }
 
@@ -77,8 +141,7 @@ namespace Reanimator.Forms.HeroEditorFunctions
 
         public Bitmap GetImage(string name)
         {
-
-            Bitmap bmp = _images.GetIconByName(name);
+            Bitmap bmp = _iconDictionary[name];
 
             return bmp;
         }
@@ -86,7 +149,22 @@ namespace Reanimator.Forms.HeroEditorFunctions
         public void ClearImageList()
         {
             _loadedAtlas.Clear();
-            _images.Icons.Clear();
+            _iconDictionary.Clear();
+        }
+
+        public void SaveImagesToFolder(string folder)
+        {
+            if (!Directory.Exists(folder))
+            {
+                Directory.CreateDirectory(folder);
+            }
+
+            List<string> keys = new List<string>(_iconDictionary.Keys);
+
+            foreach (string key in keys)
+            {
+                _iconDictionary[key].Save(Path.Combine(folder, key));
+            }
         }
     }
 
