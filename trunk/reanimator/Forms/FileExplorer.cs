@@ -20,6 +20,7 @@ namespace Reanimator.Forms
         private readonly FileManager _fileManagerTCv4;
         private TreeView _clonedTreeView;
         private bool _isFiltering;
+        private FreeImageAPI.FreeImageBitmap bmp;
 
         /// <summary>
         /// Main constructor. Initialises the file tree system from a valid FileManager.
@@ -91,9 +92,9 @@ namespace Reanimator.Forms
                 _fileManager.BeginAllDatReadAccess();
                 Stream stream = new MemoryStream(_fileManager.GetFileBytes(selectedNode.FullPath));
                 _fileManager.EndAllDatAccess();
-                FreeImageAPI.FreeImageBitmap bmp = FreeImageAPI.FreeImageBitmap.FromStream(stream);
-                Image bmp1 = bmp.ToBitmap();
-                pictureBox1.Image = bmp1;
+                bmp = FreeImageAPI.FreeImageBitmap.FromStream(stream);
+                pictureBox1.Image = bmp.ToBitmap();
+                stream.Close();
             }
 
             _files_listView.Items.Clear();
@@ -1368,6 +1369,18 @@ namespace Reanimator.Forms
 
             foreach (IndexFile file in fileManager.IndexFiles) // Close Dats
                 file.EndDatAccess();
+        }
+
+        /// <summary>
+        /// Will open a new Form for the image on click
+        /// </summary>
+        /// <param name="sender"></param>
+        /// <param name="e"></param>
+        private void pictureBox1_Click(object sender, EventArgs e)
+        {
+            picturePreview form = new picturePreview();
+            form.setImage(bmp.ToBitmap());
+            form.Show();
         }
     }
 }
