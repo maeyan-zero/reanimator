@@ -13,31 +13,17 @@ namespace Reanimator.Forms
     public partial class TextureSheetPreview : Form
     {
         AtlasImageLoader loader;
-        int position;
 
         public TextureSheetPreview()
         {
             InitializeComponent();
-
-            position = 0;
         }
 
         public void SetAtlasImageLoader(AtlasImageLoader loader)
         {
             this.loader = loader;
 
-            foreach (string key in loader.GetImageNames())
-            {
-                PictureBox box = new PictureBox();
-                box.SizeMode = PictureBoxSizeMode.Zoom;
-                box.Image = loader.GetImage(key);
-                box.Size = box.Image.Size;
-                position += box.Width + 3;
-                box.Location = new Point(3, position);
-                box.BorderStyle = BorderStyle.FixedSingle;
-
-                panelImages.Controls.Add(box);
-            }
+            comboBox1.DataSource = loader.GetImageNames();
         }
 
         private void buttonSave_Click(object sender, EventArgs e)
@@ -46,6 +32,13 @@ namespace Reanimator.Forms
             {
                 loader.SaveImagesToFolder(folderBrowserDialog1.SelectedPath);
             }
+        }
+
+        private void comboBox1_SelectedIndexChanged(object sender, EventArgs e)
+        {
+            Bitmap bmp = loader.GetImage((string)comboBox1.SelectedItem);
+
+            pictureBox1.Image = bmp;
         }
     }
 }

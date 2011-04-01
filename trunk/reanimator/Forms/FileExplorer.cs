@@ -1423,7 +1423,7 @@ namespace Reanimator.Forms
                     preview.SetAtlasImageLoader(loader);
                     preview.Show();
 
-                    loader.ClearImageList();
+                    //loader.ClearImageList();
                 }
             }
         }
