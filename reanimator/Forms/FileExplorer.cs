@@ -93,6 +93,8 @@ namespace Reanimator.Forms
             pictureBox1.Tag = null;
             loader.ClearImageList();
 
+            pictureBox1.Hide();
+
             if (checkBoxPreview.Checked)
             {
                 if (selectedNode.Name.EndsWith(".dds"))
@@ -103,6 +105,8 @@ namespace Reanimator.Forms
                     _fileManager.EndAllDatAccess();
 
                     pictureBox1.Image = bmp;
+
+                    pictureBox1.Show();
                 }
                 else if (selectedNode.Name.EndsWith("_atlas.xml"))
                 {
@@ -116,6 +120,7 @@ namespace Reanimator.Forms
                         {
                             pictureBox1.Image = loader.GetImage(loader.GetImageNames()[0]);
                             pictureBox1.Tag = loader;
+                            pictureBox1.Show();
                         }
                     }
                     catch (Exception ex)
@@ -124,7 +129,6 @@ namespace Reanimator.Forms
                     }
                 }
             }
-
 
             _files_listView.Items.Clear();
             if (nodeObject.IsFolder)  return;
@@ -1407,15 +1411,16 @@ namespace Reanimator.Forms
         /// <param name="e"></param>
         private void pictureBox1_Click(object sender, EventArgs e)
         {
-            if (pictureBox1.Tag == null)
+            if (pictureBox1.Tag == null && pictureBox1.Image != null)
             {
                 Bitmap bmp = (Bitmap)pictureBox1.Image;
+
                 string text = (string)pictureBox1.Image.Tag;
                 TextureSheetPreview preview = new TextureSheetPreview();
                 preview.SetBitmap(bmp, text);
-                preview.Show();
+                preview.Show(this);
             }
-            else
+            else if(pictureBox1.Tag != null)
             {
                 AtlasImageLoader loader = (AtlasImageLoader)pictureBox1.Tag;
 
@@ -1423,7 +1428,7 @@ namespace Reanimator.Forms
                 {
                     TextureSheetPreview preview = new TextureSheetPreview();
                     preview.SetAtlasImageLoader(loader);
-                    preview.Show();
+                    preview.Show(this);
 
                     //loader.ClearImageList();
                 }
