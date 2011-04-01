@@ -22,6 +22,11 @@ namespace Reanimator.Forms.HeroEditorFunctions
             _iconDictionary = new Dictionary<string, Bitmap>();
         }
 
+        public int Count
+        {
+            get { return _iconDictionary.Count(); }
+        }
+
         public void LoadAtlas(string filePath)
         {
             try
@@ -29,6 +34,11 @@ namespace Reanimator.Forms.HeroEditorFunctions
                 if (!_loadedAtlas.Contains(filePath))
                 {
                     Atlas atlas = XmlUtilities<Atlas>.Deserialize(filePath);
+
+                    if (atlas.file == null)
+                    {
+                        return;
+                    }
 
                     _loadedAtlas.Add(filePath);
                     GameIcon[] icons = LoadImagesFromLocalFiles(atlas);
@@ -59,6 +69,11 @@ namespace Reanimator.Forms.HeroEditorFunctions
                     Atlas atlas = XmlUtilities<Atlas>.Deserialize(stream);
                     stream.Close();
 
+                    if (atlas.file == null)
+                    {
+                        return;
+                    }
+
                     _loadedAtlas.Add(filePath);
                     GameIcon[] icons = LoadImagesFromGameFiles(atlas, fileManager);
 
@@ -76,7 +91,7 @@ namespace Reanimator.Forms.HeroEditorFunctions
             }
         }
 
-        public Bitmap TextureFromGameFile(string path, FileManager fileManager)
+        public static Bitmap TextureFromGameFile(string path, FileManager fileManager)
         {
             byte[] imageFile = fileManager.GetFileBytes(path);
             Stream stream = new MemoryStream(imageFile);
@@ -91,6 +106,11 @@ namespace Reanimator.Forms.HeroEditorFunctions
 
         private GameIcon[] LoadImagesFromLocalFiles(Atlas atlas)
         {
+            if (atlas.file == null || atlas.file == string.Empty)
+            {
+                return null;
+            }
+
             string path = Path.Combine(Config.HglDir, atlas.file);
             Bitmap bitmap = new Bitmap(path);
 
@@ -99,6 +119,11 @@ namespace Reanimator.Forms.HeroEditorFunctions
 
         private GameIcon[] LoadImagesFromGameFiles(Atlas atlas, FileManager fileManager)
         {
+            if (atlas.file == null || atlas.file == string.Empty)
+            {
+                return null;
+            }
+
             string extension = Path.GetExtension(atlas.file);
             string path = atlas.file.Replace(extension, string.Empty) + ".dds";
 
@@ -163,8 +188,15 @@ namespace Reanimator.Forms.HeroEditorFunctions
 
             foreach (string key in keys)
             {
-                _iconDictionary[key].Save(Path.Combine(folder, key));
+                _iconDictionary[key].Save(Path.Combine(folder, key + ".bmp"));
             }
+        }
+
+        public List<string> GetImageNames()
+        {
+            List<string> keys = new List<string>(_iconDictionary.Keys);
+
+            return keys;
         }
     }
 
