@@ -79,6 +79,7 @@
             this.statusStrip = new System.Windows.Forms.StatusStrip();
             this.toolStripStatusLabel = new System.Windows.Forms.ToolStripStatusLabel();
             this.toolTip = new System.Windows.Forms.ToolTip(this.components);
+            this.animationTestToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.menuStrip.SuspendLayout();
             this.statusStrip.SuspendLayout();
             this.SuspendLayout();
@@ -326,7 +327,8 @@
             this.extrasToolStripMenuItem.DropDownItems.AddRange(new System.Windows.Forms.ToolStripItem[] {
             this.dropTableOverviewToolStripMenuItem,
             this.toolStripMenuItem1,
-            this.savegameOverviewToolStripMenuItem});
+            this.savegameOverviewToolStripMenuItem,
+            this.animationTestToolStripMenuItem});
             this.extrasToolStripMenuItem.Name = "extrasToolStripMenuItem";
             this.extrasToolStripMenuItem.Size = new System.Drawing.Size(152, 22);
             this.extrasToolStripMenuItem.Text = "Extras";
@@ -487,6 +489,13 @@
             this.toolStripStatusLabel.Size = new System.Drawing.Size(214, 17);
             this.toolStripStatusLabel.Text = "Reanimator (c) Revival Team 2009-2011";
             // 
+            // animationTestToolStripMenuItem
+            // 
+            this.animationTestToolStripMenuItem.Name = "animationTestToolStripMenuItem";
+            this.animationTestToolStripMenuItem.Size = new System.Drawing.Size(192, 22);
+            this.animationTestToolStripMenuItem.Text = "Animation Test";
+            this.animationTestToolStripMenuItem.Click += new System.EventHandler(this.animationTestToolStripMenuItem_Click);
+            // 
             // Reanimator
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
@@ -561,5 +570,6 @@
         private System.Windows.Forms.ToolStripMenuItem dropTableOverviewToolStripMenuItem;
         private System.Windows.Forms.ToolStripMenuItem toolStripMenuItem1;
         private System.Windows.Forms.ToolStripMenuItem savegameOverviewToolStripMenuItem;
+        private System.Windows.Forms.ToolStripMenuItem animationTestToolStripMenuItem;
     }
 }
