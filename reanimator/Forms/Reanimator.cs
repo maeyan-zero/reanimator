@@ -981,6 +981,12 @@ namespace Reanimator.Forms
             itemTransfer.Show(this);
         }
 
+        private void animationTestToolStripMenuItem_Click(object sender, EventArgs e)
+        {
+            AnimationTestForm test = new AnimationTestForm(_fileManager);
+            test.Show(this);
+        }
+
         //private void saveSinglePlayerFilesToolStripMenuItem_Click(object sender, EventArgs e)
         //{
         //    // Select Dump location

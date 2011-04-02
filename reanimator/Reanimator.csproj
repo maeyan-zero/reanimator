@@ -139,6 +139,13 @@
     <Compile Include="Controls\TablesLoaded.Designer.cs">
       <DependentUpon>TablesLoaded.cs</DependentUpon>
     </Compile>
+    <Compile Include="Forms\AnimationHandler.cs" />
+    <Compile Include="Forms\AnimationTestForm.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="Forms\AnimationTestForm.Designer.cs">
+      <DependentUpon>AnimationTestForm.cs</DependentUpon>
+    </Compile>
     <Compile Include="Forms\DropOverviewForm\DropOverview.cs">
       <SubType>Form</SubType>
     </Compile>
@@ -400,6 +407,9 @@
     </EmbeddedResource>
     <EmbeddedResource Include="Controls\TablesLoaded.resx">
       <DependentUpon>TablesLoaded.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Forms\AnimationTestForm.resx">
+      <DependentUpon>AnimationTestForm.cs</DependentUpon>
     </EmbeddedResource>
     <EmbeddedResource Include="Forms\CSVSelection.resx">
       <DependentUpon>CSVSelection.cs</DependentUpon>
