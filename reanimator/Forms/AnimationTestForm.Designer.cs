@@ -144,7 +144,7 @@
             this.checkBoxReverse.UseVisualStyleBackColor = true;
             this.checkBoxReverse.CheckedChanged += new System.EventHandler(this.checkBoxReverse_CheckedChanged);
             // 
-            // AnimationTest
+            // AnimationTestForm
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
@@ -158,7 +158,7 @@
             this.Controls.Add(this.buttonStart);
             this.Controls.Add(this.comboBox1);
             this.Controls.Add(this.pictureBox1);
-            this.Name = "AnimationTest";
+            this.Name = "AnimationTestForm";
             this.ShowIcon = false;
             this.Text = "AnimationTest";
             ((System.ComponentModel.ISupportInitialize)(this.pictureBox1)).EndInit();

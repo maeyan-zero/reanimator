@@ -62,6 +62,7 @@ namespace Reanimator.Forms
 
         public void Start()
         {
+            pause = false;
             timer.Start();
         }
 

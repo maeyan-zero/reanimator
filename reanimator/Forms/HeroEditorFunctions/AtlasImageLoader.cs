@@ -22,7 +22,7 @@ namespace Reanimator.Forms.HeroEditorFunctions
             _iconDictionary = new Dictionary<string, Bitmap>();
         }
 
-        public int Count
+        public int ImageCount
         {
             get { return _iconDictionary.Count(); }
         }
@@ -45,6 +45,11 @@ namespace Reanimator.Forms.HeroEditorFunctions
 
                     foreach(GameIcon icon in icons)
                     {
+                        if (_iconDictionary.ContainsKey(icon.IconName))
+                        {
+                            icon.IconName += "_1";
+                        }
+
                         _iconDictionary.Add(icon.IconName, icon.Bitmap);
                     }
                 }
@@ -79,6 +84,11 @@ namespace Reanimator.Forms.HeroEditorFunctions
 
                     foreach (GameIcon icon in icons)
                     {
+                        if(_iconDictionary.ContainsKey(icon.IconName))
+                        {
+                            icon.IconName += "_1";
+                        }
+
                         _iconDictionary.Add(icon.IconName, icon.Bitmap);
                     }
 
@@ -155,6 +165,8 @@ namespace Reanimator.Forms.HeroEditorFunctions
                         icons.Add(icon);
                     }
                 }
+
+                bitmap.Dispose();
 
                 return icons.ToArray();
             }

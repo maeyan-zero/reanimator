@@ -116,7 +116,7 @@ namespace Reanimator.Forms
                         loader.LoadAtlas(selectedNode.FullPath, _fileManager);
                         _fileManager.EndAllDatAccess();
 
-                        if (loader.Count > 0)
+                        if (loader.ImageCount > 0)
                         {
                             pictureBox1.Image = loader.GetImage(loader.GetImageNames()[0]);
                             pictureBox1.Tag = loader;
@@ -1424,7 +1424,7 @@ namespace Reanimator.Forms
             {
                 AtlasImageLoader loader = (AtlasImageLoader)pictureBox1.Tag;
 
-                if (loader.Count > 0)
+                if (loader.ImageCount > 0)
                 {
                     TextureSheetPreview preview = new TextureSheetPreview();
                     preview.SetAtlasImageLoader(loader);
