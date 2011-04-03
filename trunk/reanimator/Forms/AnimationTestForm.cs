@@ -25,18 +25,13 @@ namespace Reanimator.Forms
             animations.Add("health anim ");
             animations.Add("power anim ");
 
-            comboBox1.DataSource = animations;
-
             loader = new AtlasImageLoader();
             loader.LoadAtlas(@"data\uix\xml\main_new_atlas.xml", fileManager);
             handler = new AnimationHandler();
             handler.Speed = (int)numericUpDown1.Value;
             handler.NewFrameEvent += new NewFrame(handler_NewFrameEvent);
 
-            for (int counter = 1; counter < 17; counter++)
-            {
-                handler.AddFrame(loader.GetImage("health anim " + counter));
-            }
+            comboBox1.DataSource = animations;
         }
 
         void handler_NewFrameEvent()
@@ -77,7 +72,14 @@ namespace Reanimator.Forms
 
         private void comboBox1_SelectedIndexChanged(object sender, EventArgs e)
         {
+            string text = (string)comboBox1.SelectedItem;
 
+            handler.ClearFrames();
+
+            for (int counter = 1; counter < 17; counter++)
+            {
+                handler.AddFrame(loader.GetImage(text + counter));
+            }
         }
     }
 }
