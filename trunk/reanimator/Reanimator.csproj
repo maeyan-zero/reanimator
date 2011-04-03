@@ -146,6 +146,12 @@
     <Compile Include="Forms\AnimationTestForm.Designer.cs">
       <DependentUpon>AnimationTestForm.cs</DependentUpon>
     </Compile>
+    <Compile Include="Forms\CustomControls\HGLForm.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="Forms\CustomControls\HGLForm.Designer.cs">
+      <DependentUpon>HGLForm.cs</DependentUpon>
+    </Compile>
     <Compile Include="Forms\DropOverviewForm\DropOverview.cs">
       <SubType>Form</SubType>
     </Compile>
