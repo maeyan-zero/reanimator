@@ -31,6 +31,9 @@ namespace Reanimator.Forms
             handler.Speed = (int)numericUpDown1.Value;
             handler.NewFrameEvent += new NewFrame(handler_NewFrameEvent);
 
+            handler.AddOverlay(loader.GetImage("meter mask"));
+            handler.AddOverlay(loader.GetImage("health meter"));
+
             comboBox1.DataSource = animations;
         }
 
@@ -80,6 +83,11 @@ namespace Reanimator.Forms
             {
                 handler.AddFrame(loader.GetImage(text + counter));
             }
+        }
+
+        private void checkBoxUseMask_CheckedChanged(object sender, EventArgs e)
+        {
+            handler.UseOverlays = checkBoxUseMask.Checked;
         }
     }
 }

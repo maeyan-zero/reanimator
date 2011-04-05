@@ -15,11 +15,29 @@ namespace Reanimator.Forms
         public event NewFrame NewFrameEvent = delegate { };
 
         List<Bitmap> frames;
+        List<Bitmap> overlays;
+        bool useOverlays;
         bool loop;
         bool reverse;
         bool pause;
         Timer timer;
         int currentFrame;
+
+        public void AddOverlay(Bitmap image)
+        {
+            overlays.Add(image);
+        }
+
+        public void ClearOverlay()
+        {
+            overlays.Clear();
+        }
+
+        public bool UseOverlays
+        {
+            get { return useOverlays; }
+            set { useOverlays = value; }
+        }
 
         public void AddFrame(Bitmap bitmap)
         {
@@ -68,9 +86,30 @@ namespace Reanimator.Forms
 
         public Bitmap GetCurrentFrame()
         {
-            Bitmap bitmap = frames[currentFrame];
+            Bitmap bitmap = GetFrame();
 
             return bitmap;
+        }
+
+        private Bitmap GetFrame()
+        {
+            Bitmap bmp = (Bitmap)frames[currentFrame].Clone();
+
+            if(useOverlays)
+            {
+                Graphics g = Graphics.FromImage(bmp);
+
+                foreach (Bitmap overlay in overlays)
+                {
+                    g.DrawImage(overlay, -32, -32);
+                }
+
+                g.Dispose();
+
+                bmp.MakeTransparent(Color.FromArgb(1, 1, 1));
+            }
+
+            return bmp;            
         }
 
         public void Stop()
@@ -139,6 +178,7 @@ namespace Reanimator.Forms
         public AnimationHandler()
         {
             frames = new List<Bitmap>();
+            overlays = new List<Bitmap>();
             currentFrame = 0;
             loop = false;
             reverse = false;

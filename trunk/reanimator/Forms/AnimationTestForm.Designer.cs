@@ -37,6 +37,7 @@
             this.numericUpDown1 = new System.Windows.Forms.NumericUpDown();
             this.checkBoxLoop = new System.Windows.Forms.CheckBox();
             this.checkBoxReverse = new System.Windows.Forms.CheckBox();
+            this.checkBoxUseMask = new System.Windows.Forms.CheckBox();
             ((System.ComponentModel.ISupportInitialize)(this.pictureBox1)).BeginInit();
             ((System.ComponentModel.ISupportInitialize)(this.numericUpDown1)).BeginInit();
             this.SuspendLayout();
@@ -144,11 +145,23 @@
             this.checkBoxReverse.UseVisualStyleBackColor = true;
             this.checkBoxReverse.CheckedChanged += new System.EventHandler(this.checkBoxReverse_CheckedChanged);
             // 
+            // checkBoxUseMask
+            // 
+            this.checkBoxUseMask.AutoSize = true;
+            this.checkBoxUseMask.Location = new System.Drawing.Point(12, 247);
+            this.checkBoxUseMask.Name = "checkBoxUseMask";
+            this.checkBoxUseMask.Size = new System.Drawing.Size(100, 17);
+            this.checkBoxUseMask.TabIndex = 9;
+            this.checkBoxUseMask.Text = "Use orb overlay";
+            this.checkBoxUseMask.UseVisualStyleBackColor = true;
+            this.checkBoxUseMask.CheckedChanged += new System.EventHandler(this.checkBoxUseMask_CheckedChanged);
+            // 
             // AnimationTestForm
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
             this.ClientSize = new System.Drawing.Size(284, 264);
+            this.Controls.Add(this.checkBoxUseMask);
             this.Controls.Add(this.checkBoxReverse);
             this.Controls.Add(this.checkBoxLoop);
             this.Controls.Add(this.numericUpDown1);
@@ -158,6 +171,10 @@
             this.Controls.Add(this.buttonStart);
             this.Controls.Add(this.comboBox1);
             this.Controls.Add(this.pictureBox1);
+            this.MaximizeBox = false;
+            this.MaximumSize = new System.Drawing.Size(300, 300);
+            this.MinimizeBox = false;
+            this.MinimumSize = new System.Drawing.Size(300, 300);
             this.Name = "AnimationTestForm";
             this.ShowIcon = false;
             this.Text = "AnimationTest";
@@ -179,5 +196,6 @@
         private System.Windows.Forms.NumericUpDown numericUpDown1;
         private System.Windows.Forms.CheckBox checkBoxLoop;
         private System.Windows.Forms.CheckBox checkBoxReverse;
+        private System.Windows.Forms.CheckBox checkBoxUseMask;
     }
 }

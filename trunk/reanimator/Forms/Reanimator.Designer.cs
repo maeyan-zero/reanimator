@@ -61,6 +61,7 @@
             this.dropTableOverviewToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.toolStripMenuItem1 = new System.Windows.Forms.ToolStripMenuItem();
             this.savegameOverviewToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
+            this.animationTestToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.toolStripSeparator1 = new System.Windows.Forms.ToolStripSeparator();
             this.statusBarToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.windowsMenu = new System.Windows.Forms.ToolStripMenuItem();
@@ -79,7 +80,7 @@
             this.statusStrip = new System.Windows.Forms.StatusStrip();
             this.toolStripStatusLabel = new System.Windows.Forms.ToolStripStatusLabel();
             this.toolTip = new System.Windows.Forms.ToolTip(this.components);
-            this.animationTestToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
+            this.testToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.menuStrip.SuspendLayout();
             this.statusStrip.SuspendLayout();
             this.SuspendLayout();
@@ -328,7 +329,8 @@
             this.dropTableOverviewToolStripMenuItem,
             this.toolStripMenuItem1,
             this.savegameOverviewToolStripMenuItem,
-            this.animationTestToolStripMenuItem});
+            this.animationTestToolStripMenuItem,
+            this.testToolStripMenuItem});
             this.extrasToolStripMenuItem.Name = "extrasToolStripMenuItem";
             this.extrasToolStripMenuItem.Size = new System.Drawing.Size(152, 22);
             this.extrasToolStripMenuItem.Text = "Extras";
@@ -353,6 +355,13 @@
             this.savegameOverviewToolStripMenuItem.Size = new System.Drawing.Size(192, 22);
             this.savegameOverviewToolStripMenuItem.Text = "Savegame overview";
             this.savegameOverviewToolStripMenuItem.Click += new System.EventHandler(this.savegameOverviewToolStripMenuItem_Click);
+            // 
+            // animationTestToolStripMenuItem
+            // 
+            this.animationTestToolStripMenuItem.Name = "animationTestToolStripMenuItem";
+            this.animationTestToolStripMenuItem.Size = new System.Drawing.Size(192, 22);
+            this.animationTestToolStripMenuItem.Text = "Animation Test";
+            this.animationTestToolStripMenuItem.Click += new System.EventHandler(this.animationTestToolStripMenuItem_Click);
             // 
             // toolStripSeparator1
             // 
@@ -489,12 +498,12 @@
             this.toolStripStatusLabel.Size = new System.Drawing.Size(214, 17);
             this.toolStripStatusLabel.Text = "Reanimator (c) Revival Team 2009-2011";
             // 
-            // animationTestToolStripMenuItem
+            // testToolStripMenuItem
             // 
-            this.animationTestToolStripMenuItem.Name = "animationTestToolStripMenuItem";
-            this.animationTestToolStripMenuItem.Size = new System.Drawing.Size(192, 22);
-            this.animationTestToolStripMenuItem.Text = "Animation Test";
-            this.animationTestToolStripMenuItem.Click += new System.EventHandler(this.animationTestToolStripMenuItem_Click);
+            this.testToolStripMenuItem.Name = "testToolStripMenuItem";
+            this.testToolStripMenuItem.Size = new System.Drawing.Size(192, 22);
+            this.testToolStripMenuItem.Text = "Test";
+            this.testToolStripMenuItem.Click += new System.EventHandler(this.testToolStripMenuItem_Click);
             // 
             // Reanimator
             // 
@@ -571,5 +580,6 @@
         private System.Windows.Forms.ToolStripMenuItem toolStripMenuItem1;
         private System.Windows.Forms.ToolStripMenuItem savegameOverviewToolStripMenuItem;
         private System.Windows.Forms.ToolStripMenuItem animationTestToolStripMenuItem;
+        private System.Windows.Forms.ToolStripMenuItem testToolStripMenuItem;
     }
 }
