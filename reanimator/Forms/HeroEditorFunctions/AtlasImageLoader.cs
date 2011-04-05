@@ -178,9 +178,13 @@ namespace Reanimator.Forms.HeroEditorFunctions
 
         public Bitmap GetImage(string name)
         {
-            Bitmap bmp = _iconDictionary[name];
+            if (_iconDictionary.ContainsKey(name))
+            {
+                Bitmap bmp = _iconDictionary[name];
 
-            return bmp;
+                return bmp;
+            }
+            return null;
         }
 
         public void ClearImageList()

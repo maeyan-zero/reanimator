@@ -987,6 +987,12 @@ namespace Reanimator.Forms
             test.Show(this);
         }
 
+        private void testToolStripMenuItem_Click(object sender, EventArgs e)
+        {
+            CustomControls.HGLForm form = new CustomControls.HGLForm(_fileManager);
+            form.Show(this);
+        }
+
         //private void saveSinglePlayerFilesToolStripMenuItem_Click(object sender, EventArgs e)
         //{
         //    // Select Dump location

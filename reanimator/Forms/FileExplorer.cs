@@ -93,6 +93,8 @@ namespace Reanimator.Forms
             pictureBox1.Tag = null;
             loader.ClearImageList();
 
+            textBoxPath.Text = selectedNode.FullPath;
+
             pictureBox1.Hide();
 
             if (checkBoxPreview.Checked)
@@ -370,7 +372,7 @@ namespace Reanimator.Forms
             // are we doing anything...
             if (!extractFiles && !patchFiles)
             {
-                MessageBox.Show("Please select at lease one action out of extracting or patching to perform!", "No Actions Checked", MessageBoxButtons.OK, MessageBoxIcon.Exclamation);
+                MessageBox.Show("Please select at least one action out of extracting or patching to perform!", "No Actions Checked", MessageBoxButtons.OK, MessageBoxIcon.Exclamation);
                 return;
             }
 
@@ -1438,6 +1440,11 @@ namespace Reanimator.Forms
         private void checkBoxPreview_CheckedChanged(object sender, EventArgs e)
         {
             pictureBox1.Visible = checkBoxPreview.Enabled;
+        }
+
+        private void buttonCopy_Click(object sender, EventArgs e)
+        {
+            Clipboard.SetText(textBoxPath.Text);
         }
     }
 }
