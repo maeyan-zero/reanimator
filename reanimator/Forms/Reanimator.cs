@@ -32,6 +32,10 @@ namespace Reanimator.Forms
             InitializeComponent();
             setIcon();
 
+            #region snotz_stuff
+            //TestScripts.ExtractFunctionList();
+            #endregion
+
             #region alexs_stuff
             //Config.HglDir = @"D:\Games\Hellgate";
             //Config.HglDir = @"D:\Projects\Hellgate London\Flagshipped\ServerTest\bin\Debug";

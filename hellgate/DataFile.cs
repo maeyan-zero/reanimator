@@ -501,6 +501,7 @@ namespace Hellgate
             {"ACHIEVEMENTS", new DataFileAttributes {RowType = typeof(AchievementsBeta), HasScriptTable = true}},
             {"ACHIEVEMENTSLOTS", new DataFileAttributes {RowType = typeof(AchievementSlotsBeta)}},
             {"ACT", new DataFileAttributes {RowType = typeof(ActBeta)}},
+            {"ACTION", new DataFileAttributes {RowType = typeof(ActionBeta)}},
             {"AFFIXES", new DataFileAttributes {RowType = typeof(AffixesBeta)}},
             {"AFFIXPICK", new DataFileAttributes {RowType = typeof(AffixPickBeta)}},
             {"BADGE_REWARDS", new DataFileAttributes {RowType = typeof(BadgeRewardsBeta)}},

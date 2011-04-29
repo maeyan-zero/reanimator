@@ -994,7 +994,8 @@ namespace Reanimator
         {
             //const String path = @"C:\SP_FunctionNamePtrGeneration.txt";
             //const String path = @"C:\MP_FunctionNamePtrGeneration.txt";
-            const String path = @"C:\FunctionNamePtrGeneration.txt";
+            //const String path = @"C:\FunctionNamePtrGeneration.txt";
+            const String path = @"C:\test.txt";
             String[] functionCode = File.ReadAllLines(path);
 
             ExcelScript.ExtractFunctionListCStyle(functionCode);
