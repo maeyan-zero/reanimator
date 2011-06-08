@@ -1246,7 +1246,7 @@ namespace Reanimator
             FileManager fileManager = new FileManager(Config.HglDir);
             fileManager.LoadTableFiles();
             fileManager.ExtractAllExcel();
-            ExcelScript.EnableDebug(true);
+            ExcelScript.GlobalDebug(true);
 
             foreach (PackFileEntry fileEntry in fileManager.FileEntries.Values)
             {

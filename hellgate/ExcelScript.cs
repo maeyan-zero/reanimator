@@ -12,7 +12,8 @@ namespace Hellgate
         #region Members
 
         // debug members
-        private static bool _debug;
+        public static bool DebugEnabled { get; private set; }
+        private static bool _globalDebug;
         private const String DebugRoot = @"C:\excel_script_debug\";
         private const String DebugRootTestCenter = @"C:\excel_script_debug_testcenter\";
         private const String DebugRootResurrection = @"C:\excel_script_debug_resurrection\";
@@ -73,23 +74,24 @@ namespace Hellgate
             {
                 _callFunctions = CallFunctionsResurrection;
                 _initCallFunctionsCount = _initCallFunctionsResurrectionCount;
-                if (_debug) _debugRoot = DebugRootResurrection;
+                _debugRoot = DebugRootResurrection;
             }
             else if (_fileManager.IsVersionTestCenter)
             {
                 _callFunctions = CallFunctionsTestCenter;
                 _initCallFunctionsCount = _initCallFunctionsTestCenterCount;
-                if (_debug) _debugRoot = DebugRootTestCenter;
+                _debugRoot = DebugRootTestCenter;
             }
             else
             {
                 _callFunctions = CallFunctions;
                 _initCallFunctionsCount = _initCallFunctionsCountSinglePlayer;
-                if (_debug) _debugRoot = DebugRoot;
+                _debugRoot = DebugRoot;
             }
 
             _statsTable = (ExcelFile)_fileManager.DataFiles["STATS"];
             _statsDelegator = _fileManager.DataFileDelegators["STATS"];
+            if (_globalDebug) EnableDebug(true);
 
             if (_callFunctions.Count == _initCallFunctionsCount) _GenerateExcelScriptFunctions();
         }
@@ -115,7 +117,7 @@ namespace Hellgate
             _script = script;
             _level = -1;
 
-            if (_debug)
+            if (DebugEnabled)
             {
                 _debugScriptByteString = debugScriptByteString;
                 _debugStringId = debugStringId;
@@ -773,7 +775,7 @@ namespace Hellgate
             _startOffset = offset;
             _offset = offset;
 
-            if (_debug)
+            if (DebugEnabled)
             {
                 _debugScriptByteString = debugScriptByteString;
                 _debugStringId = debugStringId;
@@ -808,7 +810,7 @@ namespace Hellgate
             _startOffset = 0;
             _offset = 0;
 
-            if (_debug)
+            if (DebugEnabled)
             {
                 _debugScriptByteString = debugScriptByteString;
                 _debugStringId = debugStringId;
@@ -829,7 +831,7 @@ namespace Hellgate
         /// <returns>A stack object with decompiled script and number of bytes read.</returns>
         private StackObject _Decompile(byte[] scriptBytes, int maxBytes, int ifLevel)
         {
-            bool debug = (_debugStringId != null) && _debug;
+            bool debug = (_debugStringId != null) && DebugEnabled;
             bool debugShowParsed = false;
             bool debugOutputParsed = false;
             bool debugOutputFuncWithOpCode = false;

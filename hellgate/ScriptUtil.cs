@@ -1088,17 +1088,24 @@ namespace Hellgate
         }
         #endregion
 
-        #region Static Debug Function
+        #region Debug Functions
 
-        public static void EnableDebug(bool enableDebug, bool isTCv4 = false)
+        public static void GlobalDebug(bool globalDebug)
         {
-            _debug = enableDebug;
+            _globalDebug = globalDebug;
+        }
 
-            if (!_debug) return;
+        public void EnableDebug(bool enableDebug, bool deleteOld=false)
+        {
+            if (enableDebug == DebugEnabled) return;
 
-            String debugRoot = isTCv4 ? DebugRootTestCenter : DebugRoot;
-            Directory.CreateDirectory(debugRoot);
-            String[] oldLogs = Directory.GetFiles(debugRoot);
+            DebugEnabled = enableDebug;
+            if (!DebugEnabled) return;
+
+            Directory.CreateDirectory(_debugRoot);
+            if (!deleteOld) return;
+
+            String[] oldLogs = Directory.GetFiles(_debugRoot);
             foreach (String logPath in oldLogs)
             {
                 File.Delete(logPath);
@@ -1336,7 +1343,7 @@ namespace Hellgate
             _Decompile(scriptBytes, subMaxBytes, ifLevel + 1);
 
 
-            if (!_debug || !_debugFormatConditionalByteCounts) return;
+            if (!DebugEnabled || !_debugFormatConditionalByteCounts) return;
 
             conditionObject = _stack.Pop();
             conditionObject.Value = String.Format("{0}[{1}]", conditionObject.Value, byteOffset);
@@ -1725,7 +1732,7 @@ namespace Hellgate
                 }
 
                 String byteCodeString = null;
-                if (_debug && debugOutputLikeFunction)
+                if (DebugEnabled && debugOutputLikeFunction)
                 {
                     int offset = 0;
                     byteCodeString = FileTools.ByteArrayToInt32Array(excelFunction.ScriptByteCode, ref offset, excelFunction.ScriptByteCode.Length / 4).ToString(",");
@@ -1735,7 +1742,7 @@ namespace Hellgate
 
                 function.ExcelScript = _Decompile(excelFunction, function, byteCodeString, "PROPERTIES", 0, 0, function.Name);
 
-                if (_debug && debugOutputLikeFunction)
+                if (DebugEnabled && debugOutputLikeFunction)
                 {
                     String[] code = function.ExcelScript.Split(new[] { "; ", ";", "\n" }, StringSplitOptions.RemoveEmptyEntries);
                     String codeStr = code.Aggregate(String.Empty, (current, line) => current + ("\t" + line + ";\n"));
