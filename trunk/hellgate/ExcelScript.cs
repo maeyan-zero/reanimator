@@ -1230,6 +1230,14 @@ namespace Hellgate
                             _stack.Push(new StackObject { Value = String.Format(endIfFormat, stackObject1.Value, stackObject2.Value), OpCode = stackObject1.OpCode, StatementCount = conditionCount });
                             break;
 
+                        case ScriptOpCodes.TypeCastDoubleInt:        // 598  0x256
+                            _TypeCast("int");
+                            break;
+
+                        case ScriptOpCodes.TypeCastIntDouble:        // 648  0x288
+                            _TypeCast("double");
+                            break;
+
                         case ScriptOpCodes.GetStat666:               // 666  0x29A
                             index = FileTools.ByteArrayToUInt32(scriptBytes, ref _offset);
                             _StatsFunction("GetStat666", index, opCode, false);
@@ -1361,6 +1369,7 @@ namespace Hellgate
                             break;
 
                         default:
+                            Debug.WriteLine(String.Format("Unknown OpCode: {0} at offset {1}", opCode, _offset));
                             throw new Exceptions.ScriptUnknownOpCodeException(opCode.ToString(), _DumpStack(_stack));
                     }
 
