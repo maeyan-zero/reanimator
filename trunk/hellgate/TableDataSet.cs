@@ -220,12 +220,22 @@ namespace Hellgate
 
                         try
                         {
-                            script = excelScript.Decompile(excelFile.ScriptBuffer, valueInt);
+                            if (ExcelScript.DebugEnabled)
+                            {
+                                int[] scriptCode = excelFile.ReadScriptTable(valueInt);
+                                script = scriptCode != null ? FileTools.ArrayToStringGeneric(scriptCode, ",") : String.Empty;
+
+                                script = excelScript.Decompile(excelFile.ScriptBuffer, valueInt, script, excelFile.StringId, row, col, fieldInfo.Name);
+                            }
+                            else
+                            {
+                                script = excelScript.Decompile(excelFile.ScriptBuffer, valueInt);
+                            }
                         }
                         catch (Exception)
                         {
                             int[] scriptCode = excelFile.ReadScriptTable(valueInt);
-                            script = FileTools.ArrayToStringGeneric(scriptCode, ",");
+                            script = scriptCode != null ? FileTools.ArrayToStringGeneric(scriptCode, ",") : "ScriptError";
                         }
 
                         baseRow[col++] = script;
