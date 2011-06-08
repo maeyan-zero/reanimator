@@ -1025,6 +1025,8 @@ namespace Hellgate
             And = 516,                      // 0x204    .rdata:000000014060AB50     aLandjmpOffse_6 db 'landjmp  offset = %u  type = int'
             Or = 527,                       // 0x20F    .rdata:000000014060AF00     aLorjmpOffset_6 db 'lorjmp  offset = %u  type = int'
             EndCond = 538,                  // 0x21A    .rdata:000000014060B198     aLogendTypeInt  db 'logend  type = int'
+            TypeCastDoubleInt = 598,        // 0x256
+            TypeCastIntDouble = 648,        // 0x288
             GetStat666 = 666,               // 0x29A    these are used for different arg/return types (int/uint/float/double/etc)
             GetStat667 = 667,               // 0x29B    not sure which are which yet - do it later
             SetStat669 = 669,               // 0x29D
@@ -1559,6 +1561,19 @@ namespace Hellgate
                 OperatorCount = operatorCount,
                 ByteOffset = (uint)_offset,
                 IfLevel = ifLevel
+            };
+
+            _stack.Push(newStackObject);
+        }
+
+        private void _TypeCast(String name)
+        {
+            StackObject varStackObject = _stack.Pop();
+
+            StackObject newStackObject = new StackObject
+            {
+                Value = String.Format("({0}){1}", name, varStackObject),
+                IsFunction = false
             };
 
             _stack.Push(newStackObject);
