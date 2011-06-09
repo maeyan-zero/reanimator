@@ -765,7 +765,9 @@ namespace Reanimator.Forms
                 file.Repair();
                 try
                 {
-                    File.WriteAllBytes(file.Path, file.ToByteArray());
+                    byte[] indexBytes = file.ToByteArray();
+                    Crypt.Encrypt(indexBytes);
+                    File.WriteAllBytes(file.Path, indexBytes);
                 }
                 catch (Exception ex)
                 {

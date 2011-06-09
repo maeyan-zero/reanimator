@@ -372,7 +372,7 @@ namespace Hellgate
 
             // resize, encrypt, and return
             Array.Resize(ref buffer, offset);
-            Crypt.Encrypt(buffer);
+            //Crypt.Encrypt(buffer);
             return buffer;
         }
 
