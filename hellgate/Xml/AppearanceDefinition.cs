@@ -182,6 +182,13 @@ namespace Hellgate.Xml
             },
             new XmlCookElement
             {
+                Name = "fMinFacingTargetZ",
+                DefaultValue = -100.0f,
+                ElementType = ElementType.Float,
+                IsResurrection = true
+            },
+            new XmlCookElement
+            {
                 Name = "vAimOffset.fX",
                 DefaultValue = 0.0f,
                 ElementType = ElementType.Float
