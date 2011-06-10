@@ -936,9 +936,9 @@ namespace Hellgate
 
                         if ((attribute.IsScript))
                         {
-                            string strValue = value as string;
+                            String strValue = value as string;
 
-                            if ((fileManager == null && value == "0") || value == "")
+                            if (strValue == null || (fileManager == null && strValue == "0") || strValue == "")
                             {
                                 objectDelegator[fieldInfo.Name, rowInstance] = 0;
                                 continue;
