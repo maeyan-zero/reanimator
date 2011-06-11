@@ -314,92 +314,92 @@
     <Compile Include="Excel\SinglePlayer\SubLevel.cs" />
     <Compile Include="Excel\SinglePlayer\Tag.cs" />
     <Compile Include="Excel\SinglePlayer\Tasks.cs" />
-    <Compile Include="Excel\TCv4\Achievements.cs">
+    <Compile Include="Excel\TestCentre\Achievements.cs">
       <SubType>Code</SubType>
     </Compile>
-    <Compile Include="Excel\TCv4\Act.cs">
+    <Compile Include="Excel\TestCentre\Act.cs">
       <SubType>Code</SubType>
     </Compile>
-    <Compile Include="Excel\TCv4\Affixes.cs">
+    <Compile Include="Excel\TestCentre\Affixes.cs">
       <SubType>Code</SubType>
     </Compile>
-    <Compile Include="Excel\TCv4\AffixGroups.cs" />
-    <Compile Include="Excel\TCv4\BackGroundSounds2D.cs">
+    <Compile Include="Excel\TestCentre\AffixGroups.cs" />
+    <Compile Include="Excel\TestCentre\BackGroundSounds2D.cs">
       <SubType>Code</SubType>
     </Compile>
-    <Compile Include="Excel\TCv4\BadgeRewards.cs">
+    <Compile Include="Excel\TestCentre\BadgeRewards.cs">
       <SubType>Code</SubType>
     </Compile>
-    <Compile Include="Excel\TCv4\CharacterClass.cs">
+    <Compile Include="Excel\TestCentre\CharacterClass.cs">
       <SubType>Code</SubType>
     </Compile>
-    <Compile Include="Excel\TCv4\DamageEffects.cs">
+    <Compile Include="Excel\TestCentre\DamageEffects.cs">
       <SubType>Code</SubType>
     </Compile>
-    <Compile Include="Excel\TCv4\DamageTypes.cs">
+    <Compile Include="Excel\TestCentre\DamageTypes.cs">
       <SubType>Code</SubType>
     </Compile>
-    <Compile Include="Excel\TCv4\Inventory.cs">
+    <Compile Include="Excel\TestCentre\Inventory.cs">
       <SubType>Code</SubType>
     </Compile>
-    <Compile Include="Excel\TCv4\ItemLooks.cs">
+    <Compile Include="Excel\TestCentre\ItemLooks.cs">
       <SubType>Code</SubType>
     </Compile>
-    <Compile Include="Excel\TCv4\ItemQuality.cs">
+    <Compile Include="Excel\TestCentre\ItemQuality.cs">
       <SubType>Code</SubType>
     </Compile>
-    <Compile Include="Excel\TCv4\Items.cs">
+    <Compile Include="Excel\TestCentre\Items.cs">
       <SubType>Code</SubType>
     </Compile>
-    <Compile Include="Excel\TCv4\Levels.cs">
+    <Compile Include="Excel\TestCentre\Levels.cs">
       <SubType>Code</SubType>
     </Compile>
-    <Compile Include="Excel\TCv4\LevelScaling.cs">
+    <Compile Include="Excel\TestCentre\LevelScaling.cs">
       <SubType>Code</SubType>
     </Compile>
-    <Compile Include="Excel\TCv4\LevelsRoomIndex.cs">
+    <Compile Include="Excel\TestCentre\LevelsRoomIndex.cs">
       <SubType>Code</SubType>
     </Compile>
-    <Compile Include="Excel\TCv4\MaterialsCollision.cs">
+    <Compile Include="Excel\TestCentre\MaterialsCollision.cs">
       <SubType>Code</SubType>
     </Compile>
-    <Compile Include="Excel\TCv4\PlayerLevels.cs">
+    <Compile Include="Excel\TestCentre\PlayerLevels.cs">
       <SubType>Code</SubType>
     </Compile>
-    <Compile Include="Excel\TCv4\Recipes.cs">
+    <Compile Include="Excel\TestCentre\Recipes.cs">
       <SubType>Code</SubType>
     </Compile>
-    <Compile Include="Excel\TCv4\SkillEventTypes.cs">
+    <Compile Include="Excel\TestCentre\SkillEventTypes.cs">
       <SubType>Code</SubType>
     </Compile>
-    <Compile Include="Excel\TCv4\Skills.cs">
+    <Compile Include="Excel\TestCentre\Skills.cs">
       <SubType>Code</SubType>
     </Compile>
-    <Compile Include="Excel\TCv4\SkillTabs.cs">
+    <Compile Include="Excel\TestCentre\SkillTabs.cs">
       <SubType>Code</SubType>
     </Compile>
-    <Compile Include="Excel\TCv4\SoundMixStates.cs">
+    <Compile Include="Excel\TestCentre\SoundMixStates.cs">
       <SubType>Code</SubType>
     </Compile>
-    <Compile Include="Excel\TCv4\Sounds.cs">
+    <Compile Include="Excel\TestCentre\Sounds.cs">
       <SubType>Code</SubType>
     </Compile>
-    <Compile Include="Excel\TCv4\Stats.cs">
+    <Compile Include="Excel\TestCentre\Stats.cs">
       <SubType>Code</SubType>
     </Compile>
-    <Compile Include="Excel\TCv4\Treasure.cs">
+    <Compile Include="Excel\TestCentre\Treasure.cs">
       <SubType>Code</SubType>
     </Compile>
-    <Compile Include="Excel\TCv4\UnitModeGroups.cs">
+    <Compile Include="Excel\TestCentre\UnitModeGroups.cs">
       <SubType>Code</SubType>
     </Compile>
-    <Compile Include="Excel\TCv4\UnitModes.cs">
+    <Compile Include="Excel\TestCentre\UnitModes.cs">
       <SubType>Code</SubType>
     </Compile>
-    <Compile Include="Excel\TCv4\UnitTypes.cs">
+    <Compile Include="Excel\TestCentre\UnitTypes.cs">
       <SubType>Code</SubType>
     </Compile>
-    <Compile Include="Excel\TCv4\Wardrobe.cs">
+    <Compile Include="Excel\TestCentre\Wardrobe.cs">
       <SubType>Code</SubType>
     </Compile>
     <Compile Include="Excel\SinglePlayer\TextureTypes.cs" />
