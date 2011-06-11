@@ -10,7 +10,7 @@
     <AppDesignerFolder>Properties</AppDesignerFolder>
     <RootNamespace>Hellgate</RootNamespace>
     <AssemblyName>Hellgate</AssemblyName>
-    <TargetFrameworkVersion>v3.5</TargetFrameworkVersion>
+    <TargetFrameworkVersion>v4.0</TargetFrameworkVersion>
     <FileAlignment>512</FileAlignment>
     <FileUpgradeFlags>
     </FileUpgradeFlags>
@@ -31,6 +31,7 @@
     <IsWebBootstrapper>false</IsWebBootstrapper>
     <UseApplicationTrust>false</UseApplicationTrust>
     <BootstrapperEnabled>true</BootstrapperEnabled>
+    <TargetFrameworkProfile />
   </PropertyGroup>
   <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Debug|AnyCPU' ">
     <DebugSymbols>true</DebugSymbols>
@@ -116,6 +117,11 @@
     <Compile Include="ExcelFileUtil.cs" />
     <Compile Include="ExcelScript.cs" />
     <Compile Include="Excel\JapaneseBeta\Action.cs" />
+    <Compile Include="Excel\Mod\LevelDrlgChoiceRow.cs" />
+    <Compile Include="Excel\Mod\SkillsRow.cs" />
+    <Compile Include="Excel\Mod\StatesRow.cs" />
+    <Compile Include="Excel\Mod\StatsRow.cs" />
+    <Compile Include="Excel\Mod\UnitDataRow.cs" />
     <Compile Include="Excel\SinglePlayer\Achievements.cs" />
     <Compile Include="Excel\SinglePlayer\Act.cs" />
     <Compile Include="Excel\SinglePlayer\Affixes.cs" />
@@ -146,7 +152,7 @@
     <Compile Include="Excel\SinglePlayer\EffectsFiles.cs" />
     <Compile Include="Excel\SinglePlayer\EffectsIndex.cs" />
     <Compile Include="Excel\SinglePlayer\EffectsShaders.cs" />
-    <Compile Include="Excel\SinglePlayer\ExcelTables.cs" />
+    <Compile Include="Excel\SinglePlayer\ExcelTablesRow.cs" />
     <Compile Include="Excel\SinglePlayer\Faction.cs" />
     <Compile Include="Excel\SinglePlayer\FactionStanding.cs" />
     <Compile Include="Excel\SinglePlayer\Filter.cs" />
@@ -435,51 +441,54 @@
     <Compile Include="TableDataSet.cs" />
     <Compile Include="UnitObject.cs" />
     <Compile Include="UnitObjectUtil.cs" />
+    <Compile Include="XLS.cs" />
     <Compile Include="XmlCookedFile.cs" />
     <Compile Include="XmlCookedFileUtil.cs" />
     <Compile Include="XmlCookedFileTree.cs" />
-    <Compile Include="Xml\AIBehaviorDefinition.cs" />
-    <Compile Include="Xml\AIBehaviorDefinitionTable.cs" />
-    <Compile Include="Xml\AIDefinition.cs" />
-    <Compile Include="Xml\AnimationDefinition.cs" />
-    <Compile Include="Xml\AnimEvent.cs" />
-    <Compile Include="Xml\AppearanceDefinition.cs" />
-    <Compile Include="Xml\BlendRLE.cs" />
-    <Compile Include="Xml\BlendRun.cs" />
-    <Compile Include="Xml\ColorDefinition.cs" />
-    <Compile Include="Xml\ColorSetDefinition.cs" />
-    <Compile Include="Xml\ConditionDefinition.cs" />
-    <Compile Include="Xml\ConfigDefinition.cs" />
-    <Compile Include="Xml\DemoLevelDefinition.cs" />
-    <Compile Include="Xml\EnvironmentDefinition.cs" />
-    <Compile Include="Xml\EnvLightDefinition.cs" />
-    <Compile Include="Xml\FmodReverbProperties.cs" />
-    <Compile Include="Xml\GameGlobalDefinition.cs" />
-    <Compile Include="Xml\GlobalDefinition.cs" />
-    <Compile Include="Xml\InventoryViewInfo.cs" />
-    <Compile Include="Xml\LightDefinition.cs" />
-    <Compile Include="Xml\Material.cs" />
-    <Compile Include="Xml\ParticleSystemDefinition.cs" />
-    <Compile Include="Xml\RoomLayoutGroup.cs" />
-    <Compile Include="Xml\RoomLayoutGroupDefinition.cs" />
-    <Compile Include="Xml\RoomPathNode.cs" />
-    <Compile Include="Xml\RoomPathNodeConnection.cs" />
-    <Compile Include="Xml\RoomPathNodeConnectionRef.cs" />
-    <Compile Include="Xml\RoomPathNodeDefinition.cs" />
-    <Compile Include="Xml\RoomPathNodeSet.cs" />
-    <Compile Include="Xml\ScreenEffectDefinition.cs" />
-    <Compile Include="Xml\SkillEvent.cs" />
-    <Compile Include="Xml\SkillEventHolder.cs" />
-    <Compile Include="Xml\SkillEventsDefinition.cs" />
-    <Compile Include="Xml\SkyboxDefinition.cs" />
-    <Compile Include="Xml\SkyboxModel.cs" />
-    <Compile Include="Xml\SoundAdsrEnvelope.cs" />
-    <Compile Include="Xml\SoundEffect.cs" />
-    <Compile Include="Xml\SoundEffectDefinition.cs" />
-    <Compile Include="Xml\SoundReverbDefinition.cs" />
-    <Compile Include="Xml\StateDefinition.cs" />
-    <Compile Include="Xml\StateEvent.cs" />
-    <Compile Include="Xml\TextureDefinition.cs" />
+    <Compile Include="XmlCookedObject.cs" />
+    <Compile Include="XmlCookedTree.cs" />
+    <Compile Include="Xml\XmlAIBehaviorDefinition.cs" />
+    <Compile Include="Xml\XmlAIBehaviorDefinitionTable.cs" />
+    <Compile Include="Xml\XmlAIDefinition.cs" />
+    <Compile Include="Xml\XmlAnimationDefinition.cs" />
+    <Compile Include="Xml\XmlAnimEvent.cs" />
+    <Compile Include="Xml\XmlAppearanceDefinition.cs" />
+    <Compile Include="Xml\XmlBlendRLE.cs" />
+    <Compile Include="Xml\XmlBlendRun.cs" />
+    <Compile Include="Xml\XmlColorDefinition.cs" />
+    <Compile Include="Xml\XmlColorSetDefinition.cs" />
+    <Compile Include="Xml\XmlConditionDefinition.cs" />
+    <Compile Include="Xml\XmlConfigDefinition.cs" />
+    <Compile Include="Xml\XmlDemoLevelDefinition.cs" />
+    <Compile Include="Xml\XmlEnvironmentDefinition.cs" />
+    <Compile Include="Xml\XmlEnvLightDefinition.cs" />
+    <Compile Include="Xml\XmlFmodReverbProperties.cs" />
+    <Compile Include="Xml\XmlGameGlobalDefinition.cs" />
+    <Compile Include="Xml\XmlGlobalDefinition.cs" />
+    <Compile Include="Xml\XmlInventoryViewInfo.cs" />
+    <Compile Include="Xml\XmlLightDefinition.cs" />
+    <Compile Include="Xml\XmlMaterial.cs" />
+    <Compile Include="Xml\XmlParticleSystemDefinition.cs" />
+    <Compile Include="Xml\XmlRoomLayoutGroup.cs" />
+    <Compile Include="Xml\XmlRoomLayoutGroupDefinition.cs" />
+    <Compile Include="Xml\XmlRoomPathNode.cs" />
+    <Compile Include="Xml\XmlRoomPathNodeConnection.cs" />
+    <Compile Include="Xml\XmlRoomPathNodeConnectionRef.cs" />
+    <Compile Include="Xml\XmlRoomPathNodeDefinition.cs" />
+    <Compile Include="Xml\XmlRoomPathNodeSet.cs" />
+    <Compile Include="Xml\XmlScreenEffectDefinition.cs" />
+    <Compile Include="Xml\XmlSkillEvent.cs" />
+    <Compile Include="Xml\XmlSkillEventHolder.cs" />
+    <Compile Include="Xml\XmlSkillEventsDefinition.cs" />
+    <Compile Include="Xml\XmlSkyboxDefinition.cs" />
+    <Compile Include="Xml\XmlSkyboxModel.cs" />
+    <Compile Include="Xml\XmlSoundAdsrEnvelope.cs" />
+    <Compile Include="Xml\XmlSoundEffect.cs" />
+    <Compile Include="Xml\XmlSoundEffectDefinition.cs" />
+    <Compile Include="Xml\XmlSoundReverbDefinition.cs" />
+    <Compile Include="Xml\XmlStateDefinition.cs" />
+    <Compile Include="Xml\XmlStateEvent.cs" />
+    <Compile Include="Xml\XmlTextureDefinition.cs" />
     <Compile Include="Xml\XmlCookElement.cs" />
     <Compile Include="Xml\XmlDefinition.cs" />
   </ItemGroup>
@@ -506,6 +515,7 @@
       <Name>Common</Name>
     </ProjectReference>
   </ItemGroup>
+  <ItemGroup />
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 
        Other similar extension points exist, see Microsoft.Common.targets.

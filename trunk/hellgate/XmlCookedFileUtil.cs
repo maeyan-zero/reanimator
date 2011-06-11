@@ -41,91 +41,91 @@ namespace Hellgate
             {
                 //// SP Definitions
                 // AI
-                new AIDefinition(),
-                new AIBehaviorDefinitionTable(),
-                new AIBehaviorDefinition(),
+                new XmlAIDefinition(),
+                new XmlAIBehaviorDefinitionTable(),
+                new XmlAIBehaviorDefinition(),
 
                 // Appearance
-                new AppearanceDefinition(),
-                new AnimationDefinition(),
-                new AnimEvent(),
-                new InventoryViewInfo(),
+                new XmlAppearanceDefinition(),
+                new XmlAnimationDefinition(),
+                new XmlAnimEvent(),
+                new XmlInventoryViewInfo(),
 
                 // Colorsets (colorsets.xml)
-                new ColorSetDefinition(),
-                new ColorDefinition(),
+                new XmlColorSetDefinition(),
+                new XmlColorDefinition(),
 
                 // Config (config.xml)
-                new ConfigDefinition(),
+                new XmlConfigDefinition(),
 
                 // Demo Levels
-                new DemoLevelDefinition(),
+                new XmlDemoLevelDefinition(),
 
                 // Environments
-                new EnvironmentDefinition(),
-                new EnvLightDefinition(),
+                new XmlEnvironmentDefinition(),
+                new XmlEnvLightDefinition(),
 
                 // GameGlobalDefinition (gamedefault.xml)
-                new GameGlobalDefinition(),
+                new XmlGameGlobalDefinition(),
 
                 // GlobalDefinition (default.xml)
-                new GlobalDefinition(),
+                new XmlGlobalDefinition(),
 
                 // Shared (used in States, Skills and Appearance)
-                new ConditionDefinition(),
+                new XmlConditionDefinition(),
 
                 // Level Layout (contains object positions etc)
-                new RoomLayoutGroupDefinition(),
-                new RoomLayoutGroup(),
+                new XmlRoomLayoutGroupDefinition(),
+                new XmlRoomLayoutGroup(),
 
                 // Level Pathing (huge-ass list of nodes/points)
-                new RoomPathNodeDefinition(),
-                new RoomPathNodeSet(),
-                new RoomPathNode(),
-                new RoomPathNodeConnection(),
-                new RoomPathNodeConnectionRef(),
+                new XmlRoomPathNodeDefinition(),
+                new XmlRoomPathNodeSet(),
+                new XmlRoomPathNode(),
+                new XmlRoomPathNodeConnection(),
+                new XmlRoomPathNodeConnectionRef(),
 
                 // Lights
-                new LightDefinition(),
+                new XmlLightDefinition(),
 
                 // Materials (makes things look like things)
-                new Material(),
+                new XmlMaterial(),
 
                 // Particles
-                new ParticleSystemDefinition(),
+                new XmlParticleSystemDefinition(),
 
                 // Screen Effects
-                new ScreenEffectDefinition(),
+                new XmlScreenEffectDefinition(),
 
                 // Skills (defines skill effect/appearance mostly, not so much the skill itself)
-                new SkillEventsDefinition(),
-                new SkillEventHolder(),
-                new SkillEvent(),
+                new XmlSkillEventsDefinition(),
+                new XmlSkillEventHolder(),
+                new XmlSkillEvent(),
 
                 // Skybox
-                new SkyboxDefinition(),
-                new SkyboxModel(),
+                new XmlSkyboxDefinition(),
+                new XmlSkyboxModel(),
 
                 // Sound Effects
-                new SoundEffectDefinition(),
-                new SoundEffect(),
+                new XmlSoundEffectDefinition(),
+                new XmlSoundEffect(),
 
                 // Sound Reverbs
-                new SoundReverbDefinition(),
-                new FmodReverbProperties(),
+                new XmlSoundReverbDefinition(),
+                new XmlFmodReverbProperties(),
 
                 // States
-                new StateDefinition(),
-                new StateEvent(),
+                new XmlStateDefinition(),
+                new XmlStateEvent(),
 
                 // Textures
-                new TextureDefinition(),
-                new BlendRLE(),
-                new BlendRun(),
+                new XmlTextureDefinition(),
+                new XmlBlendRLE(),
+                new XmlBlendRun(),
 
                 //// MP Definitions
                 // Sound Address Envelope
-                new SoundAdsrEnvelope()
+                new XmlSoundAdsrEnvelope()
             };
 
             // create hashes

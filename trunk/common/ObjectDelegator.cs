@@ -66,7 +66,16 @@ namespace Revival.Common
         }
 
         private readonly Dictionary<String, FieldDelegate> _fieldDelegatesDict = new Dictionary<String, FieldDelegate>();
+        public readonly List<FieldDelegate> FieldDelegatesPublicList = new List<FieldDelegate>();
 
+        public int FieldCount { get { return _fieldDelegatesDict.Count; } }
+        public int PublicFieldCount { get { return FieldDelegatesPublicList.Count; } }
+
+        /// <summary>
+        /// Create field delegators from an array of field infos.
+        /// The supplied array should be ordered as desired for public field ordering to work.
+        /// </summary>
+        /// <param name="fieldInfos">The fields to create delegates from.</param>
         public ObjectDelegator(IEnumerable<FieldInfo> fieldInfos)
         {
             if (fieldInfos == null) throw new ArgumentNullException("fieldInfos", "Cannot be null!");
@@ -90,6 +99,8 @@ namespace Revival.Common
             };
 
             _fieldDelegatesDict.Add(fieldInfo.Name, fieldDelegate);
+
+            if (fieldInfo.IsPublic) FieldDelegatesPublicList.Add(fieldDelegate);
         }
 
         private static FieldSetValueDelegate _CreateSetField(FieldInfo field)
@@ -135,10 +146,6 @@ namespace Revival.Common
             return (FieldGetValueDelegate)getMethod.CreateDelegate(typeof(FieldGetValueDelegate));
         }
 
-        public int FieldCount
-        {
-            get { return _fieldDelegatesDict.Count; }
-        }
 
         // "getter"
         public FieldGetValueDelegate this[String fieldName]
@@ -163,6 +170,12 @@ namespace Revival.Common
         {
             FieldDelegate fieldDelegate;
             return _fieldDelegatesDict.TryGetValue(fieldName, out fieldDelegate) ? fieldDelegate : null;
+        }
+
+        public FieldDelegate GetPublicFieldDelegate(int index)
+        {
+            if (index < 0 || index > FieldDelegatesPublicList.Count) return null;
+            return FieldDelegatesPublicList[index];
         }
 
         public FieldGetValueDelegate GetFieldGetDelegate(String fieldName)

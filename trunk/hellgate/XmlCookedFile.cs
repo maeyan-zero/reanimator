@@ -116,7 +116,7 @@ namespace Hellgate
             // todo: this is a bit excessive for a couple of offsets, but meh, fix it later
             Hashtable bitFieldOffsts = new Hashtable();
             int bitIndex = -1;
-            bool bpTest = true;
+            //bool bpTest = true;
             foreach (XmlCookElement xmlCookElement in xmlDefinition.Elements)
             {
                 if (xmlCookElement.IsTestCentre && CookExcludeTestCentre) continue;

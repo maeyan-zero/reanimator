@@ -1375,13 +1375,15 @@ namespace Reanimator.Forms
                         DataFile spVersion;
                         if (_fileManager.DataFiles.TryGetValue(excelFile.StringId, out spVersion))
                         {
+                            ObjectDelegator objectDelegator = _fileManager.DataFileDelegators[spVersion.StringId];
+
                             FieldInfo[] fieldInfos = spVersion.Attributes.RowType.GetFields();
-                            columns = new String[fieldInfos.Length];
+                            columns = new String[objectDelegator.PublicFieldCount];
 
                             int col = 0;
-                            foreach (FieldInfo fieldInfo in fieldInfos)
+                            foreach (ObjectDelegator.FieldDelegate fieldDelegate in objectDelegator.FieldDelegatesPublicList)
                             {
-                                columns[col++] = fieldInfo.Name;
+                                columns[col++] = fieldDelegate.Name;
                             }
                         }
                     }

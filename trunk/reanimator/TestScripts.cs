@@ -1200,7 +1200,7 @@ namespace Reanimator
                     }
                 }
 
-                int bp3 = 0;
+                //int bp3 = 0;
             }
 
             String previousStringId = null;
@@ -1271,10 +1271,10 @@ namespace Reanimator
                 //byte[] recookedBytes = excelFileCSV.ToByteArray();
                 byte[] csvBytes2 = excelFileCSV.ExportCSV(fileManager);
 
-                if (!csvBytes.SequenceEqual(csvBytes2))
-                {
-                    int b5p = 0;
-                }
+                //if (!csvBytes.SequenceEqual(csvBytes2))
+                //{
+                //    int b5p = 0;
+                //}
 
                 //if (excelFile.StringId == "GLOBAL_STRING")
                 //{
@@ -1285,7 +1285,7 @@ namespace Reanimator
                 //File.WriteAllBytes(filePath, recookedBytes);
             }
 
-            int bp = 0;
+            //int bp = 0;
         }
 
 
@@ -1437,11 +1437,16 @@ namespace Reanimator
         public static void UncookAllXml()
         {
             System.Security.Cryptography.MD5CryptoServiceProvider md5 = new System.Security.Cryptography.MD5CryptoServiceProvider();
-            //const String root = @"D:\Games\Hellgate London\data\";
-            const String root = @"D:\Games\Hellgate London\data\mp_hellgate_1.10.180.3416_1.0.86.4580\";
+            const String root = @"D:\Games\Hellgate\Data\";
+            //const String root = @"D:\Games\Hellgate London\data\mp_hellgate_1.10.180.3416_1.0.86.4580\";
             //const String root = @"D:\Games\Hellgate London\data\mp_hellgate_1.10.180.3416_1.0.86.4580\data\background\";
-            DirectoryInfo directoryInfo = new DirectoryInfo(root);
             List<String> xmlFiles = new List<String>(Directory.GetFiles(root, "*.xml.cooked", SearchOption.AllDirectories));
+
+            FileManager fileManager = new FileManager(Config.HglDir);
+            fileManager.BeginAllDatReadAccess();
+            fileManager.LoadTableFiles();
+            fileManager.EndAllDatAccess();
+            XmlCookedFile.Initialize(fileManager);
 
             int count = 0;
             List<XmlCookedFile> excelStringWarnings = new List<XmlCookedFile>();
@@ -1452,13 +1457,10 @@ namespace Reanimator
                 String path = xmlFilePath;
                 //path = @"D:\Games\Hellgate London\data\mp_hellgate_1.10.180.3416_1.0.86.4580\data\background\city\treasury\cap_path.xml.cooked";
 
-                //if (path.Contains("mp_hellgate")) continue;                 // todo: can't do these yet
-                //if (path.Contains("path")) continue;                 // todo: can't do these yet
-
                 XmlCookedFile xmlCookedFile = new XmlCookedFile(Path.GetFileName(path));
                 byte[] data = File.ReadAllBytes(path);
 
-                String fileName = path.Replace(@"D:\Games\Hellgate London\", "");
+                String fileName = path.Replace(root, "");
                 //Console.WriteLine("Uncooking: " + fileName);
 
                 try
@@ -1471,7 +1473,8 @@ namespace Reanimator
                     continue;
                 }
 
-                xmlCookedFile.SaveXml(path.Replace(".cooked", ""));
+                String newPath = path.Replace(".xml.cooked", ".test.xml");
+                xmlCookedFile.SaveXml(newPath);
                 count++;
 
                 if (xmlCookedFile.HasExcelStringsMissing) excelStringWarnings.Add(xmlCookedFile);
@@ -1483,12 +1486,12 @@ namespace Reanimator
                 byte[] recookedData = recookedXmlFile.CookXmlDocument(xmlCookedFile.XmlDoc);
 
                 // if file passes byte-byte test, then continue
-                if (data.SequenceEqual(recookedData) ||
-                    path.Contains("sevenbranchsword_mesh_appearance.xml") ||    // this file has some weird bytes in a string element
-                    path.Contains("focus_item11_mesh_appearance.xml") ||        // this file has non-zeroed flag base masks (all differing)
-                    path.Contains("focus_item10_mesh_appearance.xml") ||        // as above     // (all 3 probably from not zeroing a ptr at original cooking)
-                    path.Contains("thirdpersononly.xml.cooked") ||              // this file has 3xBitFlag Elements (from ConditionsDefinition) exceeding the file buffer
-                    path.Contains("dizzy_reverb.xml.cooked")                    // as above, but in SoundReverbDefinition
+                if (data.SequenceEqual(recookedData)// ||
+                    //path.Contains("sevenbranchsword_mesh_appearance.xml") ||    // this file has some weird bytes in a string element
+                    //path.Contains("focus_item11_mesh_appearance.xml") ||        // this file has non-zeroed flag base masks (all differing)
+                    //path.Contains("focus_item10_mesh_appearance.xml") ||        // as above     // (all 3 probably from not zeroing a ptr at original cooking)
+                    //path.Contains("thirdpersononly.xml.cooked") ||              // this file has 3xBitFlag Elements (from ConditionsDefinition) exceeding the file buffer
+                    //path.Contains("dizzy_reverb.xml.cooked")                    // as above, but in SoundReverbDefinition
                    ) continue;
 
                 File.WriteAllBytes(path + "2", recookedData);

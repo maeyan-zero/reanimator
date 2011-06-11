@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using System.Data;
 using System.IO;
+using System.Linq;
 using System.Reflection;
 using Revival.Common;
 
@@ -17,6 +18,11 @@ namespace Hellgate
             StringId = _GetStringId(filePath);
             if (StringId == null) throw new Exceptions.DataFileStringIdNotFound(filePath);
             Attributes = DataFileMap[StringId];
+
+            // create field delegators
+            FieldInfo[] dataFileFields = Attributes.RowType.GetFields(BindingFlags.Public | BindingFlags.NonPublic | BindingFlags.Instance);
+            dataFileFields = dataFileFields.OrderBy(f => f.MetadataToken).ToArray(); // order by defined order - GetFields does not guarantee ordering
+            Delegator = new ObjectDelegator(dataFileFields);
 
             Rows = new List<Object>();
             
@@ -47,7 +53,7 @@ namespace Hellgate
                 stringBlock.Reserved = FileTools.ByteArrayToInt32(buffer, ref offset);
 
                 count = FileTools.ByteArrayToInt32(buffer, ref offset);
-                stringBlock.String = FileTools.ByteArrayToStringUnicode(buffer, offset);
+                stringBlock.String = FileTools.ByteArrayToStringUnicode(buffer, offset, count);
                 offset += count;
 
                 int attributeCount = FileTools.ByteArrayToInt32(buffer, ref offset);
@@ -55,24 +61,25 @@ namespace Hellgate
                 for (int j = 0; j < attributeCount; j++)
                 {
                     count = FileTools.ByteArrayToInt32(buffer, ref offset);
+                    int byteCount = (count + 1)*2;
 
                     switch (j)
                     {
                         case 0:
-                            stringBlock.Attribute1 = FileTools.ByteArrayToStringUnicode(buffer, offset);
+                            stringBlock.Attribute1 = FileTools.ByteArrayToStringUnicode(buffer, offset, byteCount);
                             break;
                         case 1:
-                            stringBlock.Attribute2 = FileTools.ByteArrayToStringUnicode(buffer, offset);
+                            stringBlock.Attribute2 = FileTools.ByteArrayToStringUnicode(buffer, offset, byteCount);
                             break;
                         case 2:
-                            stringBlock.Attribute3 = FileTools.ByteArrayToStringUnicode(buffer, offset);
+                            stringBlock.Attribute3 = FileTools.ByteArrayToStringUnicode(buffer, offset, byteCount);
                             break;
                         case 3:
-                            stringBlock.Attribute4 = FileTools.ByteArrayToStringUnicode(buffer, offset);
+                            stringBlock.Attribute4 = FileTools.ByteArrayToStringUnicode(buffer, offset, byteCount);
                             break;
                     }
 
-                    offset += (count + 1) * 2;
+                    offset += byteCount;
                 }
 
                 Rows.Add(stringBlock);

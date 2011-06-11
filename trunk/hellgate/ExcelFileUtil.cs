@@ -568,7 +568,6 @@ namespace Hellgate
 
             // need column fields
             Object row = Rows[index];
-            FieldInfo[] fields = Rows[0].GetType().GetFields();
 
             // each row has its own bit high
             int intOffset = index >> 5;
@@ -577,7 +576,7 @@ namespace Hellgate
             // check isAX columns
             for (int j = startIndex; j < endIndex; j++)
             {
-                int value = (int)fields[j].GetValue(row);
+                int value = (int)Delegator.GetPublicFieldDelegate(j).GetValue(row);
                 if (value == -1) continue; // at first -1, no other values have been found (tested)
 
                 intOffset = value >> 5;

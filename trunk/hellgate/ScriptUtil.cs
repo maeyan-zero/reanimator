@@ -14,7 +14,7 @@ namespace Hellgate
     {
         #region Type Definitions
 
-        private enum ArgType : uint
+        public enum ArgType : uint
         {
             Int32,              // 0
             ExcelIndex,         // 1
@@ -28,7 +28,7 @@ namespace Hellgate
             ContextPtr          // 9    used for PushContextVarPtr
         }
 
-        private class Argument
+        public class Argument
         {
             public String Name;             // name of argument
             public ArgType Type;            // not used, just kept "just because"
@@ -36,7 +36,7 @@ namespace Hellgate
             public int ByteOffset = -1;     // used for excel script functions
         }
 
-        private class Function
+        public class Function
         {
             public String Name;             // name of function
             public Argument[] Args;         // function arguments (null if none)
@@ -1053,7 +1053,7 @@ namespace Hellgate
             UsePtrObjectReference = 714     // 0x2CA    // set type/size = 4??  // pointer object usage?? (let's try that) - seems to work
         }
 
-        private enum ContextVariables : uint
+        public enum ContextVariables : uint
         {
             Unit,           // 0        // not seen used
             Object,         // 1        // not seen used
