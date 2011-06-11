@@ -4,7 +4,9 @@ using System.Data;
 using System.IO;
 using Hellgate.Excel;
 using Hellgate.Excel.JapaneseBeta;
+using Hellgate.Excel.SinglePlayer;
 using Hellgate.Excel.TCv4;
+using Revival.Common;
 
 namespace Hellgate
 {
@@ -13,6 +15,7 @@ namespace Hellgate
         public String StringId { get; protected set; }
         public DataFileAttributes Attributes { get; protected set; }
         public Type DataType { get { return Attributes.RowType; } }
+        public ObjectDelegator Delegator { get; protected set; }
         public bool HasIntegrity { get; protected set; }
         public bool IsExcelFile { get; protected set; }
         public bool IsStringsFile { get; protected set; }
@@ -66,7 +69,7 @@ namespace Hellgate
             {"BADGE_REWARDS", new DataFileAttributes {RowType = typeof(BadgeRewards), StructureId = 0xAA0F158C}},
             {"BONES", new DataFileAttributes {RowType = typeof(Bones), StructureId = 0x1EE32EF6}},
             {"BONEWEIGHTS", new DataFileAttributes {RowType = typeof(Bones), StructureId = 0x1EE32EF6}},
-            {"BOOKMARKS", new DataFileAttributes {RowType = typeof(ExcelTables), StructureId = 0x86DC367C}},
+            {"BOOKMARKS", new DataFileAttributes {RowType = typeof(ExcelTablesRow), StructureId = 0x86DC367C}},
             {"BUDGETS_MODEL", new DataFileAttributes {RowType = typeof(BudgetsModel), StructureId = 0x7A7D891E}},
             {"BUDGETS_TEXTURE_MIPS", new DataFileAttributes {RowType = typeof(BudgetTextureMips), StructureId = 0xBEE975EA}},
             {"CHARACTER_CLASS", new DataFileAttributes {RowType = typeof(CharacterClass), StructureId = 0x08402828}},
@@ -79,7 +82,7 @@ namespace Hellgate
             {"DIFFICULTY", new DataFileAttributes {RowType = typeof(Difficulty), StructureId = 0x5C719A50}},
             {"CHARDISPLAY", new DataFileAttributes {FileName = "DISPLAY_CHAR", RowType = typeof(Display), StructureId = 0x4319D23D}},
             {"ITEMDISPLAY", new DataFileAttributes {FileName = "DISPLAY_ITEM", RowType = typeof(Display), StructureId = 0x4319D23D}},
-            {"EXCELTABLES", new DataFileAttributes {RowType = typeof(ExcelTables), StructureId = 0x86DC367C}},
+            {"EXCELTABLES", new DataFileAttributes {RowType = typeof(ExcelTablesRow), StructureId = 0x86DC367C}},
             {"EFFECTS_FILES", new DataFileAttributes {RowType = typeof(EffectsFiles), StructureId = 0xF303187F}},
             {"EFFECTS", new DataFileAttributes {FileName = "EFFECTS_INDEX", RowType = typeof(EffectsIndex), StructureId = 0x99264BCB}},
             {"EFFECTS_SHADERS", new DataFileAttributes {RowType = typeof(EffectsShaders), StructureId = 0xC8471612}},
@@ -150,7 +153,7 @@ namespace Hellgate
             {"QUEST", new DataFileAttributes {RowType = typeof(Quest), StructureId = 0x043A420D}},
             {"QUEST_CAST", new DataFileAttributes {RowType = typeof(QuestCast), StructureId = 0x7765138E}},
             {"QUEST_STATE", new DataFileAttributes {RowType = typeof(QuestState), StructureId = 0x1A0A1C09}},
-            {"QUEST_STATE_VALUE", new DataFileAttributes {RowType = typeof(ExcelTables), StructureId = 0x86DC367C}},
+            {"QUEST_STATE_VALUE", new DataFileAttributes {RowType = typeof(ExcelTablesRow), StructureId = 0x86DC367C}},
             {"QUEST_STATUS", new DataFileAttributes {RowType = typeof(QuestStatus), StructureId = 0xB0593288}},
             {"QUEST_TEMPLATE", new DataFileAttributes {RowType = typeof(QuestTemplate), StructureId = 0xD4AE7FA7}},
             {"RARENAMES", new DataFileAttributes {RowType = typeof(RareNames), HasScriptTable = true, StructureId = 0xF09E4089}},
@@ -174,11 +177,11 @@ namespace Hellgate
             {"STATES", new DataFileAttributes {RowType = typeof(States), HasIndexBitRelations = true, StructureId = 0xFD6839DE}},
             {"STATS", new DataFileAttributes {RowType = typeof(Stats), StructureId = 0x569C0513}},
             {"STATS_FUNC", new DataFileAttributes {FileName = "STATSFUNC", RowType = typeof(StatsFunc), StructureId = 0x2C085508}},
-            {"STATS_SELECTOR", new DataFileAttributes {FileName = "STATSSELECTOR", RowType = typeof(ExcelTables), StructureId = 0x86DC367C}},
+            {"STATS_SELECTOR", new DataFileAttributes {FileName = "STATSSELECTOR", RowType = typeof(ExcelTablesRow), StructureId = 0x86DC367C}},
             {"STRING_FILES", new DataFileAttributes {RowType = typeof(StringFiles), StructureId = 0x22FCCFEB}},
             {"SUBLEVEL", new DataFileAttributes {RowType = typeof(SubLevel), StructureId = 0x1ACBB8F7}},
             {"TAG", new DataFileAttributes {RowType = typeof(Tag), StructureId = 0xF8A155D8}},
-            {"TASK_STATUS", new DataFileAttributes {RowType = typeof(ExcelTables), StructureId = 0x86DC367C}},
+            {"TASK_STATUS", new DataFileAttributes {RowType = typeof(ExcelTablesRow), StructureId = 0x86DC367C}},
             {"TASKS", new DataFileAttributes {RowType = typeof(Tasks), StructureId = 0xBF3BFFF5}},
             {"TEXTURE_TYPES", new DataFileAttributes {FileName = "TEXTURETYPES", RowType = typeof(TextureTypes), StructureId = 0xC8071451}},
             {"TREASURE", new DataFileAttributes {RowType = typeof(Treasure), StructureId = 0x01A8DA81}},

@@ -21,11 +21,24 @@ namespace Hellgate
         private readonly byte[] _myshBuffer;
         private String[][] _csvTable;
 
+        public Xls.TableCodes TableCode { get; set; }
         public byte[][] StatsBuffer;
         public List<String> SecondaryStrings { get; private set; }
         public byte[] ScriptBuffer { get { return _scriptBuffer; } }
+        public int[] ScriptCode { get; private set; }
         public List<ExcelFunction> ExcelFunctions;
         public List<Int32[]> IndexSortArray; // is only available/set when ExcelFile.ExcelDebug = true
+
+        private bool _hasCodeField = false;
+        public readonly Dictionary<int, Object> RowFromCode = new Dictionary<int, Object>();
+        public readonly Dictionary<Object, int> CodeFromRow = new Dictionary<Object, int>();
+
+        private bool _hasFirstStringField = false;
+        public readonly Dictionary<string, Object> RowFromFirstString = new Dictionary<string, Object>();
+        public readonly Dictionary<Object, string> FirstStringFromRow = new Dictionary<Object, string>();
+
+        public readonly Dictionary<Object, int> IndexFromRow = new Dictionary<Object, int>();
+
 
         private ExcelHeader _excelFileHeader = new ExcelHeader
         {
@@ -64,9 +77,17 @@ namespace Hellgate
                 DataFileMap.TryGetValue(StringId, out dataFileAttributes);
             }
             Attributes = dataFileAttributes;
+
+            // create field delegators
+            FieldInfo[] dataFileFields = Attributes.RowType.GetFields(BindingFlags.Public | BindingFlags.NonPublic | BindingFlags.Instance);
+            dataFileFields = dataFileFields.OrderBy(f => f.MetadataToken).ToArray(); // order by defined order - GetFields does not guarantee ordering
+            Delegator = new ObjectDelegator(dataFileFields);
+
+            // if we're empty, then just return
             if (Attributes.IsEmpty)
             {
                 HasIntegrity = true;
+                Rows = new List<Object>();
                 return;
             }
 
@@ -110,9 +131,17 @@ namespace Hellgate
                 DataFileMap.TryGetValue(StringId, out dataFileAttributes);
             }
             Attributes = dataFileAttributes;
+
+            // create field delegators
+            FieldInfo[] dataFileFields = Attributes.RowType.GetFields(BindingFlags.Public | BindingFlags.NonPublic | BindingFlags.Instance);
+            dataFileFields = dataFileFields.OrderBy(f => f.MetadataToken).ToArray(); // order by defined order - GetFields does not guarantee ordering
+            Delegator = new ObjectDelegator(dataFileFields);
+
+            // if we're empty, then just return
             if (Attributes.IsEmpty)
             {
                 HasIntegrity = true;
+                Rows = new List<Object>();
                 return;
             }
 
@@ -201,6 +230,7 @@ namespace Hellgate
             if (fileManager == null || !fileManager.DataFileDelegators.ContainsKey(StringId))
             {
                 FieldInfo[] fieldInfos = DataType.GetFields(BindingFlags.Instance | BindingFlags.Public | BindingFlags.NonPublic);
+                fieldInfos = fieldInfos.OrderBy(f => f.MetadataToken).ToArray(); // order by defined order - GetFields does not guarantee ordering
                 objectDelegator = new ObjectDelegator(fieldInfos);
                 excelAttributes = new OutputAttribute[fieldInfos.Length];
             }
@@ -649,7 +679,68 @@ namespace Hellgate
             for (int i = 0; i < rowCount; i++)
             {
                 Rows.Add(FileTools.ByteArrayToStructure(buffer, DataType, ref offset));
+                IndexFromRow.Add(Rows[i], i);
+                // Add to RowFromCode Dictionary if Row has "code" column
+                FieldInfo field = Attributes.RowType.GetField("code");
+                if (field != null)
+                {
+                    int rowCode;
+                    if (field.FieldType == typeof(Int16))
+                        rowCode = (Int16) field.GetValue(Rows[i]);
+                    else if (field.FieldType == typeof(Int32))
+                        rowCode = (Int32) field.GetValue(Rows[i]);
+                    else
+                        rowCode = -1;
+                    if (!RowFromCode.ContainsKey(rowCode))
+                    {
+                        RowFromCode.Add(rowCode, Rows[i]);
+                        CodeFromRow.Add(Rows[i], rowCode);
+                        _hasCodeField = true;
+                    }
+                }
+                // Add to RowFromFirstString Dictionary if Row has column with attribute SortColumnOrder = 1 
+                FieldInfo[] fields = Attributes.RowType.GetFields();
+                for (int fieldIndex = 0; fieldIndex < fields.Count(); fieldIndex++)
+                {
+                    field = fields[fieldIndex];
+                    OutputAttribute attribute = GetExcelAttribute(field);
+                    // Check if field has attributes
+                    if (attribute != null)
+                    {
+                        if (attribute.SortColumnOrder == 1)
+                            break;
+                    }
+                    // No attribute, skip field
+                    else
+                    {
+                        field = null;
+                    }
+                }
+                if (field != null)
+                {
+                    int nameOffset;
+                    String nameString = "";
+                    // Gets string from string buffer
+                    if (field.FieldType == typeof(Int32))
+                    {
+                        nameOffset = (Int32)field.GetValue(Rows[i]);
+                        // No string buffer, just use "value" for string
+                        nameString = ReadStringTable(nameOffset) ?? nameOffset.ToString();
+                    }
+
+                    if (field.FieldType == typeof(String))
+                    {
+                        nameString = (String)field.GetValue(Rows[i]);
+                    }
+                    if (!RowFromFirstString.ContainsKey(nameString))
+                    {
+                        RowFromFirstString.Add(nameString, Rows[i]);
+                        FirstStringFromRow.Add(Rows[i], nameString);
+                        _hasFirstStringField = true;
+                    }
+                }
             }
+            //Debug.WriteLine("{0}", DataType);
 
             // Primary Indice Block
             if (!_CheckToken(buffer, ref offset, Token.cxeh)) return false;
@@ -719,15 +810,21 @@ namespace Hellgate
             }
 
 
-            // Integer Block
-            if ((_CheckToken(buffer, ref offset, Token.cxeh)))
+            // Scripts
+            if (_CheckToken(buffer, ref offset, Token.cxeh))
             {
-                int integerBufferOffset = FileTools.ByteArrayToInt32(buffer, ref offset);
-                if (integerBufferOffset != 0)
+                int scriptsByteCount = FileTools.ByteArrayToInt32(buffer, ref offset);
+                if (scriptsByteCount != 0)
                 {
-                    _scriptBuffer = new byte[integerBufferOffset];
-                    Buffer.BlockCopy(buffer, offset, _scriptBuffer, 0, integerBufferOffset);
-                    offset += integerBufferOffset;
+                    _scriptBuffer = new byte[scriptsByteCount];
+                    Buffer.BlockCopy(buffer, offset, _scriptBuffer, 0, scriptsByteCount);
+                    offset += scriptsByteCount;
+
+                    int intCount = scriptsByteCount - 1;
+                    Debug.Assert(intCount % 4 == 0);
+                    intCount /= 4;
+
+                    ScriptCode = FileTools.ByteArrayToInt32Array(_scriptBuffer, 1, intCount);
                 }
             }
 
@@ -1148,7 +1245,12 @@ namespace Hellgate
                 FileTools.WriteToBuffer(ref buffer, ref offset, Token.DnehValue);
             }
 
-            // Append the integer array.
+            // add scripts
+            //if (Scripts != null && Scripts.Count > 0)
+            //{
+            //    Scripts.
+            //    foreach (int[] script in Scripts.C)
+            //}
             if (_scriptBuffer != null && _scriptBuffer.Length > 0)
             {
                 FileTools.WriteToBuffer(ref buffer, ref offset, Token.cxeh);

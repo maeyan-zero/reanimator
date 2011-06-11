@@ -36,7 +36,11 @@ namespace Hellgate.Xml
         BitFlag = 0x0C02,
         UnknownPTypeD_0x0D00 = 0x0D00,      // found in RoomPath and AppearanceDefinition and children; no known use/occurance - name usually "pName"
 
-        ByteArrayVariable = 0x1007          // found in BlendRun (TextureDefinition child)
+        ByteArrayVariable = 0x1007,         // found in BlendRun (TextureDefinition child)
+
+        Bool = 0xFFFD,                      // custom type for Int32 -> Bool
+        Vector3 = 0xFFFE,                   // custom type for Vector3 object
+        Object = 0xFFFF                     // custom type for objects (e.g. ConditionDef, AttachmentDef)
     }
 
     public class XmlCookElement

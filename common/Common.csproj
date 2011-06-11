@@ -114,7 +114,9 @@
     <Compile Include="ExceptionLogger.cs" />
     <Compile Include="FileTools.cs" />
     <Compile Include="FormTools.cs" />
+    <Compile Include="MathTools.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
+    <Compile Include="StreamTools.cs" />
     <Compile Include="TableTools.cs" />
     <Compile Include="ObjectDelegator.cs" />
     <Compile Include="XmlUtilities.cs" />

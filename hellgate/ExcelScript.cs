@@ -144,7 +144,7 @@ namespace Hellgate
             _level++;
             List<Int32> scriptByteCode = new List<Int32>();
             ScriptOpCodes operatorOpCode = ScriptOpCodes.Return;
-            int bp = 0;
+            //int bp = 0;
             String excelStr;
             Stack<StackObject> operatorStack = new Stack<StackObject>();
 
@@ -239,7 +239,7 @@ namespace Hellgate
                                 break;
 
                             default:
-                                bp = 0;
+                                //bp = 0;
                                 break;
                         }
                         Debug.Assert((int)contextOpCode != 0);

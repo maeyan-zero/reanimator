@@ -866,7 +866,7 @@ namespace Hellgate
             if (statBlock.Usage == 1)
             {
                 unitStat.Row = _ReadBits(11); // not sure what this is... row? (pretty sure it's the row index)
-                StatsBeta stat = FileManager.GetExcelStatsRowFromIndex(unitStat.Row);
+                StatsBeta stat = new StatsBeta(); // todo: FIXME FileManager.GetStatRowFromIndex(unitStat.Row);
                 unitStat.BitCount = stat.valbits;
             }
             else
@@ -2083,7 +2083,7 @@ namespace Hellgate
             if (statBlock.Usage == 1)
             {
                 _WriteBits(stat.Row, 11);
-                StatsBeta statRow = FileManager.GetExcelStatsRowFromIndex(stat.Row);
+                StatsBeta statRow = new StatsBeta(); // todo: FIXME FileManager.GetStatRowFromIndex(stat.Row);
                 stat.BitCount = statRow.valbits;
             }
             else

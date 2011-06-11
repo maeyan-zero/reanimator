@@ -12,16 +12,18 @@ namespace Revival.Common
 {
     public static class FileTools
     {
-        public static int UnixTime()
+        private static readonly DateTime UnixEpoch = new DateTime(1970, 1, 1);
+
+        public static uint UnixTime()
         {
-            TimeSpan timeSpan = (DateTime.Now - new DateTime(1970, 1, 1));
-            return (int)timeSpan.TotalSeconds;
+            TimeSpan timeSpan = (DateTime.Now - UnixEpoch);
+            return (uint)timeSpan.TotalSeconds;
         }
 
-        public static int UnixTimeUTC()
+        public static uint UnixTimeUTC()
         {
-            TimeSpan timeSpan = (DateTime.UtcNow - new DateTime(1970, 1, 1));
-            return (int)timeSpan.TotalSeconds;
+            TimeSpan timeSpan = (DateTime.UtcNow - UnixEpoch);
+            return (uint)timeSpan.TotalSeconds;
         }
 
         public static int MemCmp(byte[] buffer1, int offset1, byte[] buffer2, int offset2, int count)
@@ -50,6 +52,95 @@ namespace Revival.Common
         public static void ZeroMemory(byte[] buffer, int offset, int count)
         {
             MemSet(buffer, offset, count, 0x00);
+        }
+
+        private static readonly int[] BitCountTable = new[] // this is how they do it in the client... Not sure why they don't just use a for loop and shifting... I guess this would be ever so slightly quicker...
+        {
+            0,
+            1,
+            2, 2,
+            3, 3, 3, 3,
+            4, 4, 4, 4, 4, 4, 4, 4,
+            5, 5, 5, 5, 5, 5, 5, 5, 5, 5, 5, 5, 5, 5, 5, 5,
+            6, 6, 6, 6, 6, 6, 6, 6, 6, 6, 6, 6, 6, 6, 6, 6, 6, 6, 6, 6, 6, 6, 6, 6, 6, 6, 6, 6, 6, 6, 6, 6,
+            7, 7, 7, 7, 7, 7, 7, 7, 7, 7, 7, 7, 7, 7, 7, 7, 7, 7, 7, 7, 7, 7, 7, 7, 7, 7, 7, 7, 7, 7, 7, 7, 7, 7, 7, 7, 7, 7, 7, 7, 7, 7, 7, 7, 7, 7, 7, 7, 7, 7, 7, 7, 7, 7, 7, 7, 7, 7, 7, 7, 7, 7, 7, 7,
+            8, 8, 8, 8, 8, 8, 8, 8, 8, 8, 8, 8, 8, 8, 8, 8, 8, 8, 8, 8, 8, 8, 8, 8, 8, 8, 8, 8, 8, 8, 8, 8, 8, 8, 8, 8, 8, 8, 8, 8, 8, 8, 8, 8, 8, 8, 8, 8, 8, 8, 8, 8, 8, 8, 8, 8, 8, 8, 8, 8, 8, 8, 8, 8, 8, 8, 8, 8, 8, 8, 8, 8, 8, 8, 8, 8, 8, 8, 8, 8, 8, 8, 8, 8, 8, 8, 8, 8, 8, 8, 8, 8, 8, 8, 8, 8, 8, 8, 8, 8, 8, 8, 8, 8, 8, 8, 8, 8, 8, 8, 8, 8, 8, 8, 8, 8, 8, 8, 8, 8, 8, 8, 8, 8, 8, 8, 8, 8
+        };
+
+        public static int GetMaxBits(int value)
+        {
+            int bitShift = -1;
+            if ((value & 0xFF000000) > 0)
+            {
+                bitShift = 0x18;
+            }
+            else if ((value & 0xFF0000) > 0)
+            {
+                bitShift = 0x10;
+            }
+            else if ((value & 0xFF00) > 0)
+            {
+                bitShift = 0x08;
+            }
+            else if ((value & 0xFF) > 0)
+            {
+                bitShift = 0x00;
+            }
+            Debug.Assert(bitShift >= 0);
+
+            int bitCountIndex = (value >> bitShift);
+            int bitCount = BitCountTable[bitCountIndex] + bitShift;
+
+            return bitCount;
+        }
+
+        public static byte[] HexFileToByteArray(string Hex)
+        {
+            byte[] test = null;
+            try
+            {
+                string hexTrimmed = Hex.Replace("\r\n", " ");
+                test = hexTrimmed.Split(new char[] { ' ' }, StringSplitOptions.RemoveEmptyEntries).Select(x => Convert.ToByte(x, 16)).ToArray();
+                Console.WriteLine("{0}", hexTrimmed);
+            }
+            catch (Exception exception)
+            {
+                // Error
+                Console.WriteLine("Exception caught in process: {0}", exception);
+            }
+            return test;
+        }
+
+        public static byte[] ReadFile(string fileName)
+        {
+            byte[] buffer = null;
+
+            try
+            {
+                // Open file for reading
+                FileStream fileStream = new FileStream("packets\\"+fileName, FileMode.Open, FileAccess.Read);
+
+                // attach filestream to stream reader
+                StreamReader streamReader = new StreamReader(fileStream, Encoding.UTF8);
+
+                // read entire file into string
+                string hexString;
+                hexString = streamReader.ReadToEnd();
+
+                // close file reader
+                fileStream.Close();
+                fileStream.Dispose();
+                streamReader.Close();
+
+                // convert hex string to byte array, valid delimiters in files SPACE and ENTER
+                buffer = HexFileToByteArray(hexString);
+            }
+            catch (Exception exception)
+            {
+                // Error
+                Console.WriteLine("Exception caught in process: {0}", exception);
+            }
+            return buffer;
         }
 
         /// <summary>
@@ -87,6 +178,24 @@ namespace Revival.Common
             offset += 2;
             return value;
         }
+
+        /// <summary>
+        /// Converts an array of bytes to an Int16 from a given offset.<br />
+        /// <i>offset</i> is incremented by the size of an Int16.
+        /// <i>bytesRemaining</i> is decremented by the size of of an Int16
+        /// </summary>
+        /// <param name="byteArray">The byte array containing the Int16.</param>
+        /// <param name="offset">The initial offset within byteArray.</param>
+        /// <param name="bytesRemaining">The externally used bytes remaining counter to be updated.</param>
+        /// <returns>The converted Int16 value.</returns>
+        public static Int16 ByteArrayToInt16(byte[] byteArray, ref int offset, ref int bytesRemaining)
+        {
+            Int16 value = BitConverter.ToInt16(byteArray, offset);
+            offset += 2;
+            bytesRemaining -= 2;
+            return value;
+        }
+
 
         /// <summary>
         /// Converts an array of bytes to an Int32 from a given offset.<br />
@@ -167,6 +276,20 @@ namespace Revival.Common
         }
 
         /// <summary>
+        /// Converts an array of bytes to an Int64 from a given offset.
+        /// <i>offset</i> is incremented by the size of an Int64.
+        /// </summary>
+        /// <param name="byteArray">The byte array containing the Int64.</param>
+        /// <param name="offset">The initial offset within byteArray.</param>
+        /// <returns>The converted Int64 value.</returns>
+        public static Int64 ByteArrayToInt64(byte[] byteArray, ref int offset)
+        {
+            Int64 value = BitConverter.ToInt64(byteArray, offset);
+            offset += 8;
+            return value;
+        }
+
+        /// <summary>
         /// Converts an array of bytes to an array of short values.<br />
         /// <i>offset</i> is incremented by the size of the short array.
         /// </summary>
@@ -185,6 +308,18 @@ namespace Revival.Common
             offset += count * 2;
 
             return shortArray;
+        }
+
+        /// <summary>
+        /// Converts an array of bytes to an array of Int32 values.
+        /// </summary>
+        /// <param name="byteArray">The byte array containing the Int32 array.</param>
+        /// <param name="offset">The initial offset within byteArray.</param>
+        /// <param name="count">The number of Int32 array elements.</param>
+        /// <returns>The converted Int32 array.</returns>
+        public static Int32[] ByteArrayToInt32Array(byte[] byteArray, int offset, int count)
+        {
+            return ByteArrayToInt32Array(byteArray, ref offset, count);
         }
 
         /// <summary>
@@ -405,15 +540,16 @@ namespace Revival.Common
         /// </summary>
         /// <param name="byteArray">The byte array containing the Unicode String.</param>
         /// <param name="offset">The initial offset within byteArray.</param>
+        /// <param name="maxByteCount">The maximum number of bytes to use/check.</param>
         /// <returns>The converted Unicode String.</returns>
-        public static String ByteArrayToStringUnicode(byte[] byteArray, int offset)
+        public static String ByteArrayToStringUnicode(byte[] byteArray, int offset, int maxByteCount)
         {
             // may not look as pretty, but much faster/safter than using Marshal string crap
             // get first null location etc
             int arrayLenth = byteArray.Length;
             int strLength = 0;
             int currOffset = offset;
-            for (; currOffset < arrayLenth; currOffset++, currOffset++)
+            for (int i = 0; currOffset < arrayLenth && i < maxByteCount; i++, currOffset += 2)
             {
                 if (byteArray[currOffset] != 0x00) continue;
 
@@ -423,7 +559,7 @@ namespace Revival.Common
 
             if (strLength == 0 && currOffset != offset /*make sure not empty string*/)
             {
-                strLength = byteArray.Length - offset;
+                strLength = arrayLenth - offset;
             }
 
             String str = Encoding.Unicode.GetString(byteArray, offset, strLength);
@@ -437,7 +573,7 @@ namespace Revival.Common
         /// <returns>The converted byte array.</returns>
         public static byte[] StringToUnicodeByteArray(String str)
         {
-            return Encoding.Unicode.GetBytes(str);
+            return String.IsNullOrEmpty(str) ? new byte[0] : Encoding.Unicode.GetBytes(str);
         }
 
         /// <summary>
@@ -745,7 +881,7 @@ namespace Revival.Common
 
             const byte CR = 0x0D;
             const byte LF = 0x0A;
-            byte EN = 0x22;
+            //byte EN = 0x22;
             int offset = 0;
             int length = source.Length;
             List<string[]> rowCollection = new List<string[]>();
