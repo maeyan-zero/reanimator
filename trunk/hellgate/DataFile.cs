@@ -5,7 +5,7 @@ using System.IO;
 using Hellgate.Excel;
 using Hellgate.Excel.JapaneseBeta;
 using Hellgate.Excel.SinglePlayer;
-using Hellgate.Excel.TCv4;
+using Hellgate.Excel.TestCentre;
 using Revival.Common;
 
 namespace Hellgate
