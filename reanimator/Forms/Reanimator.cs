@@ -85,7 +85,7 @@ namespace Reanimator.Forms
             catch (Exception ex)
             {
                 Debug.WriteLine(ex.ToString());
-                int bp = 0;
+                //int bp = 0;
             }
 
             

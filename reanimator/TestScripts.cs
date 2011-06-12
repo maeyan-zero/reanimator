@@ -461,10 +461,10 @@ namespace Reanimator
 
                             if (isArray)
                             {
-                                if (excelFile.StringId == "TREASURE")
-                                {
-                                    int bp = 0;
-                                }
+                                //if (excelFile.StringId == "TREASURE")
+                                //{
+                                //    int bp = 0;
+                                //}
                                 IEnumerator arrayEnumator1 = ((Array)obj1).GetEnumerator();
                                 IEnumerator arrayEnumator2 = ((Array)obj2).GetEnumerator();
                                 int index = -1;
@@ -575,7 +575,7 @@ namespace Reanimator
             }
 
             // convert tables
-            int converted = -1;
+            //int converted = -1;
             Dictionary<String, ObjectDelegator> objectDelegators = new Dictionary<String, ObjectDelegator>();
             foreach (ExcelFile excelFile in fileManager.DataFiles.Values.Where(dataFile => dataFile.IsExcelFile))
             {
@@ -610,8 +610,8 @@ namespace Reanimator
                 bool isAchievements = false;
                 bool isAffixes = false;
                 bool isCharacterClass = false;
-                bool isCharDisplay = false;
-                bool isInventory = false;
+                //bool isCharDisplay = false;
+                //bool isInventory = false;
                 switch (excelFile.StringId)
                 {
                     case "ACHIEVEMENTS":
@@ -626,13 +626,13 @@ namespace Reanimator
                         isCharacterClass = true;
                         break;
 
-                    case "CHARDISPLAY":
-                        isCharDisplay = true;
-                        break;
+                    //case "CHARDISPLAY":
+                    //    isCharDisplay = true;
+                    //    break;
 
-                    case "INVENTORY":
-                        isInventory = true;
-                        break;
+                    //case "INVENTORY":
+                    //    isInventory = true;
+                    //    break;
                 }
 
 

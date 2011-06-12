@@ -741,10 +741,10 @@ namespace Hellgate
             } while (operatorStack.Count > 0 && operatorObj.Precedence <= precedence);
 
 
-            if (operatorStack.Count > 1)
-            {
-                int b2p = 0;
-            }
+            //if (operatorStack.Count > 1)
+            //{
+            //    int b2p = 0;
+            //}
 
             while (operatorStack.Count > 0 && precedence == 99)
             {
@@ -891,11 +891,11 @@ namespace Hellgate
                     StackObject stackObject2;
                     int subMaxBytes;
 
-                    if (_debugRow == 893 && _debugCol == 155 && _offset == scriptStartOffset + 4)
-                    {
-                        //debugOutputBytesRead = true;
-                        int bp = 0;
-                    }
+                    //if (_debugRow == 893 && _debugCol == 155 && _offset == scriptStartOffset + 4)
+                    //{
+                    //    //debugOutputBytesRead = true;
+                    //    int bp = 0;
+                    //}
 
                     switch (opCode)
                     {

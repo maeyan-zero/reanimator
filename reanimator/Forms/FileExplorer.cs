@@ -226,103 +226,103 @@ namespace Reanimator.Forms
 
 
 
-            if (nodeObject.IsFolder || !nodeObject.CanEdit) return;
+            //if (nodeObject.IsFolder || !nodeObject.CanEdit) return;
 
-            String editorPath = null;
+            //String editorPath = null;
 
-            // todo: this section needs a good cleaning
-            // todo: implementation of choosing default program in the options menu
-            // todo: current implementation overwites already extracted/uncooked file without asking - open it instead or ask?
-            String nodeFullPath = String.Empty;
-            String filePath = String.Empty;
-            if (nodeFullPath.EndsWith(ExcelFile.Extension))
-            {
-                MessageBox.Show("todo");
-            }
-            else if (nodeFullPath.EndsWith(StringsFile.Extention))
-            {
-                MessageBox.Show("todo");
-            }
-            else if (nodeFullPath.EndsWith(XmlCookedFile.Extension))
-            {
-                PackFileEntry fileIndex = nodeObject.FileEntry;
-                String xmlDataPath = Path.Combine(Config.HglDir, nodeFullPath.Replace(".cooked", ""));
+            //// todo: this section needs a good cleaning
+            //// todo: implementation of choosing default program in the options menu
+            //// todo: current implementation overwites already extracted/uncooked file without asking - open it instead or ask?
+            //String nodeFullPath = String.Empty;
+            //String filePath = String.Empty;
+            //if (nodeFullPath.EndsWith(ExcelFile.Extension))
+            //{
+            //    MessageBox.Show("todo");
+            //}
+            //else if (nodeFullPath.EndsWith(StringsFile.Extention))
+            //{
+            //    MessageBox.Show("todo");
+            //}
+            //else if (nodeFullPath.EndsWith(XmlCookedFile.Extension))
+            //{
+            //    PackFileEntry fileIndex = nodeObject.FileEntry;
+            //    String xmlDataPath = Path.Combine(Config.HglDir, nodeFullPath.Replace(".cooked", ""));
 
-                byte[] fileData = _fileManager.GetFileBytes(fileIndex);
-                if (fileData == null)
-                {
-                    MessageBox.Show("Failed to read xml.cooked from source!", "Error", MessageBoxButtons.OK,
-                                    MessageBoxIcon.Error);
-                    return;
-                }
+            //    byte[] fileData = _fileManager.GetFileBytes(fileIndex);
+            //    if (fileData == null)
+            //    {
+            //        MessageBox.Show("Failed to read xml.cooked from source!", "Error", MessageBoxButtons.OK,
+            //                        MessageBoxIcon.Error);
+            //        return;
+            //    }
 
-                XmlCookedFile xmlCookedFile = new XmlCookedFile();
-                try
-                {
-                    xmlCookedFile.ParseFileBytes(fileData);
-                }
-                catch (Exception ex)
-                {
-                    MessageBox.Show("Failed to uncook xml file!\n" + ex, "Error", MessageBoxButtons.OK, MessageBoxIcon.Error);
-                    return;
-                }
+            //    XmlCookedFile xmlCookedFile = new XmlCookedFile();
+            //    try
+            //    {
+            //        xmlCookedFile.ParseFileBytes(fileData);
+            //    }
+            //    catch (Exception ex)
+            //    {
+            //        MessageBox.Show("Failed to uncook xml file!\n" + ex, "Error", MessageBoxButtons.OK, MessageBoxIcon.Error);
+            //        return;
+            //    }
 
-                try
-                {
-                    Directory.CreateDirectory(Path.GetDirectoryName(xmlDataPath));
-                    xmlCookedFile.SaveXml(xmlDataPath);
-                }
-                catch (Exception ex)
-                {
-                    MessageBox.Show("Failed to save uncooked xml file!\n\n" + ex, "Error", MessageBoxButtons.OK, MessageBoxIcon.Error);
-                    return;
-                }
+            //    try
+            //    {
+            //        Directory.CreateDirectory(Path.GetDirectoryName(xmlDataPath));
+            //        xmlCookedFile.SaveXml(xmlDataPath);
+            //    }
+            //    catch (Exception ex)
+            //    {
+            //        MessageBox.Show("Failed to save uncooked xml file!\n\n" + ex, "Error", MessageBoxButtons.OK, MessageBoxIcon.Error);
+            //        return;
+            //    }
 
-                DialogResult drOpen = MessageBox.Show("Uncooked XML file saved at " + xmlDataPath + "\n\nOpen with editor?", "Success",
-                                                      MessageBoxButtons.YesNo, MessageBoxIcon.Question);
-                if (drOpen == DialogResult.Yes)
-                {
-                    try
-                    {
-                        Process notePad = new Process { StartInfo = { FileName = Config.XmlEditor, Arguments = xmlDataPath } };
-                        notePad.Start();
-                    }
-                    catch (Exception ex)
-                    {
-                        MessageBox.Show("Failed to start editor!\n" + ex, "Error", MessageBoxButtons.OK, MessageBoxIcon.Error);
-                    }
-                }
-            }
-            else if (nodeFullPath.EndsWith(".xml"))
-            {
-                editorPath = Config.XmlEditor;
-            }
-            else if (nodeFullPath.EndsWith(".txt"))
-            {
-                editorPath = Config.TxtEditor;
-            }
-            else if (nodeFullPath.EndsWith(".csv"))
-            {
-                editorPath = Config.CsvEditor;
-            }
-            else
-            {
-                MessageBox.Show("Unexpected editable file!\n(this shouldn't happen - please report this)", "Warning",
-                                MessageBoxButtons.OK, MessageBoxIcon.Warning);
-            }
+            //    DialogResult drOpen = MessageBox.Show("Uncooked XML file saved at " + xmlDataPath + "\n\nOpen with editor?", "Success",
+            //                                          MessageBoxButtons.YesNo, MessageBoxIcon.Question);
+            //    if (drOpen == DialogResult.Yes)
+            //    {
+            //        try
+            //        {
+            //            Process notePad = new Process { StartInfo = { FileName = Config.XmlEditor, Arguments = xmlDataPath } };
+            //            notePad.Start();
+            //        }
+            //        catch (Exception ex)
+            //        {
+            //            MessageBox.Show("Failed to start editor!\n" + ex, "Error", MessageBoxButtons.OK, MessageBoxIcon.Error);
+            //        }
+            //    }
+            //}
+            //else if (nodeFullPath.EndsWith(".xml"))
+            //{
+            //    editorPath = Config.XmlEditor;
+            //}
+            //else if (nodeFullPath.EndsWith(".txt"))
+            //{
+            //    editorPath = Config.TxtEditor;
+            //}
+            //else if (nodeFullPath.EndsWith(".csv"))
+            //{
+            //    editorPath = Config.CsvEditor;
+            //}
+            //else
+            //{
+            //    MessageBox.Show("Unexpected editable file!\n(this shouldn't happen - please report this)", "Warning",
+            //                    MessageBoxButtons.OK, MessageBoxIcon.Warning);
+            //}
 
 
-            if (String.IsNullOrEmpty(editorPath) || String.IsNullOrEmpty(filePath)) return;
+            //if (String.IsNullOrEmpty(editorPath) || String.IsNullOrEmpty(filePath)) return;
 
-            try
-            {
-                Process process = new Process { StartInfo = { FileName = editorPath, Arguments = filePath } };
-                process.Start();
-            }
-            catch (Exception ex)
-            {
-                MessageBox.Show("Failed to start editor!\n" + ex, "Error", MessageBoxButtons.OK, MessageBoxIcon.Error);
-            }
+            //try
+            //{
+            //    Process process = new Process { StartInfo = { FileName = editorPath, Arguments = filePath } };
+            //    process.Start();
+            //}
+            //catch (Exception ex)
+            //{
+            //    MessageBox.Show("Failed to start editor!\n" + ex, "Error", MessageBoxButtons.OK, MessageBoxIcon.Error);
+            //}
         }
 
         /// <summary>
@@ -1016,30 +1016,29 @@ namespace Reanimator.Forms
             return;
 
             // make sure we have at least 1 checked file
-            List<TreeNode> checkedNodes = new List<TreeNode>();
-            if (_GetCheckedNodes(_files_fileTreeView.Nodes, checkedNodes) == 0)
-            {
-                MessageBox.Show("No files checked for extraction!", "Need Files", MessageBoxButtons.OK,
-                                MessageBoxIcon.Information);
-                return;
-            }
+            //List<TreeNode> checkedNodes = new List<TreeNode>();
+            //if (_GetCheckedNodes(_files_fileTreeView.Nodes, checkedNodes) == 0)
+            //{
+            //    MessageBox.Show("No files checked for extraction!", "Need Files", MessageBoxButtons.OK,
+            //                    MessageBoxIcon.Information);
+            //    return;
+            //}
 
-            // we're uncooking, so we want only cook-able files
-            List<TreeNode> cookNodes = (from treeNode in checkedNodes
-                                        let nodeObject = (NodeObject)treeNode.Tag
-                                        where nodeObject.CanCookWith && nodeObject.IsUncookedVersion
-                                        select treeNode).ToList();
-            if (cookNodes.Count == 0)
-            {
-                MessageBox.Show("Unable to find any checked files that can be cooked!", "Error", MessageBoxButtons.OK,
-                                MessageBoxIcon.Exclamation);
-                return;
-            }
+            //// we're uncooking, so we want only cook-able files
+            //List<TreeNode> cookNodes = (from treeNode in checkedNodes
+            //                            let nodeObject = (NodeObject)treeNode.Tag
+            //                            where nodeObject.CanCookWith && nodeObject.IsUncookedVersion
+            //                            select treeNode).ToList();
+            //if (cookNodes.Count == 0)
+            //{
+            //    MessageBox.Show("Unable to find any checked files that can be cooked!", "Error", MessageBoxButtons.OK,
+            //                    MessageBoxIcon.Exclamation);
+            //    return;
+            //}
 
-            ProgressForm progressForm = new ProgressForm(_DoCooking, cookNodes);
-            progressForm.SetLoadingText(String.Format("Uncooking file(s)... ({0})", cookNodes.Count));
-            progressForm.Show(this);
-
+            //ProgressForm progressForm = new ProgressForm(_DoCooking, cookNodes);
+            //progressForm.SetLoadingText(String.Format("Uncooking file(s)... ({0})", cookNodes.Count));
+            //progressForm.Show(this);
         }
 
         private static void _DoCooking(ProgressForm progressForm, Object param)
