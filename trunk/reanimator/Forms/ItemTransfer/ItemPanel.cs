@@ -598,7 +598,7 @@ namespace Reanimator.Forms.ItemTransfer
                 FreeImageAPI.FreeImageBitmap bmp = FreeImageAPI.FreeImageBitmap.FromStream(stream);
                 return bmp.ToBitmap();
             }
-            catch (Exception ex)
+            catch (Exception)
             {
                 MessageBox.Show(string.Format("Item image not found at {0}!", path));
                 return null;
