@@ -925,7 +925,8 @@ namespace Hellgate
             /*279*/ new Function { Name = "is_bindable", Args = new[] { new Argument { Name = "unit", Type = ArgType.Unit } } },
             /*280*/ new Function { Name = "getConditionRatio", Args = new[] { new Argument { Name = "unit", Type = ArgType.Unit } } },
             /*281*/ new Function { Name = "refund_regist_item_okay", Args = new[] { new Argument { Name = "unit", Type = ArgType.Unit }, new Argument { Name = "context", Type = ArgType.Context } } },
-            /*282*/ new Function { Name = "action_itemupgrade", Args = new[] { new Argument { Name = "unit", Type = ArgType.Unit }, new Argument { Name = "context", Type = ArgType.Context } } },
+            /*282*/ new Function { Name = "is_refundable", Args = new[] { new Argument { Name = "unit", Type = ArgType.Unit } } },
+/*283*/ new Function { Name = "is_pcbang", Args = new[] { new Argument { Name = "unit", Type = ArgType.Unit } } }
         };
 
         /* OpCode           Function                                Action
@@ -1731,7 +1732,7 @@ namespace Hellgate
                     {
                         function.Name = parameter.Name;
                         int functionIndex = parameter.TypeValues[4];
-                        if (functionIndex != _callFunctions.Count) continue;//throw new Exceptions.ScriptFunctionCountError(functionIndex, _callFunctions.Count);
+                        if (functionIndex != _callFunctions.Count) throw new Exceptions.ScriptFunctionCountError(functionIndex, _callFunctions.Count);
 
                         continue;
                     }
