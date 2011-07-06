@@ -40,13 +40,14 @@ namespace Reanimator.Forms
             //Config.HglDir = @"D:\Projects\Hellgate London\Flagshipped\ServerTest\bin\Debug";
             //Config.HglDir = @"D:\Games\Hellgate London";
             //TestScripts.UncookAllXml();
+            //TestScripts.ExtractFunctionList();
             if (true) return;
             //Config.HglDir = @"D:\Projects\Hellgate London\Flagshipped\ServerTest\bin\Debug";
             ////Config.HglDir = @"D:\Games\Hellgate";
             //int bitCount = 6;
             //int shift = (1 << (bitCount - 1));
             //bitCount -= shift;
-
+            
 
             //byte[] charBytes = {
             //                       0xCD,
@@ -172,6 +173,7 @@ namespace Reanimator.Forms
             //        int bp = 0;
             //    }
             //}
+
             #endregion
         }
 
