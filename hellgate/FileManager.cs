@@ -249,11 +249,6 @@ namespace Hellgate
                     continue;
                 }
 
-                //if (fileEntry.Name.Contains("filter"))
-                //{
-                //    int bp = 0;
-                //}
-
                 // parse file data
                 DataFile dataFile;
                 if (fileEntry.Name.EndsWith(ExcelFile.Extension))
@@ -275,7 +270,6 @@ namespace Hellgate
                         Console.WriteLine(String.Format("Critical Error: Failed to load excel file {0} (ClientVersion = {1})", fileEntry.Name, ClientVersion));
                         continue;
                     }
-                    if (dataFile.Attributes.IsEmpty) continue;
                 }
                 else
                 {

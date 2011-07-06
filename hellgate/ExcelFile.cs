@@ -648,23 +648,22 @@ namespace Hellgate
 
         /// <summary>
         /// Creates a ExcelFile based on the serialized data source.
+        /// [Reading process updated to match how client does it (can now read "empty" files)]
         /// </summary>
         /// <param name="buffer">The serialized excel file as a byte array.</param>
         /// <returns>True if the buffer parsed okay.</returns>
         public override sealed bool ParseData(byte[] buffer)
         {
-            if ((buffer == null)) return false;
-            if ((buffer.Length == 0)) return false;
+            if (buffer == null) return false;
+            if (buffer.Length == 0) return false;
             int offset = 0;
 
             // File Header
-            if (!(_CheckToken(buffer, ref offset, Token.cxeh))) return false;
+            if (!_CheckToken(buffer, ref offset, Token.cxeh)) return false;
             _excelFileHeader = FileTools.ByteArrayToStructure<ExcelHeader>(buffer, ref offset);
-            //ExcelMap = GetTypeMap(StructureId);
-            //if ((ExcelMap == null)) return false;
 
             // Strings Block
-            if (!(_CheckToken(buffer, ref offset, Token.cxeh))) return false;
+            if (!_CheckToken(buffer, ref offset, Token.cxeh)) return false;
             int stringBufferOffset = FileTools.ByteArrayToInt32(buffer, ref offset);
             if (stringBufferOffset != 0)
             {
@@ -674,24 +673,32 @@ namespace Hellgate
             }
 
             // Dataset Block
-            if (!(_CheckToken(buffer, ref offset, Token.cxeh))) return false;
+            if (!_CheckToken(buffer, ref offset, Token.cxeh)) return false;
             int rowCount = FileTools.ByteArrayToInt32(buffer, ref offset);
             Rows = new List<Object>(rowCount);
             for (int i = 0; i < rowCount; i++)
             {
                 Rows.Add(FileTools.ByteArrayToStructure(buffer, DataType, ref offset));
                 IndexFromRow.Add(Rows[i], i);
+
                 // Add to RowFromCode Dictionary if Row has "code" column
                 FieldInfo field = Attributes.RowType.GetField("code");
                 if (field != null)
                 {
                     int rowCode;
                     if (field.FieldType == typeof(Int16))
+                    {
                         rowCode = (Int16) field.GetValue(Rows[i]);
+                    }
                     else if (field.FieldType == typeof(Int32))
+                    {
                         rowCode = (Int32) field.GetValue(Rows[i]);
+                    }
                     else
+                    {
                         rowCode = -1;
+                    }
+
                     if (!RowFromCode.ContainsKey(rowCode))
                     {
                         RowFromCode.Add(rowCode, Rows[i]);
@@ -699,85 +706,86 @@ namespace Hellgate
                         _hasCodeField = true;
                     }
                 }
+
                 // Add to RowFromFirstString Dictionary if Row has column with attribute SortColumnOrder = 1 
                 FieldInfo[] fields = Attributes.RowType.GetFields();
                 for (int fieldIndex = 0; fieldIndex < fields.Count(); fieldIndex++)
                 {
                     field = fields[fieldIndex];
                     OutputAttribute attribute = GetExcelAttribute(field);
+
                     // Check if field has attributes
                     if (attribute != null)
                     {
-                        if (attribute.SortColumnOrder == 1)
-                            break;
+                        if (attribute.SortColumnOrder == 1) break;
                     }
-                    // No attribute, skip field
-                    else
+                    else // No attribute, skip field
                     {
                         field = null;
                     }
                 }
-                if (field != null)
-                {
-                    int nameOffset;
-                    String nameString = "";
-                    // Gets string from string buffer
-                    if (field.FieldType == typeof(Int32))
-                    {
-                        nameOffset = (Int32)field.GetValue(Rows[i]);
-                        // No string buffer, just use "value" for string
-                        nameString = ReadStringTable(nameOffset) ?? nameOffset.ToString();
-                    }
+                if (field == null) continue;
 
-                    if (field.FieldType == typeof(String))
-                    {
-                        nameString = (String)field.GetValue(Rows[i]);
-                    }
-                    if (!RowFromFirstString.ContainsKey(nameString))
-                    {
-                        RowFromFirstString.Add(nameString, Rows[i]);
-                        FirstStringFromRow.Add(Rows[i], nameString);
-                        _hasFirstStringField = true;
-                    }
+                int nameOffset;
+                String nameString = "";
+
+                // Gets string from string buffer
+                if (field.FieldType == typeof(Int32))
+                {
+                    nameOffset = (Int32)field.GetValue(Rows[i]); // No string buffer, just use "value" for string // todo: GetValue is *very* slow - change to delegates
+                    nameString = ReadStringTable(nameOffset) ?? nameOffset.ToString();
                 }
-            }
-            //Debug.WriteLine("{0}", DataType);
-
-            // Primary Indice Block
-            if (!_CheckToken(buffer, ref offset, Token.cxeh)) return false;
-            if (Attributes.HasStats) // items, objects, missles, players
-            {
-                StatsBuffer = new byte[Count][];
-                for (int i = 0; i < Count; i++)
+                else if (field.FieldType == typeof(String))
                 {
-                    offset += sizeof(int); // Skip the indice
-
-                    int size = FileTools.ByteArrayToInt32(buffer, ref offset);
-                    StatsBuffer[i] = new byte[size];
-
-                    Buffer.BlockCopy(buffer, offset, StatsBuffer[i], 0, size);
-                    offset += size;
+                    nameString = (String)field.GetValue(Rows[i]);
                 }
-            }
-            else
-            {
-                offset += (Count * sizeof(int)); // do not allocate this array
-            }
 
-            // Secondary String Block
-            if (!(_CheckToken(buffer, offset, Token.cxeh)))
-            {
-                int stringCount = FileTools.ByteArrayToInt32(buffer, ref offset);
-                if (stringCount != 0) SecondaryStrings = new List<String>();
-                for (int i = 0; i < stringCount; i++)
+                if (!RowFromFirstString.ContainsKey(nameString))
                 {
-                    int charCount = FileTools.ByteArrayToInt32(buffer, ref offset);
-                    SecondaryStrings.Add(FileTools.ByteArrayToStringASCII(buffer, offset));
-                    offset += charCount;
+                    RowFromFirstString.Add(nameString, Rows[i]);
+                    FirstStringFromRow.Add(Rows[i], nameString);
+                    _hasFirstStringField = true;
                 }
             }
 
-            // Sorted Indices
+            if (rowCount > 0)
+            {
+                // primary index
+                if (!_CheckToken(buffer, ref offset, Token.cxeh)) return false;
+                if (Attributes.HasStats) // items, objects, missles, players
+                {
+                    StatsBuffer = new byte[Count][];
+                    for (int i = 0; i < Count; i++)
+                    {
+                        offset += sizeof (int); // Skip the indice
+
+                        int size = FileTools.ByteArrayToInt32(buffer, ref offset);
+                        StatsBuffer[i] = new byte[size];
+
+                        Buffer.BlockCopy(buffer, offset, StatsBuffer[i], 0, size);
+                        offset += size;
+                    }
+                }
+                else
+                {
+                    offset += (Count*sizeof (int)); // do not allocate this array
+                }
+
+                // secondary strings
+                if (!_CheckToken(buffer, offset, Token.cxeh))
+                {
+                    int stringCount = FileTools.ByteArrayToInt32(buffer, ref offset);
+                    if (stringCount != 0) SecondaryStrings = new List<String>();
+                    for (int i = 0; i < stringCount; i++)
+                    {
+                        int charCount = FileTools.ByteArrayToInt32(buffer, ref offset);
+                        SecondaryStrings.Add(FileTools.ByteArrayToStringASCII(buffer, offset));
+                        offset += charCount;
+                    }
+                }
+            }
+
+            // sort indices
             for (int i = 0; i < 4; i++)
             {
                 if (!(_CheckToken(buffer, ref offset, Token.cxeh))) return false;
@@ -794,11 +802,10 @@ namespace Hellgate
                 }
             }
 
-            // rcsh, tysh, mysh, dneh blocks
+            // rcsh, tysh, mysh, dneh, and scripts blocks
             if (!_CheckToken(buffer, ref offset, Token.cxeh)) return false;
-            if (!_CheckToken(buffer, offset, 0))
+            if (_CheckToken(buffer, ref offset, Token.rcsh))
             {
-                if (!_CheckToken(buffer, ref offset, Token.rcsh)) return false;
                 if (!_CheckToken(buffer, ref offset, Token.RcshValue)) return false;
 
                 if (!_CheckToken(buffer, ref offset, Token.tysh)) return false;
@@ -808,12 +815,8 @@ namespace Hellgate
 
                 if (!_CheckToken(buffer, ref offset, Token.dneh)) return false;
                 if (!_CheckToken(buffer, ref offset, Token.DnehValue)) return false;
-            }
 
-
-            // Scripts
-            if (_CheckToken(buffer, ref offset, Token.cxeh))
-            {
+                if (!_CheckToken(buffer, ref offset, Token.cxeh)) return false;
                 int scriptsByteCount = FileTools.ByteArrayToInt32(buffer, ref offset);
                 if (scriptsByteCount != 0)
                 {
@@ -829,20 +832,15 @@ namespace Hellgate
                 }
             }
 
+            // final data block
+            if (!_CheckToken(buffer, ref offset, Token.cxeh)) return false;
 
-            // final data block; why is this not allocated? - no need to save? automatically generated when cooked?
-            // -> automatically generated via CreateIndexBitRelations() method
-            if (!_CheckToken(buffer, offset, 0))
+            int byteCount = FileTools.ByteArrayToInt32(buffer, ref offset);
+            int blockCount = FileTools.ByteArrayToInt32(buffer, ref offset);
+            if (byteCount != 0)
             {
-                if (!_CheckToken(buffer, ref offset, Token.cxeh)) return false;
-
-                int byteCount = FileTools.ByteArrayToInt32(buffer, ref offset);
-                int blockCount = FileTools.ByteArrayToInt32(buffer, ref offset);
-                if (byteCount != 0)
-                {
-                    byteCount = byteCount << 2;
-                    offset += ((byteCount * blockCount)); // do not allocate
-                }
+                byteCount = byteCount << 2;
+                offset += (byteCount * blockCount); // do not allocate
             }
 
             return HasIntegrity = (offset == buffer.Length);
