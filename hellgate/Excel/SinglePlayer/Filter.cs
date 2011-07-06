@@ -1,19 +1,17 @@
 ﻿using System;
 using System.Runtime.InteropServices;
-using ExcelOutput = Hellgate.ExcelFile.OutputAttribute;
-using RowHeader = Hellgate.ExcelFile.RowHeader;
 
-namespace Hellgate.Excel
+namespace Hellgate.Excel.SinglePlayer
 {
     [StructLayout(LayoutKind.Sequential, Pack = 1)]
     class Filter
     {
-        RowHeader header;
+        ExcelFile.RowHeader header;
         [MarshalAs(UnmanagedType.ByValTStr, SizeConst = 256)]
-        public string name;
-        [ExcelOutput(IsBool = true)]
+        public String word;
+        [ExcelFile.OutputAttribute(IsBool = true)]
         public Int32 allowPrefixed;
-        [ExcelOutput(IsBool = true)]
+        [ExcelFile.OutputAttribute(IsBool = true)]
         public Int32 allowSuffixed;
     }
 }

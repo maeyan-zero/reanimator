@@ -249,8 +249,7 @@ namespace Hellgate
                     continue;
                 }
 
-                //if (!fileEntry.FileNameString.Contains("sounds")) continue;
-                //if (!MPVersion && fileEntry.FileNameString.Contains("act.txt.cooked"))
+                //if (fileEntry.Name.Contains("filter"))
                 //{
                 //    int bp = 0;
                 //}
