@@ -77,7 +77,7 @@ namespace Hellgate.Xml
              Name = "pNodeHashArray",
              ElementType = ElementType.NonCookedInt32,
              DefaultValue = 0)] // FALSE
-        public float NodeHashArray;
+        public int NodeHashArray;
 
         [XmlCookedAttribute(
              Name = "nHashLengths",

@@ -981,10 +981,10 @@ namespace Reanimator
                 File.Move(writePath, backupPath);
                 File.WriteAllBytes(writePath, convertedBytes);
 
-                int bp2 = 0;
+                //int bp2 = 0;
             }
 
-            int bp1 = 0;
+            //int bp1 = 0;
         }
 
         /// <summary>
@@ -1446,7 +1446,7 @@ namespace Reanimator
             fileManager.BeginAllDatReadAccess();
             fileManager.LoadTableFiles();
             fileManager.EndAllDatAccess();
-            XmlCookedFile.Initialize(fileManager);
+            //XmlCookedFile.Initialize(fileManager);
 
             int count = 0;
             List<XmlCookedFile> excelStringWarnings = new List<XmlCookedFile>();
@@ -1454,18 +1454,44 @@ namespace Reanimator
             List<String> resurrectionWarnings = new List<String>();
             foreach (String xmlFilePath in xmlFiles)
             {
-                String path = xmlFilePath;
-                //path = @"D:\Games\Hellgate London\data\mp_hellgate_1.10.180.3416_1.0.86.4580\data\background\city\treasury\cap_path.xml.cooked";
+                //if (xmlFilePath.Contains("\\Data\\colorsets.xml")) continue;
+                //if (xmlFilePath.Contains("\\Data\\ai\\")) continue;
+                //if (xmlFilePath.Contains("\\Data\\background\\")) continue;
+                //if (xmlFilePath.Contains("\\Data\\demolevel\\")) continue;
+                //if (xmlFilePath.Contains("\\Data\\lights\\")) continue;
+                //if (xmlFilePath.Contains("\\Data\\materials\\")) continue;
+                //if (xmlFilePath.Contains("\\Data\\particles\\")) continue;
+                //if (xmlFilePath.Contains("\\Data\\screenfx\\")) continue;
+                //if (xmlFilePath.Contains("\\Data\\skills\\")) continue;
+                //if (xmlFilePath.Contains("\\Data\\sounds\\")) continue;
+                //if (xmlFilePath.Contains("\\Data\\states\\")) continue;
+                //if (xmlFilePath.Contains("\\Data\\units\\items\\")) continue;
+                //if (xmlFilePath.Contains("\\Data\\units\\missiles\\")) continue;
+                //if (xmlFilePath.Contains("\\Data\\units\\monsters\\")) continue;
+                //if (xmlFilePath.Contains("\\Data\\units\\npc\\")) continue;
+                //if (xmlFilePath.Contains("\\Data\\units\\objects\\")) continue;
 
-                XmlCookedFile xmlCookedFile = new XmlCookedFile(Path.GetFileName(path));
+                String path = xmlFilePath;
+                String fileName = Path.GetFileName(path);
+                //path = @"D:\Games\Hellgate London\data\mp_hellgate_1.10.180.3416_1.0.86.4580\data\background\city\treasury\cap_path.xml.cooked";
+                //path = "D:\\Games\\Hellgate\\Data\\background\\_environments\\outdoor_redhellcow_env.xml.cooked";
+                //path = "D:\\Games\\Hellgate\\Data\\particles\\background\\t_background\\tokyo_dark_smoke_c_large_01.xml.cooked";
+                //if (path == @"D:\Games\Hellgate\Data\background\cans and boxes.xml.cooked")
+                //{
+                //    int bp = 0;
+                //}
+
+                XmlCookedFile xmlCookedFile1 = new XmlCookedFile(fileName);
+                XmlCookedFile xmlCookedFile2 = new XmlCookedFile(fileName);
                 byte[] data = File.ReadAllBytes(path);
 
-                String fileName = path.Replace(root, "");
                 //Console.WriteLine("Uncooking: " + fileName);
 
+                xmlCookedFile2.ParseFileBytes(data, fileManager, true);
                 try
                 {
-                    xmlCookedFile.ParseFileBytes(data);
+                    //xmlCookedFile1.ParseFileBytes(data);
+                    //xmlCookedFile2.ParseFileBytes(data, fileManager);
                 }
                 catch (Exception e)
                 {
@@ -1473,28 +1499,65 @@ namespace Reanimator
                     continue;
                 }
 
-                String newPath = path.Replace(".xml.cooked", ".test.xml");
-                xmlCookedFile.SaveXml(newPath);
+                String newPath = path.Replace(".xml.cooked", ".obj.xml");
+                //xmlCookedFile1.SaveXml(newPath);
+                byte[] newXmlBytes = xmlCookedFile2.ExportAsDocument();
+                //File.WriteAllBytes(newPath, newXmlBytes);
                 count++;
 
-                if (xmlCookedFile.HasExcelStringsMissing) excelStringWarnings.Add(xmlCookedFile);
-                if (xmlCookedFile.HasTestCentreElements) testCentreWarnings.Add(Path.GetFileName(fileName));
-                if (xmlCookedFile.HasResurrectionElements) resurrectionWarnings.Add(Path.GetFileName(fileName));
-                if (xmlCookedFile.HasExcelStringsMissing || xmlCookedFile.HasTestCentreElements || xmlCookedFile.HasResurrectionElements) continue;
+                byte[] origXmlBytes = File.ReadAllBytes(path.Replace(".cooked", ""));
+                //if (!origXmlBytes.SequenceEqual(newXmlBytes))
+                //{
+                //    int bp = 0;
+                //}
 
-                XmlCookedFile recookedXmlFile = new XmlCookedFile();
-                byte[] recookedData = recookedXmlFile.CookXmlDocument(xmlCookedFile.XmlDoc);
+                //if (xmlCookedFile1.HasExcelStringsMissing) excelStringWarnings.Add(xmlCookedFile1);
+                //if (xmlCookedFile1.HasTestCentreElements) testCentreWarnings.Add(Path.GetFileName(fileName));
+                //if (xmlCookedFile1.HasResurrectionElements) resurrectionWarnings.Add(Path.GetFileName(fileName));
+                //if (xmlCookedFile1.HasExcelStringsMissing || xmlCookedFile1.HasTestCentreElements || xmlCookedFile1.HasResurrectionElements) continue;
+
+                if (path == @"D:\Games\Hellgate\Data\background\cans and boxes.xml.cooked")
+                {
+                    int bp = 0;
+                }
+
+                XmlCookedFile recookedXmlFile = new XmlCookedFile(fileName) { CookExcludeResurrection = false };
+                byte[] origXmlCookedBytes = recookedXmlFile.ParseFileBytes(origXmlBytes, fileManager);
+                byte[] newXmlCookedBytes = recookedXmlFile.ParseFileBytes(newXmlBytes, fileManager);
+                //byte[] recookedData = recookedXmlFile.CookXmlDocument(xmlCookedFile1.XmlDoc);
+                //byte[] recookedData = recookedXmlFile.ToByteArray();
+
+                // check if *cooking method* is working. i.e. is the cook from the *original* XML format == the original.cooked
+                bool identicalOrig = data.SequenceEqual(origXmlCookedBytes);
+
+                // check if *cooking method* is working. i.e. is the cook from the *new* XML format == the original.cooked
+                bool identicalNew = data.SequenceEqual(newXmlCookedBytes);
 
                 // if file passes byte-byte test, then continue
-                if (data.SequenceEqual(recookedData)// ||
-                    //path.Contains("sevenbranchsword_mesh_appearance.xml") ||    // this file has some weird bytes in a string element
-                    //path.Contains("focus_item11_mesh_appearance.xml") ||        // this file has non-zeroed flag base masks (all differing)
-                    //path.Contains("focus_item10_mesh_appearance.xml") ||        // as above     // (all 3 probably from not zeroing a ptr at original cooking)
-                    //path.Contains("thirdpersononly.xml.cooked") ||              // this file has 3xBitFlag Elements (from ConditionsDefinition) exceeding the file buffer
-                    //path.Contains("dizzy_reverb.xml.cooked")                    // as above, but in SoundReverbDefinition
-                   ) continue;
+                if (identicalOrig && identicalNew)
+                {
+                    Console.WriteLine("{0} passed checks...", path);
+                    continue;
+                }
 
-                File.WriteAllBytes(path + "2", recookedData);
+                if (
+                path.Contains("female_3p_appearance.xml") ||            // this file has some weird bytes in a string element
+                path.Contains("focus_item12_mesh_appearance.xml") ||    // this file has non-zeroed flag base masks (all differing)
+                path.Contains("focus_item10_mesh_appearance.xml") ||    // as above     // (all 3 probably from not zeroing a ptr at original cooking)
+                path.Contains("dof_test.xml") ||                        // as above
+                path.Contains("motionblur.xml") ||                      // as above
+                    path.Contains("player dead.xml")
+                 )
+                {
+                    Console.WriteLine("{0} passed checks...", path);
+                    continue;
+                }
+
+                File.WriteAllBytes(newPath, newXmlBytes);
+                if (!identicalOrig) File.WriteAllBytes(path + "dataFROMorig", origXmlCookedBytes);
+                if (!identicalNew) File.WriteAllBytes(path + "dataFROMnew", newXmlCookedBytes);
+
+                Console.WriteLine("{0} failed!", path);
             }
 
             TextWriter consoleOut = Console.Out;

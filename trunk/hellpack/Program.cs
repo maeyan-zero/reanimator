@@ -49,37 +49,36 @@ namespace Revival
             #region alexs_stuff
             if (false)
             {
-
-                _fileManager = new FileManager(@"D:\Games\Hellgate London");
-                _fileManager.LoadTableFiles();
+                //_fileManager = new FileManager(@"D:\Games\Hellgate London");
+                //_fileManager.LoadTableFiles();
                 
 
-                //byte[] buffer = fileManager.DataFiles["SOUNDS"].ExportCSV();
-                //return;
-                //File.WriteAllBytes(@"D:\levels_rules.txt", buffer);
+                ////byte[] buffer = fileManager.DataFiles["SOUNDS"].ExportCSV();
+                ////return;
+                ////File.WriteAllBytes(@"D:\levels_rules.txt", buffer);
 
-                foreach (DataFile dataFile in _fileManager.DataFiles.Values)
-                {
-                    if (dataFile.IsStringsFile) continue;
+                //foreach (DataFile dataFile in _fileManager.DataFiles.Values)
+                //{
+                //    if (dataFile.IsStringsFile) continue;
 
-                    ExcelFile excelFile = (ExcelFile) dataFile;
+                //    ExcelFile excelFile = (ExcelFile) dataFile;
 
-                    Console.WriteLine(dataFile.FileName);
-                    String dir = Path.GetDirectoryName(dataFile.FilePath);
-                    if (Directory.Exists(dir) == false) Directory.CreateDirectory(dir);
+                //    Console.WriteLine(dataFile.FileName);
+                //    String dir = Path.GetDirectoryName(dataFile.FilePath);
+                //    if (Directory.Exists(dir) == false) Directory.CreateDirectory(dir);
 
-                    byte[] ebuffer = excelFile.ExportCSV(_fileManager);
-                    //for (int i = 0; i < 10; i++)
-                    //{
-                    //    Stopwatch stopwatch = new Stopwatch();
-                    //    stopwatch.Start();
-                    //    ebuffer = dataFile.ExportCSV();
-                    //    stopwatch.Stop();
-                    //    Console.WriteLine("Elapsed: {0}", stopwatch.Elapsed);
-                    //}
+                //    byte[] ebuffer = excelFile.ExportCSV(_fileManager);
+                //    //for (int i = 0; i < 10; i++)
+                //    //{
+                //    //    Stopwatch stopwatch = new Stopwatch();
+                //    //    stopwatch.Start();
+                //    //    ebuffer = dataFile.ExportCSV();
+                //    //    stopwatch.Stop();
+                //    //    Console.WriteLine("Elapsed: {0}", stopwatch.Elapsed);
+                //    //}
 
-                    File.WriteAllBytes(dataFile.FilePath.Replace(".cooked", ""), ebuffer);
-                }
+                //    File.WriteAllBytes(dataFile.FilePath.Replace(".cooked", ""), ebuffer);
+                //}
 
 
                 //Stopwatch stopwatch = new Stopwatch();
@@ -117,65 +116,65 @@ namespace Revival
                 //    CookStringFiles(stringFilesToCook.ToArray());
                 //}
 
-                return;
+                //return;
             }
             #endregion
 
             #region Model conversion testing
             if (false)
             {
-                _fileManager = new FileManager(@"D:\Games\Hellgate London");
-                string filePath = @"data\background\tubestations\charingcross\cc_southbound.m";
-                byte[] buffer = _fileManager.GetFileBytes(filePath);
-                if (buffer == null)
-                {
-                    Console.WriteLine("Could not read specified file.");
-                    return;
-                }
-                string modelId = Path.GetFileNameWithoutExtension(filePath);
-                Model model = new Model(buffer, modelId);
-                buffer = model.ExportCollada();
-                File.WriteAllBytes(modelId + ".xml", buffer);
-                return;
+                //_fileManager = new FileManager(@"D:\Games\Hellgate London");
+                //string filePath = @"data\background\tubestations\charingcross\cc_southbound.m";
+                //byte[] buffer = _fileManager.GetFileBytes(filePath);
+                //if (buffer == null)
+                //{
+                //    Console.WriteLine("Could not read specified file.");
+                //    return;
+                //}
+                //string modelId = Path.GetFileNameWithoutExtension(filePath);
+                //Model model = new Model(buffer, modelId);
+                //buffer = model.ExportCollada();
+                //File.WriteAllBytes(modelId + ".xml", buffer);
+                //return;
             }
             #endregion
 
             #region SQL test
             if (false)
             {
-                _fileManager = new FileManager(@"D:\Games\Hellgate London", true);
-                _fileManager.LoadTableFiles();
+                //_fileManager = new FileManager(@"D:\Games\Hellgate London", true);
+                //_fileManager.LoadTableFiles();
 
-                byte[] sqlBuffer = new byte[1024];
-                int sqlOffset = 0;
+                //byte[] sqlBuffer = new byte[1024];
+                //int sqlOffset = 0;
 
-                //string createDB = "CREATE DATABASE hellgate_london;\nUSE hellgate_london;\n";
-                //byte[] createDBArray = FileTools.StringToASCIIByteArray(createDB);
-                //FileTools.WriteToBuffer(ref sqlBuffer, ref sqlOffset, createDBArray);
+                ////string createDB = "CREATE DATABASE hellgate_london;\nUSE hellgate_london;\n";
+                ////byte[] createDBArray = FileTools.StringToASCIIByteArray(createDB);
+                ////FileTools.WriteToBuffer(ref sqlBuffer, ref sqlOffset, createDBArray);
 
-                foreach (DataFile dataFile in _fileManager.DataFiles.Values)
-                {
-                    if (dataFile.IsStringsFile) continue;
-                    ExcelFile excelFile = dataFile as ExcelFile;
-                    byte[] buffer = excelFile.ExportSQL(_fileManager, "hgl");
-                    //if (dataFile.IsExcelFile) continue;
-                    //byte[] buffer = dataFile.ExportSQL("hgl_tcv4_");
-                    Console.WriteLine(dataFile.FileName);
-                    FileTools.WriteToBuffer(ref sqlBuffer, ref sqlOffset, buffer);
-                    if (true)
-                    {
-                        String dir = Path.GetDirectoryName(dataFile.FilePath);
-                        if (Directory.Exists(dir) == false) Directory.CreateDirectory(dir);
-                        string fileName = dataFile.FilePath;
-                        fileName = fileName.Replace(".txt.cooked", ".sql");
-                        fileName = fileName.Replace(".xls.uni.cooked", ".sql");
-                        File.WriteAllBytes(fileName, buffer);
-                    }
-                }
+                //foreach (DataFile dataFile in _fileManager.DataFiles.Values)
+                //{
+                //    if (dataFile.IsStringsFile) continue;
+                //    ExcelFile excelFile = dataFile as ExcelFile;
+                //    byte[] buffer = excelFile.ExportSQL(_fileManager, "hgl");
+                //    //if (dataFile.IsExcelFile) continue;
+                //    //byte[] buffer = dataFile.ExportSQL("hgl_tcv4_");
+                //    Console.WriteLine(dataFile.FileName);
+                //    FileTools.WriteToBuffer(ref sqlBuffer, ref sqlOffset, buffer);
+                //    if (true)
+                //    {
+                //        String dir = Path.GetDirectoryName(dataFile.FilePath);
+                //        if (Directory.Exists(dir) == false) Directory.CreateDirectory(dir);
+                //        string fileName = dataFile.FilePath;
+                //        fileName = fileName.Replace(".txt.cooked", ".sql");
+                //        fileName = fileName.Replace(".xls.uni.cooked", ".sql");
+                //        File.WriteAllBytes(fileName, buffer);
+                //    }
+                //}
 
-                Array.Resize(ref sqlBuffer, sqlOffset);
-                File.WriteAllBytes("hellgate_london_db.sql", sqlBuffer);
-                return;
+                //Array.Resize(ref sqlBuffer, sqlOffset);
+                //File.WriteAllBytes("hellgate_london_db.sql", sqlBuffer);
+                //return;
             }
             #endregion
 

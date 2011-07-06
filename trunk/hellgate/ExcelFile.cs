@@ -132,11 +132,6 @@ namespace Hellgate
             }
             Attributes = dataFileAttributes;
 
-            // create field delegators
-            FieldInfo[] dataFileFields = Attributes.RowType.GetFields(BindingFlags.Public | BindingFlags.NonPublic | BindingFlags.Instance);
-            dataFileFields = dataFileFields.OrderBy(f => f.MetadataToken).ToArray(); // order by defined order - GetFields does not guarantee ordering
-            Delegator = new ObjectDelegator(dataFileFields);
-
             // if we're empty, then just return
             if (Attributes.IsEmpty)
             {
@@ -144,6 +139,12 @@ namespace Hellgate
                 Rows = new List<Object>();
                 return;
             }
+
+            // create field delegators
+            Debug.Assert(Attributes != null && Attributes.RowType != null);
+            FieldInfo[] dataFileFields = Attributes.RowType.GetFields(BindingFlags.Public | BindingFlags.NonPublic | BindingFlags.Instance);
+            dataFileFields = dataFileFields.OrderBy(f => f.MetadataToken).ToArray(); // order by defined order - GetFields does not guarantee ordering
+            Delegator = new ObjectDelegator(dataFileFields);
 
             // parse data
             int peek = FileTools.ByteArrayToInt32(buffer, 0);

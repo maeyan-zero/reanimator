@@ -1,5 +1,6 @@
 ﻿using System;
 using Hellgate.Excel.JapaneseBeta;
+using Revival.Common;
 
 namespace Hellgate.Xml
 {
@@ -56,6 +57,8 @@ namespace Hellgate.Xml
             SKILL_EVENT_FLAG2_MARK_SKILL_AS_SUCCESSFUL = (1 << 7),
             SKILL_EVENT_FLAG2_LASER_INCLUDE_IN_UI = (1 << 8),
             SKILL_EVENT_FLAG2_LASER_DONT_TARGET_UNITS = (1 << 11),
+
+            [XmlCookedAttribute(IsTestCentre = true)]
             SKILL_EVENT_FLAG2_DONT_EXECUTE_STATS = (1 << 12)
         }
 
@@ -94,34 +97,111 @@ namespace Hellgate.Xml
         public float RandChance;
 
         [XmlCookedAttribute(
-            Name = "tParam[0].flValue",
+            Name = "tParam0.flValue",
+            TrueName = "tParam[0].flValue",
             DefaultValue = 0.0f,
             ElementType = ElementType.Float)]
         public float Param0;
 
         [XmlCookedAttribute(
-            Name = "tParam[1].flValue",
+            Name = "tParam1.flValue",
+            TrueName = "tParam[1].flValue",
             DefaultValue = 0.0f,
             ElementType = ElementType.Float)]
         public float Param1;
 
         [XmlCookedAttribute(
-            Name = "tParam[2].flValue",
+            Name = "tParam2.flValue",
+            TrueName = "tParam[2].flValue",
             DefaultValue = 0.0f,
             ElementType = ElementType.Float)]
         public float Param2;
 
         [XmlCookedAttribute(
-            Name = "tParam[3].flValue",
+            Name = "tParam3.flValue",
+            TrueName = "tParam[3].flValue",
             DefaultValue = 0.0f,
             ElementType = ElementType.Float)]
         public float Param3;
 
         [XmlCookedAttribute(
-            Name = "tAttachmentDef",
-            ChildType = typeof(AttachmentDef),
-            CustomType = ElementType.Object)]
-        public AttachmentDef Attachment;
+            Name = "tAttachmentDef.eType",
+            DefaultValue = 0,
+            ElementType = ElementType.Int32)]
+        public int AttachmentType;
+
+        [XmlCookedAttribute(
+            Name = "tAttachmentDef.dwFlags",
+            DefaultValue = 0,
+            ElementType = ElementType.Int32)]
+        public int AttachmentFlags;
+
+        [XmlCookedAttribute(
+            Name = "tAttachmentDef.pszAttached",
+            DefaultValue = null,
+            ElementType = ElementType.String)]
+        public String Attached;
+
+        [XmlCookedAttribute(
+            Name = "tAttachmentDef.nVolume",
+            DefaultValue = 1,
+            ElementType = ElementType.Int32)]
+        public int Volume;
+
+        [XmlCookedAttribute(
+            Name = "tAttachmentDef.nAttachedDefId",
+            DefaultValue = -1,
+            ElementType = ElementType.NonCookedInt32)]
+        public int AttachedDefId;
+
+        [XmlCookedAttribute(
+            Name = "tAttachmentDef.pszBone",
+            DefaultValue = null,
+            ElementType = ElementType.String)]
+        public String Bone;
+
+        [XmlCookedAttribute(
+            Name = "tAttachmentDef.nBoneId",
+            DefaultValue = -1,
+            ElementType = ElementType.NonCookedInt32)]
+        public int BoneId;
+
+        [XmlCookedAttribute(Name = "vPosition", ElementType = ElementType.Float, CustomType = ElementType.Vector3)]
+        [XmlCookedAttribute(
+            Name = "tAttachmentDef.vPosition.fX",
+            DefaultValue = 0.0f,
+            ElementType = ElementType.Float)]
+        [XmlCookedAttribute(
+            Name = "tAttachmentDef.vPosition.fY",
+            DefaultValue = 0.0f,
+            ElementType = ElementType.Float)]
+        [XmlCookedAttribute(
+            Name = "tAttachmentDef.vPosition.fZ",
+            DefaultValue = 0.0f,
+            ElementType = ElementType.Float)]
+        public Vector3 Position = new Vector3();
+
+        [XmlCookedAttribute(Name = "vNormal", ElementType = ElementType.Float, CustomType = ElementType.Vector3)]
+        [XmlCookedAttribute(
+            Name = "tAttachmentDef.vNormal.fX",
+            DefaultValue = -1.0f,
+            ElementType = ElementType.Float)]
+        [XmlCookedAttribute(
+            Name = "tAttachmentDef.vNormal.fY",
+            DefaultValue = 0.0f,
+            ElementType = ElementType.Float)]
+        [XmlCookedAttribute(
+            Name = "tAttachmentDef.vNormal.fZ",
+            DefaultValue = 0.0f,
+            ElementType = ElementType.Float)]
+        public Vector3 Normal = new Vector3();
+
+        [XmlCookedAttribute(
+            Name = "tAttachmentDef.fScale",
+            DefaultValue = 1.0f,
+            ElementType = ElementType.Float,
+            IsResurrection = true)]
+        public float Scale;
 
         [XmlCookedAttribute(
             Name = "tCondition",
@@ -129,10 +209,5 @@ namespace Hellgate.Xml
             ElementType = ElementType.Table,
             ChildType = typeof(ConditionDefinition))]
         public ConditionDefinition Condition;
-
-        public SkillEvent()
-        {
-            Attachment = new AttachmentDef();
-        }
     }
 }

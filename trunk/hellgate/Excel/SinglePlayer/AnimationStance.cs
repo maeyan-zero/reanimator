@@ -6,7 +6,7 @@ using RowHeader = Hellgate.ExcelFile.RowHeader;
 namespace Hellgate.Excel
 {
     [StructLayout(LayoutKind.Sequential, Pack = 1)]
-    class AnimationStance
+    public class AnimationStance
     {
         RowHeader header;
         [ExcelOutput(SortColumnOrder = 1)]

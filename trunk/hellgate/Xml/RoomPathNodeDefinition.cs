@@ -62,13 +62,13 @@ namespace Hellgate.Xml
 
         [XmlCookedAttribute(
             Name = "fNodeOffsetX",
-            ElementType = ElementType.NonCookedFloat,
+            ElementType = ElementType.Float,
             DefaultValue = 0.0f)]
         public float NodeOffsetX;
 
         [XmlCookedAttribute(
             Name = "fNodeOffsetY",
-            ElementType = ElementType.NonCookedFloat,
+            ElementType = ElementType.Float,
             DefaultValue = 0.0f)]
         public float NodeOffsetY;
 

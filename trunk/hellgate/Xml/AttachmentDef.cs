@@ -9,13 +9,13 @@ namespace Hellgate.Xml
             Name = "tAttachmentDef.eType",
             DefaultValue = 0,
             ElementType = ElementType.Int32)]
-        public int Type;
+        public int AttachmentType;
 
         [XmlCookedAttribute(
             Name = "tAttachmentDef.dwFlags",
             DefaultValue = 0,
             ElementType = ElementType.Int32)]
-        public int Flags;
+        public int AttachmentFlags;
 
         [XmlCookedAttribute(
             Name = "tAttachmentDef.pszAttached",

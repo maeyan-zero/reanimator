@@ -741,85 +741,85 @@ namespace Hellgate
             // below is the very quick hard-coded version of the (mostly-completed; see comments) strings_files.txt.cooked StructureId
             throw new NotImplementedException();
 
-            UInt32 finalHash = 0x4C; // total structure byte size (not including header)
-            finalHash += 0x20;
+            //UInt32 finalHash = 0x4C; // total structure byte size (not including header)
+            //finalHash += 0x20;
 
-            // columns are ordered by name DESC
-            KeyValuePair<String, Int32>[] columns = new[]
-            {
-                new KeyValuePair<String, Int32>("Name", 0),
-                new KeyValuePair<String, Int32>("Loaded by Game", 0x44),
-                new KeyValuePair<String, Int32>("Is Common", 0x40),
-                new KeyValuePair<String, Int32>("Credits File", 0x48)
-            };
+            //// columns are ordered by name DESC
+            //KeyValuePair<String, Int32>[] columns = new[]
+            //{
+            //    new KeyValuePair<String, Int32>("Name", 0),
+            //    new KeyValuePair<String, Int32>("Loaded by Game", 0x44),
+            //    new KeyValuePair<String, Int32>("Is Common", 0x40),
+            //    new KeyValuePair<String, Int32>("Credits File", 0x48)
+            //};
 
-            for (int i = columns.Length - 1; i >= 0; i--)
-            {
-                String str = columns[i].Key;
-                UInt32 stringHash = Crypt.GetStringHash(str);
+            //for (int i = columns.Length - 1; i >= 0; i--)
+            //{
+            //    String str = columns[i].Key;
+            //    UInt32 stringHash = Crypt.GetStringHash(str);
 
-                // I think this is the "type"
-                Int32 type = 0x0B;                  // Int32 (first 3 are ints)
-                if (str == "Name") type = 0x01;     // String ("Name" is a string)
-                if (str.Length > 0)
-                {
-                    byte[] typeBytes = BitConverter.GetBytes(type);
-                    UInt32 stringHash2 = Crypt.GetStringHash(typeBytes, stringHash);
-                    stringHash = stringHash2;
-                }
+            //    // I think this is the "type"
+            //    Int32 type = 0x0B;                  // Int32 (first 3 are ints)
+            //    if (str == "Name") type = 0x01;     // String ("Name" is a string)
+            //    if (str.Length > 0)
+            //    {
+            //        byte[] typeBytes = BitConverter.GetBytes(type);
+            //        UInt32 stringHash2 = Crypt.GetStringHash(typeBytes, stringHash);
+            //        stringHash = stringHash2;
+            //    }
 
 
-                Int32 byteStructOffset = columns[i].Value;
-                byte[] byteStructOffsetBytes = BitConverter.GetBytes(byteStructOffset);
-                if (type != 0x02)
-                {
-                    UInt32 stringHash2 = Crypt.GetStringHash(byteStructOffsetBytes, stringHash);
-                    stringHash = stringHash2;
+            //    Int32 byteStructOffset = columns[i].Value;
+            //    byte[] byteStructOffsetBytes = BitConverter.GetBytes(byteStructOffset);
+            //    if (type != 0x02)
+            //    {
+            //        UInt32 stringHash2 = Crypt.GetStringHash(byteStructOffsetBytes, stringHash);
+            //        stringHash = stringHash2;
 
-                    Int32 unknown1 = 4;                 // was 0x04 for first 3
-                    if (str == "Name") unknown1 = 1;    // 0x01 for "Name"
-                    byte[] unknown1Bytes = BitConverter.GetBytes(unknown1);
-                    UInt32 stringHash3 = Crypt.GetStringHash(unknown1Bytes, stringHash);
-                    stringHash = stringHash3;
-                }
+            //        Int32 unknown1 = 4;                 // was 0x04 for first 3
+            //        if (str == "Name") unknown1 = 1;    // 0x01 for "Name"
+            //        byte[] unknown1Bytes = BitConverter.GetBytes(unknown1);
+            //        UInt32 stringHash3 = Crypt.GetStringHash(unknown1Bytes, stringHash);
+            //        stringHash = stringHash3;
+            //    }
 
-                byte[] unknown0x01 = new byte[] { 0x01, 0x00, 0x00, 0x00 }; // not sure if this was the same for name - gave up
-                UInt32 stringHash4 = Crypt.GetStringHash(unknown0x01, stringHash);
-                stringHash = stringHash4;
+            //    byte[] unknown0x01 = new byte[] { 0x01, 0x00, 0x00, 0x00 }; // not sure if this was the same for name - gave up
+            //    UInt32 stringHash4 = Crypt.GetStringHash(unknown0x01, stringHash);
+            //    stringHash = stringHash4;
 
-                Int32 unknown3 = 0;                     // was 0x00 for first 3
-                if (str == "Name") unknown3 = 1;        // 0x01 for "Name"
-                byte[] unknown3Bytes = BitConverter.GetBytes(unknown3);
-                UInt32 stringHash5 = Crypt.GetStringHash(unknown3Bytes, stringHash);
-                stringHash = stringHash5;
+            //    Int32 unknown3 = 0;                     // was 0x00 for first 3
+            //    if (str == "Name") unknown3 = 1;        // 0x01 for "Name"
+            //    byte[] unknown3Bytes = BitConverter.GetBytes(unknown3);
+            //    UInt32 stringHash5 = Crypt.GetStringHash(unknown3Bytes, stringHash);
+            //    stringHash = stringHash5;
 
-                int switchType = type - 1;
-                switch (switchType)
-                {
-                    case 0: // String
-                        // does 1x more string hash, 0x10 in length (so same as first part of Int32)
-                        // sub_140011BB0+217  028 lea     r9, [rbx+20h]
-                        break;
+            //    int switchType = type - 1;
+            //    switch (switchType)
+            //    {
+            //        case 0: // String
+            //            // does 1x more string hash, 0x10 in length (so same as first part of Int32)
+            //            // sub_140011BB0+217  028 lea     r9, [rbx+20h]
+            //            break;
 
-                    // and a few more cases as well
+            //        // and a few more cases as well
 
-                    default: // Int32
-                        // sub_140011BB0+306  028 lea     r9, [rbx+20h]
-                        byte[] unknown2 = new byte[0x10]; // for our first sets of columns, it was all zeros
-                        UInt32 stringHash6 = Crypt.GetStringHash(unknown2, stringHash);
-                        stringHash = stringHash6;
+            //        default: // Int32
+            //            // sub_140011BB0+306  028 lea     r9, [rbx+20h]
+            //            byte[] unknown2 = new byte[0x10]; // for our first sets of columns, it was all zeros
+            //            UInt32 stringHash6 = Crypt.GetStringHash(unknown2, stringHash);
+            //            stringHash = stringHash6;
 
-                        // sub_140011BB0+345  028 lea     r8, [rbx+30h]
-                        byte[] unknown4 = new byte[0x18]; // for our first sets of columns, it was all zeros
-                        UInt32 stringHash7 = Crypt.GetStringHash(unknown4, stringHash);
-                        stringHash = stringHash7;
-                        break;
-                }
+            //            // sub_140011BB0+345  028 lea     r8, [rbx+30h]
+            //            byte[] unknown4 = new byte[0x18]; // for our first sets of columns, it was all zeros
+            //            UInt32 stringHash7 = Crypt.GetStringHash(unknown4, stringHash);
+            //            stringHash = stringHash7;
+            //            break;
+            //    }
 
-                finalHash += stringHash;
-            }
+            //    finalHash += stringHash;
+            //}
 
-            return finalHash;
+            //return finalHash;
         }
     }
 }

@@ -132,6 +132,15 @@ namespace Hellgate
             }
         }
 
+        public class ScriptFunctionCountError : ReanimatorException
+        {
+                public ScriptFunctionCountError(int functionIndex, int functionCount)
+            {
+                CustomMessage = String.Format("The function index of an excel properties function did not match the currently defined number of client functions. ({0} != {1})\n" +
+                    "The most likely cause of this is a recent client update and thus the client function list may need to be extracted from the client again.", functionIndex, functionCount);
+            }
+        }
+
         public class ScriptInvalidStackStateException : ReanimatorException
         {
             public ScriptInvalidStackStateException(String reason)

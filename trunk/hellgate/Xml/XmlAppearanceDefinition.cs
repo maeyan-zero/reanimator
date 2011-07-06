@@ -34,19 +34,19 @@ namespace Hellgate.Xml
             {
                 Name = "pLoader",
                 DefaultValue = null,
-                ElementType = ElementType.UnknownPTypeD_0x0D00
+                ElementType = ElementType.Pointer
             },
             new XmlCookElement
             {
                 Name = "pMeshBinding",
                 DefaultValue = null,
-                ElementType = ElementType.UnknownPTypeD_0x0D00
+                ElementType = ElementType.Pointer
             },
             new XmlCookElement
             {
                 Name = "pGrannyModel",
                 DefaultValue = null,
-                ElementType = ElementType.UnknownPTypeD_0x0D00
+                ElementType = ElementType.Pointer
             },
             new XmlCookElement
             {
@@ -334,7 +334,7 @@ namespace Hellgate.Xml
             {
                 Name = "pGrannyFile",
                 DefaultValue = null,
-                ElementType = ElementType.UnknownPTypeD_0x0D00
+                ElementType = ElementType.Pointer
             },
             new XmlCookElement
             {
@@ -383,7 +383,7 @@ namespace Hellgate.Xml
             {
                 Name = "pAnimGroups",
                 DefaultValue = null,
-                ElementType = ElementType.UnknownPTypeD_0x0D00
+                ElementType = ElementType.Pointer
             },
             new XmlCookElement
             {

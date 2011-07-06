@@ -5,7 +5,7 @@ namespace Hellgate.Xml
     public enum ElementType : ushort
     {
         Int32 = 0x0000,
-        Int32ArrayFixed = 0x0006,           // found in colorsets (pdwColors)
+        Int32ArrayFixed = 0x0006,           // found in AppearanceDefinition (pnWardrobeLayerParams) and ColorDefinition (pdwColors)
         Int32ArrayVariable = 0x0007,
 
         Float = 0x0100,
@@ -34,10 +34,12 @@ namespace Hellgate.Xml
         Int32Array_0x0A06 = 0x0A06,         // found in AppearanceDefinition, like any other array type but as Int32_0x0A00; name usually "pnName"
         Flag = 0x0B01,
         BitFlag = 0x0C02,
-        UnknownPTypeD_0x0D00 = 0x0D00,      // found in RoomPath and AppearanceDefinition and children; no known use/occurance - name usually "pName"
+        Pointer = 0x0D00,                   // found in RoomPath and AppearanceDefinition and children; no known use/occurance - name usually "pName" (assumed to be a pointer)
 
         ByteArrayVariable = 0x1007,         // found in BlendRun (TextureDefinition child)
 
+        Vector4 = 0xFFFB,                   // custom type for Vector4 object
+        Unsigned = 0xFFFC,                  // custom type for Int32ArrayFixed -> UInt32ArrayFixed (but can/will be applicable for other Int->UInt types etc)
         Bool = 0xFFFD,                      // custom type for Int32 -> Bool
         Vector3 = 0xFFFE,                   // custom type for Vector3 object
         Object = 0xFFFF                     // custom type for objects (e.g. ConditionDef, AttachmentDef)

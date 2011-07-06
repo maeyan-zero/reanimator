@@ -152,19 +152,19 @@
             {
                 Name = "pBinding",
                 DefaultValue = null,
-                ElementType = ElementType.UnknownPTypeD_0x0D00
+                ElementType = ElementType.Pointer
             },
             new XmlCookElement
             {
                 Name = "pGrannyAnimation",
                 DefaultValue = null,
-                ElementType = ElementType.UnknownPTypeD_0x0D00
+                ElementType = ElementType.Pointer
             },
             new XmlCookElement
             {
                 Name = "pGrannyFile",
                 DefaultValue = null,
-                ElementType = ElementType.UnknownPTypeD_0x0D00
+                ElementType = ElementType.Pointer
             },
             new XmlCookElement
             {
@@ -183,7 +183,7 @@
             {
                 Name = "pNextInGroup",
                 DefaultValue = null,
-                ElementType = ElementType.UnknownPTypeD_0x0D00
+                ElementType = ElementType.Pointer
             },
             new XmlCookElement
             {
