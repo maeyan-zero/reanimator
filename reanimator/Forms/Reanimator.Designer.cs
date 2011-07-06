@@ -480,7 +480,7 @@
             this.aboutToolStripMenuItem.Name = "aboutToolStripMenuItem";
             this.aboutToolStripMenuItem.Size = new System.Drawing.Size(168, 22);
             this.aboutToolStripMenuItem.Text = "&About ...";
-            this.aboutToolStripMenuItem.Click += new System.EventHandler(this._AboutToolStripMenuItem_Click);
+            this.aboutToolStripMenuItem.Click += new System.EventHandler(_AboutToolStripMenuItem_Click);
             // 
             // statusStrip
             // 

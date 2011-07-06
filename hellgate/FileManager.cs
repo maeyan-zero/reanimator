@@ -409,7 +409,7 @@ namespace Hellgate
         public object GetRowFromFirstString(Xls.TableCodes tableCode, String firstString)
         {
             ExcelFile table = GetExcelTableFromCode(tableCode);
-            object row;
+            Object row;
             return (table.RowFromFirstString.TryGetValue(firstString, out row)) ? row : null;
         }
 
@@ -682,7 +682,7 @@ namespace Hellgate
 
         public String GetExcelRowStringFromTableIndex(int tableIndex, int rowIndex)
         {
-            uint tableCode = (uint)_GetTableCodeFromTableIndex(tableIndex);
+            Xls.TableCodes tableCode = _GetTableCodeFromTableIndex(tableIndex);
             return GetExcelRowStringFromRowIndex(tableCode, rowIndex);
         }
 
@@ -808,11 +808,11 @@ namespace Hellgate
             return stringVal;
         }
 
-        public String GetExcelRowStringFromRowIndex(uint code, int rowIndex, int colIndex = 0)
+        public String GetExcelRowStringFromRowIndex(Xls.TableCodes code, int rowIndex, int colIndex = 0)
         {
             if (DataFiles == null || DataFiles.ContainsKey(ExcelTablesStringId) == false || rowIndex < 0) return null;
 
-            ExcelFile excelTable = GetExcelTableFromCode((Xls.TableCodes)code);
+            ExcelFile excelTable = GetExcelTableFromCode(code);
 
             String stringVal = _GetExcelRowStringFromExcelFile(excelTable, rowIndex, colIndex);
             return stringVal;

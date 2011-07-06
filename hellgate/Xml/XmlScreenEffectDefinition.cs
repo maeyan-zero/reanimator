@@ -72,13 +72,13 @@ namespace Hellgate.Xml
             {
                 Name = "tColor0",
                 DefaultValue = 0.0f,
-                ElementType = ElementType.FloatQuadArrayVariable,
+                ElementType = ElementType.FloatQuadArrayVariable
             },
             new XmlCookElement
             {
                 Name = "tColor1",
                 DefaultValue = 0.0f,
-                ElementType = ElementType.FloatQuadArrayVariable,
+                ElementType = ElementType.FloatQuadArrayVariable
             },
             new XmlCookElement
             {

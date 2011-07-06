@@ -221,7 +221,7 @@ namespace Hellgate
         private List<FileEntryStruct> FileDetails { get; set; }
         
         public bool DatFileOpen { get { return DatFile == null ? false : true; } }
-        public int Count { get { return FileDetails.Count; } }
+        public new int Count { get { return FileDetails.Count; } }
         #endregion
 
         /// <summary>

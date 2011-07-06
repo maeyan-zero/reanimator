@@ -122,7 +122,7 @@ namespace Revival.Common
 
         public override string ToString()
         {
-            return String.Format("({0}, {1}, {2})", X.ToString("r"), Y.ToString("r"), Z.ToString("r"));
+            return String.Format("{0}, {1}, {2}", X.ToString("r"), Y.ToString("r"), Z.ToString("r"));
         }
     }
 
@@ -161,7 +161,7 @@ namespace Revival.Common
 
         public override string ToString()
         {
-            return String.Format("({0}, {1}, {2}, {3})", X.ToString("r"), Y.ToString("r"), Z.ToString("r"), W.ToString("r"));
+            return String.Format("{0}, {1}, {2}, {3}", X.ToString("r"), Y.ToString("r"), Z.ToString("r"), W.ToString("r"));
         }
     }
 

@@ -11,7 +11,7 @@
 
         [XmlCookedAttribute(
             Name = "pConnection",
-            ElementType = ElementType.UnknownPTypeD_0x0D00,
+            ElementType = ElementType.Pointer,
             DefaultValue = 0)]
         public RoomPathNodeConnection Connection; // guessing this is what the UnknownPTypeD_0x0D00 refers to (pointer etc)
     }

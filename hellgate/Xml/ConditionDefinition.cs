@@ -11,8 +11,8 @@ namespace Hellgate.Xml
         public enum ConditionFlags : uint
         {
             CONDITION_BIT_CHECK_OWNER = (1 << 0),
-            CONDITION_BIT_CHECK_WEAPON = (1 << 1),
             CONDITION_BIT_CHECK_TARGET = (1 << 2),
+            CONDITION_BIT_CHECK_WEAPON = (1 << 1),
             CONDITION_BIT_NOT_DEAD_OR_DYING = (1 << 3),
             CONDITION_BIT_IS_YOUR_PLAYER = (1 << 4),
             CONDITION_BIT_OWNER_IS_YOUR_PLAYER = (1 << 5),
@@ -24,7 +24,7 @@ namespace Hellgate.Xml
             DefaultValue = null,
             TableCode = Xls.TableCodes.CONDITION_FUNCTIONS, // 26417 CONDITION_FUNCTIONS
             ElementType = ElementType.ExcelIndex)]
-        public ConditionFunctionsRow CondFunc;
+        public ConditionFunctionsRow Type;
         public int CondFuncRowIndex;
 
         [XmlCookedAttribute(
@@ -85,13 +85,15 @@ namespace Hellgate.Xml
         public int StatRowIndex;
 
         [XmlCookedAttribute(
-            Name = "tParams[0].fValue",
+            Name = "tParams0.fValue",
+            TrueName = "tParams[0].fValue",
             DefaultValue = 0.0f,
             ElementType = ElementType.Float)]
         public float Param0;
 
         [XmlCookedAttribute(
-            Name = "tParams[1].fValue",
+            Name = "tParams1.fValue",
+            TrueName = "tParams[1].fValue",
             DefaultValue = 0.0f,
             ElementType = ElementType.Float)]
         public float Param1;

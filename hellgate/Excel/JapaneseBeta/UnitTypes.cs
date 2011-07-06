@@ -6,7 +6,7 @@ using RowHeader = Hellgate.ExcelFile.RowHeader;
 namespace Hellgate.Excel.JapaneseBeta
 {
     [StructLayout(LayoutKind.Sequential, Pack = 1)]
-    class UnitTypesBeta
+    public class UnitTypesBeta
     {
         RowHeader header;
         [ExcelOutput(SortColumnOrder = 1)]

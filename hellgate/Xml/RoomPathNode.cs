@@ -18,20 +18,20 @@ namespace Hellgate.Xml
         public int EdgeIndex;
 
         [XmlCookedAttribute(
-             Name = "vNormal",
-             ElementType = ElementType.FloatArrayFixed,
-             DefaultValue = 0.0f,
-             Count = 3,
-             CustomType = ElementType.Vector3)]
-        public Vector3 Normal;
-
-        [XmlCookedAttribute(
              Name = "vPosition",
              ElementType = ElementType.FloatArrayFixed,
              DefaultValue = 0.0f,
              Count = 3,
              CustomType = ElementType.Vector3)]
         public Vector3 Position;
+
+        [XmlCookedAttribute(
+             Name = "vNormal",
+             ElementType = ElementType.FloatArrayFixed,
+             DefaultValue = 0.0f,
+             Count = 3,
+             CustomType = ElementType.Vector3)]
+        public Vector3 Normal;
 
         [XmlCookedAttribute(
              Name = "fHeight",

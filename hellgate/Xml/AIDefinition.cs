@@ -5,9 +5,9 @@
     {
         [XmlCookedAttribute(
             Name = "tTable",
-                DefaultValue = null,
-                ElementType = ElementType.Table,
-                ChildType = typeof(AIBehaviorDefinitionTable))]
+            DefaultValue = null,
+            ElementType = ElementType.Table,
+            ChildType = typeof(AIBehaviorDefinitionTable))]
         public AIBehaviorDefinitionTable[] Table;
     }
 }

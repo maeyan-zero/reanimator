@@ -1,4 +1,4 @@
- using System;
+using System;
 using System.Collections.Generic;
 using System.Diagnostics;
 using System.Drawing;
@@ -16,7 +16,7 @@ namespace Reanimator.Forms
 {
     public partial class Reanimator : Form
     {
-        private FileExplorer  _fileExplorer;
+        private FileExplorer _fileExplorer;
         private FileManager _fileManager;
         private FileManager _fileManagerTCv4;
         private TableEditorForm _excelTableForm;
@@ -25,7 +25,6 @@ namespace Reanimator.Forms
         private readonly List<TableForm> _openTableForms = new List<TableForm>();
         private readonly List<TableEditorForm> _openExcelTableForms = new List<TableEditorForm>();
         private List<HeroEditor> _openHeroEditorForms = new List<HeroEditor>();
-        private const bool AlexInstaLoad = false;
 
         public Reanimator()
         {
@@ -42,11 +41,11 @@ namespace Reanimator.Forms
             //Config.HglDir = @"D:\Games\Hellgate London";
             //TestScripts.UncookAllXml();
             if (true) return;
-            Config.HglDir = @"D:\Projects\Hellgate London\Flagshipped\ServerTest\bin\Debug";
-            //Config.HglDir = @"D:\Games\Hellgate";
-            int bitCount = 6;
-            int shift = (1 << (bitCount - 1));
-            bitCount -= shift;
+            //Config.HglDir = @"D:\Projects\Hellgate London\Flagshipped\ServerTest\bin\Debug";
+            ////Config.HglDir = @"D:\Games\Hellgate";
+            //int bitCount = 6;
+            //int shift = (1 << (bitCount - 1));
+            //bitCount -= shift;
 
 
             //byte[] charBytes = {
@@ -64,42 +63,42 @@ namespace Reanimator.Forms
             //                       0x01, 0x20, 0x40, 0x01, 0x00, 0x00, 0x24, 0x8C, 0x82, 0x01, 0x00, 0x00, 0xB2, 0x21,
             //                       0x06, 0xE4,
             //                       0xC4, 0xC8, 0x00, 0x00, 0x00, 0x00, 0x00, 0xA3, 0x91, 0x5A, 0x01
-                               //};
+            //};
 
-            FileManager fileManager = new FileManager(@"D:\Projects\Hellgate London\Flagshipped\ServerTest\bin\Debug");
-            fileManager.LoadTableFiles();
-            UnitObject.FileManager = fileManager;
+            //FileManager fileManager = new FileManager(@"D:\Projects\Hellgate London\Flagshipped\ServerTest\bin\Debug");
+            //fileManager.LoadTableFiles();
+            //UnitObject.FileManager = fileManager;
 
-            byte[] charBytes = {0xCD, 0x00, 0x04, 0x02, 0x67, 0xE8, 0x01, 0x03, 0x0C, 0x00, 0x00, 0x00, 0x60, 0x34, 0x52, 0x2B, 0x0E, 0x00, 0x00, 0x00, 0x65, 0x16, 0x26, 0x05, 0x00, 0x00, 0x40, 0xE5, 0x61, 0x26, 0x68, 0xE3, 0xB6, 0x21, 0x58, 0xA3, 0x31, 0xF1, 0xD7, 0xCD, 0xED, 0x8E, 0x56, 0xFF, 0xFF, 0xEF, 0x17, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0xF0, 0x07, 0x00, 0x00, 0x00, 0xC0, 0x1F, 0x00, 0x00, 0x00, 0x80, 0x81, 0x02, 0x40, 0x80, 0x00, 0x00, 0x00, 0x48, 0x00, 0x00, 0x46, 0x23, 0xB5, 0x02};
-            byte[] goldDropBytes = {0xCD, 0x00, 0x04, 0x02, 0x27, 0xE8, 0x81, 0x03, 0x0C, 0x00, 0x00, 0x00, 0x60, 0x34, 0x52, 0x2B, 0x5D, 0x00, 0x00, 0x00, 0x04, 0x03, 0x33, 0x27, 0x01, 0x52, 0x56, 0x45, 0xF1, 0x99, 0x0D, 0x02, 0x00, 0x00, 0x20, 0x0F, 0xB4, 0x1A, 0xA8, 0x8E, 0xCA, 0x35, 0x18, 0x0E, 0x13, 0xE9, 0x97, 0x9D, 0x8F, 0xE1, 0x27, 0x3C, 0xC0, 0xEA, 0x17, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0xF0, 0x07, 0x00, 0x00, 0x00, 0x20, 0x20, 0x00, 0x00, 0x00, 0x80, 0x40, 0x01, 0x20, 0x40, 0x01, 0x00, 0x00, 0x24, 0x8C, 0x82, 0x01, 0x00, 0x00, 0xB2, 0x21, 0x06, 0xE4, 0xC4, 0xC8, 0x00, 0x00, 0x00, 0x00, 0x00, 0xA3, 0x91, 0x5A, 0x01};
+            //byte[] charBytes = { 0xCD, 0x00, 0x04, 0x02, 0x67, 0xE8, 0x01, 0x03, 0x0C, 0x00, 0x00, 0x00, 0x60, 0x34, 0x52, 0x2B, 0x0E, 0x00, 0x00, 0x00, 0x65, 0x16, 0x26, 0x05, 0x00, 0x00, 0x40, 0xE5, 0x61, 0x26, 0x68, 0xE3, 0xB6, 0x21, 0x58, 0xA3, 0x31, 0xF1, 0xD7, 0xCD, 0xED, 0x8E, 0x56, 0xFF, 0xFF, 0xEF, 0x17, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0xF0, 0x07, 0x00, 0x00, 0x00, 0xC0, 0x1F, 0x00, 0x00, 0x00, 0x80, 0x81, 0x02, 0x40, 0x80, 0x00, 0x00, 0x00, 0x48, 0x00, 0x00, 0x46, 0x23, 0xB5, 0x02 };
+            //byte[] goldDropBytes = { 0xCD, 0x00, 0x04, 0x02, 0x27, 0xE8, 0x81, 0x03, 0x0C, 0x00, 0x00, 0x00, 0x60, 0x34, 0x52, 0x2B, 0x5D, 0x00, 0x00, 0x00, 0x04, 0x03, 0x33, 0x27, 0x01, 0x52, 0x56, 0x45, 0xF1, 0x99, 0x0D, 0x02, 0x00, 0x00, 0x20, 0x0F, 0xB4, 0x1A, 0xA8, 0x8E, 0xCA, 0x35, 0x18, 0x0E, 0x13, 0xE9, 0x97, 0x9D, 0x8F, 0xE1, 0x27, 0x3C, 0xC0, 0xEA, 0x17, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0xF0, 0x07, 0x00, 0x00, 0x00, 0x20, 0x20, 0x00, 0x00, 0x00, 0x80, 0x40, 0x01, 0x20, 0x40, 0x01, 0x00, 0x00, 0x24, 0x8C, 0x82, 0x01, 0x00, 0x00, 0xB2, 0x21, 0x06, 0xE4, 0xC4, 0xC8, 0x00, 0x00, 0x00, 0x00, 0x00, 0xA3, 0x91, 0x5A, 0x01 };
 
-            //const String test = @"accounts\alex2069\SwordMan.hg1";
-            //byte[] charBytes = File.ReadAllBytes(test);
-            CharacterFile saveFile = new CharacterFile("asdf");
-            UnitObject goldDrop = new UnitObject(true);
-            try
-            {
-                goldDrop.ParseUnitObject(goldDropBytes);
-               // saveFile.ParseFileBytes(charBytes, true);
-            }
-            catch (Exception ex)
-            {
-                Debug.WriteLine(ex.ToString());
-                //int bp = 0;
-            }
+            ////const String test = @"accounts\alex2069\SwordMan.hg1";
+            ////byte[] charBytes = File.ReadAllBytes(test);
+            //CharacterFile saveFile = new CharacterFile("asdf");
+            //UnitObject goldDrop = new UnitObject(true);
+            //try
+            //{
+            //    goldDrop.ParseUnitObject(goldDropBytes);
+            //    // saveFile.ParseFileBytes(charBytes, true);
+            //}
+            //catch (Exception ex)
+            //{
+            //    Debug.WriteLine(ex.ToString());
+            //    //int bp = 0;
+            //}
 
-            
+
 
 
             //TestScripts.ExtractFunctionList();
 
 
-            const String test = @"data\background\city\bldg_c_station_warp_next_layout.xml.cooked";
-            String dir = Path.GetDirectoryName(test) + "\\";
-            String name = Path.GetFileName(test);
+            //const String test = @"data\background\city\bldg_c_station_warp_next_layout.xml.cooked";
+            //String dir = Path.GetDirectoryName(test) + "\\";
+            //String name = Path.GetFileName(test);
 
-            uint dirHash = Crypt.GetStringSHA1UInt32(dir);
-            uint nameHash = Crypt.GetStringSHA1UInt32(name);
+            //uint dirHash = Crypt.GetStringSHA1UInt32(dir);
+            //uint nameHash = Crypt.GetStringSHA1UInt32(name);
 
             //const String hellpackTablePath = @"D:\Games\Hellgate\Data\hgl.hpt";
             //byte[] hellpackFileBytes = File.ReadAllBytes(hellpackTablePath);
@@ -175,7 +174,7 @@ namespace Reanimator.Forms
             //}
             #endregion
         }
-        
+
         /// <summary>
         /// Checks the Windows Version and sets the coresponding icon
         /// </summary>
@@ -210,8 +209,8 @@ namespace Reanimator.Forms
             System.Drawing.Icon ico = pathName;
             this.Icon = ico;
         }
-        
-        
+
+
         /// <summary>
         /// Checks the registry for the Hellgate path, if it doesn't exist prompt the user to find it.
         /// </summary>
@@ -315,7 +314,7 @@ namespace Reanimator.Forms
                 packFile = new HellgatePackFile(filePath);
             }
 
-            
+
 
             // Check if the form is already open.
             // If true, then activate the form.
@@ -671,8 +670,6 @@ namespace Reanimator.Forms
 
         private void _Reanimator_Load(object sender, EventArgs e)
         {
-            if (AlexInstaLoad) return;
-
             try
             {
                 Height = Config.ClientHeight;
@@ -705,34 +702,27 @@ namespace Reanimator.Forms
             _fileManager = new FileManager(Config.HglDir, false);
 
             foreach (PackFile file in _fileManager.IndexFiles) file.BeginDatReading();
-
             progressForm.SetCurrentItemText("Loading Excel and Strings Tables...");
             if (!_fileManager.LoadTableFiles())
             {
-                MessageBox.Show("Failed to load excel and strings files!", "Data Table Error", MessageBoxButtons.OK,
-                                MessageBoxIcon.Error);
+                MessageBox.Show("Failed to load excel and strings files!", "Data Table Error", MessageBoxButtons.OK, MessageBoxIcon.Error);
             }
-
             foreach (PackFile file in _fileManager.IndexFiles) file.EndDatAccess();
 
             XmlCookedFile.Initialize(_fileManager);
 
-            if (Config.LoadTCv4DataFiles)
+
+            if (!Config.LoadTCv4DataFiles) return;
+            progressForm.SetCurrentItemText("Loading TCv4 File Manager...");
+            _fileManagerTCv4 = new FileManager(Config.HglDir, true);
+
+            foreach (PackFile file in _fileManagerTCv4.IndexFiles) file.BeginDatReading();
+            progressForm.SetCurrentItemText("Loading TCv4 Excel and Strings Tables...");
+            if (!_fileManagerTCv4.LoadTableFiles())
             {
-                progressForm.SetCurrentItemText("Loading TCv4 File Manager...");
-                _fileManagerTCv4 = new FileManager(Config.HglDir, true);
-
-                foreach (PackFile file in _fileManagerTCv4.IndexFiles) file.BeginDatReading();
-
-                progressForm.SetCurrentItemText("Loading TCv4 Excel and Strings Tables...");
-                if (!_fileManagerTCv4.LoadTableFiles())
-                {
-                    MessageBox.Show("Failed to load TCv4 excel and strings files!", "Data Table Error",
-                                    MessageBoxButtons.OK,
-                                    MessageBoxIcon.Error);
-                }
-                foreach (PackFile file in _fileManagerTCv4.IndexFiles) file.EndDatAccess();
+                MessageBox.Show("Failed to load TCv4 excel and strings files!", "Data Table Error", MessageBoxButtons.OK, MessageBoxIcon.Error);
             }
+            foreach (PackFile file in _fileManagerTCv4.IndexFiles) file.EndDatAccess();
         }
 
         private void _SaveToolStripButton_Click(object sender, EventArgs e)
@@ -831,7 +821,7 @@ namespace Reanimator.Forms
             //}
         }
 
-        private void _AboutToolStripMenuItem_Click(object sender, EventArgs e)
+        private static void _AboutToolStripMenuItem_Click(object sender, EventArgs e)
         {
             MessageBox.Show("Reanimator by the Revival Team (c) 2009-2010" + Environment.NewLine
                 + "Credits: Maeyan, Alex2069, Kite & Malachor" + Environment.NewLine
@@ -901,12 +891,14 @@ namespace Reanimator.Forms
         private void excelTableEditorToolStripMenuItem_Click(object sender, EventArgs e)
         {
             if (_excelTableForm == null || _excelTableForm.IsDisposed)
-                _excelTableForm = new TableEditorForm(_fileManager) { MdiParent = this, Text = "Table Editor [" + _fileManager.ClientVersion.ToString() + "]" };
+                _excelTableForm = new TableEditorForm(_fileManager) { MdiParent = this, Text = "Table Editor [" + _fileManager.ClientVersion + "]" };
+
             _excelTableForm.Show();
             _excelTableForm.Focus();
 
             if (Config.LoadTCv4DataFiles && (_excelTableFormTCv4 == null || _excelTableFormTCv4.IsDisposed))
-                _excelTableFormTCv4 = new TableEditorForm(_fileManagerTCv4) { MdiParent = this, Text = "Table Editor [" + _fileManagerTCv4.ClientVersion.ToString() + "]" };
+                _excelTableFormTCv4 = new TableEditorForm(_fileManagerTCv4) { MdiParent = this, Text = "Table Editor [" + _fileManagerTCv4.ClientVersion + "]" };
+
             if (Config.LoadTCv4DataFiles)
             {
                 _excelTableFormTCv4.Show();

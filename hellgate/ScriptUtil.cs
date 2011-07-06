@@ -1731,7 +1731,7 @@ namespace Hellgate
                     {
                         function.Name = parameter.Name;
                         int functionIndex = parameter.TypeValues[4];
-                        Debug.Assert(functionIndex == _callFunctions.Count);
+                        if (functionIndex != _callFunctions.Count) throw new Exceptions.ScriptFunctionCountError(functionIndex, _callFunctions.Count);
 
                         continue;
                     }
@@ -1986,8 +1986,8 @@ namespace Hellgate
             int argIndex = 0;
             int line = 0;
             bool haveFuncName = false;
-            bool haveReturnType = false;
-            bool haveVoidArg = false;
+            //bool haveReturnType = false;
+            //bool haveVoidArg = false;
             foreach (String asmString in functionCode)
             {
                 line++;
@@ -2118,13 +2118,13 @@ namespace Hellgate
                         }
                         else
                         {
-                            int bp2 = 0;
+                            //int bp2 = 0;
                         }
 
                         break;
 
                     default:
-                        int b3p = 0;
+                        //int b3p = 0;
                         break;
                 }
             }

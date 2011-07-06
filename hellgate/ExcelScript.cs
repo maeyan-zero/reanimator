@@ -883,7 +883,7 @@ namespace Hellgate
                 {
                     ScriptOpCodes opCode = (ScriptOpCodes)FileTools.ByteArrayToUInt32(scriptBytes, ref _offset);
                     String value1;
-                    String value2;
+                    //String value2;
                     uint index;
                     int functionIndex;
                     uint byteOffset;

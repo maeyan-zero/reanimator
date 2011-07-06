@@ -193,6 +193,12 @@ namespace Hellgate
             return value;
         }
 
+        public static String ReadStringAscii(byte[] buffer, int offset, int charCount)
+        {
+            String str = Encoding.ASCII.GetString(buffer, offset, charCount);
+            return str;
+        }
+
         public static String ReadStringAscii(byte[] buffer, ref int offset, int charCount, bool includeZero)
         {
             String str = Encoding.ASCII.GetString(buffer, offset, charCount);
