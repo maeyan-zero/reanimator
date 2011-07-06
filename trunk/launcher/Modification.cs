@@ -318,7 +318,7 @@ namespace Revival
                 if (File.Exists(sourcePath) == false) return false;
 
                 // Try open the index file
-                byte[] sbuffer;
+                //byte[] sbuffer;
                 PackFile sourceIndex = new IndexFile(sourcePath);
                 PackFile destinationIndex = new IndexFile(destinationPath);
                 try

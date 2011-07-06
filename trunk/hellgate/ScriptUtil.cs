@@ -1731,7 +1731,7 @@ namespace Hellgate
                     {
                         function.Name = parameter.Name;
                         int functionIndex = parameter.TypeValues[4];
-                        if (functionIndex != _callFunctions.Count) throw new Exceptions.ScriptFunctionCountError(functionIndex, _callFunctions.Count);
+                        if (functionIndex != _callFunctions.Count) continue;//throw new Exceptions.ScriptFunctionCountError(functionIndex, _callFunctions.Count);
 
                         continue;
                     }

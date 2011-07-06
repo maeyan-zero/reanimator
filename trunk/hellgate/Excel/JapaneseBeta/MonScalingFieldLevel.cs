@@ -11,14 +11,18 @@ namespace Hellgate.Excel.JapaneseBeta
         RowHeader header;
         [ExcelOutput(SortColumnOrder = 1)]
         [MarshalAs(UnmanagedType.ByValTStr, SizeConst = 64)]
-        public string name;
+        public String fieldLevel;
+        [ExcelOutput(IsBool = true)]
+        public Int32 uiActive;
+        [ExcelOutput(IsStringIndex = true)]
+        public Int32 mapDifficultyString;
         public float playerVsMonsterIncrementPct0;
-        public float playerVsMonsterIncreementPct1;
+        public float playerVsMonsterIncrementPct1;
         public Int32 monsterVsPlayerIncrementPct;
         public Int32 experienceTotal;
         public Int32 treasurePerPlayer;
         public Int32 addAffixCount;
-        [ExcelFile.OutputAttribute(IsScript = true)]
+        [ExcelOutput(IsScript = true)]
         public Int32 prop1;
         public Int32 overrideChampionChancePct;
         public Int32 adventureChancePct;

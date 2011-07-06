@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Runtime.InteropServices;
+using ExcelOutput = Hellgate.ExcelFile.OutputAttribute;
 
 namespace Hellgate.Excel.JapaneseBeta
 {
@@ -18,6 +19,8 @@ namespace Hellgate.Excel.JapaneseBeta
 		public float playerVsMonsterIncrementPct;
 		public Int32 monsterVsPlayerIncrementPct;
 		public Int32 experienceTotal;
+        [ExcelOutput(IsTableIndex = true, TableStringId = "STATES")]
+        public Int32 requiredState;
 
         [FlagsAttribute]
         public enum BitMask01 : uint

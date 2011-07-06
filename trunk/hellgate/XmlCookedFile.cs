@@ -376,13 +376,9 @@ namespace Hellgate
             int bitFieldByteCount = (elementCount - 1 >> 3) + 1; // -1 as 16 >> 3 = 2 + 1 = 3, but should only be 2 bytes, and +1 as 7 >> 3 = 0
             _offset += bitFieldByteCount;
 
-            // todo: this is a bit excessive for a couple of offsets, but meh, fix it later
             int[] flagOffsets = new[] { -1, -1, -1 };
             int[] bitFlagOffsets = new[] { -1, -1, -1 };
-            //XmlFlag[] flags = new XmlFlag[3];
-            //Hashtable bitFieldOffsts = new Hashtable();
             int bitIndex = -1;
-            bool bpTest = true;
             foreach (XmlCookedObject.XmlElement xmlCookElement in xmlDefinition.Elements.Values)
             {
                 if (!_IncludeElement(xmlCookElement)) continue;

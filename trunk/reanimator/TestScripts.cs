@@ -1516,10 +1516,10 @@ namespace Reanimator
                 //if (xmlCookedFile1.HasResurrectionElements) resurrectionWarnings.Add(Path.GetFileName(fileName));
                 //if (xmlCookedFile1.HasExcelStringsMissing || xmlCookedFile1.HasTestCentreElements || xmlCookedFile1.HasResurrectionElements) continue;
 
-                if (path == @"D:\Games\Hellgate\Data\background\cans and boxes.xml.cooked")
-                {
-                    int bp = 0;
-                }
+                //if (path == @"D:\Games\Hellgate\Data\background\cans and boxes.xml.cooked")
+                //{
+                //    int bp = 0;
+                //}
 
                 XmlCookedFile recookedXmlFile = new XmlCookedFile(fileName) { CookExcludeResurrection = false };
                 byte[] origXmlCookedBytes = recookedXmlFile.ParseFileBytes(origXmlBytes, fileManager);
