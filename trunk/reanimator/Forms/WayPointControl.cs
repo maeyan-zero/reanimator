@@ -6,7 +6,8 @@ namespace Reanimator.Forms
 {
     public partial class WayPointControl : UserControl
     {
-        UnitObject.StatBlock.Stat.Values wayPointValues;
+        private UnitObjectStats.Stat.StatValue wayPointValues;
+        //StatBlock.Stat.Values wayPointValues;
         int bits;
 
         public WayPointControl()
@@ -16,14 +17,16 @@ namespace Reanimator.Forms
             bits = 0;
         }
 
-        public WayPointControl(UnitObject.StatBlock.Stat.Values values) : this()
+        //public WayPointControl(UnitObjectStats.Stat.Values values) : this()
+        public WayPointControl(UnitObjectStats.Stat.StatValue values): this()
         {
             wayPointValues = values;
         }
 
         private void InitializeWayPointList()
         {
-            int value = wayPointValues.StatValue;
+            //int value = wayPointValues.StatValue;
+            int value = wayPointValues.Value;
 
             clb_wayPoints.SuspendLayout();
             clb_wayPoints.BeginUpdate();
@@ -60,7 +63,7 @@ namespace Reanimator.Forms
                 bits -= (int)Math.Pow(2, e.Index);
             }
 
-            wayPointValues.StatValue = bits;
+            wayPointValues.Value = bits;
         }
 
         private void WayPointControl_Load(object sender, EventArgs e)

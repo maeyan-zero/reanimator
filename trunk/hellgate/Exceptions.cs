@@ -85,9 +85,9 @@ namespace Hellgate
 
         public class UnknownExcelCodeException : ReanimatorException
         {
-            public UnknownExcelCodeException(int code)
+            public UnknownExcelCodeException(int code, String additionalMsg=null)
             {
-                CustomMessage = "Unknown Excel Table code value = " + code;
+                CustomMessage = String.Format("Unknown Excel Table Code Value = {0} (0x{0:X8}.\n{1}", code, additionalMsg);
             }
         }
 
@@ -101,10 +101,10 @@ namespace Hellgate
 
         public class NotSupportedXmlElementCount : ReanimatorException
         {
-            public NotSupportedXmlElementCount(String excelElement)
+            public NotSupportedXmlElementCount(String xmlElement)
             {
-                if (String.IsNullOrEmpty(excelElement)) excelElement = String.Empty;
-                CustomMessage = "The XML Definition for the file has less elements than the file has defined!\n" + excelElement;
+                if (String.IsNullOrEmpty(xmlElement)) xmlElement = String.Empty;
+                CustomMessage = "The XML Definition for the file has less elements than the file has defined!\n" + xmlElement;
             }
         }
 
@@ -238,12 +238,37 @@ namespace Hellgate
             }
         }
 
-        public class CharacterFileNotImplementedException : ReanimatorException
+        public class UnitObjectNotImplementedException : ReanimatorException
         {
-            public CharacterFileNotImplementedException(String message)
+            public UnitObjectNotImplementedException(String message)
             {
                 CustomMessage = message;
             }
         }
+
+        public class UnitObjectException : ReanimatorException // general exception for unit object related stuffs (parsing/writing etc)
+        {
+            public UnitObjectException(String message)
+            {
+                CustomMessage = message;
+            }
+        }
+
+        public class UnexpectedErrorException : ReanimatorException // very general exception
+        {
+            public UnexpectedErrorException(String message)
+            {
+                CustomMessage = message;
+            }
+        }
+
+        public class LevelRuleException : ReanimatorException
+        {
+            public LevelRuleException(String message)
+            {
+                CustomMessage = message;
+            }
+        }
+
     }
 }

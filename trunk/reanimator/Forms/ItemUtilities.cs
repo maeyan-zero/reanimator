@@ -17,71 +17,69 @@ namespace Reanimator.Forms
 
     public class UnitHelpFunctions
     {
-        FileManager fileManager;
-        private readonly DataTable statsTable;
+        readonly FileManager _fileManager;
+        private readonly DataTable _statsTable;
 
        public UnitHelpFunctions(FileManager fileManager)
         {
-            this.fileManager = fileManager;
-           statsTable = fileManager.GetDataTable("STATS");
+            _fileManager = fileManager;
+           _statsTable = fileManager.GetDataTable("STATS");
         }
 
         public void LoadCharacterValues(UnitObject unit)
         {
-            GenerateUnitNameStrings(new[] { unit }, null);
+            //GenerateUnitNameStrings(new[] { unit }, null);
 
             PopulateItems(unit);
         }
 
-        private void GenerateUnitNameStrings(UnitObject[] units, Hashtable hash)
-        {
-            if (hash == null)
-            {
-                hash = new Hashtable();
-            }
+        // not needed anymore (name is obtained automatically)
+        //private void GenerateUnitNameStrings(UnitObject[] units, Hashtable hash)
+        //{
+        //    if (hash == null) hash = new Hashtable();
 
-            try
-            {
-                UnitObject.StatBlock.Stat stat;
-                foreach (UnitObject unit in units)
-                {
-                    for (int counter = 0; counter < unit.Stats.stats.Count; counter++)
-                    {
-                        stat = unit.Stats.stats[counter];
+        //    try
+        //    {
+        //        UnitObjectStats.Stat stat;
+        //        foreach (UnitObject unit in units)
+        //        {
+        //            for (int counter = 0; counter < unit.Stats.Stats.Count; counter++)
+        //            {
+        //                stat = unit.Stats.Stats[counter];
 
-                        String name;
-                        if (hash.Contains(stat.Code))
-                        {
-                            name = (string)hash[stat.Code];
-                        }
-                        else
-                        {
-                            DataRow[] statRows = statsTable.Select("code = " + stat.Code);
-                            name = (string)statRows[0]["stat"];
+        //                String name;
+        //                if (hash.Contains(stat.Code))
+        //                {
+        //                    name = (string)hash[stat.Code];
+        //                }
+        //                else
+        //                {
+        //                    DataRow[] statRows = statsTable.Select("code = " + stat.Code);
+        //                    name = (string)statRows[0]["stat"];
 
-                            if (name != null)
-                            {
-                                hash.Add(stat.Code, name);
-                            }
-                        }
+        //                    if (name != null)
+        //                    {
+        //                        hash.Add(stat.Code, name);
+        //                    }
+        //                }
 
-                        unit.Stats[counter].Name = name;
-                    }
+        //                unit.Stats[counter].Name = name;
+        //            }
 
-                    GenerateUnitNameStrings(unit.Items.ToArray(), hash);
-                }
-            }
-            catch (Exception ex)
-            {
-                MessageBox.Show(ex.Message, "GenerateUnitNameStrings");
-            }
-        }
+        //            GenerateUnitNameStrings(unit.Items.ToArray(), hash);
+        //        }
+        //    }
+        //    catch (Exception ex)
+        //    {
+        //        MessageBox.Show(ex.Message, "GenerateUnitNameStrings");
+        //    }
+        //}
 
-        public string MapIdToString(UnitObject.StatBlock.Stat stat, int tableId, int lookupId)
+        public string MapIdToString(UnitObjectStats.Stat stat, Xls.TableCodes tableId, int lookupId)
         {
             string value = string.Empty;
 
-            if (stat.values.Count != 0)
+            if (stat.Values.Count != 0)
             {
                 String select = String.Format("code = '{0}'", lookupId);
                 DataTable table = null;// todo: rewrite  _dataSet.GetExcelTableFromCode((uint)tableId);
@@ -162,9 +160,9 @@ namespace Reanimator.Forms
             try
             {
                 bool canGetItemNames = true;
-                DataTable itemsTable = fileManager.GetDataTable("ITEMS");
-                DataTable affixTable = fileManager.GetDataTable("AFFIXES");
-                DataTable affixNames = fileManager.GetDataTable("Strings_Affix");
+                DataTable itemsTable = _fileManager.GetDataTable("ITEMS");
+                DataTable affixTable = _fileManager.GetDataTable("AFFIXES");
+                DataTable affixNames = _fileManager.GetDataTable("Strings_Affix");
                 if (itemsTable != null && affixTable != null)
                 {
                     if (!itemsTable.Columns.Contains("code") || !itemsTable.Columns.Contains("String_string"))
@@ -213,12 +211,15 @@ namespace Reanimator.Forms
 
                     // does it have an affix/prefix
                     String affixString = String.Empty;
-                    for (int s = 0; s < item.Stats.NameCount; s++)
+                    foreach (UnitObjectStats.Stat stat in item.Stats.Stats.Values)
                     {
+                        
+                    //for (int s = 0; s < item.Stats.NameCount; s++)
+                    //{
                         // "applied_affix"
-                        if (item.Stats[s].Id == (int)ItemValueNames.applied_affix)
+                        if (stat.Code == (int)ItemValueNames.applied_affix)
                         {
-                            int affixCode = item.Stats[s].values[0].StatValue;
+                            int affixCode = stat.Values[0].Value;
                             DataRow[] affixRows = affixTable.Select(String.Format("code = '{0}'", affixCode));
                             if (affixRows.Length > 0)
                             {
@@ -243,10 +244,10 @@ namespace Reanimator.Forms
                         }
 
                         // "item_quality"
-                        if (item.Stats[s].Id == (int)ItemValueNames.item_quality)
+                        if (stat.Code == (int)ItemValueNames.item_quality)
                         {
                             // is unique || is mutant then no affix
-                            int itemQualityCode = item.Stats[s].values[0].StatValue;
+                            int itemQualityCode = stat.Values[0].Value;
                             if (itemQualityCode == (int)ItemQuality.Unique || itemQualityCode == (int)ItemQuality.Mutant)
                             {
                                 affixString = String.Empty;
@@ -276,15 +277,23 @@ namespace Reanimator.Forms
         {
             //if (!initialized) return;
 
-            for (int counter = 0; counter < unit.Stats.stats.Count; counter++)
+            foreach (UnitObjectStats.Stat unitStats in unit.Stats.Stats.Values)
             {
-                UnitObject.StatBlock.Stat unitStats = unit.Stats[counter];
-
                 if (unitStats.Name != valueName) continue;
 
-                unitStats.values[0].StatValue = value;
+                unitStats.Values[0].Value = value;
                 return true;
             }
+
+            //for (int counter = 0; counter < unit.Stats.Stats.Count; counter++)
+            //{
+            //    UnitObjectStats.Stat unitStats = unit.Stats[counter];
+
+            //    if (unitStats.Name != valueName) continue;
+
+            //    unitStats.Values[0].Value = value;
+            //    return true;
+            //}
 
             return false;
         }
@@ -293,99 +302,155 @@ namespace Reanimator.Forms
         {
             //if (!initialized) return;
 
-            for (int counter = 0; counter < unit.Stats.stats.Count; counter++)
+            foreach (UnitObjectStats.Stat unitStats in unit.Stats.Stats.Values)
             {
-                UnitObject.StatBlock.Stat unitStats = unit.Stats[counter];
+                if (unitStats.Code != valueId) continue;
 
-                if (unitStats.Id != valueId) continue;
-
-                unitStats.values[0].StatValue = value;
+                unitStats.Values[0].Value = value;
                 return true;
             }
+
+            //for (int counter = 0; counter < unit.Stats.Stats.Count; counter++)
+            //{
+            //    UnitObjectStats.Stat unitStats = unit.Stats[counter];
+
+            //    if (unitStats.Code != valueId) continue;
+
+            //    unitStats.Values[0].Value = value;
+            //    return true;
+            //}
 
             return false;
         }
 
-        public static bool SetComplexValue(UnitObject unit, string valueName, UnitObject.StatBlock.Stat stat)
+        public static bool SetComplexValue(UnitObject unit, string valueName, UnitObjectStats.Stat stat)
         {
             //if (!initialized) return;
 
-            for (int counter = 0; counter < unit.Stats.stats.Count; counter++)
+            foreach (UnitObjectStats.Stat unitStats in unit.Stats.Stats.Values)
             {
-                UnitObject.StatBlock.Stat unitStats = unit.Stats[counter];
-
                 if (unitStats.Name != valueName) continue;
 
-                unitStats = stat;
                 return true;
             }
+
+            //for (int counter = 0; counter < unit.Stats.Stats.Count; counter++)
+            //{
+            //    UnitObjectStats.Stat unitStats = unit.Stats[counter];
+
+            //    if (unitStats.Name != valueName) continue;
+
+            //    unitStats = stat;
+            //    return true;
+            //}
 
             return false;
         }
 
         public static int GetSimpleValue(UnitObject unit, string valueName)
         {
-            for (int counter = 0; counter < unit.Stats.stats.Count; counter++)
+            foreach (UnitObjectStats.Stat unitStats in unit.Stats.Stats.Values)
             {
-                UnitObject.StatBlock.Stat unitStats = unit.Stats[counter];
-
                 if (unitStats.Name == valueName)
                 {
-                    return unitStats.values[0].StatValue;
+                    return unitStats.Values[0].Value;
                 }
             }
+
+            //for (int counter = 0; counter < unit.Stats.Stats.Count; counter++)
+            //{
+            //    UnitObjectStats.Stat unitStats = unit.Stats[counter];
+
+            //    if (unitStats.Name == valueName)
+            //    {
+            //        return unitStats.Values[0].Value;
+            //    }
+            //}
             //MessageBox.Show("Field \"" + valueName + "\" not present in unit " + unit.Name + "!");
+
             return 0;
         }
 
         public static int GetSimpleValue(UnitObject unit, int valueId)
         {
-            for (int counter = 0; counter < unit.Stats.stats.Count; counter++)
+            foreach (UnitObjectStats.Stat unitStats in unit.Stats.Stats.Values)
             {
-                UnitObject.StatBlock.Stat unitStats = unit.Stats[counter];
+                if (unitStats.Code != valueId) continue;
 
-                if (unitStats.Id == valueId)
+                UnitObjectStats.Stat.StatValue entry = unitStats.Values[0];
+
+                // if all atributes are 0 the value is most likely a simple value
+                if (entry.Param1 == 0 && entry.Param2 == 0 && entry.Param3 == 0)
                 {
-                    UnitObject.StatBlock.Stat.Values entry = unitStats.values[0];
-
-                    // if all atributes are 0 the value is most likely a simple value
-                    if (entry.Attribute1 == 0 && entry.Attribute2 == 0 && entry.Attribute3 == 0)
-                    {
-                        return entry.StatValue;
-                    }
-
-                    ExceptionLogger.LogException(new Exception("IsComplexAttributeException"), "GetSimpleValue", unitStats.Id + " is of type ComplexValue", false);
+                    return entry.Value;
                 }
+
+                ExceptionLogger.LogException(new Exception("IsComplexAttributeException"), "GetSimpleValue", unitStats.Code + " is of type ComplexValue", false);
             }
+
+            //for (int counter = 0; counter < unit.Stats.Stats.Count; counter++)
+            //{
+            //    UnitObjectStats.Stat unitStats = unit.Stats[counter];
+
+            //    if (unitStats.Code == valueId)
+            //    {
+            //        UnitObjectStats.Stat.StatValue entry = unitStats.Values[0];
+
+            //        // if all atributes are 0 the value is most likely a simple value
+            //        if (entry.Param1 == 0 && entry.Param2 == 0 && entry.Param3 == 0)
+            //        {
+            //            return entry.Value;
+            //        }
+
+            //        ExceptionLogger.LogException(new Exception("IsComplexAttributeException"), "GetSimpleValue", unitStats.Code + " is of type ComplexValue", false);
+            //    }
+            //}
             //MessageBox.Show("Field \"" + valueName + "\" not present in unit " + unit.Name + "!");
+
             return 0;
         }
 
-        public static UnitObject.StatBlock.Stat GetComplexValue(UnitObject unit, string valueName)
+        public static UnitObjectStats.Stat GetComplexValue(UnitObject unit, string valueName)
         {
-            for (int counter = 0; counter < unit.Stats.stats.Count; counter++)
+            foreach (UnitObjectStats.Stat unitStats in unit.Stats.Stats.Values)
             {
-                UnitObject.StatBlock.Stat unitStats = unit.Stats[counter];
-
                 if (unitStats.Name.Equals(valueName, StringComparison.OrdinalIgnoreCase))
                 {
                     return unitStats;
                 }
             }
+
+            //for (int counter = 0; counter < unit.Stats.Stats.Count; counter++)
+            //{
+            //    UnitObjectStats.Stat unitStats = unit.Stats[counter];
+
+            //    if (unitStats.Name.Equals(valueName, StringComparison.OrdinalIgnoreCase))
+            //    {
+            //        return unitStats;
+            //    }
+            //}
+
             return null;
         }
 
-        public static UnitObject.StatBlock.Stat GetComplexValue(UnitObject unit, ItemValueNames valueName)
+        public static UnitObjectStats.Stat GetComplexValue(UnitObject unit, ItemValueNames valueName)
         {
-            for (int counter = 0; counter < unit.Stats.stats.Count; counter++)
+            foreach (UnitObjectStats.Stat unitStats in unit.Stats.Stats.Values)
             {
-                UnitObject.StatBlock.Stat unitStats = unit.Stats[counter];
-
-                if (unitStats.Id == (int)valueName)
+                if (unitStats.Code == (int)valueName)
                 {
                     return unitStats;
                 }
             }
+            //for (int counter = 0; counter < unit.Stats.Stats.Count; counter++)
+            //{
+            //    UnitObjectStats.Stat unitStats = unit.Stats[counter];
+
+            //    if (unitStats.Code == (int)valueName)
+            //    {
+            //        return unitStats;
+            //    }
+            //}
             return null;
         }
 
@@ -398,37 +463,37 @@ namespace Reanimator.Forms
         /// <param name="bitCount">The bitCount of this value (possibly defines the maximum value of the "value" entry)</param>
         public static void AddSimpleValue(UnitObject unit, ItemValueNames valueName, int value, int bitCount)
         {
-            List<UnitObject.StatBlock.Stat> newStats = new List<UnitObject.StatBlock.Stat>();
+            List<UnitObjectStats.Stat> newStats = new List<UnitObjectStats.Stat>();
             //copies the existing values to a new array
-            newStats.AddRange(unit.Stats.stats);
+            newStats.AddRange(unit.Stats.Stats.Values);
 
             //check if the value already exists
-            if (newStats.Find(tmp => tmp.Id == (int)valueName) != null)
+            if (newStats.Find(tmp => tmp.Code == (int)valueName) != null)
             {
                 return;
             }
 
             //generates a new stat
-            UnitObject.StatBlock.Stat newStat = new UnitObject.StatBlock.Stat();
+            UnitObjectStats.Stat newStat = new UnitObjectStats.Stat();
             //generates the entry that holds the stat value
-            UnitObject.StatBlock.Stat.Values newValue = new UnitObject.StatBlock.Stat.Values();
-            newStat.values = new List<UnitObject.StatBlock.Stat.Values>();
+            UnitObjectStats.Stat.StatValue newValue = new UnitObjectStats.Stat.StatValue();
+            //newStat.Values = new List<UnitObjectStats.Stat.StatValue>();
             //adds the entry to the new stat
-            newStat.values.Add(newValue);
+            newStat.Values.Add(newValue);
             //sets the bitCOunt value (maximum stat value defined by the number of bits?)
-            newStat.BitCount = bitCount;
+            //newStat.BitCount = bitCount;
             //sets the length of the stat array (may be unnecessary)
             //newStat.Length = 1;
             //sets the Id of the new stat
-            newStat.Code = (short)valueName;
-            newStat.SkipResource = 1;
+            //newStat.Code = (short)valueName;
+            //newStat.SkipResource = 1;
             //newStat.repeatCount = 1;
 
             //adds the new value to the array
             newStats.Add(newStat);
 
             //assigns the new array to the unit
-            unit.Stats.stats.Add(newStat);// = newStats.ToArray();
+            unit.Stats.Stats.TryAdd(newStat.Code, newStat);// = newStats.ToArray();
             //unit.Stats.statCount = newStats.Count;
         }
 

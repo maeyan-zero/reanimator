@@ -146,7 +146,6 @@ namespace Revival.Common
             return (FieldGetValueDelegate)getMethod.CreateDelegate(typeof(FieldGetValueDelegate));
         }
 
-
         // "getter"
         public FieldGetValueDelegate this[String fieldName]
         {

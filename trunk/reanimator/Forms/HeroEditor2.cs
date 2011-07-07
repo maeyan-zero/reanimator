@@ -91,7 +91,7 @@ namespace Reanimator.Forms
 
         private void button1_Click(object sender, EventArgs e)
         {
-            UnitObject.StatBlock.Stat skillLevel = _hero.Stats.stats[18];
+            UnitObjectStats.Stat skillLevel = _hero.Stats.Stats[18];
             UnitHelpFunctions.SaveCharacterFile(_hero, _filePath);
         }
     }

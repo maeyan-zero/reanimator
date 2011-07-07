@@ -131,15 +131,15 @@ namespace Reanimator.Forms.ItemTransfer
             // get inventory type that the item uses
             TradeInventoryTypes type = TradeInventoryTypes.Inventory;
 
-            if (item.InventoryType == (int)InventoryTypes.Cube)
+            if (item.InventoryLocationIndex == (int)InventoryTypes.Cube)
             {
                 type = TradeInventoryTypes.Cube;
             }
-            else if (item.InventoryType == (int)InventoryTypes.Stash)
+            else if (item.InventoryLocationIndex == (int)InventoryTypes.Stash)
             {
                 type = TradeInventoryTypes.Stash;
             }
-            else if (item.InventoryType == (int)InventoryTypes.Inventory)
+            else if (item.InventoryLocationIndex == (int)InventoryTypes.Inventory)
             {
                 type = TradeInventoryTypes.Inventory;
             }
@@ -181,15 +181,15 @@ namespace Reanimator.Forms.ItemTransfer
             // get inventory type that the item uses
             TradeInventoryTypes type = TradeInventoryTypes.Inventory;
 
-            if (item.InventoryType == (int)InventoryTypes.Cube)
+            if (item.InventoryLocationIndex == (int)InventoryTypes.Cube)
             {
                 type = TradeInventoryTypes.Cube;
             }
-            else if (item.InventoryType == (int)InventoryTypes.Stash)
+            else if (item.InventoryLocationIndex == (int)InventoryTypes.Stash)
             {
                 type = TradeInventoryTypes.Stash;
             }
-            else if (item.InventoryType == (int)InventoryTypes.Inventory)
+            else if (item.InventoryLocationIndex == (int)InventoryTypes.Inventory)
             {
                 type = TradeInventoryTypes.Inventory;
             }

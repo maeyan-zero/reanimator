@@ -229,7 +229,7 @@ namespace Reanimator.Forms.HeroEditorFunctions
 
     public class CharacterWaypoint : CharacterProperty
     {
-        UnitObject.StatBlock.Stat _waypoints;
+        UnitObjectStats.Stat _waypoints;
         string[] _waypointNames;
 
         //// todo: rewrite public CharacterWaypoint(Unit heroUnit, TableDataSet dataSet)
@@ -268,37 +268,37 @@ namespace Reanimator.Forms.HeroEditorFunctions
         //    //UnitHelpFunctions.SetComplexValue(_hero, ItemValueNames.waypoint_flags.ToString(), _waypoints);
         //}
 
-        private UnitObject.StatBlock.Stat.Values GenerateNormal()
+        private UnitObjectStats.Stat.StatValue GenerateNormal()
         {
-            UnitObject.StatBlock.Stat.Values normal = new UnitObject.StatBlock.Stat.Values();
-            normal.Attribute2 = 16705;
-            normal.StatValue = 1535;
+            UnitObjectStats.Stat.StatValue normal = new UnitObjectStats.Stat.StatValue();
+            normal.Param2 = 16705;
+            normal.Value = 1535;
             return normal;
         }
 
-        private UnitObject.StatBlock.Stat.Values GenerateNightmare()
+        private UnitObjectStats.Stat.StatValue GenerateNightmare()
         {
-            UnitObject.StatBlock.Stat.Values nightmare = new UnitObject.StatBlock.Stat.Values();
-            nightmare.Attribute2 = 16961;
-            nightmare.StatValue = 1535;
+            UnitObjectStats.Stat.StatValue nightmare = new UnitObjectStats.Stat.StatValue();
+            nightmare.Param2 = 16961;
+            nightmare.Value = 1535;
             return nightmare;
         }
 
         public int NormalWaypoints
         {
-            get { return _waypoints.values[0].StatValue; }
+            get { return _waypoints.Values[0].Value; }
             set
             {
-                _waypoints.values[0].StatValue = value;
+                _waypoints.Values[0].Value = value;
             }
         }
 
         public int NightmareWaypoints
         {
-            get { return _waypoints.values[1].StatValue; }
+            get { return _waypoints.Values[1].Value; }
             set
             {
-                _waypoints.values[1].StatValue = value;
+                _waypoints.Values[1].Value = value;
             }
         }
 
@@ -766,9 +766,9 @@ namespace Reanimator.Forms.HeroEditorFunctions
     //    //    skills.values = availableSkills;
     //    //}
 
-    //    private SkillTab CreateSkillsFromRow(List<UnitObject.StatBlock.Stat.Values> availableSkills, DataTable skillTable, DataRow[] skillRows)
+    //    private SkillTab CreateSkillsFromRow(List<UnitObjectStats.Stat.Values> availableSkills, DataTable skillTable, DataRow[] skillRows)
     //    {
-    //        List<UnitObject.StatBlock.Stat.Values> values = new List<UnitObject.StatBlock.Stat.Values>();
+    //        List<UnitObjectStats.Stat.Values> values = new List<UnitObjectStats.Stat.Values>();
     //        SkillTab skillInSkillTab = new SkillTab();
 
     //        //iterate through all available skills
@@ -777,7 +777,7 @@ namespace Reanimator.Forms.HeroEditorFunctions
     //            //get the skill id
     //            int skillId = (int)row["code"];
     //            //if the skill is already present, use that one
-    //            UnitObject.StatBlock.Stat.Values tmpSkill = availableSkills.Find(tmp => tmp.Attribute1 == skillId);
+    //            UnitObjectStats.Stat.Values tmpSkill = availableSkills.Find(tmp => tmp.Attribute1 == skillId);
     //            if (tmpSkill != null)
     //            {
     //                values.Add(tmpSkill);
@@ -785,7 +785,7 @@ namespace Reanimator.Forms.HeroEditorFunctions
     //            //if not, add a new one
     //            else
     //            {
-    //                UnitObject.StatBlock.Stat.Values skillEntry = new UnitObject.StatBlock.Stat.Values();
+    //                UnitObjectStats.Stat.Values skillEntry = new UnitObjectStats.Stat.Values();
     //                skillEntry.Attribute1 = skillId;
 
     //                values.Add(skillEntry);
@@ -794,7 +794,7 @@ namespace Reanimator.Forms.HeroEditorFunctions
     //        //_hero.Stats.statCount
 
     //        //and finally... initialize all skills :)
-    //        foreach (UnitObject.StatBlock.Stat.Values skillBlock in values)
+    //        foreach (UnitObjectStats.Stat.Values skillBlock in values)
     //        {
     //            Skill skill = InitializeSkill(skillTable, skillBlock);
     //            skillInSkillTab.Skills.Add(skill);
@@ -802,7 +802,7 @@ namespace Reanimator.Forms.HeroEditorFunctions
     //        return skillInSkillTab;
     //    }
 
-    //    private Skill InitializeSkill(DataTable table, UnitObject.StatBlock.Stat.Values skillBlock)
+    //    private Skill InitializeSkill(DataTable table, UnitObjectStats.Stat.Values skillBlock)
     //    {
     //        DataRow[] availableSkillRows = table.Select("code = " + skillBlock.Attribute1);
 
@@ -1489,11 +1489,11 @@ namespace Reanimator.Forms.HeroEditorFunctions
         {
             get
             {
-                return new Size(UnitObject.CharacterWidth, UnitObject.CharacterHeight);
+                return new Size(UnitObject.CharacterBulk, UnitObject.CharacterHeight);
             }
             set
             {
-                UnitObject.CharacterWidth = value.Width;
+                UnitObject.CharacterBulk = value.Width;
                 UnitObject.CharacterHeight = value.Height;
             }
         }

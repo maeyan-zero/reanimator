@@ -14,7 +14,7 @@ namespace Reanimator.Forms
         AttributeValues[] currentMinigame;
         Random random;
         Difficulty difficulty;
-        UnitObject.StatBlock.Stat.Values[] minigameValues;
+        UnitObjectStats.Stat.StatValue[] minigameValues;
 
         // List of available mini game icons
         private enum MinigameIcons
@@ -64,7 +64,7 @@ namespace Reanimator.Forms
             InitializeComponent();
         }
 
-        public MinigameControl(UnitObject.StatBlock.Stat.Values[] minigame) : this()
+        public MinigameControl(UnitObjectStats.Stat.StatValue[] minigame) : this()
         {
             minigameValues = minigame;
             random = new Random(DateTime.Now.Millisecond);
@@ -81,8 +81,8 @@ namespace Reanimator.Forms
         {
             for (int counter = 0; counter < minigameValues.Length; counter++)
             {
-                AttributeValues game = GetMatchingValues(minigameValues[counter].Attribute1, minigameValues[counter].Attribute2);
-                SetMinigame(game.Icon, minigameValues[counter].StatValue - 1, counter + 1);
+                AttributeValues game = GetMatchingValues(minigameValues[counter].Param1, minigameValues[counter].Param2);
+                SetMinigame(game.Icon, minigameValues[counter].Value - 1, counter + 1);
             }
         }
 
@@ -193,9 +193,9 @@ namespace Reanimator.Forms
             button.Tag = values[valueIndex];
             currentMinigame[buttonIndex] = values[valueIndex];
 
-            minigameValues[buttonIndex].Attribute1 = values[valueIndex].Attr0;
-            minigameValues[buttonIndex].Attribute2 = values[valueIndex].Attr1;
-            minigameValues[buttonIndex].StatValue = count + 1;
+            minigameValues[buttonIndex].Param1 = values[valueIndex].Attr0;
+            minigameValues[buttonIndex].Param2 = values[valueIndex].Attr1;
+            minigameValues[buttonIndex].Value = count + 1;
         }
 
         private int CheckIfLAreadyExists(int newIndex)

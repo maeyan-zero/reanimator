@@ -85,10 +85,8 @@ namespace Reanimator.Forms
             {
                 stats_ListBox.Items.Clear();
 
-                for (int i = 0; i < unit.Stats.stats.Count; i++)
+                foreach (UnitObjectStats.Stat stat in unit.Stats.Stats.Values)
                 {
-                    UnitObject.StatBlock.Stat stat = unit.Stats[i];
-
                     stats_ListBox.Items.Add(stat);
                 }
             }
@@ -104,71 +102,71 @@ namespace Reanimator.Forms
             {
                 panel1.Controls.Clear();
 
-                UnitObject.StatBlock.Stat stat = (UnitObject.StatBlock.Stat)stats_ListBox.SelectedItem;
+                // not really needed anymore
+                //UnitObjectStats.Stat stat = (UnitObjectStats.Stat)stats_ListBox.SelectedItem;
                 // yea, copy/paste nastiness ftw
-                if (stat.Attribute1 != null)
-                {
-                    statAttribute1_GroupBox.Enabled = true;
-                    statAttribute1_bitCount_TextBox.DataBindings.Clear();
-                    statAttribute1_unknown1_TextBox.DataBindings.Clear();
-                    statAttribute1_unknown1_1_TextBox.DataBindings.Clear();
-                    statAttribute1_tableId_TextBox.DataBindings.Clear();
-                    statAttribute1_bitCount_TextBox.DataBindings.Add("Text", stat.Attribute1, "BitCount");
-                    statAttribute1_unknown1_TextBox.DataBindings.Add("Text", stat.Attribute1, "Unknown1");
-                    statAttribute1_unknown1_1_TextBox.DataBindings.Add("Text", stat.Attribute1, "Unknown1_1");
-                    // todo: rewrite statAttribute1_tableId_TextBox.Text = stat.Attribute1.TableId > 0 ? _tableFiles.GetExcelTableFromCode(stat.Attribute1.TableId).StringId : "NA";
-                }
-                else
-                {
-                    statAttribute1_GroupBox.Enabled = false;
-                    statAttribute1_bitCount_TextBox.Clear();
-                    statAttribute1_unknown1_1_TextBox.Clear();
-                    statAttribute1_unknown1_TextBox.Clear();
-                    statAttribute1_tableId_TextBox.Clear();
-                }
-                if (stat.Attribute2 != null)
-                {
-                    statAttribute2_GroupBox.Enabled = true;
-                    statAttribute2_bitCount_TextBox.DataBindings.Clear();
-                    statAttribute2_unknown1_TextBox.DataBindings.Clear();
-                    statAttribute2_unknown1_1_TextBox.DataBindings.Clear();
-                    statAttribute2_tableId_TextBox.DataBindings.Clear();
-                    statAttribute2_bitCount_TextBox.DataBindings.Add("Text", stat.Attribute2, "BitCount");
-                    statAttribute2_unknown1_TextBox.DataBindings.Add("Text", stat.Attribute2, "Unknown1");
-                    statAttribute2_unknown1_1_TextBox.DataBindings.Add("Text", stat.Attribute2, "Unknown1_1");
-                    // todo: rewrite statAttribute2_tableId_TextBox.Text = stat.Attribute2.TableId > 0 ? _tableFiles.GetExcelTableFromCode(stat.Attribute2.TableId).StringId : "NA";
-                }
-                else
-                {
-                    statAttribute2_GroupBox.Enabled = false;
-                    statAttribute2_bitCount_TextBox.Clear();
-                    statAttribute2_unknown1_1_TextBox.Clear();
-                    statAttribute2_unknown1_TextBox.Clear();
-                    statAttribute2_tableId_TextBox.Clear();
-                }
-                if (stat.Attribute3 != null)
-                {
-                    statAttribute3_GroupBox.Enabled = true;
-                    statAttribute3_bitCount_TextBox.DataBindings.Clear();
-                    statAttribute3_unknown1_TextBox.DataBindings.Clear();
-                    statAttribute3_unknown1_1_TextBox.DataBindings.Clear();
-                    statAttribute3_tableId_TextBox.DataBindings.Clear();
-                    statAttribute3_bitCount_TextBox.DataBindings.Add("Text", stat.Attribute3, "BitCount");
-                    statAttribute3_unknown1_TextBox.DataBindings.Add("Text", stat.Attribute3, "Unknown1");
-                    statAttribute3_unknown1_1_TextBox.DataBindings.Add("Text", stat.Attribute3, "Unknown1_1");
-                    // todo: rewrite statAttribute3_tableId_TextBox.Text = stat.Attribute3.TableId > 0 ? _tableFiles.GetExcelTableFromCode(stat.Attribute3.TableId).StringId : "NA";
-                }
-                else
-                {
-                    statAttribute3_GroupBox.Enabled = false;
-                    statAttribute3_bitCount_TextBox.Clear();
-                    statAttribute3_unknown1_1_TextBox.Clear();
-                    statAttribute3_unknown1_TextBox.Clear();
-                    statAttribute3_tableId_TextBox.Clear();
-                }
+                //if (stat.Attribute1 != null)
+                //{
+                //    statAttribute1_GroupBox.Enabled = true;
+                //    statAttribute1_bitCount_TextBox.DataBindings.Clear();
+                //    statAttribute1_unknown1_TextBox.DataBindings.Clear();
+                //    statAttribute1_unknown1_1_TextBox.DataBindings.Clear();
+                //    statAttribute1_tableId_TextBox.DataBindings.Clear();
+                //    statAttribute1_bitCount_TextBox.DataBindings.Add("Text", stat.Attribute1, "BitCount");
+                //    statAttribute1_unknown1_TextBox.DataBindings.Add("Text", stat.Attribute1, "Unknown1");
+                //    statAttribute1_unknown1_1_TextBox.DataBindings.Add("Text", stat.Attribute1, "Unknown1_1");
+                //    // todo: rewrite statAttribute1_tableId_TextBox.Text = stat.Attribute1.TableId > 0 ? _tableFiles.GetExcelTableFromCode(stat.Attribute1.TableId).StringId : "NA";
+                //}
+                //else
+                //{
+                //    statAttribute1_GroupBox.Enabled = false;
+                //    statAttribute1_bitCount_TextBox.Clear();
+                //    statAttribute1_unknown1_1_TextBox.Clear();
+                //    statAttribute1_unknown1_TextBox.Clear();
+                //    statAttribute1_tableId_TextBox.Clear();
+                //}
+                //if (stat.Attribute2 != null)
+                //{
+                //    statAttribute2_GroupBox.Enabled = true;
+                //    statAttribute2_bitCount_TextBox.DataBindings.Clear();
+                //    statAttribute2_unknown1_TextBox.DataBindings.Clear();
+                //    statAttribute2_unknown1_1_TextBox.DataBindings.Clear();
+                //    statAttribute2_tableId_TextBox.DataBindings.Clear();
+                //    statAttribute2_bitCount_TextBox.DataBindings.Add("Text", stat.Attribute2, "BitCount");
+                //    statAttribute2_unknown1_TextBox.DataBindings.Add("Text", stat.Attribute2, "Unknown1");
+                //    statAttribute2_unknown1_1_TextBox.DataBindings.Add("Text", stat.Attribute2, "Unknown1_1");
+                //    // todo: rewrite statAttribute2_tableId_TextBox.Text = stat.Attribute2.TableId > 0 ? _tableFiles.GetExcelTableFromCode(stat.Attribute2.TableId).StringId : "NA";
+                //}
+                //else
+                //{
+                //    statAttribute2_GroupBox.Enabled = false;
+                //    statAttribute2_bitCount_TextBox.Clear();
+                //    statAttribute2_unknown1_1_TextBox.Clear();
+                //    statAttribute2_unknown1_TextBox.Clear();
+                //    statAttribute2_tableId_TextBox.Clear();
+                //}
+                //if (stat.Attribute3 != null)
+                //{
+                //    statAttribute3_GroupBox.Enabled = true;
+                //    statAttribute3_bitCount_TextBox.DataBindings.Clear();
+                //    statAttribute3_unknown1_TextBox.DataBindings.Clear();
+                //    statAttribute3_unknown1_1_TextBox.DataBindings.Clear();
+                //    statAttribute3_tableId_TextBox.DataBindings.Clear();
+                //    statAttribute3_bitCount_TextBox.DataBindings.Add("Text", stat.Attribute3, "BitCount");
+                //    statAttribute3_unknown1_TextBox.DataBindings.Add("Text", stat.Attribute3, "Unknown1");
+                //    statAttribute3_unknown1_1_TextBox.DataBindings.Add("Text", stat.Attribute3, "Unknown1_1");
+                //    // todo: rewrite statAttribute3_tableId_TextBox.Text = stat.Attribute3.TableId > 0 ? _tableFiles.GetExcelTableFromCode(stat.Attribute3.TableId).StringId : "NA";
+                //}
+                //else
+                //{
+                //    statAttribute3_GroupBox.Enabled = false;
+                //    statAttribute3_bitCount_TextBox.Clear();
+                //    statAttribute3_unknown1_1_TextBox.Clear();
+                //    statAttribute3_unknown1_TextBox.Clear();
+                //    statAttribute3_tableId_TextBox.Clear();
+                //}
 
-                SetStatValues(stat);
-
+                //SetStatValues(stat);
             }
             catch (Exception ex)
             {
@@ -182,21 +180,18 @@ namespace Reanimator.Forms
          * if Attribute1 not set -> Resource = tableID && values.Attribute1 set -> values.Attribute1 = codeID
          * if Attribute1 not set -> Resource = tableID && values.Attribute1 not set -> values.stat = codeID
          */
-        private void SetStatValues(UnitObject.StatBlock.Stat stat)
+        private void SetStatValues(UnitObjectStats.Stat stat)
         {
             int heightOffset = 0;
             for (int i = 0; i < stat.Length; i++)
             {
-                UnitObject.StatBlock.Stat.Values statValues = stat[i];
+                UnitObjectStats.Stat.StatValue statValues = stat[i];
 
                 bool hasExtraAttribute = false;
                 string lookUpString;
                 for (int j = 0; j < 3; j++)
                 {
-                    if (stat.AttributeAt(j) == null)
-                    {
-                        break;
-                    }
+                    if (stat.GetParamAt(j) == Xls.TableCodes.Null) break;
 
                     Label eaValueLabel = new Label { Text = "Attr" + j + ": ", Width = 40, Top = 3 + heightOffset };
                     TextBox eaMappingTextBox = new TextBox { Left = eaValueLabel.Right, Top = heightOffset, Width = 80 };
@@ -207,22 +202,22 @@ namespace Reanimator.Forms
                     if (stat.Name.Equals(ItemValueNames.minigame_category_needed.ToString(), StringComparison.InvariantCultureIgnoreCase))
                     {
                         // checks for minigame entries by using the values as the minigame doesn't define any tables -> Yes it does... needs some reworking
-                        lookUpString = GetMinigameGoal(stat.values[i].Attribute1, stat.values[i].Attribute2);
+                        lookUpString = GetMinigameGoal(stat.Values[i].Param1, stat.Values[i].Param2);
                     }
                     else
                     {
-                        lookUpString = _itemFunctions.MapIdToString(stat, stat.AttributeAt(j).TableCode, stat.values[i].AttributeAt(j));
+                        lookUpString = _itemFunctions.MapIdToString(stat, stat.GetParamAt(j), stat.Values[i].GetParamAt(j));
                     }
 
                     if (lookUpString != string.Empty)
                     {
                         eaMappingTextBox.Text = lookUpString;
-                        eaValueTextBox.Text = stat.values[i].AttributeAt(j).ToString();
+                        eaValueTextBox.Text = stat.Values[i].GetParamAt(j).ToString();
                     }
                     else
                     {
                         eaMappingTextBox.DataBindings.Add("Text", statValues, "Attribute" + (j + 1));
-                        eaValueTextBox.Text = stat.values[i].AttributeAt(j).ToString();
+                        eaValueTextBox.Text = stat.Values[i].GetParamAt(j).ToString();
                     }
 
                     panel1.Controls.Add(eaValueLabel);
@@ -242,7 +237,8 @@ namespace Reanimator.Forms
                 Label valueLabel = new Label { Text = "Value: ", Left = leftOffset, Width = 40, Top = 3 + heightOffset };
                 TextBox valueTextBox = new TextBox { Left = valueLabel.Right, Top = heightOffset };
 
-                lookUpString = _itemFunctions.MapIdToString(stat, stat.Resource, stat.values[i].StatValue);
+                //lookUpString = _itemFunctions.MapIdToString(stat, stat.Resource, stat.Values[i].Value);
+                lookUpString = _itemFunctions.MapIdToString(stat, stat.Param1TableCode, stat.Values[i].Value);
                 if (!String.IsNullOrEmpty(lookUpString))
                 {
                     valueTextBox.Text = lookUpString;
@@ -371,26 +367,26 @@ namespace Reanimator.Forms
         private void InitUnknownStatList()
         {
             string text = string.Empty;
-            text += "playerFlagCount1: " + _heroUnit.PlayerFlags1.Count + "\n";
-            text += "playerFlagCount2: " + _heroUnit.PlayerFlags2.Count + "\n";
-            if (_heroUnit.PlayerFlags1 != null)
+            text += "playerFlagCount1: " + _heroUnit.StateCodes1.Count + "\n";
+            text += "playerFlagCount2: " + _heroUnit.StateCodes2.Count + "\n";
+            if (_heroUnit.StateCodes1 != null)
             {
-                foreach (int val in _heroUnit.PlayerFlags1)
+                foreach (int val in _heroUnit.StateCodes1)
                 {
-                    text += "playerFlags1: " + val + "\n";
+                    text += "StateCodes1: " + val + "\n";
                 }
             }
-            if (_heroUnit.PlayerFlags2 != null)
+            if (_heroUnit.StateCodes2 != null)
             {
-                foreach (int val in _heroUnit.PlayerFlags2)
+                foreach (int val in _heroUnit.StateCodes2)
                 {
-                    text += "PlayerFlags2: " + val + "\n";
+                    text += "StateCodes2: " + val + "\n";
                 }
             }
-            text += "TimeStamp1: " + _heroUnit.TimeStamp1 + "\n";
-            text += "TimeStamp2: " + _heroUnit.TimeStamp2 + "\n";
-            text += "TimeStamp3: " + _heroUnit.TimeStamp3 + "\n";
-            text += "InventoryType: " + _heroUnit.InventoryType + "\n";
+            text += "TimeStamp1: " + _heroUnit._timeStamp1 + "\n";
+            text += "TimeStamp2: " + _heroUnit._timeStamp2 + "\n";
+            text += "TimeStamp3: " + _heroUnit._timeStamp3 + "\n";
+            text += "InventoryType: " + _heroUnit.InventoryLocationIndex + "\n";
             text += "InventoryPositionX: " + _heroUnit.InventoryPositionX + "\n";
             text += "InventoryPositionY: " + _heroUnit.InventoryPositionY + "\n";
             if (_heroUnit.Unknown0103Int64 != 0)
@@ -398,7 +394,7 @@ namespace Reanimator.Forms
                 text += "Unknown0103Int64: 0x" + _heroUnit.Unknown0103Int64.ToString("X16") + "\n";
             }
             text += "Unknown02: " + _heroUnit.Unknown02 + "\n";
-            text += "Unknown09: " + _heroUnit.Unknown09 + "\n";
+            text += "ItemLookGroupCode: " + _heroUnit.ItemLookGroupCode + "\n";
             if (_heroUnit.ObjectId != 0)
             {
                 text += "ObjectId: 0x" + _heroUnit.ObjectId.ToString("X16") + "\n";
@@ -406,32 +402,32 @@ namespace Reanimator.Forms
             text += "IsInventory: " + _heroUnit.IsInventory + "\n";
             text += "UnknownBool06: " + _heroUnit.UnknownBool06 + "\n";
             text += "IsDead: " + _heroUnit.IsDead + "\n";
-            text += "UnknownCount1F: " + _heroUnit.UnknownCount1F + "\n";
+            text += "SaveLocationsCount: " + _heroUnit.SaveLocations.Count + "\n";
             text += "UnitType: " + _heroUnit.UnitType + "\n";
 
             text += "\n\n\n\n";
 
             UnitObject.UnitAppearance appearance = _heroUnit.Appearance;
-            text += "Unknown1: " + appearance.Unknown1 + "\n";
+            text += "ArmorColorSetCode: " + appearance.ArmorColorSetCode + "\n";
             text += "Unknown16: 0x" + appearance.Unknown16.ToString("X16") + "\n";
-            text += "Unknown23: 0x" + appearance.Unknown23.ToString("X16") + "\n";
+            text += "Unknown23ColorSetsCode: 0x" + appearance.Unknown23ColorSetsCode.ToString("X16") + "\n";
 
             richTextBox2.Text = text;
         }
 
-        public static void Serialize(UnitObject.StatBlock.Stat stats, string path)
+        public static void Serialize(UnitObjectStats.Stat stats, string path)
         {
-            XmlSerializer serializer = new XmlSerializer(typeof(UnitObject.StatBlock.Stat));
+            XmlSerializer serializer = new XmlSerializer(typeof(UnitObjectStats.Stat));
             TextWriter tw = new StreamWriter(path);
             serializer.Serialize(tw, stats);
             tw.Close();
         }
 
-        public static UnitObject.StatBlock.Stat Deserialize(string path)
+        public static UnitObjectStats.Stat Deserialize(string path)
         {
-            XmlSerializer serializer = new XmlSerializer(typeof(UnitObject.StatBlock.Stat));
+            XmlSerializer serializer = new XmlSerializer(typeof(UnitObjectStats.Stat));
             TextReader tr = new StreamReader(path);
-            UnitObject.StatBlock.Stat stats = (UnitObject.StatBlock.Stat)serializer.Deserialize(tr);
+            UnitObjectStats.Stat stats = (UnitObjectStats.Stat)serializer.Deserialize(tr);
             tr.Close();
 
             return stats;
@@ -439,27 +435,27 @@ namespace Reanimator.Forms
 
         private void PopulateMinigame()
         {
-            UnitObject.StatBlock.Stat minigame = UnitHelpFunctions.GetComplexValue(_heroUnit, ItemValueNames.minigame_category_needed.ToString());
+            UnitObjectStats.Stat minigame = UnitHelpFunctions.GetComplexValue(_heroUnit, ItemValueNames.minigame_category_needed.ToString());
 
             // As long as VS won't let me place the control in the form by hand I'll initialize it here
-            MinigameControl control = new MinigameControl(minigame.values.ToArray());
+            MinigameControl control = new MinigameControl(minigame.Values.ToArray());
             p_miniGame.Controls.Add(control);
         }
 
         private void PopulateWaypoints()
         {
-            UnitObject.StatBlock.Stat wayPoints = UnitHelpFunctions.GetComplexValue(_heroUnit, ItemValueNames.waypoint_flags.ToString());
+            UnitObjectStats.Stat wayPoints = UnitHelpFunctions.GetComplexValue(_heroUnit, ItemValueNames.waypoint_flags.ToString());
 
             if (wayPoints != null)
             {
-                if (wayPoints.values.Count >= 1)
+                if (wayPoints.Values.Count >= 1)
                 {
-                    WayPointControl wpcNormal = new WayPointControl(wayPoints.values[0]);
+                    WayPointControl wpcNormal = new WayPointControl(wayPoints.Values[0]);
                     p_wpNormal.Controls.Add(wpcNormal);
                 }
-                if (wayPoints.values.Count >= 2)
+                if (wayPoints.Values.Count >= 2)
                 {
-                    WayPointControl wpcNightmare = new WayPointControl(wayPoints.values[1]);
+                    WayPointControl wpcNightmare = new WayPointControl(wayPoints.Values[1]);
                     p_wpNightmare.Controls.Add(wpcNightmare);
                 }
 
@@ -634,19 +630,19 @@ namespace Reanimator.Forms
         private void SetStateCheckBoxes()
         {
             // elite
-            if (_heroUnit.PlayerFlags1.Contains(21062) || _heroUnit.PlayerFlags2.Contains(21062))
+            if (_heroUnit.StateCodes1.Contains(21062) || _heroUnit.StateCodes2.Contains(21062))
             {
                 elite_CheckBox.Checked = true;
             }
 
             // hc
-            if (_heroUnit.PlayerFlags1.Contains(18243) || _heroUnit.PlayerFlags2.Contains(18243))
+            if (_heroUnit.StateCodes1.Contains(18243) || _heroUnit.StateCodes2.Contains(18243))
             {
                 hardcore_CheckBox.Checked = true;
             }
 
             // dead
-            if (_heroUnit.PlayerFlags1.Contains(18499) || _heroUnit.PlayerFlags2.Contains(18499))
+            if (_heroUnit.StateCodes1.Contains(18499) || _heroUnit.StateCodes2.Contains(18499))
             {
                 dead_CheckBox.Checked = true;
             }
@@ -680,13 +676,13 @@ namespace Reanimator.Forms
         {
             if (set)
             {
-                if (!_heroUnit.PlayerFlags1.Contains((short)stateId))
+                if (!_heroUnit.StateCodes1.Contains((short)stateId))
                 {
-                    _heroUnit.PlayerFlags1.Add((short)stateId);
+                    _heroUnit.StateCodes1.Add((short)stateId);
                 }
-                if (!_heroUnit.PlayerFlags2.Contains(stateId))
+                if (!_heroUnit.StateCodes2.Contains(stateId))
                 {
-                    _heroUnit.PlayerFlags2.Add(stateId);
+                    _heroUnit.StateCodes2.Add(stateId);
                 }
                 //Adds Subsriber status
                 //_heroUnit.PlayerFlags1.Add(18759);
@@ -694,8 +690,8 @@ namespace Reanimator.Forms
             }
             else
             {
-                _heroUnit.PlayerFlags1.Remove((short)stateId);
-                _heroUnit.PlayerFlags2.Remove(stateId);
+                _heroUnit.StateCodes1.Remove((short)stateId);
+                _heroUnit.StateCodes2.Remove(stateId);
             }
 
         }
@@ -705,12 +701,12 @@ namespace Reanimator.Forms
             richTextBox1.Text = string.Empty;
 
             richTextBox1.Text += "Flag1:\n";
-            richTextBox1.Text += _heroUnit.PlayerFlags1.Count + "\n";
-            if (_heroUnit.PlayerFlags1 != null)
+            richTextBox1.Text += _heroUnit.StateCodes1.Count + "\n";
+            if (_heroUnit.StateCodes1 != null)
             {
-                richTextBox1.Text += "Array size: " + _heroUnit.PlayerFlags1.Count + "\n";
+                richTextBox1.Text += "Array size: " + _heroUnit.StateCodes1.Count + "\n";
 
-                foreach (int flag in _heroUnit.PlayerFlags1)
+                foreach (int flag in _heroUnit.StateCodes1)
                 {
                     richTextBox1.Text += flag + "\n";
                 }
@@ -721,12 +717,12 @@ namespace Reanimator.Forms
             }
 
             richTextBox1.Text += "\n\nFlag2:\n";
-            richTextBox1.Text += _heroUnit.PlayerFlags2.Count + "\n";
-            if (_heroUnit.PlayerFlags2 != null)
+            richTextBox1.Text += _heroUnit.StateCodes2.Count + "\n";
+            if (_heroUnit.StateCodes2 != null)
             {
-                richTextBox1.Text += "Array size: " + _heroUnit.PlayerFlags2.Count + "\n";
+                richTextBox1.Text += "Array size: " + _heroUnit.StateCodes2.Count + "\n";
 
-                foreach (int flag in _heroUnit.PlayerFlags2)
+                foreach (int flag in _heroUnit.StateCodes2)
                 {
                     richTextBox1.Text += flag + "\n";
                 }
@@ -1036,9 +1032,9 @@ namespace Reanimator.Forms
         {
             foreach (UnitObject item in items)
             {
-                foreach (UnitObject.StatBlock.Stat stat in item.Stats.stats)
+                foreach (UnitObjectStats.Stat stat in item.Stats.Stats.Values)
                 {
-                    string val = stat.Name + " = " + stat.Id.ToString() + ",";
+                    string val = stat.Name + " = " + stat.Code.ToString() + ",";
                     if (!values.Contains(val))
                     {
                         values.Add(val);
@@ -1129,7 +1125,7 @@ namespace Reanimator.Forms
                 {
                     foreach (Control control in tp_characterInventory.Controls)
                     {
-                        if (item.InventoryType.ToString() != (string)control.Tag) continue;
+                        if (item.InventoryLocationIndex.ToString() != (string)control.Tag) continue;
 
                         int quality = UnitHelpFunctions.GetSimpleValue(item, ItemValueNames.item_quality.ToString());
                         int quantity = UnitHelpFunctions.GetSimpleValue(item, ItemValueNames.item_quantity.ToString());
@@ -1138,7 +1134,7 @@ namespace Reanimator.Forms
                             quantity = 1;
                         }
 
-                        if (item.InventoryType == 19760 || item.InventoryType == 28208 || item.InventoryType == 26928 || item.InventoryType == 22577)
+                        if (item.InventoryLocationIndex == 19760 || item.InventoryLocationIndex == 28208 || item.InventoryLocationIndex == 26928 || item.InventoryLocationIndex == 22577)
                         {
                             ((ListBox)control).Items.Add(item);
 
@@ -1193,7 +1189,7 @@ namespace Reanimator.Forms
                                 b.Text = quantity + "x " + item.Name;
                             }
 
-                            switch (item.InventoryType)
+                            switch (item.InventoryLocationIndex)
                             {
                                 case (int)InventoryTypes.Inventory:
                                     tp_inventory.Controls.Add(b);
@@ -1211,7 +1207,7 @@ namespace Reanimator.Forms
 
                             break;
                         }
-                        else if (item.InventoryType == (int)InventoryTypes.CurrentWeaponSet)
+                        else if (item.InventoryLocationIndex == (int)InventoryTypes.CurrentWeaponSet)
                         {
                             lb_equipped.Items.Add(item);
 
@@ -1288,11 +1284,20 @@ namespace Reanimator.Forms
         private void cb_availableMods_SelectedIndexChanged(object sender, EventArgs e)
         {
             UnitObject mod = (UnitObject)cb_availableMods.SelectedItem;
-            UnitObject.StatBlock.Stat affix = mod.Stats.GetStatByName(ItemValueNames.applied_affix.ToString());
+
+            UnitObjectStats.Stat affix = null;
+            foreach (UnitObjectStats.Stat stat in mod.Stats.Stats.Values)
+            {
+                if (stat.Name != ItemValueNames.applied_affix.ToString()) continue;
+
+                affix = stat;
+                break;
+            }
+            //= mod.Stats.GetStatByName(ItemValueNames.applied_affix.ToString());
 
             if (affix == null) return;
-            tb_modAttribute.Text = affix.Id.ToString();
-            tb_modValue.Text = affix.values[0].StatValue.ToString();
+            tb_modAttribute.Text = affix.Code.ToString();
+            tb_modValue.Text = affix.Values[0].Value.ToString();
         }
 
         private void b_saveXML_Click(object sender, EventArgs e)

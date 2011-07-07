@@ -51,7 +51,7 @@ namespace Hellgate
             if (fileHeader.Version != RequiredVersion) throw new Exceptions.NotSupportedFileVersionException();
 
             byteOffset = 0x2028;
-            Character.ParseUnitObject(fileBytes, byteOffset);
+            Character.ParseUnitObject(fileBytes, byteOffset, fileBytes.Length);
         }
 
         public void CreateNewCharacter(String name)
