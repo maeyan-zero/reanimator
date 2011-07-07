@@ -243,25 +243,25 @@ namespace Reanimator.Forms.HeroEditorFunctions
         {
             get
             {
-                return UnitObject.PlayerFlags1.Contains((int)GameMode.Elite) || unitObject.PlayerFlags2.Contains((int)GameMode.Elite);
+                return UnitObject.StateCodes1.Contains((int)GameMode.Elite) || unitObject.StateCodes2.Contains((int)GameMode.Elite);
             }
             set
             {
                 if (value)
                 {
-                    if (!UnitObject.PlayerFlags1.Contains((int)GameMode.Elite))
+                    if (!UnitObject.StateCodes1.Contains((int)GameMode.Elite))
                     {
-                        UnitObject.PlayerFlags1.Add((int)GameMode.Elite);
+                        UnitObject.StateCodes1.Add((int)GameMode.Elite);
                     }
-                    if (!UnitObject.PlayerFlags2.Contains((int)GameMode.Elite))
+                    if (!UnitObject.StateCodes2.Contains((int)GameMode.Elite))
                     {
-                        UnitObject.PlayerFlags2.Add((int)GameMode.Elite);
+                        UnitObject.StateCodes2.Add((int)GameMode.Elite);
                     }
                 }
                 else
                 {
-                    UnitObject.PlayerFlags1.Remove((int)GameMode.Elite);
-                    UnitObject.PlayerFlags2.Remove((int)GameMode.Elite);
+                    UnitObject.StateCodes1.Remove((int)GameMode.Elite);
+                    UnitObject.StateCodes2.Remove((int)GameMode.Elite);
                 }
             }
         }
@@ -270,25 +270,25 @@ namespace Reanimator.Forms.HeroEditorFunctions
         {
             get
             {
-                return UnitObject.PlayerFlags1.Contains((int)GameMode.Hardcore) || UnitObject.PlayerFlags2.Contains((int)GameMode.Hardcore);
+                return UnitObject.StateCodes1.Contains((int)GameMode.Hardcore) || UnitObject.StateCodes2.Contains((int)GameMode.Hardcore);
             }
             set
             {
                 if (value)
                 {
-                    if (!UnitObject.PlayerFlags1.Contains((int)GameMode.Hardcore))
+                    if (!UnitObject.StateCodes1.Contains((int)GameMode.Hardcore))
                     {
-                        UnitObject.PlayerFlags1.Add((int)GameMode.Hardcore);
+                        UnitObject.StateCodes1.Add((int)GameMode.Hardcore);
                     }
-                    if (!UnitObject.PlayerFlags2.Contains((int)GameMode.Hardcore))
+                    if (!UnitObject.StateCodes2.Contains((int)GameMode.Hardcore))
                     {
-                        UnitObject.PlayerFlags2.Add((int)GameMode.Hardcore);
+                        UnitObject.StateCodes2.Add((int)GameMode.Hardcore);
                     }
                 }
                 else
                 {
-                    UnitObject.PlayerFlags1.Remove((int)GameMode.Hardcore);
-                    UnitObject.PlayerFlags2.Remove((int)GameMode.Hardcore);
+                    UnitObject.StateCodes1.Remove((int)GameMode.Hardcore);
+                    UnitObject.StateCodes2.Remove((int)GameMode.Hardcore);
                 }
             }
         }
@@ -297,25 +297,25 @@ namespace Reanimator.Forms.HeroEditorFunctions
         {
             get
             {
-                return UnitObject.PlayerFlags1.Contains((int)GameMode.HardcoreDead) || UnitObject.PlayerFlags2.Contains((int)GameMode.HardcoreDead);
+                return UnitObject.StateCodes1.Contains((int)GameMode.HardcoreDead) || UnitObject.StateCodes2.Contains((int)GameMode.HardcoreDead);
             }
             set
             {
                 if (value)
                 {
-                    if (!UnitObject.PlayerFlags1.Contains((int)GameMode.HardcoreDead))
+                    if (!UnitObject.StateCodes1.Contains((int)GameMode.HardcoreDead))
                     {
-                        UnitObject.PlayerFlags1.Add((int)GameMode.HardcoreDead);
+                        UnitObject.StateCodes1.Add((int)GameMode.HardcoreDead);
                     }
-                    if (!UnitObject.PlayerFlags2.Contains((int)GameMode.HardcoreDead))
+                    if (!UnitObject.StateCodes2.Contains((int)GameMode.HardcoreDead))
                     {
-                        UnitObject.PlayerFlags2.Add((int)GameMode.HardcoreDead);
+                        UnitObject.StateCodes2.Add((int)GameMode.HardcoreDead);
                     }
                 }
                 else
                 {
-                    UnitObject.PlayerFlags1.Remove((int)GameMode.HardcoreDead);
-                    UnitObject.PlayerFlags2.Remove((int)GameMode.HardcoreDead);
+                    UnitObject.StateCodes1.Remove((int)GameMode.HardcoreDead);
+                    UnitObject.StateCodes2.Remove((int)GameMode.HardcoreDead);
                 }
             }
         }
@@ -701,7 +701,7 @@ namespace Reanimator.Forms.HeroEditorFunctions
 
                 foreach (UnitObject item in UnitObject.Items)
                 {
-                    if (item.InventoryType == (int)InventoryTypes.CurrentWeaponSet)
+                    if (item.InventoryLocationIndex == (int)InventoryTypes.CurrentWeaponSet)
                     {
                         _weapons.Add(item);
                     }
@@ -719,7 +719,7 @@ namespace Reanimator.Forms.HeroEditorFunctions
 
                 foreach (UnitObject item in UnitObject.Items)
                 {
-                    if (item.InventoryType == (int)InventoryTypes.CurrentWeaponSet)
+                    if (item.InventoryLocationIndex == (int)InventoryTypes.CurrentWeaponSet)
                     {
                         _weapons.Add(item);
                     }
@@ -737,7 +737,7 @@ namespace Reanimator.Forms.HeroEditorFunctions
 
                 foreach (UnitObject item in UnitObject.Items)
                 {
-                    if (item.InventoryType == (int)InventoryTypes.CurrentWeaponSet)
+                    if (item.InventoryLocationIndex == (int)InventoryTypes.CurrentWeaponSet)
                     {
                         _weapons.Add(item);
                     }
@@ -763,17 +763,16 @@ namespace Reanimator.Forms.HeroEditorFunctions
             get { return _skillTabs; }
         }
 
-        public CharacterSkills(UnitObject unitObject, FileManager fileManager, int[] skillTabs)
-            : base(unitObject, fileManager)
+        public CharacterSkills(UnitObject unitObject, FileManager fileManager, IEnumerable<int> skillTabs) : base(unitObject, fileManager)
         {
             _skillTabs = new List<SkillTab>();
             
             //to make things easier, let's add all available character skills to the list
-            List<UnitObject.StatBlock.Stat.Values> availableSkills = new List<UnitObject.StatBlock.Stat.Values>();
+            List<UnitObjectStats.Stat.StatValue> availableSkills = new List<UnitObjectStats.Stat.StatValue>();
             ////get the skills the character already knows
-            UnitObject.StatBlock.Stat skills = UnitHelpFunctions.GetComplexValue(unitObject, ItemValueNames.skill_level);
+            UnitObjectStats.Stat skills = UnitHelpFunctions.GetComplexValue(unitObject, ItemValueNames.skill_level);
             ////add them to the complete skill list
-            availableSkills.AddRange(skills.values);
+            availableSkills.AddRange(skills.Values);
 
             DataTable skillTable = fileManager.GetDataTable("SKILLS");
 
@@ -812,12 +811,15 @@ namespace Reanimator.Forms.HeroEditorFunctions
             }
 
             //skills.repeatCount = availableSkills.Count;
-            skills.values = availableSkills;
+
+            //skills.Values = availableSkills;
+            skills.Values.Clear();
+            skills.Values.AddRange(availableSkills);
         }
 
-        private SkillTab CreateSkillsFromRow(List<UnitObject.StatBlock.Stat.Values> availableSkills, DataTable skillTable, DataRow[] skillRows)
+        private SkillTab CreateSkillsFromRow(List<UnitObjectStats.Stat.StatValue> availableSkills, DataTable skillTable, DataRow[] skillRows)
         {
-            List<UnitObject.StatBlock.Stat.Values> values = new List<UnitObject.StatBlock.Stat.Values>();
+            List<UnitObjectStats.Stat.StatValue> values = new List<UnitObjectStats.Stat.StatValue>();
             SkillTab skillInSkillTab = new SkillTab();
 
             //iterate through all available skills
@@ -826,7 +828,7 @@ namespace Reanimator.Forms.HeroEditorFunctions
                 //get the skill id
                 int skillId = (int)row["code"];
                 //if the skill is already present, use that one
-                UnitObject.StatBlock.Stat.Values tmpSkill = availableSkills.Find(tmp => tmp.Attribute1 == skillId);
+                UnitObjectStats.Stat.StatValue tmpSkill = availableSkills.Find(tmp => tmp.Param1 == skillId);
                 if (tmpSkill != null)
                 {
                     values.Add(tmpSkill);
@@ -834,8 +836,8 @@ namespace Reanimator.Forms.HeroEditorFunctions
                 //if not, add a new one
                 else
                 {
-                    UnitObject.StatBlock.Stat.Values skillEntry = new UnitObject.StatBlock.Stat.Values();
-                    skillEntry.Attribute1 = skillId;
+                    UnitObjectStats.Stat.StatValue skillEntry = new UnitObjectStats.Stat.StatValue();
+                    skillEntry.Param1 = skillId;
 
                     values.Add(skillEntry);
                 }
@@ -843,7 +845,7 @@ namespace Reanimator.Forms.HeroEditorFunctions
             //_hero.Stats.statCount
 
             //and finally... initialize all skills :)
-            foreach (UnitObject.StatBlock.Stat.Values skillBlock in values)
+            foreach (UnitObjectStats.Stat.StatValue skillBlock in values)
             {
                 Skill skill = InitializeSkill(skillTable, skillBlock);
                 skillInSkillTab.Skills.Add(skill);
@@ -851,9 +853,9 @@ namespace Reanimator.Forms.HeroEditorFunctions
             return skillInSkillTab;
         }
 
-        private Skill InitializeSkill(DataTable table, UnitObject.StatBlock.Stat.Values skillBlock)
+        private Skill InitializeSkill(DataTable table, UnitObjectStats.Stat.StatValue skillBlock)
         {
-            DataRow[] availableSkillRows = table.Select("code = " + skillBlock.Attribute1);
+            DataRow[] availableSkillRows = table.Select("code = " + skillBlock.Param1);
 
             string name = availableSkillRows[0]["displayName_string"].ToString();
             string description = availableSkillRows[0]["descriptionString_string"].ToString();
@@ -904,7 +906,7 @@ namespace Reanimator.Forms.HeroEditorFunctions
 
     public class Skill
     {
-        UnitObject.StatBlock.Stat.Values _skillBlock;
+        UnitObjectStats.Stat.StatValue _skillBlock;
         string _name;
         string _description;
         int _maxLevel;
@@ -913,7 +915,7 @@ namespace Reanimator.Forms.HeroEditorFunctions
         int[] _levelsOfRequiredSkills;
         Point _position;
 
-        public UnitObject.StatBlock.Stat.Values SkillBlock
+        public UnitObjectStats.Stat.StatValue SkillBlock
         {
             get { return _skillBlock; }
             set { _skillBlock = value; }
@@ -931,7 +933,7 @@ namespace Reanimator.Forms.HeroEditorFunctions
 
         public int SkillID
         {
-            get { return _skillBlock.Attribute1; }
+            get { return _skillBlock.Param1; }
         }
 
         public string Name
@@ -956,7 +958,7 @@ namespace Reanimator.Forms.HeroEditorFunctions
 
         public int CurrentLevel
         {
-            get { return _skillBlock.StatValue; }
+            get { return _skillBlock.Value; }
             set
             {
                 if (value > _maxLevel)
@@ -964,7 +966,7 @@ namespace Reanimator.Forms.HeroEditorFunctions
                     value = _maxLevel;
                 }
 
-                _skillBlock.StatValue = value;
+                _skillBlock.Value = value;
             }
         }
 
@@ -981,7 +983,7 @@ namespace Reanimator.Forms.HeroEditorFunctions
             }
         }
 
-        public Skill(string name, string description, string iconName, int maxLevel, Point position, int[] requiredSkills, int[] levelsOfRequiredSkills, UnitObject.StatBlock.Stat.Values skillBlock)
+        public Skill(string name, string description, string iconName, int maxLevel, Point position, int[] requiredSkills, int[] levelsOfRequiredSkills, UnitObjectStats.Stat.StatValue skillBlock)
         {
             _name = name;
             _description = description;
@@ -1169,10 +1171,10 @@ namespace Reanimator.Forms.HeroEditorFunctions
                 //globalsRow = gameGlobals.Select("name = " + "max_item_augmentations");
                 globalsRow = gameGlobals.Select("Index = " + 17);
                 _maxNumberOfAffixes = (int)globalsRow[0]["intValue"];
-                UnitObject.StatBlock.Stat affixes = UnitHelpFunctions.GetComplexValue(unitObject, ItemValueNames.applied_affix.ToString());
+                UnitObjectStats.Stat affixes = UnitHelpFunctions.GetComplexValue(unitObject, ItemValueNames.applied_affix.ToString());
                 if (affixes != null)
                 {
-                    _numberOfAffixes = affixes.values.Count;
+                    _numberOfAffixes = affixes.Values.Count;
                 }
 
                 int numberOfInherentAffixes = _numberOfAffixes - _numberOfAugmentations;
@@ -1389,11 +1391,11 @@ namespace Reanimator.Forms.HeroEditorFunctions
         {
             get
             {
-                return (InventoryTypes)Enum.Parse(typeof(InventoryTypes), UnitObject.InventoryType.ToString());
+                return (InventoryTypes)Enum.Parse(typeof(InventoryTypes), UnitObject.InventoryLocationIndex.ToString());
             }
             set
             {
-                UnitObject.InventoryType = (int)value;
+                UnitObject.InventoryLocationIndex = (int)value;
             }
         }
 
@@ -1487,7 +1489,7 @@ namespace Reanimator.Forms.HeroEditorFunctions
 
             foreach (UnitObject item in UnitObject.Items)
             {
-                if (item.InventoryType == (int)type)
+                if (item.InventoryLocationIndex == (int)type)
                 {
                     tmp.Add(item);
                 }

@@ -1,73 +1,109 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Diagnostics;
-using System.Xml.Serialization;
+using System.Text;
+using Hellgate.Excel;
 using Hellgate.Excel.JapaneseBeta;
 using Revival.Common;
 
 namespace Hellgate
 {
+    /*
+    == Monster Stats ==
+    level
+    hp_cur
+    hp_max
+    hp_cur_otherplayer
+    hp_max_otherplayer
+    attack_rating
+    base_dmg_min
+    base_dmg_max
+    damage_min
+    damage_max
+    critical_mult
+    interrupt_defense
+    armor
+    sfx_defense_bonus
+    experience
+    can_run
+    stealth_defense
+    ai_change_defense
+    name_label_adj
+    corpse_explode_points
+
+    == NPC Stats ==
+    level
+    hp_cur
+    hp_max
+    hp_cur_otherplayer
+    hp_max_otherplayer
+    sfx_defense_bonus
+    can_run
+    */
+
     [Serializable]
     public partial class UnitObject
     {
         private const UInt32 ObjectMagicWord = 0x67616C46;          // 'Flag'
         private const UInt32 ItemMagicWord = 0x2B523460;            // '`4R+'
-        private const UInt32 WeaponConfigMagicWord = 0x91103A74;    // 't:.`'
+        private const UInt32 HotkeysMagicWord = 0x91103A74;         // 't:.`'
+
+        public const int SPVersion = 0x00BF;
+        public const int CurrentVersion = 0x00CD;
 
         ///////////////////// General Structure Definition /////////////////////
         /////// Start of read inside main header check function (in ASM) ///////
 
-        public int Version;							    	                    // 16 bits      // 0x00BF for SP client, 0x00CD for current Resurrection client
-        public int Usage;							    	                    // 8
+        private int _version;                                                   // 16 bits      0x00BF for SP client, 0x00CD for current Resurrection client
+        private ObjectContext _context;                                         // 8            Usage context - 0 = Character, 2 = Character Select, 4 = Item Drop
 
-        public int BitFieldCount;									            // 8			// must be <= 2
-        public int BitField1;										            // 32
-        public int BitField2;										            // 32
-        public UInt64 BitField;
+        private int _bitFieldCount;									            // 8            must be <= 2
+        private UInt64 _bitField;                                               // 32 * Count
 
 
         // if (testBit(bitField, 0x1D))
-        public int BitCount;										            // 32			// of entire unit object
+        private int _bitCount;                                                  // 32           of entire unit object
 
 
         // if (testBit(bitField, 0x00))
-        public uint BeginFlag;										            // 32			// must be "Flag" (0x67616C46) or "`4R+" (0x2B523460)
+        private uint _beginFlag;                                                // 32           must be "Flag" (0x67616C46) or "`4R+" (0x2B523460)
 
 
         // if (testBit(bitField, 0x1C))
-        public int TimeStamp1;										            // 32			// i don't think these are actually time stamps
-        public int TimeStamp2;										            // 32			// but since they change all the time and can be
-        public int TimeStamp3;										            // 32			// set to 00 00 00 00 and it'll still load... it'll do
+        public int _timeStamp1;                                                 // 32           i don't think these are actually time stamps
+        public int _timeStamp2;                                                 // 32           but since they change all the time and can be
+        public int _timeStamp3;                                                 // 32           set to 00 00 00 00 and it'll still load... it'll do
 
 
         // if (testBit(bitField, 0x1F))
-        public int UnknownCount1F;									            // 4
-        public UnknownCount1FClass[] UnknownCount1Fs;                                           // no idea wtf these do
+        //public int SaveLocationsCount;									    // 4
+        public List<SaveLocation> SaveLocations;                                // 32 * Count   contains Level and Difficulty code values of last(?) station save location
 
 
-        // if (testBit(bitField, 0x20)					                                        // char state flags (e.g. "elite")
-        public int PlayerFlagCount1;								            // 8
-        public List<short> PlayerFlags1;                                        // 16 * PlayerFlagCount1		
+        // if (testBit(bitField, 0x20)
+        //public int StateCode1Count;                                           // 8            state code values (e.g. "elite") from STATES
+        public List<Int32> StateCodes1;                                         // 16 * Count	not sure what difference is with this and StateCodes2
 
 
         /////// End of read inside main header check function (in ASM) ///////
 
 
         // if (testBit(bitField, 0x1B))
-        public int BitOffsetCount;                                              // 5            // only ever seen as 0 or 1 - alert if otherwise
-        public readonly List<UnitBitOffsets> BitOffsets;                                        // only seen with item end bit offset in it
+        public int BookmarkCount;                                              // 5             (only 1 bookmark row exists though - "hotkeys")
+        public List<Bookmark> Bookmarks;                                       // 48 * Count    
 
 
         // if (testBit(bitField, 0x05))
-        public int Unknown05;                                                                   // used in MP
+        public int UnitObjectId;                                                   // 32           used in MP, used in item (same as UnitObjectID)
 
 
-        public int UnitType;										            // 4		    // 1 = character, 2 = monster (e.g. engineer drone), 3 = ?, 4 = item, 5 = ?
-        public short UnitCode;								                    // 16           // the code identifier of the UnitObject (e.g. Job Class, or Item Id etc)
+        public UnitTypes UnitType;										        // 4		    1 = character, 2 = monster (e.g. engineer drone), 3 = ?, 4 = item, 5 = ? (these look like row index values from UNITTYPES)
+        public ushort UnitCode;                                                 // 16           the code identifier of the UnitObject (e.g. Job Class, or Item Id etc)
+        public UnitDataRow UnitData;
 
 
-        // if (testBit(bitField, 0x17)) // 64 bits read as 8x8 chunk bits from non-standard bit read function
-        public Int64 ObjectId;                                                  // 64           // a unique id identifiying this unit "structure"
+        // if (testBit(bitField, 0x17))
+        public UInt64 ObjectId;                                                 // 64           a unique id identifiying this unit "structure"
 
 
         // if (testBit(bitField, 0x01) || testBit(bitField, 0x03))
@@ -75,27 +111,24 @@ namespace Hellgate
         public bool IsInventory;								                // 1 bit
         // {
         //// if (testBit(bitField, 0x02))
-        public int Unknown02;										            // 32			// untested
+        public int Unknown02;										            // 32			untested
 
-        public int InventoryType;        								        // 16           // i think...
-        public int InventoryPositionX;									        // 12           // x-position of inventory item
-        public int InventoryPositionY;									        // 12           // y-position of inventory item
+        public int InventoryLocationIndex;     								    // 12           i think...
+        public int InventoryPositionX;									        // 12           x-position of inventory item
+        public int InventoryPositionY;									        // 12           y-position of inventory item
+        public int Unknown04;                                                   // 4 bits       not sure
         // }
         // else
         // {
-        public int Unknown0103Int1;                                             // 32
+        public int RoomId;                                                      // 32
 
-        public float Unknown0103Float11;                                        // 32
-        public float Unknown0103Float12;                                        // 32
-        public float Unknown0103Float13;                                        // 32
+        public Vector3 Position;                                                // 32 * 3
 
         public float Unknown0103Float21;                                        // 32
         public float Unknown0103Float22;                                        // 32
         public float Unknown0103Float23;                                        // 32
 
-        public float Unknown0103Float31;                                        // 32
-        public float Unknown0103Float32;                                        // 32
-        public float Unknown0103Float33;                                        // 32
+        public Vector3 Normal;                                                  // 32 * 3
 
         public int Unknown0103Int2;                                             // 32
 
@@ -113,1152 +146,1129 @@ namespace Hellgate
 
 
         // if (testBit(bitField, 0x09))
-        public int Unknown09;										            // 8
+        public int ItemLookGroupCode;									        // 8            from table ITEM_LOOK_GROUPS
 
 
         // if (testBit(bitField, 0x07)) // if (bitField1 & 0x80)
         public int CharacterHeight;									            // 8
-        public int CharacterWidth;									            // 8
+        public int CharacterBulk;									            // 8
 
 
         // if (testBit(bitField, 0x08))
-        public int CharNameCount;									            // 8
-        public char[] CharacterName;                                            // 8 * CharNameCount
+        //private int _charCount;									            // 8            number of *Unicode* characters
+        private byte[] _charNameBytes;                                          // 8 * Count * 2
 
 
-        // if (testBit(bitField, 0x0A))						                                    // char state flags (e.g. "elite")
-        public int PlayerFlagCount2;								            // 8
-        public List<int> PlayerFlags2;			                                // 16  * PlayerFlagCount2
+        // if (testBit(bitField, 0x0A))
+        //public int StateCode2Count;                                          // 8            state code values (e.g. "elite") from STATES table
+        public List<Int32> StateCodes2;                                        // 16 * Count   not sure what difference is with this and StateCodes1
 
 
-        public bool UsageBool;                                                  // 1
-        public int UsageBoolValue;                                              // 4
+        public bool ContextBool;                                                // 1
+        public int ContextBoolValue;                                            // 4
 
 
-        public bool IsDead;									                    // 1            // does NOT influence HC dead! If the character died right before saving this flag is set to 1
+        public bool IsDead;									                    // 1            does NOT influence HC dead! If the character died right before saving this bool is true
 
 
-        // if (testBit(bitField1, 0x0D))
-        public StatBlock Stats;
-        public byte StatUnknownByte1;
-        public byte StatUnknownByte2;
-        public int StatUnknownInt1;
+        // if (_TestBit(Bits.Bit0DStats))
+        public UnitObjectStats Stats;
+        // else if (_TestBit(Bits.Bit14CharSelectStats))                                        these values are used in the character select screen when playing MP
+        //public int CharacterLevel;                                            // 8
+        //public int CharacterPvpRankRowIndex;                                  // 8
+        // if (_TestBit(Bits.Bit1ECharSelectStatsMaxDifficulty))
+        //public int MaxDifficultyRowIndex;                                     // 3
 
 
         public bool HasAppearanceDetails;						                // 1
-        public UnitAppearance Appearance;
-        /*
-        // {
-        BYTE unknownCount7;										        // 3 
-        std::vector<UnknownCount7_S> unknownCount7s;
-
-        DWORD unknown5;											        // 16 
-
-        //// if (bitTest(bitField1, 0x16))
-            BYTE unknown6[8];                                                           // non-standard read in again
-
-        //// if (bitTest(bitField1, 0x11))
-            BYTE unknownCount8;										    // 4 
-            std::vector<WORD> unknownCount8s;						    // 16  * unknownCount8
-
-            BYTE modelAppearanceCounter;							    // 3 
-            std::vector<WORD> modelAppearance;						    // 16  * modelAppearanceCounter
-
-            BYTE unknownCount9;										    // 4 
-            std::vector<BYTE> unknownCount9s;						    // 8  * unknownCount9
-
-        //// if (140267C48 test    byte ptr [r9+46h], 1) // 0xE7 part
-            WORD gearCount;										        // 16 
-            std::vector<Gear_S> gears;							        // 17  * gearCount
-        // }*/
+        public UnitAppearance Appearance;                                       //              see UnitAppearance structure for layout and counts
 
 
         // if (testBit(pUnit->bitField1, 0x12))
-        public int ItemEndBitOffset;									        // 32           // bit offset to end of items
-        public int ItemCount;										            // 10 
-        public List<UnitObject> Items;                                                          // each item is another UnitObject
+        public int ItemEndBitOffset;									        // 32           bit offset to end of items
+        public int ItemCount;										            // 10           each item is another UnitObject
+        public List<UnitObject> Items;
 
 
         // if (testBit(pUnit->bitField1, 0x1A))
-        public uint WeaponConfigFlag;                                           // 32           // must be 0x91103A74; always present
-        public int EndFlagBitOffset;                                            // 32           // offset to end of file flag
-        public int WeaponConfigCount;                                           // 6            // weapon config count
-        public UnitWeaponConfig[] WeaponConfigs;                                                // i think this has item positions on bottom bar, etc as well
+        public uint HotkeyFlag;                                                 // 32           must be 0x91103A74 (always present)
+        public int EndFlagBitOffset;                                            // 32           offset to end of file flag
+        public int HotkeyCount;                                                 // 6            hotkey count
+        public List<Hotkey> Hotkeys;                                            //              positions on bottom bar, etc as well
 
 
-        // if (testBit(unit->bitField1, 0x00))
-        public int EndFlag;											            // 32           // end of unit flag
+        public int EndFlag;											            // 32           end of unit flag (always present)
 
 
         ///////////////////// Function Definitions /////////////////////
 
         public static FileManager FileManager;
+
         private readonly bool _debugOutputLoadingProgress;
 
-        private bool _usingExternalBuffer;
-        private byte[] _buffer;
-        private int _byteOffset;
-        private int _bitOffset;
+        private BitBuffer _bitBuffer;
 
-        public UnitObject() : this(false) { } // for XML serialisation
-
-        public UnitObject(bool debugOutputLoadingProgress)
+        public UnitObject(int version = CurrentVersion) : this(false)
         {
+            _version = version;
+            _Init();
+        }
+
+        public UnitObject(bool debugOutputLoadingProgress, int version = CurrentVersion)
+        {
+            _version = version;
             _debugOutputLoadingProgress = debugOutputLoadingProgress;
+            _bitBuffer = new BitBuffer();
 
-            PlayerFlags1 = new List<short>();
-            PlayerFlags2 = new List<int>();
-            BitOffsets = new List<UnitBitOffsets>();
+            _Init();
+        }
+
+        private UnitObject(BitBuffer bitBuffer, bool debugOutputLoadingProgress = false)
+            : this(debugOutputLoadingProgress)
+        {
+            _bitBuffer = bitBuffer;
+        }
+
+        private void _Init()
+        {
+            SaveLocations = new List<SaveLocation>(3); // always seen as 3 (1 for each difficulty - even if not applicable on the char yet)
+            StateCodes1 = new List<Int32>();
+            StateCodes2 = new List<Int32>();
+            Bookmarks = new List<Bookmark>();
+            Stats = new UnitObjectStats(FileManager, _debugOutputLoadingProgress);
             Items = new List<UnitObject>();
+            Appearance = new UnitAppearance();
+            Hotkeys = new List<Hotkey>();
+            Position = new Vector3();
+            Normal = new Vector3();
         }
 
-        [XmlAttribute("Name")]
-        public string Name
+        private String _name;
+        public String Name
         {
-            get { return ToString(); }
-            set { CharacterName = value.ToCharArray(); }
+            get { return _name; }
+            set
+            {
+                _name = value;
+                _charNameBytes = Encoding.Unicode.GetBytes(value);
+            }
         }
 
-        public override string ToString()
+        public override String ToString()
         {
-            return new string(CharacterName);
+            return _name;
         }
 
-        public void ParseUnitObject(byte[] buffer, int byteOffset = 0)
+        /// <summary>
+        /// Parses a unit object byte array and populates the current UnitObject.
+        /// </summary>
+        /// <param name="buffer">The buffer to read from.</param>
+        /// <param name="offset">The offset within the buffer to start from.</param>
+        /// <param name="maxBytes">A maxmimum byte count to use. Set to 0 to ignore (not recommended).</param>
+        public void ParseUnitObject(byte[] buffer, int offset, int maxBytes)
         {
-            _buffer = buffer;
-            _byteOffset = byteOffset;
-            _ReadUnit(this);
-            _buffer = null;
+            lock (_bitBuffer)
+            {
+                _bitBuffer.SetBuffer(buffer, offset, maxBytes);
+                _ReadUnit();
+                _bitBuffer.FreeBuffer();
+            }
+        }
+
+        /// <summary>
+        /// Parses the wardrobe appearance segment of a unit object byte array and populates the current UnitObject.
+        /// </summary>
+        /// <param name="buffer">The buffer to read</param>
+        /// <param name="offset">The offset within the buffer to start from.</param>
+        /// <param name="maxBytes">A maximum byte count to use. Set to 0 to ignore (not recommended).</param>
+        public void ParseWardrobeAppearance(byte[] buffer, int offset, int maxBytes)
+        {
+            lock (_bitBuffer)
+            {
+                _bitBuffer.SetBuffer(buffer, offset, maxBytes);
+                _ReadWardrobeAppearance(true);
+            }
+        }
+
+        /// <summary>
+        /// Parses the stats segment of a unit object byte array and populates the current UnitObject.
+        /// </summary>
+        /// <param name="buffer">The buffer to read</param>
+        /// <param name="offset">The offset within the buffer to start from.</param>
+        /// <param name="maxBytes">A maximum byte count to use. Set to 0 to ignore (not recommended).</param>
+        /// <param name="readNameCount">Whether or not to include reading the "name count" (actual usage not entirely accurate).</param>
+        public void ParseStats(byte[] buffer, int offset, int maxBytes, bool readNameCount)
+        {
+            lock (_bitBuffer)
+            {
+                _bitBuffer.SetBuffer(buffer, offset, maxBytes);
+                Stats.ReadStats(_bitBuffer, readNameCount);
+            }
+        }
+
+        public void ParseUnknown(byte[] buffer, int offset)
+        {
+            // code based on sub_4AC1CC
+
+            _bitBuffer.SetBuffer(buffer, offset, 0);
+
+            int roomRowIndexOffset = _bitBuffer.ReadBits(12); // 0x30 for our Tutorial_Russel Square
+            int bitCount = _bitBuffer.ReadBits(12); // 0x73 bits... is this always 0x73? Where is it from? (possibly largest number of rooms any level can have?)
+            Debug.WriteLine(String.Format("RoomRowIndexOffset = {0} (0x{0:X4}), BitCount = {1} (0x{1:X4})", roomRowIndexOffset, bitCount));
+
+            int int32Count = (bitCount >> 5);
+            int remainingBitCount = (bitCount & 0x1F);
+            int remainingByteCount = (remainingBitCount >> 3) + (remainingBitCount > 0 ? 1 : 0);
+            Debug.WriteLine(String.Format("Int32Count = {0}, RemainingBitCount = {1} -> RemainingByteCount = {2}", int32Count, remainingBitCount, remainingByteCount));
+
+            int bitFieldCount = int32Count + (remainingByteCount > 0 ? 1 : 0);
+            int[] bitField = new int[bitFieldCount];
+            for (int i = 0; i < int32Count; i++)
+            {
+                bitField[i] = _bitBuffer.ReadInt32();
+                Debug.WriteLine(String.Format("bitField[{0}] = {2} = {1} (0x{1:X8})", i, bitField[i], _DebugBinaryFormat(bitField[i])));
+            }
+            if (remainingBitCount > 0)
+            {
+                int lastIndex = bitField.Length - 1;
+                bitField[bitField.Length - 1] = _bitBuffer.ReadBits(remainingBitCount);
+                Debug.WriteLine(String.Format("bitField[{0}] = {2} = {1} (0x{1:X8})", lastIndex, bitField[lastIndex], _DebugBinaryFormat((ulong)bitField[lastIndex], remainingBitCount)));
+            }
+
+            int[] roomOrder = new int[bitCount]; // not yet sure why these are needed client-side, or what they are, or how they're generated server-side
+            int[] roomIndexes = new int[bitCount];
+            for (int i = 0; i < bitCount; i++)
+            {
+                int int32Index = (i >> 5);
+                int bitIndex = (i % 32);
+
+                if ((bitField[int32Index] & (1 << bitIndex)) > 0)
+                {
+                    roomOrder[i] = _bitBuffer.ReadByte(); // 0x50, 0x50, 0x3C, -, 0x1E, 0x5A, -, 0, 0, 0x14, 0xA, 0x46, -, 0x32, -, 0, 0x46, -, -, 0x3C, 0x28, ---..., 0x50 (last bit)
+                    roomIndexes[i] = roomRowIndexOffset + i;
+                    Debug.WriteLine(String.Format("RoomOrder = {0}, RoomIndex = {1} (0x{1:X2})", roomOrder[i], roomIndexes[i]));
+                }
+            }
+            Array.Sort(roomOrder, roomIndexes); // proper sort method is ordering by roomOrder desc, roomIndexes desc
+                                                // Array.Sort default like this is roomOrder desc, roomIndexes asc - does it matter?
+
+            foreach (int index in roomIndexes)
+            {
+                if (index == 0) continue;
+
+                RoomIndexRow roomIndex = (RoomIndexRow)FileManager.GetRowFromIndex(Xls.TableCodes.ROOM_INDEX, index);
+                Debug.WriteLine(String.Format("RoomIndex[{0}] = {1}", index, roomIndex.Name));
+            }
+
+            int monsterCount = _bitBuffer.ReadUInt16();
+            Debug.WriteLine(String.Format("MonsterCount = {0}", monsterCount));
+
+            ExcelFile monstersTable = FileManager.GetExcelTableFromCode(Xls.TableCodes.MONSTERS);
+            for (int i = 0; i < monsterCount; i++)
+            {
+                int monsterIndex = _bitBuffer.ReadUInt16();
+
+                UnitDataRow monster = FileManager.GetUnitDataRowFromIndex(Xls.TableCodes.MONSTERS, monsterIndex);
+                String monsterName = monstersTable.ReadStringTable(monster.name);
+
+                Debug.WriteLine(String.Format("Monster[{0}] = {1} (rowIndex = {2})", i, monsterName, monsterIndex));
+            }
+        }
+
+        // writing bit fields
+        private const UInt64 ItemDrop = 0x0000000C0381E827;
+        private const UInt64 SaveCharacter = 0x00000001BDE77D81;
+        private const UInt64 SaveCharacterItems = 0x0000000021A76E09;
+        private const UInt64 CharStats = 0x0000000E0381E9E7;
+        private const UInt64 Monster = 0x0000000C0301E867;
+
+        public byte[] ToByteArray()
+        {
+            byte[] buffer = null;
+            _GenerateUnitObject(ref buffer, 0, 0, SaveCharacter, ObjectContext.Save, SaveCharacterItems, ObjectContext.Save, UnitObjectStats.StatContext.UseCodes);
+            return buffer;
+        }
+
+        public byte[] GenerateMonster()
+        {
+            byte[] buffer = null;
+            _GenerateUnitObject(ref buffer, 0, 0, Monster, ObjectContext.Monster, 0, ObjectContext.None, UnitObjectStats.StatContext.UseRows);
+            return buffer;
+        }
+
+        /// <summary>
+        /// Generate a byte array of this object as an item drop.
+        /// </summary>
+        /// <returns>A new byte array of the item drop.</returns>
+        public byte[] GenerateItemDrop()
+        {
+            byte[] buffer = null;
+            _GenerateUnitObject(ref buffer, 0, 0, ItemDrop, ObjectContext.ItemDrop, 0, ObjectContext.None, UnitObjectStats.StatContext.UseRows);
+            return buffer;
+        }
+
+        /// <summary>
+        /// Writes an item drop byte array to the supplied buffer at the specified offset up to maxBytes length.
+        /// </summary>
+        /// <param name="buffer">The buffer to write to.</param>
+        /// <param name="offset">The offset to begin writing at.</param>
+        /// <param name="maxBytes">A maximum byte count to write - an exception will be throw in exceeded.</param>
+        /// <returns>The bytes written.</returns>
+        public int GenerateItemDrop(byte[] buffer, int offset, int maxBytes)
+        {
+            // todo: not sure if items can be within items for item drops
+            return _GenerateUnitObject(ref buffer, offset, maxBytes, ItemDrop, ObjectContext.ItemDrop, 0, ObjectContext.None, UnitObjectStats.StatContext.UseRows);
+        }
+
+        //private void _FlagBit(Bits bit)
+        //{
+        //    BitField |= ((ulong)1 << (int)bit);
+        //}
+
+        public int GenerateCharacterSelect(byte[] buffer, int offset, int maxBytes)
+        {
+            /* Character Select Contents
+             * Bits.Bit00FlagAlignment
+             * Bits.Bit1CTimeStamps
+             * Bits.Bit1FSaveLocations
+             * Bits.Bit20States1 (was zero though)
+             * Bits.Bit17ObjectId
+             * Bits.Bit07CharacterShape
+             * Bits.Bit08CharacterName
+             * Bits.Bit0AStates2 (was zero though)
+             * Bits.Bit14CharSelectStats
+             * Bits.Bit1ECharSelectStatsMaxDifficulty
+             * Bits.Bit22EquippedItemRowIndex (was zero though - ItemCode was used instead - not sure what exactly this relates to)
+             * Bits.Bit18EquippedItemAffix (even when all items have no affixes)
+             * Bits.Bit16AppearanceUnknown64Bits (was zero though)
+             * Bits.Bit23AppearanceUnknownColorSetCode
+             * Bits.Bit11WardrobeLayers
+             * Bits.Bit10LayerAppearances
+             * Bits.Bit0EUnknown // is set for char select screen characters, but didn't even find any usage in ASM
+             */
+            //BitField = 0;
+            //_FlagBit(Bits.Bit00FlagAlignment);
+            //_FlagBit(Bits.Bit1CTimeStamps);
+            //_FlagBit(Bits.Bit1FSaveLocations);
+            //_FlagBit(Bits.Bit20States1);
+            //_FlagBit(Bits.Bit17ObjectId);
+            //_FlagBit(Bits.Bit07CharacterShape);
+            //_FlagBit(Bits.Bit08CharacterName);
+            //_FlagBit(Bits.Bit0AStates2);
+            //_FlagBit(Bits.Bit14CharSelectStats);
+            //_FlagBit(Bits.Bit1ECharSelectStatsMaxDifficulty);
+            //_FlagBit(Bits.Bit22EquippedItemRowIndex);
+            //_FlagBit(Bits.Bit18EquippedItemAffix);
+            //_FlagBit(Bits.Bit16AppearanceUnknown64Bits);
+            //_FlagBit(Bits.Bit23AppearanceUnknownColorSetCode);
+            //_FlagBit(Bits.Bit11WardrobeLayers);
+            //_FlagBit(Bits.Bit10LayerAppearances);
+            //_FlagBit(Bits.Bit0EUnknown);
+
+            const UInt64 charSelectCharacter = 0x0000000DD1D34581; // 59354858881 =  110111010001110100110100010110000001
+
+            return _GenerateUnitObject(ref buffer, offset, maxBytes, charSelectCharacter, ObjectContext.CharSelect, 0, ObjectContext.None, UnitObjectStats.StatContext.UseRows);
+        }
+
+        /// <summary>
+        /// Generate a byte array of this object as an item drop.
+        /// </summary>
+        /// <returns>A new byte array of the item drop.</returns>
+        public byte[] GenerateCharacterStats()
+        {
+            byte[] buffer = null;
+            _GenerateUnitObject(ref buffer, 0, 0, CharStats, ObjectContext.CharStats, 0, ObjectContext.None, UnitObjectStats.StatContext.UseRows);
+            return buffer;
+        }
+
+        public int GenerateCharacterStats(byte[] buffer, int offset, int maxBytes)
+        {
+            return _GenerateUnitObject(ref buffer, offset, maxBytes, CharStats, ObjectContext.CharStats, 0, ObjectContext.None, UnitObjectStats.StatContext.UseRows);
+        }
+
+        private int _GenerateUnitObject(ref byte[] buffer, int offset, int maxBytes, UInt64 bitField, ObjectContext context, UInt64 itemsBitField, ObjectContext itemsContext, UnitObjectStats.StatContext statsContext)
+        {
+            int byteCount;
+
+            lock (_bitBuffer)
+            {
+                if (buffer == null)
+                {
+                    _bitBuffer.CreateBuffer();
+                }
+                else
+                {
+                    _bitBuffer.SetBuffer(buffer, offset, maxBytes);
+                }
+
+                // BitField and Context could possibly be done "automatically", but it'd require changing  every _TestBit()
+                //            to a set of TestContext ranges and such; simplier like this - and essentially the same result
+                _WriteUnit(bitField, context, itemsBitField, itemsContext, statsContext); // no items supplied
+
+                byteCount = _bitBuffer.BytesUsed;
+
+                if (buffer == null)
+                {
+                    buffer = _bitBuffer.GetBuffer();
+                }
+                _bitBuffer.FreeBuffer();
+            }
+
+            return byteCount;
         }
 
         /// <summary>
         /// Reads a UnitObject from the internal serialised byte array.
         /// </summary>
-        private void _ReadUnit(UnitObject unit)
+        private void _ReadUnit()
         {
             //// start of header
             // unit object versions
-            unit.Version = _ReadBits(16);
-            unit.Usage = _ReadBits(8);
-            if (unit.Version != 0x00BF && unit.Version != 0x00CD) throw new Exceptions.NotSupportedVersionException("0x00BF or 0x00CD", "0x" + unit.Version.ToString("X4"));
-            if (unit.Usage != 0x00 && unit.Usage != 0x02 && unit.Usage != 0x04) throw new Exceptions.NotSupportedVersionException("0x00 or 0x02", "0x" + unit.Usage.ToString("X2"));
+            _version = _bitBuffer.ReadInt16();
+            _context = (ObjectContext)_bitBuffer.ReadByte();
+            if (_version != 0x00BF && _version != 0x00CD) throw new Exceptions.NotSupportedVersionException("0x00BF or 0x00CD", "0x" + _version.ToString("X4"));
+            if (_context != ObjectContext.Save && _context != ObjectContext.CharSelect &&
+                _context != ObjectContext.CharStats && _context != ObjectContext.ItemDrop)
+            {
+                throw new Exceptions.NotSupportedVersionException("0x00 or 0x02 or 0x03 or 0x04", "0x" + _context.ToString("X2"));
+            }
             if (_debugOutputLoadingProgress)
             {
-                Debug.WriteLine(String.Format("UnitObject Version = {0} (0x{0:X4}), Usage = {1} (0x{1:X2})", unit.Version, unit.Usage));
+                Debug.WriteLine(String.Format("Version = {0} (0x{0:X4}), Context = {1} (0x{2:X2})", _version, _context, (int)_context));
             }
 
 
             // content bit fields
-            unit.BitFieldCount = _ReadBits(8);
-            if (unit.BitFieldCount >= 1) unit.BitField1 = _ReadBits(32);
-            if (unit.BitFieldCount == 2) unit.BitField2 = _ReadBits(32);
-            unit.BitField = (ulong)unit.BitField2 << 32 | (uint)unit.BitField1;
+            _bitFieldCount = _bitBuffer.ReadBits(8);
+            if (_bitFieldCount == 1) _bitField = _bitBuffer.ReadUInt32();
+            if (_bitFieldCount == 2) _bitField = _bitBuffer.ReadUInt64();
             if (_debugOutputLoadingProgress)
             {
-                Debug.WriteLine(String.Format("BitField1 = {0}\nBitField2 = {1}", _DebugBinaryFormat(unit.BitField1), _DebugBinaryFormat(unit.BitField2)));
+                Debug.WriteLine(String.Format("BitField = {0} (0x{1:X16})", _DebugBinaryFormat(_bitField), _bitField));
             }
 
 
             // total bit count
-            if (_TestBit(unit.BitField, 0x1D))
+            if (_TestBit(Bits.Bit1DBitCountEof))
             {
-                unit.BitCount = _ReadBits(32);
+                _bitCount = _bitBuffer.ReadBits(32);
                 if (_debugOutputLoadingProgress)
                 {
-                    Debug.WriteLine(String.Format("Total BitCount = {0}", unit.BitCount));
+                    Debug.WriteLine(String.Format("Total BitCount = {0}", _bitCount));
                 }
             }
-
 
 
             // begin data magic word
-            if (_TestBit(unit.BitField, 0x00))
+            if (_TestBit(Bits.Bit00FlagAlignment))
             {
-                unit.BeginFlag = (uint)_ReadBits(32);
+                _beginFlag = (uint)_bitBuffer.ReadBits(32);
                 if (_debugOutputLoadingProgress)
                 {
-                    Debug.WriteLine(String.Format("BeginFlag = 0x{0}", unit.BeginFlag.ToString("X8")));
+                    Debug.WriteLine(String.Format("BeginFlag = 0x{0}", _beginFlag.ToString("X8")));
                 }
-                if (unit.BeginFlag != ObjectMagicWord && unit.BeginFlag != ItemMagicWord) throw new Exceptions.UnexpectedTokenException(ObjectMagicWord, unit.BeginFlag);
+                if (_beginFlag != ObjectMagicWord && _beginFlag != ItemMagicWord) throw new Exceptions.UnexpectedTokenException(ObjectMagicWord, _beginFlag);
             }
-
 
 
             // dunno what these are exactly
-            if (_TestBit(unit.BitField, 0x1C))
+            if (_TestBit(Bits.Bit1CTimeStamps))
             {
-                unit.TimeStamp1 = _ReadBits(32);
-                unit.TimeStamp2 = _ReadBits(32);
-                unit.TimeStamp3 = _ReadBits(32);
+                _timeStamp1 = _bitBuffer.ReadBits(32);
+                _timeStamp2 = _bitBuffer.ReadBits(32);
+                _timeStamp3 = _bitBuffer.ReadBits(32);
                 if (_debugOutputLoadingProgress)
                 {
-                    Debug.WriteLine(String.Format("TimeStamp1 = {0}, TimeStamp2 = {1}, TimeStamp3 = {2}", unit.TimeStamp1, unit.TimeStamp2, unit.TimeStamp3));
+                    Debug.WriteLine(String.Format("TimeStamp1 = {0}, TimeStamp2 = {1}, TimeStamp3 = {2}", _timeStamp1, _timeStamp2, _timeStamp3));
                 }
             }
 
 
-            // dunno...
-            if (_TestBit(unit.BitField, 0x1F))
+            // last station visited save/respawn location
+            if (_TestBit(Bits.Bit1FSaveLocations))
             {
-                unit.UnknownCount1F = _ReadBits(4) - 8;
-                unit.UnknownCount1Fs = new UnknownCount1FClass[unit.UnknownCount1F];
+                int saveLocationsCount = _bitBuffer.ReadBitsShift(4);
                 if (_debugOutputLoadingProgress)
                 {
-                    Debug.WriteLine(String.Format("unit.unknownCount1F = {0}", unit.UnknownCount1F));
+                    Debug.WriteLine(String.Format("SaveLocationsCount = {0}", saveLocationsCount));
                 }
 
-                for (int i = 0; i < unit.UnknownCount1F; i++)
+                for (int i = 0; i < saveLocationsCount; i++)
                 {
-                    unit.UnknownCount1Fs[i] = new UnknownCount1FClass
-                    {
-                        Unknown1 = (short)_ReadBits(16), // table 0x6D ??
-                        Unknown2 = (short)_ReadBits(16)  // table 0xB2 ??
-                    };
+                    ushort levelCode = _bitBuffer.ReadUInt16(); // table 0x6D (LEVEL)
+                    ushort difficultyCode = _bitBuffer.ReadUInt16();  // table 0xB2 (DIFFICULTY)
 
-                    if (_debugOutputLoadingProgress)
+                    SaveLocation saveLocation = new SaveLocation
                     {
-                        Debug.WriteLine(String.Format("unit.unknownCount1Fs[{0}].Unknown1 = {1} (0x{1:X4}), unit.unknownCount1Fs[{0}].Unknown1 = {2} (0x{2:X4})",
-                            i, unit.UnknownCount1Fs[i].Unknown1, unit.UnknownCount1Fs[i].Unknown2));
+                        Level = (LevelRow)FileManager.GetRowFromCode(Xls.TableCodes.LEVEL, (short)levelCode),
+                        Difficulty = (DifficultyRow)FileManager.GetRowFromCode(Xls.TableCodes.DIFFICULTY, (short)difficultyCode)
+                    };
+                    SaveLocations.Add(saveLocation);
+
+                    if ((SaveLocations[i].Level == null && SaveLocations[i].Difficulty != null) || (SaveLocations[i].Level != null && SaveLocations[i].Difficulty == null))
+                    {
+                        throw new Exceptions.UnitObjectException(String.Format("Invalid SaveLocation encountered. Level = {0:X4}, Difficulty = {1:X4}", levelCode, difficultyCode));
+                    }
+
+                    if (!_debugOutputLoadingProgress) continue;
+                    if (SaveLocations[i].Level == null || SaveLocations[i].Difficulty == null)
+                    {
+                        Debug.WriteLine(String.Format("SaveLocations[{0}].LevelCode = {1} (0x{1:X4}), SaveLocations[{0}].DifficultyCode = {2} (0x{2:X4})",
+                                                      i, levelCode, difficultyCode));
+                    }
+                    else
+                    {
+                        Debug.WriteLine(String.Format("SaveLocations[{0}].Level = {1}, SaveLocations[{0}].Difficulty = {2}",
+                                                      i, SaveLocations[i].Level.levelName, SaveLocations[i].Difficulty.name));
                     }
                 }
             }
 
 
             // character flags
-            if (_TestBit(unit.BitField, 0x20))
+            if (_TestBit(Bits.Bit20States1))
             {
-                unit.PlayerFlagCount1 = _ReadBits(8);
+                int statCount = _bitBuffer.ReadBits(8);
                 if (_debugOutputLoadingProgress)
                 {
-                    Debug.WriteLine(String.Format("unit.PlayerFlagCount1 = {0}", unit.PlayerFlagCount1));
+                    Debug.WriteLine(String.Format("StateCode1Count = {0}", statCount));
                 }
 
-                for (int i = 0; i < unit.PlayerFlagCount1; i++)
+                for (int i = 0; i < statCount; i++)
                 {
-                    unit.PlayerFlags1.Add(_ReadInt16()); // table 0x4B??
+                    int state = _bitBuffer.ReadInt16();
+                    AddState1(state); // table 0x4B (STATES)
                     if (_debugOutputLoadingProgress)
                     {
-                        Debug.WriteLine(String.Format("unit.PlayerFlags1[{0}] = {1} (0x{1:X4})", i, unit.PlayerFlags1[i]));
+                        Debug.WriteLine(String.Format("StateCodes1[{0}] = {1}({2:X})", i, StateCodes1[i], (short)(StateCodes1[i])));
                     }
                 }
             }
             //// end of header
 
 
-            // dunno...
-            if (_TestBit(unit.BitField, 0x1B))
+            // bit offsets to bookmarks (only 1 bookmark though - "hotkeys")
+            if (_TestBit(Bits.Bit1BBookmarks))
             {
-                unit.BitOffsetCount = _ReadBits(5);
+                BookmarkCount = _bitBuffer.ReadBits(5);
                 if (_debugOutputLoadingProgress)
                 {
-                    Debug.WriteLine(String.Format("unit._bitOffsetCount = {0}", unit.BitOffsetCount));
+                    Debug.WriteLine(String.Format("BookmarkCount = {0}", BookmarkCount));
                 }
-                if (unit.BitOffsetCount > 1)
+                if (BookmarkCount > 1)
                 {
-                    throw new Exceptions.CharacterFileNotImplementedException("Unexpected unit._bitOffsetCount (> 1)!\nNot-Implemented cases. Please report this error and supply the offending file.");
+                    throw new Exceptions.UnitObjectNotImplementedException("Unexpected BookmarkCount (> 1)!\nNot-Implemented cases. Please report this error and supply the offending file.");
                 }
 
-                for (int i = 0; i < unit.BitOffsetCount; i++)
+                for (int i = 0; i < BookmarkCount; i++)
                 {
-                    UnitBitOffsets bitOffsets = new UnitBitOffsets
+                    Bookmark bookmark = new Bookmark
                     {
-                        Code = _ReadInt16(),
-                        Offset = _ReadInt32()
+                        Code = _bitBuffer.ReadUInt16(),
+                        Offset = _bitBuffer.ReadInt32()
                     };
                     if (_debugOutputLoadingProgress)
                     {
-                        Debug.WriteLine(String.Format("bitOffsets[{0}].Code = {1} (0x{1:X4}), bitOffsets[{0}].Offset = {2}", i, bitOffsets.Code, bitOffsets.Offset));
+                        Debug.WriteLine(String.Format("Bookmarks[{0}].Code = {1} (0x{1:X4}), Bookmarks[{0}].Offset = {2}", i, bookmark.Code, bookmark.Offset));
                     }
 
-                    if (bitOffsets.Code != 0x3030)
-                    {
-                        throw new Exceptions.CharacterFileNotImplementedException("Unexpected value for bitOffsets.index (!= 0x3030)!\nNot-Implemented cases. Please report this error and supply the offending file.");
-                    }
-                    unit.BitOffsets.Add(bitOffsets);
+                    Bookmarks.Add(bookmark);
                 }
             }
 
 
             // dunno...
-            if (_TestBit(unit.BitField, 0x05))
+            if (_TestBit(Bits.Bit05Unknown))
             {
-                unit.Unknown05 = _ReadInt32();
+                UnitObjectId = _bitBuffer.ReadInt32();
                 if (_debugOutputLoadingProgress)
                 {
-                    Debug.WriteLine(String.Format("unit.Unknown05 = {0} (0x{0:X4})", unit.Unknown05));
+                    Debug.WriteLine(String.Format("UnitObjectId = {0} (0x{0:X4})", UnitObjectId));
                 }
             }
 
 
             // unit type/code
-            unit.UnitType = _ReadBits(4);
+            // if unit type == 1, table = 0x91 (PLAYERS)
+            //                 2, table = 0x77 (MONSTERS)
+            //                 3? (table = 0x72; MISSILES at a guess. For memory, MISSILES doesn't use code values - probably why not seen in ASM)
+            //                 4, table = 0x67 (ITEMS)
+            //                 5, table = 0x7B (OBJECTS)
+            UnitType = (UnitTypes)_bitBuffer.ReadBits(4);
             if (_debugOutputLoadingProgress)
             {
-                Debug.WriteLine(String.Format("unit.unitType = {0}", unit.UnitType));
+                Debug.WriteLine(String.Format("UnitType = {0}", UnitType));
             }
-            if (unit.UnitType != 1 && unit.UnitType != 2 && unit.UnitType != 4 && unit.UnitType != 5)
-            {
-                throw new Exceptions.CharacterFileNotImplementedException("Unexpected value for unit.unitType (!= 1, 2, 4, 5)!\nNot-Implemented cases. Please report this warning and supply the offending file.");
-            }
-            unit.UnitCode = _ReadInt16();
+            UnitCode = _bitBuffer.ReadUInt16();
             if (_debugOutputLoadingProgress)
             {
-                Debug.WriteLine(String.Format("unit.unitCode = {0} (0x{0:X4})", unit.UnitCode));
+                Debug.Write(String.Format("UnitCode = {0} (0x{0:X4}), ", UnitCode));
             }
-            // if unit type == 1, table = 0x91
-            //                 2, table = 0x77
-            //                 4, table = 0x67
-            //                 5, table = 0x7B
+            Xls.TableCodes tableCode = Xls.TableCodes.Null;
+            switch (UnitType)
+            {
+                case UnitTypes.Player:  tableCode = Xls.TableCodes.PLAYERS;  break;
+                case UnitTypes.Monster: tableCode = Xls.TableCodes.MONSTERS; break;
+                case UnitTypes.Missile: tableCode = Xls.TableCodes.MISSILES; break;
+                case UnitTypes.Item:    tableCode = Xls.TableCodes.ITEMS;    break;
+                case UnitTypes.Object:  tableCode = Xls.TableCodes.OBJECTS;  break;
+            }
+            if (tableCode == Xls.TableCodes.Null) throw new Exceptions.UnitObjectException("The unit object data has an unknown UnitType.");
+            UnitData = FileManager.GetUnitDataRowFromCode(tableCode, (short)UnitCode);
+            if (UnitData == null) Debug.WriteLine(String.Format("Warning: UnitCode {0} (0x{0:X4}) not found!", UnitCode));
+            if (_debugOutputLoadingProgress && UnitData != null)
+            {
+                ExcelFile unitDataTable = FileManager.GetExcelTableFromCode(tableCode);
+                String rowName = unitDataTable.ReadStringTable(UnitData.name);
+                Debug.WriteLine(String.Format("UnitDataName = " + rowName));
+            }
 
 
             // unit object id
-            if (_TestBit(unit.BitField, 0x17))
+            if (_TestBit(Bits.Bit17ObjectId))
             {
-                if (unit.Version > 0xB2)
+                if (_version > 0xB2)
                 {
-                    unit.ObjectId = _ReadInt64();
+                    ObjectId = _bitBuffer.ReadUInt64();
                     if (_debugOutputLoadingProgress)
                     {
-                        Debug.WriteLine(String.Format("unit.ObjectId = {0} (0x{0:X16})", unit.ObjectId));
+                        Debug.WriteLine(String.Format("ObjectId = {0} (0x{0:X16})", ObjectId));
                     }
 
-                    if (unit.ObjectId == 0)
+                    if (ObjectId == 0)
                     {
-                        throw new Exceptions.CharacterFileNotImplementedException("if (unit.ObjectId == 0)");
+                        throw new Exceptions.UnitObjectNotImplementedException("if (ObjectId == 0)");
                     }
                 }
             }
 
 
-            // dunno
-            if (_TestBit(unit.BitField, 0x03) || _TestBit(unit.BitField, 0x01))
+            // item positioning stuff
+            if (_TestBit(Bits.Bit01Unknown) || _TestBit(Bits.Bit03Unknown))
             {
-                unit.IsInventory = (_ReadBits(1) != 0);
+                IsInventory = _bitBuffer.ReadBool();
                 if (_debugOutputLoadingProgress)
                 {
-                    Debug.WriteLine(String.Format("unit.IsInventory = {0}", unit.IsInventory));
+                    Debug.WriteLine(String.Format("IsInventory = {0}, Bits.Bit01Unknown = {1}, Bits.Bit03Unknown = {2}", IsInventory, _TestBit(Bits.Bit01Unknown), _TestBit(Bits.Bit03Unknown)));
                 }
 
-                if (unit.IsInventory) // item is in inventory
+                if (IsInventory) // item is in inventory
                 {
-                    if (_TestBit(unit.BitField, 0x02))
+                    if (_TestBit(Bits.Bit02Unknown))
                     {
-                        unit.Unknown02 = _ReadBits(32);
+                        Unknown02 = _bitBuffer.ReadBits(32);
                         if (_debugOutputLoadingProgress)
                         {
-                            Debug.WriteLine(String.Format("unit.unknown_02 = {0}", unit.Unknown02));
+                            Debug.WriteLine(String.Format("Unknown02 = {0}", Unknown02));
                         }
                     }
 
-                    unit.InventoryType = _ReadBits(16);
-                    unit.InventoryPositionX = _ReadBits(12);
-                    unit.InventoryPositionY = _ReadBits(12);
+                    InventoryLocationIndex = _bitBuffer.ReadBits(12);
+                    InventoryPositionX = _bitBuffer.ReadBits(12);
+                    InventoryPositionY = _bitBuffer.ReadBits(12);
+                    Unknown04 = _bitBuffer.ReadBits(4);
                     if (_debugOutputLoadingProgress)
                     {
-                        Debug.WriteLine(String.Format("inventoryType = {0}, inventoryPositionX = {1}, inventoryPositionY = {2}",
-                            unit.InventoryType, unit.InventoryPositionX, unit.InventoryPositionY));
+                        Debug.WriteLine(String.Format("InventoryLocationIndex = {0}, InventoryPositionX = {1}, InventoryPositionY = {2}, Unknown04 = {3}",
+                            InventoryLocationIndex, InventoryPositionX, InventoryPositionY, Unknown04));
                     }
 
-                    unit.Unknown0103Int64 = _ReadInt64();
+                    Unknown0103Int64 = _bitBuffer.ReadNonStandardFunc();
                     if (_debugOutputLoadingProgress)
                     {
-                        Debug.WriteLine(String.Format("unit.unknown_01_03_4 = {0} (0x{0:X16})", unit.Unknown0103Int64));
+                        Debug.WriteLine(String.Format("Unknown0103Int64 = {0} (0x{0:X16})", Unknown0103Int64));
                     }
                 }
                 else // item is a "world drop"
                 {
-                    unit.Unknown0103Int1 = _ReadInt32();
+                    RoomId = _bitBuffer.ReadInt32();
 
-                    unit.Unknown0103Float11 = _ReadFloat();
-                    unit.Unknown0103Float12 = _ReadFloat();
-                    unit.Unknown0103Float13 = _ReadFloat();
+                    Position.X = _bitBuffer.ReadFloat();
+                    Position.Y = _bitBuffer.ReadFloat();
+                    Position.Z = _bitBuffer.ReadFloat();
 
-                    unit.Unknown0103Float21 = _ReadFloat();
-                    unit.Unknown0103Float22 = _ReadFloat();
-                    unit.Unknown0103Float23 = _ReadFloat();
+                    Unknown0103Float21 = _bitBuffer.ReadFloat();
+                    Unknown0103Float22 = _bitBuffer.ReadFloat();
+                    Unknown0103Float23 = _bitBuffer.ReadFloat();
 
-                    unit.Unknown0103Float31 = _ReadFloat();
-                    unit.Unknown0103Float32 = _ReadFloat();
-                    unit.Unknown0103Float33 = _ReadFloat();
+                    Normal.X = _bitBuffer.ReadFloat();
+                    Normal.Y = _bitBuffer.ReadFloat();
+                    Normal.Z = _bitBuffer.ReadFloat();
 
-                    unit.Unknown0103Int2 = _ReadBits(10);
+                    Unknown0103Int2 = _bitBuffer.ReadBits(10);
 
-                    unit.Unknown0103Float4 = _ReadFloat();
+                    Unknown0103Float4 = _bitBuffer.ReadFloat();
 
-                    unit.Unknown0103Float5 = _ReadFloat();
+                    Unknown0103Float5 = _bitBuffer.ReadFloat();
 
                     if (_debugOutputLoadingProgress)
                     {
-                        Debug.WriteLine(String.Format("Unknown0103Int1 = {0}", unit.Unknown0103Int1));
-                        Debug.WriteLine(String.Format("Unknown0103Float11 = {0}, Unknown0103Float12 = {1}, Unknown0103Float13 = {2}", unit.Unknown0103Float11, unit.Unknown0103Float12, unit.Unknown0103Float13));
-                        Debug.WriteLine(String.Format("Unknown0103Float21 = {0}, Unknown0103Float22 = {1}, Unknown0103Float23 = {2}", unit.Unknown0103Float21, unit.Unknown0103Float22, unit.Unknown0103Float23));
-                        Debug.WriteLine(String.Format("Unknown0103Float31 = {0}, Unknown0103Float32 = {1}, Unknown0103Float33 = {2}", unit.Unknown0103Float31, unit.Unknown0103Float32, unit.Unknown0103Float33));
-                        Debug.WriteLine(String.Format("Unknown0103Int2 = {0}", unit.Unknown0103Int2));
-                        Debug.WriteLine(String.Format("Unknown0103Float4 = {0}", unit.Unknown0103Float4));
-                        Debug.WriteLine(String.Format("Unknown0103Float5 = {0}", unit.Unknown0103Float5));
+                        Debug.WriteLine(String.Format("RoomId = {0}", RoomId));
+                        Debug.WriteLine(String.Format("Position.X = {0}, Position.Y = {1}, Position.Z = {2}", Position.X, Position.Y, Position.Z));
+                        Debug.WriteLine(String.Format("Unknown0103Float21 = {0}, Unknown0103Float22 = {1}, Unknown0103Float23 = {2}", Unknown0103Float21, Unknown0103Float22, Unknown0103Float23));
+                        Debug.WriteLine(String.Format("NormalX = {0}, NormalY = {1}, NormalZ = {2}", Normal.X, Normal.Y, Normal.Z));
+                        Debug.WriteLine(String.Format("Unknown0103Int2 = {0}", Unknown0103Int2));
+                        Debug.WriteLine(String.Format("Unknown0103Float4 = {0}", Unknown0103Float4));
+                        Debug.WriteLine(String.Format("Unknown0103Float5 = {0}", Unknown0103Float5));
                     }
                 }
             }
 
 
-            // dunno
-            if (_TestBit(unit.BitField, 0x06))
+            // I think this has something to do with the Monsters table +46Ch, bit 0x55 = 4 bits or bit 0x47 = 2 bits. Or Objects table +46Ch, bit 0x55 = 2 bits... Something like that
+            if (_TestBit(Bits.Bit06Unknown))
             {
-                unit.UnknownBool06 = (_ReadBits(1) != 0);
+                UnknownBool06 = _bitBuffer.ReadBool();
                 if (_debugOutputLoadingProgress)
                 {
-                    Debug.WriteLine(String.Format("unit.unknownBool_06 = {0}", unit.UnknownBool06));
+                    Debug.WriteLine(String.Format("UnknownBool06 = {0}", UnknownBool06));
                 }
-                if (!unit.UnknownBool06)
+                if (!UnknownBool06)
                 {
-                    throw new Exceptions.CharacterFileNotImplementedException("if (unit.unknownBool_06 != 1");
+                    throw new Exceptions.UnitObjectNotImplementedException("if (UnknownBool06 != 1)");
                 }
             }
 
 
-            // on items only I think - Usually 0x00
-            if (_TestBit(unit.BitField, 0x09))
+            if (_TestBit(Bits.Bit09ItemLookGroup))
             {
-                unit.Unknown09 = _ReadBits(8);
+                ItemLookGroupCode = _bitBuffer.ReadBits(8);
                 if (_debugOutputLoadingProgress)
                 {
-                    Debug.WriteLine(String.Format("unit.unknown_09 = {0} (0x{0:X2})", unit.Unknown09));
+                    Debug.WriteLine(String.Format("ItemLookGroupCode = {0} (0x{0:X2})", ItemLookGroupCode));
                 }
             }
 
 
             // on character only
-            if (_TestBit(unit.BitField, 0x07))
+            if (_TestBit(Bits.Bit07CharacterShape))
             {
-                unit.CharacterHeight = _ReadByte();
-                unit.CharacterWidth = _ReadByte();
+                CharacterHeight = _bitBuffer.ReadByte();
+                CharacterBulk = _bitBuffer.ReadByte();
                 if (_debugOutputLoadingProgress)
                 {
-                    Debug.WriteLine(String.Format("CharacterHeight = {0}, CharacterWidth = {1}", unit.CharacterHeight, unit.CharacterWidth));
+                    Debug.WriteLine(String.Format("CharacterHeight = {0}, CharacterBulk = {1}", CharacterHeight, CharacterBulk));
                 }
             }
 
 
-            // unknown - older versions only
-            if (_TestBit(unit.BitField, 0x17))
+            // object id for older versions - they moved it?
+            if (_TestBit(Bits.Bit17ObjectId))
             {
-                if (unit.Version <= 0xB2)
+                if (_version <= 0xB2)
                 {
-                    throw new Exceptions.CharacterFileNotImplementedException("if (_TestBit(unit.BitField, 0x17) && unit.MajorVersion <= 0xB2)");
+                    throw new Exceptions.UnitObjectNotImplementedException("if (_TestBit(0x17) && Version <= 0xB2)");
                 }
             }
 
 
             // on character only
-            if (_TestBit(unit.BitField, 0x08))
+            if (_TestBit(Bits.Bit08CharacterName))
             {
-                unit.CharNameCount = _ReadBits(8);
-                if (unit.CharNameCount > 0)
+                int unicodeCharCount = _bitBuffer.ReadBits(8);
+                if (unicodeCharCount > 0)
                 {
-                    int byteCount = unit.CharNameCount * 2; // is Unicode string without \0
-                    unit.CharacterName = new char[byteCount];
+                    int byteCount = unicodeCharCount * 2; // is Unicode string without \0
+                    _charNameBytes = new byte[byteCount];
                     for (int i = 0; i < byteCount; i++)
                     {
-                        unit.CharacterName[i] = _ReadChar();
+                        _charNameBytes[i] = _bitBuffer.ReadByte();
                     }
-                    unit.Name = new String(unit.CharacterName);
+                    Name = Encoding.Unicode.GetString(_charNameBytes, 0, byteCount);
                     if (_debugOutputLoadingProgress)
                     {
-                        Debug.WriteLine(String.Format("unit.Name = {0}", unit.Name));
+                        Debug.WriteLine(String.Format("Name = {0}", Name));
                     }
                 }
             }
 
 
             // on both character and items - appears to be always zero for items
-            if (_TestBit(unit.BitField, 0x0A))
+            if (_TestBit(Bits.Bit0AStates2))
             {
-                unit.PlayerFlagCount2 = _ReadBits(8);
+                int stateCount = _bitBuffer.ReadBits(8);
                 if (_debugOutputLoadingProgress)
                 {
-                    Debug.WriteLine(String.Format("unit._playerFlagCount2 = {0}", unit.PlayerFlagCount1));
+                    Debug.WriteLine(String.Format("StateCode2Count = {0}", stateCount));
                 }
 
-                if (unit.PlayerFlagCount2 > 0)
+                for (int i = 0; i < stateCount; i++)
                 {
-                    for (int i = 0; i < unit.PlayerFlagCount2; i++)
+                    int state = _bitBuffer.ReadInt16();
+                    AddState2(state);
+                    if (_debugOutputLoadingProgress)
                     {
-                        unit.PlayerFlags2.Add(_ReadBits(16));
-                        if (_debugOutputLoadingProgress)
-                        {
-                            Debug.WriteLine(String.Format("unit.PlayerFlags2[{0}] = {1} (0x{1:X4})", i, unit.PlayerFlags2[i]));
-                        }
+                        Debug.WriteLine(String.Format("StateCodes2[{0}] = {1}({2:X})", i, StateCodes2[i], (short)(StateCodes2[i])));
                     }
+
+                    // this section looks like it has more reading if Bit14 is flagged (CharSelectStats)
                 }
             }
 
 
-
-            if (unit.Usage > 2 && (unit.Usage <= 6 || unit.Usage != 7)) // so if == 0, 1, 2, 7, then *don't* do this
+            if (_context > ObjectContext.CharSelect && (_context <= ObjectContext.Unknown6 || _context != ObjectContext.Unknown7)) // so if == 0, 1, 2, 7, then *don't* do this
             {
-                unit.UsageBool = _ReadBool();
-                if (unit.UsageBool)
+                ContextBool = _bitBuffer.ReadBool();
+                if (ContextBool)
                 {
-                    unit.UsageBoolValue = _ReadBits(4);
+                    ContextBoolValue = _bitBuffer.ReadBits(4); // invlocidx??
                 }
 
                 if (_debugOutputLoadingProgress)
                 {
-                    Debug.WriteLine(String.Format("unit.UsageBool = {0}, UsageBoolValue = {1}", unit.UsageBool, unit.UsageBoolValue));
+                    Debug.WriteLine(String.Format("UsageBool = {0}, UsageBoolValue = {1}", ContextBool, ContextBoolValue));
                 }
             }
 
             // <unknown bitfield 0x11th bit> - only seen as false anyways
 
-            unit.IsDead = _ReadBool();
+            IsDead = _bitBuffer.ReadBool();
             if (_debugOutputLoadingProgress)
             {
-                Debug.WriteLine(String.Format("IsDead = {0}", unit.IsDead));
+                Debug.WriteLine(String.Format("IsDead = {0}", IsDead));
             }
 
 
             // unit stats
-            if (_TestBit(unit.BitField, 0x0D))
+            if (_TestBit(Bits.Bit0DStats))
             {
-                if (_debugOutputLoadingProgress) Debug.WriteLine("==Has Stat Block==");
-
-                unit.Stats = new StatBlock();
-                _ReadStatBlock(unit.Stats, true);
+                Stats.ReadStats(_bitBuffer, true);
             }
-            else if (_TestBit(unit.BitField, 0x14))
+            else if (_TestBit(Bits.Bit14CharSelectStats))
             {
-                unit.StatUnknownByte1 = _ReadByte(); // stats row 0x3C0?
-                unit.StatUnknownByte2 = _ReadByte(); // stats row 0x347?
+                int characterLevel = _bitBuffer.ReadByte(); // stats row 0x000 (level)
+                Stats.SetStat("level", characterLevel);
+
+                int characterPvpRankRowIndex = _bitBuffer.ReadByte(); // stats row 0x347 (player_rank)
+                Stats.SetStat("player_rank", characterPvpRankRowIndex);
+
                 if (_debugOutputLoadingProgress)
                 {
-                    Debug.WriteLine(String.Format("unit.StatUnknownByte1 = {0}, unit.StatUnknownByte2 = {1}", unit.StatUnknownByte1, unit.StatUnknownByte2));
+                    Debug.WriteLine(String.Format("LevelRowIndex = {0}, PlayerRankRowIndex = {1}", characterLevel, characterPvpRankRowIndex));
                 }
 
-                if (_TestBit(unit.BitField, 0x1E))
+                if (_TestBit(Bits.Bit1ECharSelectStatsMaxDifficulty))
                 {
-                    unit.StatUnknownInt1 = _ReadBits(3); // stats row 0x347? or 0x33A?
+                    int maxDifficultyRowIndex = _bitBuffer.ReadBits(3); // stats row 0x347 (difficulty_max)
+                    Stats.SetStat("difficulty_max", maxDifficultyRowIndex);
+
                     if (_debugOutputLoadingProgress)
                     {
-                        Debug.WriteLine(String.Format("unit.StatUnknownInt1 = {0}, ", unit.StatUnknownInt1));
+                        Debug.WriteLine(String.Format("MaxDifficultyRowIndex = {0}, ", maxDifficultyRowIndex));
                     }
                 }
             }
 
 
-            unit.HasAppearanceDetails = _ReadBool();
+            HasAppearanceDetails = _bitBuffer.ReadBool();
             if (_debugOutputLoadingProgress)
             {
-                Debug.WriteLine(String.Format("HasAppearanceDetails = {0}", unit.HasAppearanceDetails));
+                Debug.WriteLine(String.Format("HasAppearanceDetails = {0}", HasAppearanceDetails));
             }
-            if (unit.HasAppearanceDetails)
+            if (HasAppearanceDetails)
             {
-                _ReadAppearance(unit);
-            }
-
-
-            if (_TestBit(unit.BitField, 0x12))
-            {
-                unit.ItemEndBitOffset = _ReadInt32();
-                unit.ItemCount = _ReadBits(10);
-                if (_debugOutputLoadingProgress)
-                {
-                    Debug.WriteLine(String.Format("ItemEndBitOffset = {0}, ItemCount = {1}", unit.ItemEndBitOffset, unit.ItemCount));
-                }
-
-                for (int i = 0; i < unit.ItemCount; i++)
-                {
-                    UnitObject item = new UnitObject();
-                    _ReadUnit(item);
-                    unit.Items.Add(item);
-                }
+                _ReadAppearance();
             }
 
 
-            if (_TestBit(unit.BitField, 0x1A))
+            if (_TestBit(Bits.Bit12Items))
             {
-                unit.WeaponConfigFlag = _ReadUInt32();
+                ItemEndBitOffset = _bitBuffer.ReadInt32();
+                ItemCount = _bitBuffer.ReadBits(10);
                 if (_debugOutputLoadingProgress)
                 {
-                    Debug.WriteLine(String.Format("WeaponConfigFlag = {0} (0x{0:X8})", unit.ItemEndBitOffset));
-                }
-                if (unit.WeaponConfigFlag != WeaponConfigMagicWord)
-                {
-                    throw new Exceptions.UnexpectedTokenException(WeaponConfigMagicWord, unit.WeaponConfigFlag);
+                    Debug.WriteLine(String.Format("ItemEndBitOffset = {0}, ItemCount = {1}", ItemEndBitOffset, ItemCount));
                 }
 
-                unit.EndFlagBitOffset = _ReadBits(32);     // to end flag
+                for (int i = 0; i < ItemCount; i++)
+                {
+                    UnitObject item = new UnitObject(_bitBuffer, _debugOutputLoadingProgress);
+                    item._ReadUnit();
+                    Items.Add(item);
+                }
+            }
+
+
+            if (_TestBit(Bits.Bit1AHotkeys))
+            {
+                HotkeyFlag = _bitBuffer.ReadUInt32();
                 if (_debugOutputLoadingProgress)
                 {
-                    Debug.WriteLine(String.Format("EndFlagBitOffset = {0}", unit.EndFlagBitOffset));
+                    Debug.WriteLine(String.Format("HotkeyFlag = {0} (0x{0:X8})", HotkeyFlag));
+                }
+                if (HotkeyFlag != HotkeysMagicWord)
+                {
+                    throw new Exceptions.UnexpectedTokenException(HotkeysMagicWord, HotkeyFlag);
                 }
 
-                unit.WeaponConfigCount = _ReadBits(6);
+                EndFlagBitOffset = _bitBuffer.ReadBits(32);     // to end flag
                 if (_debugOutputLoadingProgress)
                 {
-                    Debug.WriteLine(String.Format("WeaponConfigCount = {0}", unit.WeaponConfigCount));
+                    Debug.WriteLine(String.Format("EndFlagBitOffset = {0}", EndFlagBitOffset));
                 }
-                unit.WeaponConfigs = new UnitWeaponConfig[unit.WeaponConfigCount];
-                for (int i = 0; i < unit.WeaponConfigCount; i++)
+
+                HotkeyCount = _bitBuffer.ReadBits(6);
+                if (_debugOutputLoadingProgress)
                 {
-                    UnitWeaponConfig weaponConfig = new UnitWeaponConfig
+                    Debug.WriteLine(String.Format("HotkeyCount = {0}", HotkeyCount));
+                }
+                for (int i = 0; i < HotkeyCount; i++)
+                {
+                    Hotkey hotkey = new Hotkey
                     {
-                        Id = (short)_ReadBits(16),
-                        UnknownCount1 = _ReadBits(4)
+                        Code = _bitBuffer.ReadUInt16(), // code from TAG table
                     };
+                    Hotkeys.Add(hotkey);
                     if (_debugOutputLoadingProgress)
                     {
-                        Debug.WriteLine(String.Format("weaponConfig.Id = {0} (0x{0:X4}), weaponConfig.UnknownCount1 = {1}", weaponConfig.Id, weaponConfig.UnknownCount1));
+                        Debug.WriteLine(String.Format("hotkey.Code = 0x{0:X4}", hotkey.Code));
                     }
 
-                    if (weaponConfig.UnknownCount1 != 0x02)
+
+                    hotkey.UnknownCount = _bitBuffer.ReadBits(4);
+                    if (_debugOutputLoadingProgress)
                     {
-                        throw new Exceptions.CharacterFileNotImplementedException("if (weaponConfig.unknownCount1 != 0x02)");
+                        Debug.WriteLine(String.Format("hotkey.UnknownCount = " + hotkey.UnknownCount));
                     }
-                    weaponConfig.Exists1 = new bool[2];
-                    weaponConfig.UnknownIds1 = new int[2];
-                    for (int j = 0; j < weaponConfig.UnknownCount1; j++)
+                    if (hotkey.UnknownCount > 0x02)
                     {
-                        weaponConfig.Exists1[j] = (_ReadBits(1) != 0);
+                        throw new Exceptions.UnitObjectNotImplementedException("if (hotkey.UnknownCount > 0x02)");
+                    }
+
+                    hotkey.UnknownExists = new bool[hotkey.UnknownCount];
+                    hotkey.UnknownValues = new int[hotkey.UnknownCount];
+                    for (int j = 0; j < hotkey.UnknownCount; j++)
+                    {
+                        hotkey.UnknownExists[j] = _bitBuffer.ReadBool();
+                        if (hotkey.UnknownExists[j])
+                        {
+                            hotkey.UnknownValues[j] = _bitBuffer.ReadBits(32); // under some condition this will be ReadFromOtherFunc thingy
+                        }
                         if (_debugOutputLoadingProgress)
                         {
-                            Debug.WriteLine(String.Format("weaponConfig.Exists1[{0}] = {1}", j, weaponConfig.Exists1[j]));
-                        }
-                        if (weaponConfig.Exists1[j])
-                        {
-                            weaponConfig.UnknownIds1[j] = _ReadBits(32); // under some condition this will be ReadFromOtherFunc thingy
+                            Debug.WriteLine(String.Format("hotkey.UnknownExists[{0}] = {1}, hotkey.UnknownValues[{0}] = 0x{2:X8}", j, hotkey.UnknownExists[j], hotkey.UnknownValues[j]));
                         }
                     }
 
-                    // yes this chunk looks the same as above - the above chunk though is in a specific function and can differ at 1 point
-                    // also, it can be != 2
-                    weaponConfig.UnknownCount2 = _ReadBits(4);
-                    weaponConfig.Exists2 = new bool[weaponConfig.UnknownCount2];
-                    weaponConfig.UnknownIds2 = new int[weaponConfig.UnknownCount2];
-                    for (int j = 0; j < weaponConfig.UnknownCount2; j++)
+
+                    hotkey.SkillCount = _bitBuffer.ReadBits(4);
+                    hotkey.SkillExists = new bool[hotkey.SkillCount];
+                    hotkey.SkillCode = new int[hotkey.SkillCount];
+                    for (int j = 0; j < hotkey.SkillCount; j++)
                     {
-                        weaponConfig.Exists2[j] = (_ReadBits(1) != 0);
-                        if (weaponConfig.Exists2[j])
+                        hotkey.SkillExists[j] = _bitBuffer.ReadBool();
+                        if (hotkey.SkillExists[j])
                         {
-                            weaponConfig.UnknownIds2[j] = _ReadBits(32);
+                            hotkey.SkillCode[j] = _bitBuffer.ReadBits(32); // code from SKILLS table
+                        }
+                        if (_debugOutputLoadingProgress)
+                        {
+                            Debug.WriteLine(String.Format("hotkey.SkillExists[{0}] = {1}, hotkey.SkillCode[{0}] = 0x{2:X8}", j, hotkey.SkillExists[j], hotkey.SkillCode[j]));
                         }
                     }
 
-                    weaponConfig.IdAnother = _ReadBits(32); // read from 0x17 file          // 0x3931 -> 0x4B
 
-                    unit.WeaponConfigs[i] = weaponConfig;
+                    hotkey.UnitTypeCode = _bitBuffer.ReadBits(32); // code from UNITTYPES table
+                    if (_debugOutputLoadingProgress)
+                    {
+                        Debug.WriteLine(String.Format("hotkey.UnitTypeCode = 0x{0:X8}", hotkey.UnitTypeCode));
+                    }
                 }
             }
 
 
             // end flag
-            //if (!_TestBit(unit.BitField, 0x00))
-            //{
-            unit.EndFlag = _ReadBits(32);
+            EndFlag = _bitBuffer.ReadBits(32);
             if (_debugOutputLoadingProgress)
             {
-                Debug.WriteLine(String.Format("EndFlag = {0} (0x{0:X8})", unit.EndFlag));
+                Debug.WriteLine(String.Format("EndFlag = {0} (0x{0:X8})", EndFlag));
             }
 
-            if (unit.EndFlag != unit.BeginFlag && unit.EndFlag != ItemMagicWord)
+            if (EndFlag != _beginFlag && EndFlag != ItemMagicWord)
             {
-                int bitOffset = unit.BitCount - _bitOffset;
-                int byteOffset = (_buffer.Length - _byteOffset) - (_bitOffset >> 3);
-                throw new Exceptions.InvalidFileException("Flags not aligned!\nBit Offset: " + _bitOffset + "\nExpected: " + unit.BitCount + " (+" + bitOffset +
-                                                          ")\nByte Offset: " + (_bitOffset >> 3) + "\nExpected: " + (_buffer.Length - _byteOffset) + " (+" + byteOffset + ")");
+                int bitOffset = _bitCount - _bitBuffer.BitOffset;
+                int byteOffset = (_bitBuffer.Length - _bitBuffer.Offset) - (_bitBuffer.BytesUsed);
+                throw new Exceptions.InvalidFileException("Flags not aligned!\nBit Offset: " + _bitBuffer.BitOffset + "\nExpected: " + _bitCount + " (+" + bitOffset +
+                                                          ")\nBytes Used: " + (_bitBuffer.BytesUsed) + "\nExpected: " + (_bitBuffer.Length - _bitBuffer.Offset) + " (+" + byteOffset + ")");
             }
-            //}
 
-            if (_TestBit(unit.BitField, 0x1D)) // no reading is done in here
+
+            if (_TestBit(Bits.Bit1DBitCountEof)) // no reading is done in here
             {
-                //throw new Exceptions.CharacterFileNotImplementedException("if (!_TestBit(unit.BitField, 0x1D))");
+                // todo: do check that we're at the EoF bit count etc
             }
 
         }
-        private void _ReadStatBlock(StatBlock statBlock, bool readNameCount)
+
+        private void _ReadAppearance()
         {
-            statBlock.Version = _ReadBits(16);
+            //// ReadEquippedItems ////
+            Appearance.EquippedItemCount = _bitBuffer.ReadBits(3);
             if (_debugOutputLoadingProgress)
             {
-                Debug.WriteLine("StatBlock Version = " + statBlock.Version);
+                Debug.WriteLine(String.Format("Appearance.EquippedItemCount = {0}", Appearance.EquippedItemCount));
             }
-            if (statBlock.Version != 0x0A)
-            {
-                throw new Exceptions.NotSupportedVersionException("0x0A", "0x" + statBlock.Version.ToString("X2"));
-            }
-
-            statBlock.Usage = _ReadBits(3);
-            statBlock.AdditionalStats = new List<UnitStatAdditional>();
-            statBlock.stats = new List<StatBlock.Stat>();
-
-            int additionalStatCount = _ReadBits(6);
-            if (_debugOutputLoadingProgress)
-            {
-                Debug.WriteLine(String.Format("statBlock.unknown1 = {0}, additionalStatCount = {1}", statBlock.Usage, additionalStatCount));
-            }
-            for (int i = 0; i < additionalStatCount; i++)
-            {
-                UnitStatAdditional additionalStat = new UnitStatAdditional
-                {
-                    Unknown = (short)_ReadBits(16),
-                    StatCount = (short)_ReadBits(16),
-                    Stats = new List<StatBlock.Stat>()
-                };
-                if (_debugOutputLoadingProgress)
-                {
-                    Debug.WriteLine(String.Format("additionalStat.Unknown = {0}, additionalStat.StatCount = {1}", additionalStat.Unknown, additionalStat.StatCount));
-                }
-
-                for (int j = 0; j < additionalStat.StatCount; j++)
-                {
-                    StatBlock.Stat unitStat = new StatBlock.Stat();
-                    _ReadStat(statBlock, unitStat);
-
-                    additionalStat.Stats.Add(unitStat);
-
-                }
-
-                statBlock.AdditionalStats.Add(additionalStat);
-            }
-
-            int statsCount = _ReadBits(16);
-            if (_debugOutputLoadingProgress)
-            {
-                Debug.WriteLine(String.Format("statsCount = {0}", statsCount));
-            }
-            for (int i = 0; i < statsCount; i++)
-            {
-                StatBlock.Stat unitStat = new StatBlock.Stat();
-                _ReadStat(statBlock, unitStat);
-                statBlock.stats.Add(unitStat);
-            }
-
-
-            if (!readNameCount) return;
-            statBlock.NameCount = _ReadBits(8);
-            statBlock.Names = new UnitStatName[statBlock.NameCount];
-            if (_debugOutputLoadingProgress)
-            {
-                Debug.WriteLine(String.Format("statBlock.nameCount = {0}", statBlock.NameCount));
-            }
-
-            for (int i = 0; i < statBlock.NameCount; i++)
-            {
-                UnitStatName name = new UnitStatName
-                {
-                    Unknown1 = (short)_ReadBits(16),
-                    StatBlock = new StatBlock()
-                };
-                if (_debugOutputLoadingProgress)
-                {
-                    Debug.WriteLine(String.Format("name.Unknown1 = {0}", name.Unknown1));
-                }
-
-                _ReadStatBlock(name.StatBlock, false);
-                statBlock.Names[i] = name;
-            }
-        }
-
-        private void _ReadStat(StatBlock statBlock, StatBlock.Stat unitStat)
-        {
-            int statAttributeCount = 0;
-
-            if (statBlock.Usage == 1)
-            {
-                unitStat.Row = _ReadBits(11); // not sure what this is... row? (pretty sure it's the row index)
-                StatsBeta stat = new StatsBeta(); // todo: FIXME FileManager.GetStatRowFromIndex(unitStat.Row);
-                unitStat.BitCount = stat.valbits;
-            }
-            else
-            {
-                unitStat.Code = (short)_ReadBits(16);
-                unitStat.Attributes = new List<StatBlock.Stat.Attribute>();
-
-                statAttributeCount = _ReadBits(2);
-                if (_debugOutputLoadingProgress)
-                {
-                    Debug.WriteLine(String.Format("unitStat.Code = {0} (0x{0:X4}), unitStat.statAttributeCount = {1}", unitStat.Code, statAttributeCount));
-                }
-                for (int i = 0; i < statAttributeCount; i++)
-                {
-                    StatBlock.Stat.Attribute exAtrib = new StatBlock.Stat.Attribute { Exists = _ReadBool() };
-                    if (!exAtrib.Exists) break;
-
-                    exAtrib.BitCount = _ReadBits(6);
-
-                    exAtrib.Unknown1 = _ReadBits(2);
-                    if (exAtrib.Unknown1 == 0x02)
-                    {
-                        exAtrib.Unknown11 = _ReadBool();
-                    }
-
-                    exAtrib.HasTableCode = _ReadBool();
-                    if (!exAtrib.HasTableCode)
-                    {
-                        exAtrib.TableCode = _ReadInt16();
-                    }
-
-                    unitStat.Attributes.Add(exAtrib);
-
-                    if (_debugOutputLoadingProgress)
-                    {
-                        Debug.WriteLine(String.Format("exAtrib.BitCount = {0}, exAtrib.Unknown1 = {1}, exAtrib.Unknown11 = {2}, exAtrib.HasTableCode = {3}, exAtrib.TableCode = {4}",
-                            exAtrib.BitCount, exAtrib.Unknown1, exAtrib.Unknown11, exAtrib.HasTableCode, exAtrib.TableCode));
-                    }
-                }
-
-                unitStat.BitCount = _ReadBits(6);
-
-                unitStat.OtherAttributeFlag = _ReadBits(3);
-                unitStat.OtherAttribute = new UnitStatOtherAttribute();
-                if ((unitStat.OtherAttributeFlag & 0x01) >= 1)
-                {
-                    unitStat.OtherAttribute.Unknown1 = _ReadBits(4);
-                }
-                if ((unitStat.OtherAttributeFlag & 0x02) >= 1)
-                {
-                    unitStat.OtherAttribute.Unknown2 = _ReadBits(12);
-                }
-                if ((unitStat.OtherAttributeFlag & 0x04) >= 1)
-                {
-                    unitStat.OtherAttribute.Unknown3 = _ReadBits(1);
-                    if (unitStat.OtherAttribute.Unknown3 != 0x01)
-                    {
-                        throw new Exceptions.CharacterFileNotImplementedException("if (unitStat.otherAttribute.unknown3 != 0x01)");
-                    }
-                }
-                if (_debugOutputLoadingProgress)
-                {
-                    Debug.WriteLine(String.Format("unitStat.bitCount = {0}, unitStat.OtherAttributeFlag = {1}, unitStat.OtherAttribute.Unknown1 = {2}, unitStat.OtherAttribute.Unknown2 = {3}, unitStat.OtherAttribute.Unknown3 = {4}",
-                        unitStat.BitCount, unitStat.OtherAttributeFlag, unitStat.OtherAttribute.Unknown1, unitStat.OtherAttribute.Unknown2, unitStat.OtherAttribute.Unknown3));
-                }
-
-                unitStat.SkipResource = _ReadBits(2);
-                if (unitStat.SkipResource == 0)
-                {
-                    unitStat.Resource = (short)_ReadBits(16);
-                }
-
-            }
-
-            unitStat.RepeatFlag = (_ReadBits(1) != 0);
-            unitStat.RepeatCount = 1;
-            if (unitStat.RepeatFlag)
-            {
-                unitStat.RepeatCount = _ReadBits(10);
-            }
-            unitStat.values = new List<StatBlock.Stat.Values>();
-            if (_debugOutputLoadingProgress)
-            {
-                Debug.WriteLine(String.Format("unitStat.SkipResource = {0}, unitStat.Resource = {1}, unitStat.RepeatFlag = {2}, unitStat.RepeatCount = {3}",
-                    unitStat.SkipResource, unitStat.Resource, unitStat.RepeatFlag, unitStat.RepeatCount));
-            }
-
-            for (int i = 0; i < unitStat.RepeatCount; i++)
-            {
-                StatBlock.Stat.Values statValues = new StatBlock.Stat.Values();
-
-                for (int j = 0; j < statAttributeCount; j++)
-                {
-                    if (!unitStat.Attributes[j].Exists) continue;
-
-                    int extraAttribute = _ReadBits(unitStat.Attributes[j].BitCount);
-                    switch (j)
-                    {
-                        case 0:
-                            statValues.Attribute1 = extraAttribute;
-                            break;
-                        case 1:
-                            statValues.Attribute2 = extraAttribute;
-                            break;
-                        case 2:
-                            statValues.Attribute3 = extraAttribute;
-                            break;
-                    }
-                }
-
-                statValues.StatValue = _ReadBits(unitStat.BitCount);
-                unitStat.values.Add(statValues);
-
-                if (_debugOutputLoadingProgress)
-                {
-                    Debug.WriteLine(String.Format("statValues.Attribute1 = {0}, statValues.Attribute2 = {1}, statValues.Attribute3 = {2}, statValues.Stat = {3}",
-                        statValues.Attribute1, statValues.Attribute2, statValues.Attribute3, statValues.StatValue));
-                }
-            }
-        }
-
-        private void _ReadAppearance(UnitObject unit)
-        {
-            UnitAppearance appearance = new UnitAppearance();
-            unit.Appearance = appearance;
-
-            appearance.EquippedItemCount = _ReadBits(3);
-            if (_debugOutputLoadingProgress)
-            {
-                Debug.WriteLine(String.Format("appearance.equippedItemCount = {0}", appearance.EquippedItemCount));
-            }
-            for (int i = 0; i < appearance.EquippedItemCount; i++)
+            for (int i = 0; i < Appearance.EquippedItemCount; i++)
             {
                 UnitAppearance.EquippedItem equippedItem = new UnitAppearance.EquippedItem();
 
-                if (_TestBit(unit.BitField, 0x0F)) // reads in Int32
+                if (_TestBit(Bits.Bit0FEquippedItemUnknown)) // unknown
                 {
-                    throw new Exceptions.CharacterFileNotImplementedException("Unexpected bitField1 value! (0x0F == true)\nNot-Implemented cases. Please report this warning and supply the offending file.");
+                    equippedItem.Unknown0F = _bitBuffer.ReadInt32();
                 }
 
-                equippedItem.ItemCode = _ReadBits(16); // table 0x67?
+                equippedItem.ItemCode = _bitBuffer.ReadUInt16(); // table 0x67 (ITEMS)
                 if (_debugOutputLoadingProgress)
                 {
-                    Debug.WriteLine(String.Format("equippedItem.ItemCode = {0} (0x{0:X4})", equippedItem.ItemCode));
+                    Debug.WriteLine(String.Format("EquippedItem.ItemCode = {0} (0x{0:X4})", equippedItem.ItemCode));
                 }
 
-                if (_TestBit(unit.BitField, 0x22))
+                if (_TestBit(Bits.Bit22EquippedItemRowIndex))
                 {
-                    equippedItem.Unknown = (byte)_ReadBitsShift(8);
+                    equippedItem.ItemRowIndex = (byte)_bitBuffer.ReadBitsShift(8); // table 0x67  (ITEMS) row index (not used? or is it in relation to something else?)
                     if (_debugOutputLoadingProgress)
                     {
-                        Debug.WriteLine(String.Format("equippedItem.Unknown = {0}", equippedItem.Unknown));
+                        Debug.WriteLine(String.Format("EquippedItem.ItemRowIndex = {0}", equippedItem.ItemRowIndex));
                     }
                 }
 
-                if (_TestBit(unit.BitField, 0x18))
+                if (_TestBit(Bits.Bit18EquippedItemAffix))
                 {
-                    int bitCount = (unit.Version > 0xC0) ? 4 : 3;
-                    equippedItem.AffixCount = _ReadBits(bitCount);
+                    int bitCount = (_version > 0xC0) ? 4 : 3;
+                    equippedItem.AffixCount = _bitBuffer.ReadBits(bitCount);
                     if (_debugOutputLoadingProgress)
                     {
-                        Debug.WriteLine(String.Format("equippedItem.affixCount = {0}", equippedItem.AffixCount));
+                        Debug.WriteLine(String.Format("EquippedItem.AffixCount = {0}", equippedItem.AffixCount));
                     }
                     for (int j = 0; j < equippedItem.AffixCount; j++)
                     {
-                        equippedItem.AffixCodes.Add(_ReadBits(32));
+                        equippedItem.AffixCodes.Add(_bitBuffer.ReadBits(32)); // table 0x35 (AFFIXES)
                         if (_debugOutputLoadingProgress)
                         {
-                            Debug.WriteLine(String.Format("equippedItem.AffixCodes[{0}] = {1} (0x{1:X4})", j, equippedItem.AffixCodes[j]));
+                            Debug.WriteLine(String.Format("EquippedItem.AffixCodes[{0}] = {1} (0x{1:X4})", j, equippedItem.AffixCodes[j]));
                         }
                     }
 
                 }
 
-                appearance.EquippedItems.Add(equippedItem);
+                Appearance.EquippedItems.Add(equippedItem);
             }
 
 
-            appearance.Unknown1 = _ReadBits(16); // some sort of color Code 0x3430 = Cooper White LBlue or something
+            //// ReadAppearanceColors ////
+            Appearance.ArmorColorSetCode = _bitBuffer.ReadInt16(); // table 0x08 (COLORSETS)
             if (_debugOutputLoadingProgress)
             {
-                Debug.WriteLine(String.Format("appearance.unknown1 = {0} (0x{0:X4})", appearance.Unknown1));
+                Debug.WriteLine(String.Format("Appearance.ArmorColorSetCode = {0} (0x{0:X4})", Appearance.ArmorColorSetCode));
             }
 
-            if (_TestBit(unit.BitField, 0x16))
+            if (_TestBit(Bits.Bit16AppearanceUnknown64Bits))
             {
-                appearance.Unknown16 = _ReadInt64();
+                Appearance.Unknown16 = _bitBuffer.ReadNonStandardFunc();
+                Debug.Assert(Appearance.Unknown16 == 0); // only seen as zero - need non-zero to test for type/usage
                 if (_debugOutputLoadingProgress)
                 {
-                    Debug.WriteLine(String.Format("appearance.Unknown16 = {0} (0x{0:X16})", appearance.Unknown16));
+                    Debug.WriteLine(String.Format("Appearance.Unknown16 = {0} (0x{0:X16})", Appearance.Unknown16));
                 }
             }
 
-            if (_TestBit(unit.BitField, 0x23))
+            if (_TestBit(Bits.Bit23AppearanceUnknownColorSetCode))
             {
-                appearance.Unknown23 = _ReadInt16();
+                Appearance.Unknown23ColorSetsCode = _bitBuffer.ReadInt16(); // table 0x08 (COLORSETS)
                 if (_debugOutputLoadingProgress)
                 {
-                    Debug.WriteLine(String.Format("appearance.Unknown23 = {0} (0x{0:X16})", appearance.Unknown23));
-                }
-            }
-
-            if (_TestBit(unit.BitField1, 0x11))
-            {
-                appearance.WardrobeLayerHeadCount = _ReadBits(4);
-                for (int i = 0; i < appearance.WardrobeLayerHeadCount; i++)
-                {
-                    appearance.WardrobeLayersHead.Add(_ReadBits(16)); // table 0x62
-                    if (_debugOutputLoadingProgress)
-                    {
-                        Debug.WriteLine(String.Format("appearance.WardrobeLayersHead[{0}] = {1} (0x{1:X4})", i, appearance.WardrobeLayersHead[i]));
-                    }
-                }
-
-                appearance.WardrobeAppearanceGroupCount = _ReadBits(3); // max of 0x0A
-                for (int i = 0; i < appearance.WardrobeAppearanceGroupCount; i++)
-                {
-                    appearance.WardrobeAppearanceGroups.Add(_ReadBits(16)); // table 0x5A
-                    if (_debugOutputLoadingProgress)
-                    {
-                        Debug.WriteLine(String.Format("appearance.WardrobeAppearanceGroups[{0}] = {1} (0x{1:X4})", i, appearance.WardrobeAppearanceGroups[i]));
-                    }
-                }
-
-                appearance.ColorCount = _ReadBits(4); // max of 0x03
-                for (int i = 0; i < appearance.ColorCount; i++)
-                {
-                    appearance.ColorPaletteIndicies.Add(_ReadBits(8));
-                    if (_debugOutputLoadingProgress)
-                    {
-                        Debug.WriteLine(String.Format("appearance.ColorPaletteIndicies[{0}] = {1} (0x{1:X2})", i, appearance.ColorPaletteIndicies[i]));
-                    }
+                    Debug.WriteLine(String.Format("Appearance.Unknown23ColorSetsCode = {0} (0x{0:X4})", Appearance.Unknown23ColorSetsCode));
                 }
             }
 
 
-            if (_TestBit(unit.BitField1, 0x10))
+            //// ReadWardrobeAppearance ////
+            _ReadWardrobeAppearance(false);
+
+
+            //// ReadAppearanceWardrobeLayers ////
+            if (_TestBit(Bits.Bit10LayerAppearances))
             {
-                appearance.WardrobeLayerCount = _ReadBits(16);
-                for (int i = 0; i < appearance.WardrobeLayerCount; i++)
+                Appearance.LayerAppearanceCount = _bitBuffer.ReadInt16();
+                for (int i = 0; i < Appearance.LayerAppearanceCount; i++)
                 {
-                    UnitAppearance.ModelWardrobeLayer gear = new UnitAppearance.ModelWardrobeLayer
+                    UnitAppearance.LayerAppearance gear = new UnitAppearance.LayerAppearance
                     {
-                        ItemCode = _ReadUInt16(), // table 0x62
-                        UnknownBool = _ReadBool()
+                        WardrobeLayerCode = _bitBuffer.ReadUInt16(), // table 0x62 (WARDROBE_LAYER)
+                        UnknownBool = _bitBuffer.ReadBool()
                     };
 
                     if (gear.UnknownBool)
                     {
-                        gear.UnknownBoolValue = _ReadBits(2);
+                        gear.UnknownBoolValue = _bitBuffer.ReadBits(2);
                     }
 
-                    appearance.WardrobeLayers.Add(gear);
+                    Appearance.LayerAppearances.Add(gear);
                     if (_debugOutputLoadingProgress)
                     {
-                        Debug.WriteLine(String.Format("appearance.WardrobeLayers[{0}].ItemCode = {1} (0x{1:X4}), .UnknownBool = {2}, .UnknownBoolValue = {3}", i, appearance.WardrobeLayers[i].ItemCode, appearance.WardrobeLayers[i].UnknownBool, appearance.WardrobeLayers[i].UnknownBoolValue));
+                        Debug.WriteLine(String.Format("appearance.WardrobeLayerModel[{0}].ItemCode = {1} (0x{1:X4}), .UnknownBool = {2}, .UnknownBoolValue = {3}", i, Appearance.LayerAppearances[i].WardrobeLayerCode, Appearance.LayerAppearances[i].UnknownBool, Appearance.LayerAppearances[i].UnknownBoolValue));
                     }
                 }
             }
         }
 
-        private unsafe float _ReadFloat()
+        private void _ReadWardrobeAppearance(bool ignoreBitfields)
         {
-            int val = _ReadBits(32);
-            return (*(float*)&val);
-        }
-
-        private Int32 _ReadInt32()
-        {
-            return _ReadBits(32);
-        }
-
-        private UInt32 _ReadUInt32()
-        {
-            return (UInt32)_ReadBits(32);
-        }
-
-        private Int16 _ReadInt16()
-        {
-            return (Int16)_ReadBits(16);
-        }
-
-        private UInt16 _ReadUInt16()
-        {
-            return (UInt16)_ReadBits(16);
-        }
-
-        private char _ReadChar()
-        {
-            return (char)_ReadBits(8);
-        }
-
-        private byte _ReadByte()
-        {
-            return (byte)_ReadBits(8);
-        }
-
-        private bool _ReadBool()
-        {
-            return (_ReadBits(1) != 0);
-        }
-
-        private int _ReadBitsShift(int bitCount)
-        {
-            int val = _ReadBits(bitCount);
-            int shift = (1 << (bitCount - 1));
-            return val - shift;
-        }
-
-        private int _ReadBits(int bitCount)
-        {
-            int bitsToRead = bitCount;
-            int byteOffset = _bitOffset >> 3;
-            int b = _buffer[_byteOffset + byteOffset];
-
-            int offsetBitsInThisByte = _bitOffset & 0x07;
-            int bitsToUseFromByte = 0x08 - offsetBitsInThisByte;
-
-            int bitOffset = bitCount;
-            if (bitsToUseFromByte < bitCount)
-                bitOffset = bitsToUseFromByte;
-
-            b >>= offsetBitsInThisByte;
-            bitsToRead -= bitOffset;
-
-            // clean any excess bits we don't want
-            b &= ((0x01 << bitOffset) - 1);
-
-            int bytesStillToRead = bitsToRead + 0x07;
-            bytesStillToRead >>= 3;
-
-            int ret = b;
-            for (int i = bytesStillToRead; i > 0; i--)
+            if (ignoreBitfields || _TestBit(Bits.Bit11WardrobeLayers))
             {
-                int bitLevel = (i - 1) * 8;
-
-                b = _buffer[_byteOffset + byteOffset + i];
-                int bitsRead = 0x08;
-
-                if (i == bytesStillToRead)
+                Appearance.WardrobeLayerBaseCount = _bitBuffer.ReadBits(4); // client max of 0x0A
+                for (int i = 0; i < Appearance.WardrobeLayerBaseCount; i++)
                 {
-                    int cleanBits = bitsToRead - bitLevel;
-                    bitsRead = cleanBits;
-                    cleanBits = 0x01 << cleanBits;
-                    cleanBits--;
-                    b &= (byte)cleanBits;
+                    Appearance.WardrobeLayerBases.Add(_bitBuffer.ReadBits(16)); // Code values from table 0x62 (WARDROBE_LAYER)
+                    if (_debugOutputLoadingProgress)
+                    {
+                        Debug.WriteLine(String.Format("appearance.WardrobeLayers[{0}] = {1} (0x{1:X4})", i, Appearance.WardrobeLayerBases[i]));
+                    }
                 }
-
-                b <<= bitOffset + bitLevel;
-                ret |= b;
-                bitsToRead -= bitsRead;
             }
 
-            _bitOffset += bitCount;
-
-            return ret;
-        }
-
-        private Int64 _ReadInt64() // todo: this might also be reading in a double value...
-        {
-            byte[] ret = new byte[8];
-
-            for (int i = 0; i < 8; i++) // todo: this could easily be done as two int32 reads and just OR them
+            Appearance.WardrobeAppearanceGroupCount = _bitBuffer.ReadBits(3); // client max of 0x06
+            for (int i = 0; i < Appearance.WardrobeAppearanceGroupCount; i++)
             {
-                ret[i] = (byte)_ReadBits(8);
+                Appearance.WardrobeAppearanceGroups.Add(_bitBuffer.ReadBits(16)); // Code values from table 0x5A (WARDROBE_APPEARANCE_GROUP)
+                if (_debugOutputLoadingProgress)
+                {
+                    Debug.WriteLine(String.Format("appearance.WardrobeAppearanceGroups[{0}] = {1} (0x{1:X4})", i, Appearance.WardrobeAppearanceGroups[i]));
+                }
             }
 
-            return BitConverter.ToInt64(ret, 0);
+            Appearance.ColorCount = _bitBuffer.ReadBits(4); // client max of 0x03
+            for (int i = 0; i < Appearance.ColorCount; i++)
+            {
+                Appearance.ColorPaletteIndicies.Add(_bitBuffer.ReadBits(8));
+                if (_debugOutputLoadingProgress)
+                {
+                    Debug.WriteLine(String.Format("appearance.ColorPaletteIndicies[{0}] = {1} (0x{1:X2})", i, Appearance.ColorPaletteIndicies[i]));
+                }
+            }
         }
 
-        private static bool _TestBit(Int32 bitField, int bitOffset)
-        {
-            return (bitField & (1 << bitOffset)) != 0;
-        }
-
-        private static bool _TestBit(ulong bitField, int bitOffset)
-        {
-            const ulong bitMask = 1;
-            return ((bitField & (bitMask << bitOffset)) != 0);
-        }
-
-        private static bool _TestBit(ulong bitField, Bits bit)
+        private bool _TestBit(Bits bit)
         {
             const ulong bitMask = 1;
-            return ((bitField & (bitMask << (int)bit)) != 0);
+            return ((_bitField & (bitMask << (int)bit)) != 0);
         }
 
-        private static String _DebugBinaryFormat(long input)
+        private static String _DebugBinaryFormat(int input)
         {
-            String bitString = null;
+            return _DebugBinaryFormat((ulong)input, 32);
+        }
 
-            for (int i = 31; i >= 0; i--)
+        private static String _DebugBinaryFormat(ulong input)
+        {
+            return _DebugBinaryFormat(input, 64);
+        }
+
+        private static String _DebugBinaryFormat(ulong input, int bitCount)
+        {
+            String bitString = String.Empty;
+
+            for (int i = bitCount - 1; i >= 0; i--)
             {
                 String result = (((input >> i) & 1) == 1) ? "1" : "0";
 
@@ -1270,66 +1280,13 @@ namespace Hellgate
             return bitString;
         }
 
-        public byte[] GenerateItemDrop()
+        private void _WriteUnit(UInt64 bitField, ObjectContext context, UInt64 itemsBitField, ObjectContext itemsContext, UnitObjectStats.StatContext statContext, BitBuffer bitBuffer = null)
         {
-            _usingExternalBuffer = false;
-            _buffer = new byte[1024];
-            _byteOffset = 0;
-            _bitOffset = 0;
+            _bitField = bitField;
+            _context = context;
+            Stats.Context = statContext;
+            if (bitBuffer != null) _bitBuffer = bitBuffer;
 
-            _WriteUnit(this);
-
-            int byteCount = (_bitOffset >> 3) + 1;
-            byte[] returnBuffer = new byte[byteCount];
-            Buffer.BlockCopy(_buffer, 0, returnBuffer, 0, byteCount);
-            return returnBuffer;
-        }
-
-        public void GenerateItemDrop(byte[] buffer, int offset)
-        {
-            _usingExternalBuffer = true;
-            _buffer = buffer;
-            _byteOffset = offset;
-            _bitOffset = 0;
-
-            _WriteUnit(this);
-        }
-
-        private enum Bits
-        {
-            // the order is around what they're actually read/checked in loading
-            Bit1DBitCountEof = 0x1D,
-            Bit00FlagAlignment = 0x00,
-            Bit1CTimeStamps = 0x1C,
-            Bit1FUnknown = 0x1F,
-            Bit20CharacterFlags1 = 0x20,
-            Bit1BBitOffsets = 0x1B,
-            Bit05Unknown = 0x05,
-            Bit17Unknown = 0x17,
-            Bit03Unknown = 0x03,
-            Bit01Unknown = 0x01,
-            Bit02Unknown = 0x02,
-            Bit06Unknown = 0x06,
-            Bit09Unknown = 0x09,
-            Bit07Unknown = 0x07,
-            Bit08Unknown = 0x08,
-            Bit0ACharacterFlags2 = 0x0A,
-            Bit0DStats = 0x0D,
-            Bit14Stats = 0x14, // i think it's another stats things
-            Bit1EInsideStats14 = 0x1E,
-            Bit0FUnknown = 0x0F,
-            Bit22Unknown = 0x22,
-            Bit18Unknown = 0x18,
-            Bit16Unknown = 0x16,
-            Bit23Unknown = 0x23,
-            Bit11Unknown = 0x11,
-            Bit10Unknown = 0x10,
-            Bit12Items = 0x12,
-            Bit1AWeaponConfig = 0x1A,
-        }
-
-        private void _WriteUnit(UnitObject unit)
-        {
             /***** Unit Header *****
              * Version                                          16                  Should be 0x00BF for SP client, 0x00CD for Resurrection client.
              * Usage                                            8                   0 for SP. For Resurrection client; 2 for char select, 4 for item drop
@@ -1376,9 +1333,9 @@ namespace Hellgate
              *
              * if (TestBit(bitField, 0x1B))
              * {
-             *      BitOffsetsCount                             5                   Count of following block.
+             *      BookmarkCount                               5                   Count of following block - only seen as 1 (only 1 row in Bookmarks table - "hotkeys")
              *      {
-             *          Code                                    16                  Code value of offset - code is from unknown excel table.
+             *          Code                                    16                  Code value of offset - code is from Bookmarks table.
              *          Offset                                  32                  Bit Offset value
              *      }
              * }
@@ -1388,8 +1345,8 @@ namespace Hellgate
              *      Unknown                                     32                  Seen in MP only - unknown usage.
              * }
              * 
-             * UnitType                                         4                   The type of unit... Is this from UnitType table?
-             * UnitCode                                         16                  The code value of the unit.
+             * UnitType                                         4                   The type of .. Is this from UnitType table?
+             * UnitCode                                         16                  The code value of the 
              * 
              * if (TestBit(bitField, 0x17))
              * {                                                                    This chunk is read in by a secondary non-standard function.
@@ -1453,8 +1410,8 @@ namespace Hellgate
              * 
              * if (TestBit(bitField, 0x08))
              * {
-             *      characterCount                              8                   Number of (unicode) characters in following string.
-             *      characterName                               8*2*count           Character's name in Unicode (no \0) - doesn't appear to be actually used in-game...
+             *      UnicodeCharCount                            8                   Number of (unicode) characters in following string.
+             *      CharacterName                               8*2*count           Character's name in Unicode (no \0) - doesn't appear to be actually used in-game...
              * }
              * 
              * if (TestBit(bitField, 0x0A))
@@ -1465,11 +1422,11 @@ namespace Hellgate
              *      }                                                               appear to be unused).
              * }
              * 
-             * if (Usage > 2 && (Usage <= 6 || Usage != 7))                         These would be applicable to MP only - SP has Usage == 0
+             * if (Context > 2 && (Context <= 6 || Context != 7))                   These would be applicable to MP only - SP has Usage == 0
              * {
-             *      UsageBool                                   1                   True if following value is present.
+             *      ContextBool                                 1                   True if following value is present.
              *      {
-             *          Unknown                                 4                   // TO BE DETERMINED
+             *          ContextBoolValu                         4                   // TO BE DETERMINED
              *      }
              * }
              * 
@@ -1591,690 +1548,390 @@ namespace Hellgate
              */
 
             int bitCountEofOffset = -1;
-            bool isItem = (unit.Usage == 4);
+            bool isItem = (UnitType == UnitTypes.Item);
+            bool isMonster = (UnitType == UnitTypes.Monster);
 
             /***** Unit Header *****/
 
-            int bitCountStart = _bitOffset;
+            int bitCountStart = _bitBuffer.BitOffset;
 
-            _WriteBits(unit.Version, 16);
-            _WriteBits(unit.Usage, 8);
-            _WriteBits(0x02, 8);
+            _version = CurrentVersion;
+            _bitBuffer.WriteBits(_version, 16);
+            _bitBuffer.WriteBits((int)_context, 8);
+            _bitBuffer.WriteBits(0x02, 8);
             {
-                _WriteNonStandardFunc(unit.BitField);
+                _bitBuffer.WriteUInt64(_bitField);
             }
 
-            if (_TestBit(unit.BitField, Bits.Bit1DBitCountEof))
+            if (_TestBit(Bits.Bit1DBitCountEof))
             {
-                bitCountEofOffset = _bitOffset;
-                _WriteInt32(0x00000000);
+                bitCountEofOffset = _bitBuffer.BitOffset;
+                _bitBuffer.WriteInt32(0x00000000);
             }
 
-            if (_TestBit(unit.BitField, Bits.Bit00FlagAlignment))
+            if (_TestBit(Bits.Bit00FlagAlignment))
             {
-                _WriteUInt32(isItem ? ItemMagicWord : ObjectMagicWord);
+                _bitBuffer.WriteUInt32((isItem || isMonster) ? ItemMagicWord : ObjectMagicWord);
             }
 
-            if (_TestBit(unit.BitField, Bits.Bit1CTimeStamps))
+            if (_TestBit(Bits.Bit1CTimeStamps))
             {
-                _WriteInt32(unit.TimeStamp1);
-                _WriteInt32(unit.TimeStamp2);
-                _WriteInt32(unit.TimeStamp3);
+                _bitBuffer.WriteInt32(_timeStamp1);
+                _bitBuffer.WriteInt32(_timeStamp2);
+                _bitBuffer.WriteInt32(_timeStamp3);
             }
 
-            if (_TestBit(unit.BitField, Bits.Bit1FUnknown))
+            if (_TestBit(Bits.Bit1FSaveLocations))
             {
-                _WriteBits(unit.UnknownCount1F + 8, 4);
-                for (int i = 0; i < unit.UnknownCount1F; i++)
+                int saveLocationsCount = SaveLocations.Count;
+                _bitBuffer.WriteBitsShift(saveLocationsCount, 4);
+                foreach (SaveLocation saveLocation in SaveLocations)
                 {
-                    UnknownCount1FClass uc1F = unit.UnknownCount1Fs[i];
-                    _WriteInt16(uc1F.Unknown1);
-                    _WriteInt16(uc1F.Unknown2);
+                    if (saveLocation.Level == null || saveLocation.Difficulty == null)
+                    {
+                        const ushort noCode = 0xFFFF;
+                        _bitBuffer.WriteUInt16(noCode);
+                        _bitBuffer.WriteUInt16(noCode);
+                    }
+                    else
+                    {
+                        _bitBuffer.WriteUInt16((ushort)saveLocation.Level.code);
+                        _bitBuffer.WriteUInt16((ushort)saveLocation.Difficulty.code);
+                    }
                 }
             }
 
-            if (_TestBit(unit.BitField, Bits.Bit20CharacterFlags1) && !isItem)
+            if (_TestBit(Bits.Bit20States1) && (!isItem || !isMonster))
             {
-                int playerFlagCount = unit.PlayerFlags1.Count;
+                int stateCount = StateCodes1.Count;
+                _bitBuffer.WriteBits(stateCount, 8);
 
-                _WriteBits(playerFlagCount, 8);
-                for (int i = 0; i < playerFlagCount; i++)
+                foreach (short stateCode in StateCodes1)
                 {
-                    _WriteInt16(unit.PlayerFlags1[i]);
+                    _bitBuffer.WriteInt16(stateCode);
                 }
             }
 
             /***** Unit Body *****/
 
-            int bitOffsetItemEndBitOffset = 0;
-            if (_TestBit(unit.BitField, Bits.Bit1BBitOffsets))
+            int bitOffsetHotkeys = 0;
+            if (_TestBit(Bits.Bit1BBookmarks))
             {
-                int bitOffsetsCount = unit.BitOffsets.Count;
+                int bitOffsetsCount = Bookmarks.Count;
 
-                _WriteBits(bitOffsetsCount, 5);
+                _bitBuffer.WriteBits(bitOffsetsCount, 5);
                 for (int i = 0; i < bitOffsetsCount; i++)
                 {
-                    _WriteInt16(unit.BitOffsets[i].Code);
-                    bitOffsetItemEndBitOffset = _bitOffset;
-                    _WriteInt32(0x00000000);
+                    _bitBuffer.WriteUInt16(Bookmarks[i].Code);
+                    bitOffsetHotkeys = _bitBuffer.BitOffset;
+                    _bitBuffer.WriteInt32(0x00000000);
                 }
             }
 
-            if (_TestBit(unit.BitField, Bits.Bit05Unknown))
+            if (_TestBit(Bits.Bit05Unknown))
             {
-                _WriteInt32(unit.Unknown05);
+                _bitBuffer.WriteInt32(UnitObjectId);
             }
 
-            _WriteBits(unit.UnitType, 4);
-            _WriteInt16(unit.UnitCode);
+            _bitBuffer.WriteBits((int)UnitType, 4);
+            if (UnitData == null && UnitCode == 0) throw new Exceptions.UnitObjectException("Unexpected null UnitData object.");
+            _bitBuffer.WriteInt16((UnitData == null) ? UnitCode : UnitData.code); // characters from SP or mods may have items not found - we don't want to delete them (todo: or do we?)
 
-            if (_TestBit(unit.BitField, Bits.Bit17Unknown))
+
+            if (_TestBit(Bits.Bit17ObjectId))
             {
-                _WriteNonStandardFunc(unit.ObjectId);
+                _bitBuffer.WriteUInt64(ObjectId);
             }
 
-            if (_TestBit(unit.BitField, Bits.Bit01Unknown) || _TestBit(unit.BitField, Bits.Bit03Unknown))
+            if (_TestBit(Bits.Bit01Unknown) || _TestBit(Bits.Bit03Unknown))
             {
-                _WriteBool(unit.IsInventory);
-                if (unit.IsInventory) // item is in inventory
+                _bitBuffer.WriteBool(IsInventory);
+                if (IsInventory) // item is in inventory
                 {
-                    if (_TestBit(unit.BitField, Bits.Bit02Unknown))
+                    if (_TestBit(Bits.Bit02Unknown))
                     {
-                        _WriteInt32(unit.Unknown02);
+                        _bitBuffer.WriteInt32(Unknown02);
                     }
 
-                    _WriteBits(unit.InventoryType, 16);
-                    _WriteBits(unit.InventoryPositionX, 12);
-                    _WriteBits(unit.InventoryPositionY, 12);
+                    _bitBuffer.WriteBits(InventoryLocationIndex, 12);
+                    _bitBuffer.WriteBits(InventoryPositionX, 12);
+                    _bitBuffer.WriteBits(InventoryPositionY, 12);
+                    _bitBuffer.WriteBits(Unknown04, 4);
 
-                    _WriteNonStandardFunc(unit.Unknown0103Int64);
+                    _bitBuffer.WriteNonStandardFunc(Unknown0103Int64);
                 }
                 else // item is a "world drop"
                 {
-                    _WriteInt32(unit.Unknown0103Int1);
+                    _bitBuffer.WriteInt32(RoomId);
 
-                    _WriteFloat(unit.Unknown0103Float11);
-                    _WriteFloat(unit.Unknown0103Float12);
-                    _WriteFloat(unit.Unknown0103Float13);
+                    _bitBuffer.WriteFloat(Position.X);
+                    _bitBuffer.WriteFloat(Position.Y);
+                    _bitBuffer.WriteFloat(Position.Z);
 
-                    _WriteFloat(unit.Unknown0103Float21);
-                    _WriteFloat(unit.Unknown0103Float22);
-                    _WriteFloat(unit.Unknown0103Float23);
+                    _bitBuffer.WriteFloat(Unknown0103Float21);
+                    _bitBuffer.WriteFloat(Unknown0103Float22);
+                    _bitBuffer.WriteFloat(Unknown0103Float23);
 
-                    _WriteFloat(unit.Unknown0103Float31);
-                    _WriteFloat(unit.Unknown0103Float32);
-                    _WriteFloat(unit.Unknown0103Float33);
+                    _bitBuffer.WriteFloat(Normal.X);
+                    _bitBuffer.WriteFloat(Normal.Y);
+                    _bitBuffer.WriteFloat(Normal.Z);
 
-                    _WriteBits(unit.Unknown0103Int2, 10);
+                    _bitBuffer.WriteBits(Unknown0103Int2, 10);
 
-                    _WriteFloat(unit.Unknown0103Float4);
+                    _bitBuffer.WriteFloat(Unknown0103Float4);
 
-                    _WriteFloat(unit.Unknown0103Float5);
+                    _bitBuffer.WriteFloat(Unknown0103Float5);
                 }
             }
 
-            if (_TestBit(unit.BitField, Bits.Bit06Unknown))
+            if (_TestBit(Bits.Bit06Unknown))
             {
-                _WriteBool(unit.UnknownBool06);
-                if (!unit.UnknownBool06)
+                _bitBuffer.WriteBool(UnknownBool06);
+                if (!UnknownBool06)
                 {
-                    throw new Exceptions.CharacterFileNotImplementedException("_WriteUnit : if (!unit.UnknownBool06)");
+                    throw new Exceptions.UnitObjectNotImplementedException("_WriteUnit : if (!UnknownBool06)");
                 }
             }
 
-            if (_TestBit(unit.BitField, Bits.Bit09Unknown))
+            if (_TestBit(Bits.Bit09ItemLookGroup))
             {
-                _WriteByte(unit.Unknown09);
+                _bitBuffer.WriteByte(ItemLookGroupCode);
             }
 
-            if (_TestBit(unit.BitField, Bits.Bit07Unknown))
+            if (_TestBit(Bits.Bit07CharacterShape))
             {
-                _WriteByte(unit.CharacterHeight);
-                _WriteByte(unit.CharacterWidth);
+                _bitBuffer.WriteByte(CharacterHeight);
+                _bitBuffer.WriteByte(CharacterBulk);
             }
 
-            if (_TestBit(unit.BitField, Bits.Bit08Unknown) && !String.IsNullOrEmpty(unit.Name))
+            if (_TestBit(Bits.Bit08CharacterName) && !String.IsNullOrEmpty(Name))
             {
-                _WriteBits(unit.Name.Length / 2, 8); // is Unicode string without \0
-                foreach (char c in unit.Name) // warning: must be a Unicode string
+                _bitBuffer.WriteBits(_charNameBytes.Length / 2, 8); // is Unicode string without \0
+                foreach (byte b in _charNameBytes)
                 {
-                    _WriteBits(c, 8);
+                    _bitBuffer.WriteByte(b);
                 }
             }
 
-            if (_TestBit(unit.BitField, Bits.Bit0ACharacterFlags2))
+            if (_TestBit(Bits.Bit0AStates2))
             {
-                int playerFlagCount = unit.PlayerFlags2.Count;
+                int stateCount = StateCodes2.Count;
+                _bitBuffer.WriteBits(stateCount, 8);
 
-                _WriteBits(playerFlagCount, 8);
-                for (int i = 0; i < playerFlagCount; i++)
+                foreach (short stateCode in StateCodes2)
                 {
-                    _WriteBits(unit.PlayerFlags2[i], 16);
+                    _bitBuffer.WriteInt16(stateCode);
                 }
             }
 
-            if (unit.Usage > 2 && (unit.Usage <= 6 || unit.Usage != 7)) // so if == 0, 1, 2, 7, then *don't* do this
+            if (_context > ObjectContext.CharSelect && (_context <= ObjectContext.Unknown6 || _context != ObjectContext.Unknown7)) // so if == 0, 1, 2, 7, then *don't* do this
             {
-                _WriteBool(unit.UsageBool);
-                if (unit.UsageBool)
+                _bitBuffer.WriteBool(ContextBool);
+                if (ContextBool)
                 {
-                    _WriteBits(unit.UsageBoolValue, 4);
+                    _bitBuffer.WriteBits(ContextBoolValue, 4);
                 }
             }
 
-            _WriteBool(unit.IsDead);
+            _bitBuffer.WriteBool(IsDead);
 
-            if (_TestBit(unit.BitField, Bits.Bit0DStats))
+            if (_TestBit(Bits.Bit0DStats))
             {
-                _WriteStatBlock(unit.Stats, true);
+                Stats.WriteStats(_bitBuffer, true);
             }
-            else if (_TestBit(unit.BitField, Bits.Bit14Stats))
+            else if (_TestBit(Bits.Bit14CharSelectStats))
             {
-                _WriteByte(unit.StatUnknownByte1);
-                _WriteByte(unit.StatUnknownByte2);
+                int charLevel = Stats.GetStatValueOrDefault("level");
+                int charPvpRank = Stats.GetStatValueOrDefault("pvp_rank");
+                _bitBuffer.WriteByte(charLevel);
+                _bitBuffer.WriteByte(charPvpRank);
 
-                if (_TestBit(unit.BitField, Bits.Bit1EInsideStats14))
+                if (_TestBit(Bits.Bit1ECharSelectStatsMaxDifficulty))
                 {
-                    _WriteBits(unit.StatUnknownInt1, 3);
+                    int maxDifficulty = Stats.GetStatValueOrDefault("difficulty_max");
+                    _bitBuffer.WriteBits(maxDifficulty, 3);
                 }
             }
 
-            _WriteBool(unit.HasAppearanceDetails);
-            if (unit.HasAppearanceDetails)
+            _bitBuffer.WriteBool(HasAppearanceDetails);
+            if (HasAppearanceDetails)
             {
-                int equippedItemCount = unit.Appearance.EquippedItems.Count;
-                _WriteBits(equippedItemCount, 3);
+                int equippedItemCount = Appearance.EquippedItems.Count;
+                _bitBuffer.WriteBits(equippedItemCount, 3);
                 for (int i = 0; i < equippedItemCount; i++)
                 {
-                    UnitAppearance.EquippedItem equippedItem = unit.Appearance.EquippedItems[i];
+                    UnitAppearance.EquippedItem equippedItem = Appearance.EquippedItems[i];
 
-                    if (_TestBit(unit.BitField, Bits.Bit0FUnknown))
+                    if (_TestBit(Bits.Bit0FEquippedItemUnknown))
                     {
-                        throw new Exceptions.CharacterFileNotImplementedException("Unexpected bitField1 value! (0x0F == true)\nNot-Implemented cases. Please report this warning and supply the offending file.");
+                        _bitBuffer.WriteInt32(equippedItem.Unknown0F);
                     }
 
-                    _WriteBits(equippedItem.ItemCode, 16);
+                    _bitBuffer.WriteUInt16(equippedItem.ItemCode);
 
-                    if (_TestBit(unit.BitField, Bits.Bit22Unknown))
+                    if (_TestBit(Bits.Bit22EquippedItemRowIndex))
                     {
-                        _WriteBitsShift(equippedItem.Unknown, 8);
+                        _bitBuffer.WriteBitsShift(equippedItem.ItemRowIndex, 8);
                     }
 
-                    if (_TestBit(unit.BitField, Bits.Bit18Unknown))
+                    if (_TestBit(Bits.Bit18EquippedItemAffix))
                     {
-                        int bitCount = (unit.Version > 0xC0) ? 4 : 3;
+                        int bitCount = (_version > 0xC0) ? 4 : 3;
                         int affixCount = equippedItem.AffixCodes.Count;
-                        _WriteBits(affixCount, bitCount);
+                        _bitBuffer.WriteBits(affixCount, bitCount);
                         for (int j = 0; j < affixCount; j++)
                         {
-                            _WriteBits(equippedItem.AffixCodes[j], 32);
+                            _bitBuffer.WriteBits(equippedItem.AffixCodes[j], 32);
                         }
                     }
                 }
 
-                _WriteBits(unit.Appearance.Unknown1, 16);
+                _bitBuffer.WriteBits(Appearance.ArmorColorSetCode, 16);
 
-                if (_TestBit(unit.BitField, Bits.Bit16Unknown))
+                if (_TestBit(Bits.Bit16AppearanceUnknown64Bits))
                 {
-                    _WriteNonStandardFunc(unit.Appearance.Unknown16);
+                    _bitBuffer.WriteNonStandardFunc(Appearance.Unknown16);
                 }
 
-                if (_TestBit(unit.BitField, Bits.Bit23Unknown))
+                if (_TestBit(Bits.Bit23AppearanceUnknownColorSetCode))
                 {
-                    _WriteInt16(unit.Appearance.Unknown23);
+                    _bitBuffer.WriteInt16(Appearance.Unknown23ColorSetsCode);
                 }
 
-                if (_TestBit(unit.BitField, Bits.Bit11Unknown))
+                if (_TestBit(Bits.Bit11WardrobeLayers))
                 {
-                    int wardrobeLayerCount = unit.Appearance.WardrobeLayersHead.Count;
-                    _WriteBits(wardrobeLayerCount, 4);
+                    int wardrobeLayerCount = Appearance.WardrobeLayerBases.Count;
+                    _bitBuffer.WriteBits(wardrobeLayerCount, 4);
                     for (int i = 0; i < wardrobeLayerCount; i++)
                     {
-                        _WriteBits(unit.Appearance.WardrobeLayersHead[i], 16);
-                    }
-
-                    int wardrobeAppearanceGroupCount = unit.Appearance.WardrobeAppearanceGroups.Count;
-                    _WriteBits(wardrobeAppearanceGroupCount, 3);
-                    for (int i = 0; i < wardrobeAppearanceGroupCount; i++)
-                    {
-                        _WriteBits(unit.Appearance.WardrobeAppearanceGroups[i], 16);
-                    }
-
-                    int colorPaletteCount = unit.Appearance.ColorPaletteIndicies.Count;
-                    _WriteBits(colorPaletteCount, 4);
-                    for (int i = 0; i < colorPaletteCount; i++)
-                    {
-                        _WriteBits(unit.Appearance.ColorPaletteIndicies[i], 8);
+                        _bitBuffer.WriteBits(Appearance.WardrobeLayerBases[i], 16);
                     }
                 }
 
-                if (_TestBit(unit.BitField, Bits.Bit10Unknown))
+                int wardrobeAppearanceGroupCount = Appearance.WardrobeAppearanceGroups.Count;
+                _bitBuffer.WriteBits(wardrobeAppearanceGroupCount, 3);
+                for (int i = 0; i < wardrobeAppearanceGroupCount; i++)
                 {
-                    _WriteBits(unit.Appearance.WardrobeLayerCount, 16);
-                    for (int i = 0; i < unit.Appearance.WardrobeLayerCount; i++)
+                    _bitBuffer.WriteBits(Appearance.WardrobeAppearanceGroups[i], 16);
+                }
+
+                int colorPaletteCount = Appearance.ColorPaletteIndicies.Count;
+                _bitBuffer.WriteBits(colorPaletteCount, 4);
+                for (int i = 0; i < colorPaletteCount; i++)
+                {
+                    _bitBuffer.WriteBits(Appearance.ColorPaletteIndicies[i], 8);
+                }
+
+                if (_TestBit(Bits.Bit10LayerAppearances))
+                {
+                    _bitBuffer.WriteBits(Appearance.LayerAppearanceCount, 16);
+                    for (int i = 0; i < Appearance.LayerAppearanceCount; i++)
                     {
-                        _WriteBits(unit.Appearance.WardrobeLayers[i].ItemCode, 16);
-                        _WriteBits(unit.Appearance.WardrobeLayers[i].UnknownBool ? 1 : 0, 1);
-                        if (unit.Appearance.WardrobeLayers[i].UnknownBool)
+                        _bitBuffer.WriteBits(Appearance.LayerAppearances[i].WardrobeLayerCode, 16);
+                        _bitBuffer.WriteBits(Appearance.LayerAppearances[i].UnknownBool ? 1 : 0, 1);
+                        if (Appearance.LayerAppearances[i].UnknownBool)
                         {
-                            _WriteBits(unit.Appearance.WardrobeLayers[i].UnknownBoolValue, 2);
+                            _bitBuffer.WriteBits(Appearance.LayerAppearances[i].UnknownBoolValue, 2);
                         }
                     }
                 }
             }
 
 
-            if (_TestBit(unit.BitField, Bits.Bit12Items))
+            if (_TestBit(Bits.Bit12Items))
             {
-                int itemBitOffset = _bitOffset;
-                _WriteBits(0x00000000, 32);
+                int itemBitOffset = _bitBuffer.BitOffset;
+                _bitBuffer.WriteBits(0x00000000, 32);
 
-                int itemCount = unit.Items.Count;
-                _WriteBits(itemCount, 10);
+                int itemCount = Items.Count;
+                _bitBuffer.WriteBits(itemCount, 10);
                 for (int i = 0; i < itemCount; i++)
                 {
-                    _WriteUnit(unit.Items[i]);
+                    Items[i]._WriteUnit(itemsBitField, itemsContext, itemsBitField, itemsContext, statContext, _bitBuffer);
                 }
 
-                _WriteBits(_bitOffset, 32, itemBitOffset);
-                if (bitOffsetItemEndBitOffset > 0)
-                {
-                    _WriteBits(_bitOffset, 32, bitOffsetItemEndBitOffset);
-                }
+                _bitBuffer.WriteBits(_bitBuffer.BitOffset, 32, itemBitOffset);
             }
 
 
-            if (_TestBit(unit.BitField, Bits.Bit1AWeaponConfig))
+            if (_TestBit(Bits.Bit1AHotkeys))
             {
-                _WriteUInt32(WeaponConfigMagicWord);
-
-                int endFlagBitOffset = _bitOffset;
-                _WriteBits(0x00000000, 32);
-
-                int weaponConfigCount = unit.WeaponConfigs.Length;
-                _WriteBits(weaponConfigCount, 6);
-                for (int i = 0; i < weaponConfigCount; i++)
+                if (bitOffsetHotkeys > 0)
                 {
-                    UnitWeaponConfig weaponConfig = unit.WeaponConfigs[i];
+                    _bitBuffer.WriteBits(_bitBuffer.BitOffset, 32, bitOffsetHotkeys);
+                }
 
-                    _WriteBits(weaponConfig.Id, 16);
-                    _WriteBits(weaponConfig.UnknownCount1, 4);
-                    for (int j = 0; j < weaponConfig.UnknownCount1; j++)
+                _bitBuffer.WriteUInt32(HotkeysMagicWord);
+
+                int endFlagBitOffset = _bitBuffer.BitOffset;
+                _bitBuffer.WriteBits(0x00000000, 32);
+
+                int weaponConfigCount = Hotkeys.Count;
+                _bitBuffer.WriteBits(weaponConfigCount, 6);
+                foreach (Hotkey hotkey in Hotkeys)
+                {
+                    _bitBuffer.WriteBits(hotkey.Code, 16);
+                    _bitBuffer.WriteBits(hotkey.UnknownCount, 4);
+                    for (int i = 0; i < hotkey.UnknownCount; i++)
                     {
-                        _WriteBits(weaponConfig.Exists1[j] ? 1 : 0, 1);
-                        if (weaponConfig.Exists1[j])
+                        _bitBuffer.WriteBits(hotkey.UnknownExists[i] ? 1 : 0, 1);
+                        if (hotkey.UnknownExists[i])
                         {
-                            _WriteBits(weaponConfig.UnknownIds1[j], 32);
+                            _bitBuffer.WriteBits(hotkey.UnknownValues[i], 32);
                         }
                     }
 
                     // yes this chunk looks the same as above - the above chunk though is in a specific function and can differ at 1 point
                     // also, it can be != 2
-                    _WriteBits(weaponConfig.UnknownCount2, 4);
-                    for (int j = 0; j < weaponConfig.UnknownCount2; j++)
+                    _bitBuffer.WriteBits(hotkey.SkillCount, 4);
+                    for (int i = 0; i < hotkey.SkillCount; i++)
                     {
-                        _WriteBits(weaponConfig.Exists2[j] ? 1 : 0, 1);
-                        if (weaponConfig.Exists2[j])
+                        _bitBuffer.WriteBits(hotkey.SkillExists[i] ? 1 : 0, 1);
+                        if (hotkey.SkillExists[i])
                         {
-                            _WriteBits(weaponConfig.UnknownIds2[j], 32);
+                            _bitBuffer.WriteBits(hotkey.SkillCode[i], 32);
                         }
                     }
 
-                    _WriteBits(weaponConfig.IdAnother, 32);
+                    _bitBuffer.WriteBits(hotkey.UnitTypeCode, 32);
                 }
 
-                _WriteBits(_bitOffset, 32, endFlagBitOffset);
+                _bitBuffer.WriteBits(_bitBuffer.BitOffset, 32, endFlagBitOffset);
             }
 
 
-            if (_TestBit(unit.BitField, Bits.Bit00FlagAlignment))
-            {
-                _WriteBits(0x2B523460, 32); // "`4R+"
-            }
+            _bitBuffer.WriteUInt32(ItemMagicWord); // "`4R+"
 
-            if (_TestBit(unit.BitField, Bits.Bit1DBitCountEof))
+            if (_TestBit(Bits.Bit1DBitCountEof))
             {
-                _WriteBits(_bitOffset - bitCountStart, 32, bitCountEofOffset);
+                _bitBuffer.WriteBits(_bitBuffer.BitOffset - bitCountStart, 32, bitCountEofOffset);
             }
         }
 
-        private void _WriteNonStandardFunc(UInt64 val)
+        public void AddState2(Int32 state)
         {
-            byte[] byteArray = BitConverter.GetBytes(val); // todo: this could easily be done as two UInt32 writes
-            for (int i = 0; i < 8; i++)
+            if (!(StateCodes2.Contains(state)))
             {
-                _WriteBits(byteArray[i], 8);
+                StateCodes2.Add(state);
             }
         }
 
-        private void _WriteNonStandardFunc(Int64 val)
+        public void RemoveState2(Int32 state)
         {
-            byte[] byteArray = BitConverter.GetBytes(val); // todo: this could easily be done as two Int32 writes
-            for (int i = 0; i < 8; i++)
+            StateCodes2.Remove(state);
+        }
+
+        public void AddState1(Int32 state)
+        {
+            if (!(StateCodes1.Contains(state)))
             {
-                _WriteBits(byteArray[i], 8);
+                StateCodes1.Add(state);
             }
         }
 
-        private void _WriteStatBlock(StatBlock statBlock, bool writeNameCount)
+        public void RemoveState1(Int32 state)
         {
-            /***** Stat Block Header *****
-             * Version                                          16                  Stat block header - Must be 0x000A.
-             * Usage                                            3                   Use as 0 for SP, 1 for MP item drops
-             * 
-             * AdditionalStatCount                              6                   Additional Stats - Not sure of use yet.
-             * {
-             *      Unknown                                     16                  // TO BE DETEREMINED
-             *      StatCount                                   16                  Count of following stats.
-             *      {
-             *          STATS                                                       See WriteStat().
-             *      }
-             * }
-             * 
-             * StatCount                                        16                  Count of following stats.
-             * {
-             *      STATS                                                           See WriteStat().
-             * }
-             * 
-             * if (WriteNameCount)                                                  This is TRUE by default. Set to FALSE when writing a stat block
-             * {                                                                    from the below name stat block chunk.
-             *      NameCount                                   8                   I think this has something to do with item names.
-             *      {
-             *          Unknown                                 16                  // TO BE DETEREMINED
-             *          STAT BLOCK                                                  See WriteStatBlock().
-             *      }
-             * }
-             */
-
-            _WriteBits(statBlock.Version, 16);
-            _WriteBits(statBlock.Usage, 3);
-
-            _WriteBits(statBlock.AdditionalStats.Count, 6);
-            foreach (UnitStatAdditional additionalStat in statBlock.AdditionalStats)
-            {
-                _WriteBits(additionalStat.Unknown, 16);
-                _WriteBits(additionalStat.Stats.Count, 16);
-
-                foreach (StatBlock.Stat stat in additionalStat.Stats)
-                {
-                    _WriteStat(statBlock, stat);
-                }
-            }
-
-            _WriteBits(statBlock.stats.Count, 16);
-            foreach (StatBlock.Stat stat in statBlock.stats)
-            {
-                _WriteStat(statBlock, stat);
-            }
-
-            if (!writeNameCount) return;
-
-            _WriteBits(statBlock.Names.Length, 8);
-            foreach (UnitStatName statName in statBlock.Names)
-            {
-                _WriteBits(statName.Unknown1, 16);
-                _WriteStatBlock(statName.StatBlock, false);
-            }
-        }
-
-        private void _WriteStat(StatBlock statBlock, StatBlock.Stat stat)
-        {
-            /***** Stat Block *****
-             * Code                                             16                  Code from Stats excel table.
-             * 
-             * extraAttributesCount                             2                   Count of following.
-             * {
-             *      Exists                                      1                   Simple bool test.
-             *      {
-             *          bitCount_EA                             6                   Number of bits used in file.
-             *          
-             *          unknownFlag                             2                   Only seen 0x00 and 0x02.
-             *          if (unknownFlag == 0x02)
-             *          {
-             *              unknownBool                         1                   // TO BE DETEREMINED
-             *          }
-             *          
-             *          skipResource                            1                   Bool type.
-             *          if (!skipResource)
-             *          {
-             *              ResourceCode                        16                  Like StatCode, refers to some value in an excel table.
-             *          }
-             *      }
-             * }
-             * 
-             * bitCount                                         6                   Number of bits used in file for stat value.
-             * 
-             * otherAttributeFlag                               3                   // TO BE DETEREMINED
-             * if (otherAttributeFlag & 0x01)
-             * {
-             *      unknown                                     4                   // TO BE DETEREMINED
-             * }
-             * if (otherAttributeFlag & 0x02)
-             * {
-             *      unknown                                     12                  // TO BE DETEREMINED
-             * }
-             * if (otherAttributeFlag & 0x04)
-             * {
-             *      unknown                                     1                   // TO BE DETEREMINED
-             * }
-             * 
-             * skipResource                                     2                   Bool type. Not sure why it's 2 bits.
-             * if (!skipResource)
-             * {
-             *      resourceId                                  16                  Like statId, refers to some value in an excel table.
-             * }
-             * 
-             * RepeatFlag                                       1                   Bool type.
-             * {
-             *      RepeatCount                                 10                  Number of times to read in stat values.
-             * }
-             * 
-             * for (number of repeats)                                              If the repeatFlag is 0, then obviously we still want to read
-             * {                                                                    in at least once... So really it's like a do {} while() chunk.
-             *      for (number of extra attributes)
-             *      {
-             *          extraAttributeValue                     bitCount_EA         The extra attribute for the applicable value below.
-             *      }
-             *      
-             *      statValue                                   bitCount            The actual stat value.
-             * }
-             */
-
-            if (statBlock.Usage == 1)
-            {
-                _WriteBits(stat.Row, 11);
-                StatsBeta statRow = new StatsBeta(); // todo: FIXME FileManager.GetStatRowFromIndex(stat.Row);
-                stat.BitCount = statRow.valbits;
-            }
-            else
-            {
-                _WriteBits(stat.Code, 16);
-                _WriteBits(stat.Attributes.Count, 2);
-                foreach (StatBlock.Stat.Attribute attribute in stat.Attributes)
-                {
-                    _WriteBool(attribute.Exists);
-                    if (!attribute.Exists) break;
-
-                    _WriteBits(attribute.BitCount, 6);
-
-                    _WriteBits(attribute.Unknown1, 2);
-                    if (attribute.Unknown1 == 0x02)
-                    {
-                        _WriteBool(attribute.Unknown11);
-                    }
-
-                    _WriteBool(attribute.HasTableCode);
-                    if (!attribute.HasTableCode)
-                    {
-                        _WriteBits(attribute.TableCode, 16);
-                    }
-                }
-
-                _WriteBits(stat.BitCount, 6);
-
-                _WriteBits(stat.OtherAttributeFlag, 3);
-                if ((stat.OtherAttributeFlag & 0x01) > 0)
-                {
-                    _WriteBits(stat.OtherAttribute.Unknown1, 4);
-                }
-                if ((stat.OtherAttributeFlag & 0x02) > 0)
-                {
-                    _WriteBits(stat.OtherAttribute.Unknown2, 12);
-                }
-                if ((stat.OtherAttributeFlag & 0x04) > 0)
-                {
-                    _WriteBits(stat.OtherAttribute.Unknown3, 1);
-                }
-
-                _WriteBits(stat.SkipResource, 2);
-                if (stat.SkipResource == 0)
-                {
-                    _WriteBits(stat.Resource, 16);
-                }
-            }
-
-            int repeatCount = stat.values.Count;
-            stat.RepeatFlag = (repeatCount > 1);
-
-            _WriteBool(stat.RepeatFlag);
-            if (stat.RepeatFlag)
-            {
-                _WriteBits(repeatCount, 10);
-            }
-
-            for (int i = 0; i < repeatCount; i++)
-            {
-                for (int j = 0; j < stat.Attributes.Count; j++)
-                {
-                    if (!stat.Attributes[j].Exists) continue;
-
-                    int extraAttribute = 0;
-                    switch (j)
-                    {
-                        case 0:
-                            extraAttribute = stat.values[i].Attribute1;
-                            break;
-                        case 1:
-                            extraAttribute = stat.values[i].Attribute2;
-                            break;
-                        case 2:
-                            extraAttribute = stat.values[i].Attribute3;
-                            break;
-                    }
-
-                    _WriteBits(extraAttribute, stat.Attributes[j].BitCount);
-                }
-
-                _WriteBits(stat.values[i].StatValue, stat.BitCount);
-            }
-        }
-
-        private void _WriteBool(bool value)
-        {
-            _WriteBits(value ? 1 : 0, 1);
-        }
-
-        private void _WriteByte(int value)
-        {
-            _WriteBits(value, 8);
-        }
-
-        private void _WriteByte(byte value)
-        {
-            _WriteBits(value, 8);
-        }
-
-        private void _WriteInt16(Int16 value)
-        {
-            _WriteBits(value, 16);
-        }
-
-        private unsafe void _WriteFloat(float value)
-        {
-            int intVal = *(int*)&value;
-            _WriteBits(intVal, 32);
-        }
-
-        private void _WriteInt32(Int32 value)
-        {
-            _WriteBits(value, 32);
-        }
-
-        private void _WriteUInt32(UInt32 value)
-        {
-            _WriteBits((Int32)value, 32);
-        }
-
-        private void _WriteBitsShift(int value, int bitCount)
-        {
-            int shift = (1 << (bitCount - 1));
-            value += shift;
-            _WriteBits(value, bitCount);
-        }
-
-        private void _WriteBits(int value, int bitCount)
-        {
-            _WriteBits(value, bitCount, _bitOffset, true);
-        }
-
-        private void _WriteBits(int value, int bitCount, int bitOffset, bool setIncrementOffset = false)
-        {
-            int byteOffset = bitOffset >> 3;
-            if (!_usingExternalBuffer && byteOffset > _buffer.Length - 10)
-            {
-                byte[] newData = new byte[_buffer.Length + 1024];
-                Buffer.BlockCopy(_buffer, 0, newData, 0, _buffer.Length);
-                _buffer = newData;
-            }
-
-            int bitsToWrite = bitCount;
-            int offsetBitsInFirstByte = bitOffset & 0x07;
-            int bitByteOffset = 0x08 - offsetBitsInFirstByte;
-
-            int bitsInFirstByte = bitCount;
-            if (bitByteOffset < bitCount) bitsInFirstByte = bitByteOffset;
-
-            int bytesToWriteTo = (bitsToWrite + 0x07 + offsetBitsInFirstByte) >> 3;
-
-            for (int i = 0; i < bytesToWriteTo; i++, byteOffset++)
-            {
-                int bitLevel = 0;
-                if (offsetBitsInFirstByte > 0 && i > 0)
-                {
-                    bitLevel = 8 - offsetBitsInFirstByte;
-                }
-                if (offsetBitsInFirstByte > 0 && i >= 2)
-                {
-                    bitLevel += (i - 1) * 8;
-                }
-                else if (offsetBitsInFirstByte == 0 && i >= 1)
-                {
-                    bitLevel += i * 8;
-                }
-
-                int toWrite = (value >> bitLevel);
-                if (i == 0)
-                {
-                    toWrite &= ((1 << bitsInFirstByte) - 1);
-                    toWrite <<= offsetBitsInFirstByte;
-                    bitsToWrite -= bitsInFirstByte;
-                }
-                else if (i == bytesToWriteTo - 1 && offsetBitsInFirstByte > 0)
-                {
-                    toWrite &= ((1 << bitsToWrite) - 1);
-                }
-                else
-                {
-                    bitsToWrite -= 8;
-                }
-
-                _buffer[_byteOffset + byteOffset] |= (byte)toWrite;
-            }
-
-            if (setIncrementOffset)
-            {
-                _bitOffset += bitCount;
-            }
+            StateCodes1.Remove(state);
         }
     }
 }

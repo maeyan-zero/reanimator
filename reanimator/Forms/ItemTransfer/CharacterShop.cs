@@ -116,7 +116,7 @@ namespace Reanimator.Forms.ItemTransfer
             {
                 foreach (UnitObject item in unit.Items)
                 {
-                    if (item.InventoryType == (int)InventoryType)
+                    if (item.InventoryLocationIndex == (int)InventoryType)
                     {
                         //InventoryItem iItem = new InventoryItem(item);
                         //iItem.InitButton(false);
@@ -185,7 +185,7 @@ namespace Reanimator.Forms.ItemTransfer
         {
             if (_characterUnit == null || _selectedItem == null) return;
 
-            UnitObject.StatBlock.Stat value = UnitHelpFunctions.GetComplexValue(_selectedItem.Item.UnitObject, ItemValueNames.applied_affix.ToString());
+            UnitObjectStats.Stat value = UnitHelpFunctions.GetComplexValue(_selectedItem.Item.UnitObject, ItemValueNames.applied_affix.ToString());
             if (value != null)
             {
                 MessageBox.Show(value.ToString());

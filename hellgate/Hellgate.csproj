@@ -119,12 +119,15 @@
     <Compile Include="Excel\JapaneseBeta\Action.cs" />
     <Compile Include="Excel\Mod\AiBehaviourRow.cs" />
     <Compile Include="Excel\Mod\ConditionFunctionsRow.cs" />
+    <Compile Include="Excel\Mod\DifficultyRow.cs" />
+    <Compile Include="Excel\Mod\ExcelTableRow.cs" />
     <Compile Include="Excel\Mod\LevelDrlgChoiceRow.cs" />
     <Compile Include="Excel\Mod\LevelDrlgsRow.cs" />
     <Compile Include="Excel\Mod\LevelFilePathsRow.cs" />
     <Compile Include="Excel\Mod\LevelRow.cs" />
     <Compile Include="Excel\Mod\LevelThemesRow.cs" />
     <Compile Include="Excel\Mod\QuestRow.cs" />
+    <Compile Include="Excel\Mod\RoomIndexRow.cs" />
     <Compile Include="Excel\Mod\SkillEventTypesRow.cs" />
     <Compile Include="Excel\Mod\SkillsRow.cs" />
     <Compile Include="Excel\Mod\SoundsRow.cs" />
@@ -451,6 +454,7 @@
     <Compile Include="StringsFileUtil.cs" />
     <Compile Include="TableDataSet.cs" />
     <Compile Include="UnitObject.cs" />
+    <Compile Include="UnitObjectStats.cs" />
     <Compile Include="UnitObjectUtil.cs" />
     <Compile Include="XLS.cs" />
     <Compile Include="XmlCookedAttribute.cs" />
