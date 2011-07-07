@@ -804,7 +804,7 @@ namespace Revival
         {
             if (xmlFilesToCook.Length > 0)
             {
-                if (XmlCookedFile.IsInitialized == false) XmlCookedFile.Initialize(fileManager);
+                //if (XmlCookedFile.IsInitialized == false) XmlCookedFile.Initialize(fileManager);
 
                 Console.WriteLine("Cooking XML Files... Loading Data Tables...");
 
@@ -819,15 +819,12 @@ namespace Revival
         {
             try
             {
-                if (XmlCookedFile.IsInitialized == false)
-                    XmlCookedFile.Initialize(fileManager);
-
                 Console.WriteLine(String.Format("Cooking {0}", Path.GetFileNameWithoutExtension(xmlPath)));
 
                 XmlDocument xmlDocument = new XmlDocument();
                 xmlDocument.Load(xmlPath);
 
-                XmlCookedFile cookedXmlFile = new XmlCookedFile();
+                XmlCookedFile cookedXmlFile = new XmlCookedFile(fileManager);
                 byte[] xmlCookedData = cookedXmlFile.CookXmlDocument(xmlDocument);
                 File.WriteAllBytes(xmlPath + ".cooked", xmlCookedData);
                 return true;

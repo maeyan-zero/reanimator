@@ -128,7 +128,6 @@ namespace Reanimator
             }
         }
 
-
         public static void ExtractAllCSV()
         {
             const String root = @"C:\test_mod\";
@@ -1289,7 +1288,6 @@ namespace Reanimator
             //int bp = 0;
         }
 
-
         public static ObjectDelegator GetExcelDelegator(DataFile excelFile, IDictionary<String, ObjectDelegator> objectDelegators)
         {
             ObjectDelegator excelDelegator;
@@ -1453,24 +1451,29 @@ namespace Reanimator
             List<XmlCookedFile> excelStringWarnings = new List<XmlCookedFile>();
             List<String> testCentreWarnings = new List<String>();
             List<String> resurrectionWarnings = new List<String>();
+            int i = 0;
             foreach (String xmlFilePath in xmlFiles)
             {
-                //if (xmlFilePath.Contains("\\Data\\colorsets.xml")) continue;
-                //if (xmlFilePath.Contains("\\Data\\ai\\")) continue;
-                //if (xmlFilePath.Contains("\\Data\\background\\")) continue;
-                //if (xmlFilePath.Contains("\\Data\\demolevel\\")) continue;
-                //if (xmlFilePath.Contains("\\Data\\lights\\")) continue;
-                //if (xmlFilePath.Contains("\\Data\\materials\\")) continue;
-                //if (xmlFilePath.Contains("\\Data\\particles\\")) continue;
-                //if (xmlFilePath.Contains("\\Data\\screenfx\\")) continue;
-                //if (xmlFilePath.Contains("\\Data\\skills\\")) continue;
-                //if (xmlFilePath.Contains("\\Data\\sounds\\")) continue;
-                //if (xmlFilePath.Contains("\\Data\\states\\")) continue;
-                //if (xmlFilePath.Contains("\\Data\\units\\items\\")) continue;
-                //if (xmlFilePath.Contains("\\Data\\units\\missiles\\")) continue;
-                //if (xmlFilePath.Contains("\\Data\\units\\monsters\\")) continue;
-                //if (xmlFilePath.Contains("\\Data\\units\\npc\\")) continue;
-                //if (xmlFilePath.Contains("\\Data\\units\\objects\\")) continue;
+                bool skip = ((i++ % 23) > 0);
+                if (skip)
+                {
+                    if (xmlFilePath.Contains("\\Data\\colorsets.xml")) continue;
+                    if (xmlFilePath.Contains("\\Data\\ai\\")) continue;
+                    if (xmlFilePath.Contains("\\Data\\background\\")) continue;
+                    if (xmlFilePath.Contains("\\Data\\demolevel\\")) continue;
+                    if (xmlFilePath.Contains("\\Data\\lights\\")) continue;
+                    if (xmlFilePath.Contains("\\Data\\materials\\")) continue;
+                    if (xmlFilePath.Contains("\\Data\\particles\\")) continue;
+                    if (xmlFilePath.Contains("\\Data\\screenfx\\")) continue;
+                    if (xmlFilePath.Contains("\\Data\\skills\\")) continue;
+                    if (xmlFilePath.Contains("\\Data\\sounds\\")) continue;
+                    if (xmlFilePath.Contains("\\Data\\states\\")) continue;
+                    if (xmlFilePath.Contains("\\Data\\units\\items\\")) continue;
+                    if (xmlFilePath.Contains("\\Data\\units\\missiles\\")) continue;
+                    if (xmlFilePath.Contains("\\Data\\units\\monsters\\")) continue;
+                    if (xmlFilePath.Contains("\\Data\\units\\npc\\")) continue;
+                    if (xmlFilePath.Contains("\\Data\\units\\objects\\")) continue;
+                }
 
                 String path = xmlFilePath;
                 String fileName = Path.GetFileName(path);
@@ -1482,13 +1485,13 @@ namespace Reanimator
                 //    int bp = 0;
                 //}
 
-                XmlCookedFile xmlCookedFile1 = new XmlCookedFile(fileName);
-                XmlCookedFile xmlCookedFile2 = new XmlCookedFile(fileName);
+                XmlCookedFile xmlCookedFile1 = new XmlCookedFile(fileManager, fileName);
+                XmlCookedFile xmlCookedFile2 = new XmlCookedFile(fileManager, fileName);
                 byte[] data = File.ReadAllBytes(path);
 
                 //Console.WriteLine("Uncooking: " + fileName);
 
-                xmlCookedFile2.ParseFileBytes(data, fileManager, true);
+                xmlCookedFile2.ParseFileBytes(data, true);
                 try
                 {
                     //xmlCookedFile1.ParseFileBytes(data);
@@ -1522,9 +1525,9 @@ namespace Reanimator
                 //    int bp = 0;
                 //}
 
-                XmlCookedFile recookedXmlFile = new XmlCookedFile(fileName) { CookExcludeResurrection = false };
-                byte[] origXmlCookedBytes = recookedXmlFile.ParseFileBytes(origXmlBytes, fileManager);
-                byte[] newXmlCookedBytes = recookedXmlFile.ParseFileBytes(newXmlBytes, fileManager);
+                XmlCookedFile recookedXmlFile = new XmlCookedFile(fileManager, fileName) { CookExcludeResurrection = false };
+                byte[] origXmlCookedBytes = recookedXmlFile.ParseFileBytes(origXmlBytes);
+                byte[] newXmlCookedBytes = recookedXmlFile.ParseFileBytes(newXmlBytes);
                 //byte[] recookedData = recookedXmlFile.CookXmlDocument(xmlCookedFile1.XmlDoc);
                 //byte[] recookedData = recookedXmlFile.ToByteArray();
 

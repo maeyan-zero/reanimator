@@ -2,20 +2,17 @@
 using System.Collections.Generic;
 using System.Diagnostics;
 using System.Linq;
-using System.Text;
-using XmlElement = Hellgate.XmlCookedObject.XmlElement;
-using XmlDefinition = Hellgate.XmlCookedObject.XmlDefinition;
 
 namespace Hellgate
 {
     public class XmlCookedTree
     {
         public uint DefinitionNameHash { get { return Definition.RootElement.NameHash; } }
-        public XmlElement Element { get; private set; }
-        public XmlDefinition Definition { get; private set; }
+        public XmlCookedElement Element { get; private set; }
+        public XmlCookedDefinition Definition { get; private set; }
 
         //private readonly Dictionary<uint, XmlElement> _elements;
-        private readonly List<KeyValuePair<UInt32, XmlElement>> _elements;
+        private readonly List<KeyValuePair<UInt32, XmlCookedElement>> _elements;
         public int Count { get; private set; }
 
         public XmlCookedTree Parent { get; private set; }
@@ -29,11 +26,11 @@ namespace Hellgate
         /// </summary>
         /// <param name="xmlDefinition">The root XML Definition.</param>
         /// <param name="elementCount">Count of elements in this definition in this XML File.</param>
-        public XmlCookedTree(XmlDefinition xmlDefinition, int elementCount)
+        public XmlCookedTree(XmlCookedDefinition xmlDefinition, int elementCount)
         {
             Definition = xmlDefinition;
             Count = elementCount;
-            _elements = new List<KeyValuePair<UInt32, XmlElement>>();
+            _elements = new List<KeyValuePair<UInt32, XmlCookedElement>>();
         }
 
         /// <summary>
@@ -43,13 +40,13 @@ namespace Hellgate
         /// <param name="xmlElement">The XML Element type (should be of .ElementType = Table or TableCount).</param>
         /// <param name="parentTree">The parent XML tree.</param>
         /// <param name="elementCount">Count of elements in this definition in this XML File.</param>
-        public XmlCookedTree(XmlDefinition xmlDefinition, XmlElement xmlElement, XmlCookedTree parentTree, int elementCount)
+        public XmlCookedTree(XmlCookedDefinition xmlDefinition, XmlCookedElement xmlElement, XmlCookedTree parentTree, int elementCount)
         {
             Definition = xmlDefinition;
             Element = xmlElement;
             Parent = parentTree;
             Count = elementCount;
-            _elements = new List<KeyValuePair<UInt32, XmlElement>>();
+            _elements = new List<KeyValuePair<UInt32, XmlCookedElement>>();
         }
 
         /// <summary>
@@ -58,7 +55,7 @@ namespace Hellgate
         /// <param name="xmlElement">The differing XML Element for this twin.</param>
         /// <param name="parentTree">he parent XML tree.</param>
         /// <param name="twinTree">The original XML tree.</param>
-        private XmlCookedTree(XmlElement xmlElement, XmlCookedTree parentTree, XmlCookedTree twinTree)
+        private XmlCookedTree(XmlCookedElement xmlElement, XmlCookedTree parentTree, XmlCookedTree twinTree)
         {
             Element = xmlElement;
             Parent = parentTree;
@@ -70,9 +67,9 @@ namespace Hellgate
         /// Add an element to the tree.
         /// </summary>
         /// <param name="xmlElement">The XML Element to add to the tree.</param>
-        public void AddElement(XmlElement xmlElement)
+        public void AddElement(XmlCookedElement xmlElement)
         {
-            _elements.Add(new KeyValuePair<UInt32, XmlElement>(xmlElement.NameHash, xmlElement));
+            _elements.Add(new KeyValuePair<UInt32, XmlCookedElement>(xmlElement.NameHash, xmlElement));
         }
 
         /// <summary>
@@ -83,7 +80,7 @@ namespace Hellgate
         {
             //_elements.Remove(_elements.Last().Key);
             //_elements.Add(xmlCookedFileTree.DefinitionNameHash, new XmlElement(xmlCookedFileTree));
-            _elements[_elements.Count - 1] = new KeyValuePair<UInt32, XmlElement>(xmlCookedFileTree.DefinitionNameHash, new XmlElement(xmlCookedFileTree));
+            _elements[_elements.Count - 1] = new KeyValuePair<UInt32, XmlCookedElement>(xmlCookedFileTree.DefinitionNameHash, new XmlCookedElement(xmlCookedFileTree));
         }
 
         /// <summary>
@@ -97,17 +94,17 @@ namespace Hellgate
             tree = tree.TwinRoot;
             Debug.Assert(tree != null, "AddExistingTree: tree not found!");
 
-            XmlElement xmlElement = this[_elements.Count - 1];
+            XmlCookedElement xmlElement = this[_elements.Count - 1];
             XmlCookedTree newTree = new XmlCookedTree(xmlElement, this, tree);
             AddTree(newTree);
         }
 
-        public XmlElement GetElement(uint nameHash)
+        public XmlCookedElement GetElement(uint nameHash)
         {
             return Definition.GetElement(nameHash);
         }
 
-        public XmlElement GetElement(String name)
+        public XmlCookedElement GetElement(String name)
         {
             return Definition.GetElement(name);
         }
@@ -121,7 +118,7 @@ namespace Hellgate
         private XmlCookedTree _GetExistingTree(XmlCookedTree xmlTree, UInt32 elementHash)
         {
             // check current branch
-            foreach (XmlElement xmlCookedElement in _elements.Select(keyValuePair => keyValuePair.Value))
+            foreach (XmlCookedElement xmlCookedElement in _elements.Select(keyValuePair => keyValuePair.Value))
             {
                 if (xmlCookedElement.XmlTree == null) continue;
                 if (xmlCookedElement.XmlTree.DefinitionNameHash == elementHash) return xmlCookedElement.XmlTree;
@@ -130,7 +127,7 @@ namespace Hellgate
             //if (existingTree != null) return existingTree;
 
             // check entire tree set
-            foreach (XmlElement xmlCookedElement in xmlTree._elements.Select(keyValuePair => keyValuePair.Value))
+            foreach (XmlCookedElement xmlCookedElement in xmlTree._elements.Select(keyValuePair => keyValuePair.Value))
             {
                 if (xmlCookedElement.XmlTree == null) continue;
                 if (xmlCookedElement.XmlTree.DefinitionNameHash == elementHash) return xmlCookedElement.XmlTree;
@@ -163,7 +160,7 @@ namespace Hellgate
 
             //return false;
 
-            foreach (KeyValuePair<UInt32, XmlElement> keyValuePair in _elements)
+            foreach (KeyValuePair<UInt32, XmlCookedElement> keyValuePair in _elements)
             {
                 if (keyValuePair.Key == elementHash) return true;
                 if (keyValuePair.Value.XmlTree == null) continue;
@@ -193,7 +190,7 @@ namespace Hellgate
             //XmlElement xmlElement;
             //return (_elements.TryGetValue(elementHash, out xmlElement)) ? xmlElement.XmlTree : null;
 
-            foreach (XmlElement xmlCookedElement in _elements.Select(keyValuePair => keyValuePair.Value))
+            foreach (XmlCookedElement xmlCookedElement in _elements.Select(keyValuePair => keyValuePair.Value))
             {
                 if (xmlCookedElement.XmlTree == null) continue;
                 if (xmlCookedElement.XmlTree.DefinitionNameHash == elementHash) return xmlCookedElement.XmlTree;
@@ -207,14 +204,14 @@ namespace Hellgate
             return null;
         }
 
-        public XmlElement this[int i]
+        public XmlCookedElement this[int i]
         {
             get
             {
                 //XmlElement xmlElement = _elements.Values.ElementAt(i);
                 //return (xmlElement.XmlTree == null) ? xmlElement : xmlElement.XmlTree.Element;
 
-                XmlElement xmlElement = _elements[i].Value;
+                XmlCookedElement xmlElement = _elements[i].Value;
                 return (xmlElement.XmlTree == null) ? xmlElement : xmlElement.XmlTree.Element;
 
                 //KeyValuePair<UInt32, Object> keyValuePair = _elements[i];

@@ -389,27 +389,6 @@
     <Compile Include="Program.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="TestScripts.cs" />
-    <Compile Include="XmlDefinitions\AIBehaviorDefinition.cs" />
-    <Compile Include="XmlDefinitions\AIBehaviorDefinitionTable.cs" />
-    <Compile Include="XmlDefinitions\AIDefinition.cs" />
-    <Compile Include="XmlDefinitions\ConditionDefinition.cs" />
-    <Compile Include="XmlDefinitions\Material.cs" />
-    <Compile Include="XmlDefinitions\RoomLayoutGroup.cs" />
-    <Compile Include="XmlDefinitions\RoomLayoutGroupDefinition.cs" />
-    <Compile Include="XmlDefinitions\RoomPathNode.cs" />
-    <Compile Include="XmlDefinitions\RoomPathNodeConnection.cs" />
-    <Compile Include="XmlDefinitions\RoomPathNodeConnectionRef.cs" />
-    <Compile Include="XmlDefinitions\RoomPathNodeDefinition.cs" />
-    <Compile Include="XmlDefinitions\RoomPathNodeSet.cs" />
-    <Compile Include="XmlDefinitions\SkillEvent.cs" />
-    <Compile Include="XmlDefinitions\SkillEventHolder.cs" />
-    <Compile Include="XmlDefinitions\SkillEventsDefinition.cs" />
-    <Compile Include="XmlDefinitions\SoundEffect.cs" />
-    <Compile Include="XmlDefinitions\SoundEffectDefinition.cs" />
-    <Compile Include="XmlDefinitions\StateDefinition.cs" />
-    <Compile Include="XmlDefinitions\StateEvent.cs" />
-    <Compile Include="XmlDefinitions\XmlDefinition.cs" />
-    <Compile Include="XmlDefinitions\XmlCookElement.cs" />
     <EmbeddedResource Include="Controls\DatafileEditor.resx">
       <DependentUpon>DatafileEditor.cs</DependentUpon>
     </EmbeddedResource>

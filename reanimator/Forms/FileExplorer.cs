@@ -1041,7 +1041,7 @@ namespace Reanimator.Forms
             //progressForm.Show(this);
         }
 
-        private static void _DoCooking(ProgressForm progressForm, Object param)
+        private void _DoCooking(ProgressForm progressForm, Object param)
         {
             List<TreeNode> cookNodes = (List<TreeNode>)param;
             const int progressUpdateFreq = 20;
@@ -1072,7 +1072,7 @@ namespace Reanimator.Forms
 
                 if (!File.Exists(filePath)) continue;
                 XmlDocument xmlDocument = new XmlDocument();
-                XmlCookedFile cookedXmlFile = new XmlCookedFile();
+                XmlCookedFile cookedXmlFile = new XmlCookedFile(_fileManager);
 
                 DialogResult dr = DialogResult.Retry;
                 byte[] cookedBytes = null;
@@ -1081,7 +1081,7 @@ namespace Reanimator.Forms
                     try
                     {
                         xmlDocument.Load(filePath);
-                        cookedBytes = cookedXmlFile.CookXmlDocument(xmlDocument);
+                        cookedBytes =  cookedXmlFile.CookXmlDocument(xmlDocument);
                     }
                     catch (Exception e)
                     {
@@ -1174,7 +1174,7 @@ namespace Reanimator.Forms
                 // get file and uncook
                 Console.WriteLine(fileEntry.Path);
                 byte[] fileBytes;
-                XmlCookedFile xmlCookedFile = new XmlCookedFile();
+                XmlCookedFile xmlCookedFile = new XmlCookedFile(_fileManager);
 
                 try
                 {
@@ -1189,7 +1189,7 @@ namespace Reanimator.Forms
 
                 try
                 {
-                    xmlCookedFile.ParseFileBytes(fileBytes);
+                    xmlCookedFile.ParseFileBytes(fileBytes, true);
                 }
                 catch (Exception ex)
                 {
@@ -1227,7 +1227,7 @@ namespace Reanimator.Forms
 
                 try
                 {
-                    xmlCookedFile.SaveXml(savePath.Replace(".cooked", ""));
+                    xmlCookedFile.SaveXmlDocument(savePath.Replace(".cooked", ""));
                 }
                 catch (Exception)
                 {

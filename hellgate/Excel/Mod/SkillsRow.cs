@@ -429,7 +429,7 @@ namespace Hellgate.Excel.JapaneseBeta
         [ExcelOutput(IsTableIndex = true, TableStringId = "MISSILES")]
         public Int32 fieldMissile;
         public Int32 termForSharedStash;
-        public XmlSkillEventsDefinition SkillEvents; // custom row - was called unknown11
+        public SkillEventsDefinition SkillEvents; // custom row - was called unknown11
         [MarshalAs(UnmanagedType.ByValArray, SizeConst = 3)]
         Int32[] unknown11;
 

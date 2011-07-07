@@ -426,7 +426,7 @@ namespace Reanimator.Forms
         }
 
 
-        private void OpenXmlFile(String filePath)
+        private void _OpenXmlFile(String filePath)
         {
             byte[] xmlCookedBytes;
             try
@@ -439,10 +439,10 @@ namespace Reanimator.Forms
                 return;
             }
 
-            XmlCookedFile xmlCookedFile = new XmlCookedFile();
+            XmlCookedFile xmlCookedFile = new XmlCookedFile(_fileManager);
             try
             {
-                xmlCookedFile.ParseFileBytes(xmlCookedBytes);
+                xmlCookedFile.ParseFileBytes(xmlCookedBytes, true);
             }
             catch (Exception e)
             {
@@ -453,7 +453,7 @@ namespace Reanimator.Forms
             String xmlPath = filePath.Replace(".cooked", "");
             try
             {
-                xmlCookedFile.SaveXml(xmlPath);
+                xmlCookedFile.SaveXmlDocument(xmlPath);
             }
             catch (Exception ex)
             {
@@ -711,7 +711,7 @@ namespace Reanimator.Forms
             }
             foreach (PackFile file in _fileManager.IndexFiles) file.EndDatAccess();
 
-            XmlCookedFile.Initialize(_fileManager);
+            //XmlCookedFile.Initialize(_fileManager);
 
 
             if (!Config.LoadTCv4DataFiles) return;
