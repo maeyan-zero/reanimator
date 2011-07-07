@@ -926,7 +926,7 @@ namespace Hellgate
             /*280*/ new Function { Name = "getConditionRatio", Args = new[] { new Argument { Name = "unit", Type = ArgType.Unit } } },
             /*281*/ new Function { Name = "refund_regist_item_okay", Args = new[] { new Argument { Name = "unit", Type = ArgType.Unit }, new Argument { Name = "context", Type = ArgType.Context } } },
             /*282*/ new Function { Name = "is_refundable", Args = new[] { new Argument { Name = "unit", Type = ArgType.Unit } } },
-/*283*/ new Function { Name = "is_pcbang", Args = new[] { new Argument { Name = "unit", Type = ArgType.Unit } } }
+            /*283*/ new Function { Name = "is_pcbang", Args = new[] { new Argument { Name = "unit", Type = ArgType.Unit } } }
         };
 
         /* OpCode           Function                                Action

@@ -15,7 +15,7 @@ namespace Hellgate.Excel.JapaneseBeta
         public String Name; // custom row - was Int32 buffer
         [ExcelOutput(SortColumnOrder = 2)]
         public Int32 code;
-        public XmlStateDefinition StateEvents; // custom row - was Int32 buffer1;              // always 0
+        public StateDefinition StateEvents; // custom row - was Int32 buffer1;              // always 0
         [ExcelOutput(IsStringOffset = true)]
         public Int32 file;
         public String File; // custom row - was Int32 buffer2;              // always 0

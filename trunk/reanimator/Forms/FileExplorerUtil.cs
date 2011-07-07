@@ -642,7 +642,7 @@ namespace Reanimator.Forms
                 HellgateFile hellgateFile;
                 if (relativePath.EndsWith(XmlCookedFile.Extension))
                 {
-                    hellgateFile = new XmlCookedFile();
+                    hellgateFile = new XmlCookedFile(_fileManager);
                 }
                 else if (relativePath.EndsWith(RoomDefinitionFile.Extension))
                 {
