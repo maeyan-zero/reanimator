@@ -41,6 +41,7 @@ namespace Reanimator.Forms
             //Config.HglDir = @"D:\Games\Hellgate London";
             //TestScripts.UncookAllXml();
             //TestScripts.ExtractFunctionList();
+            //TestScripts.TestAllExcelScripts();
             if (true) return;
             //Config.HglDir = @"D:\Projects\Hellgate London\Flagshipped\ServerTest\bin\Debug";
             ////Config.HglDir = @"D:\Games\Hellgate";

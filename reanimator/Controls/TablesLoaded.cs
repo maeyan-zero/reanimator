@@ -1,10 +1,5 @@
 ﻿using System;
 using System.Collections.Generic;
-using System.ComponentModel;
-using System.Drawing;
-using System.Data;
-using System.Linq;
-using System.Text;
 using System.Windows.Forms;
 using Hellgate;
 using Reanimator.Forms;
@@ -30,8 +25,8 @@ namespace Reanimator.Controls
 
             if (_fileManager == null || _fileManager.DataFiles.Count == 0) return;
             _loadedTables_ListBox.DataSource = new BindingSource(_fileManager.DataFiles, null);
-            _loadedTables_ListBox.DoubleClick += new EventHandler(_loadedTables_ListBox_MouseDoubleClick);
-            _loadedTables_ListBox.Format += new ListControlConvertEventHandler(_loadedTables_ListBox_Format);
+            _loadedTables_ListBox.DoubleClick += _loadedTables_ListBox_MouseDoubleClick;
+            _loadedTables_ListBox.Format += _loadedTables_ListBox_Format;
         }
 
         /// <summary>
@@ -41,12 +36,11 @@ namespace Reanimator.Controls
         /// <param name="e"></param>
         private void _loadedTables_ListBox_MouseDoubleClick(object sender, EventArgs e)
         {
-            KeyValuePair<String, DataFile> item =
-                    (KeyValuePair<String, DataFile>)_loadedTables_ListBox.SelectedItem;
+            KeyValuePair<String, DataFile> item = (KeyValuePair<String, DataFile>)_loadedTables_ListBox.SelectedItem;
 
             if (_excelTableForm == null || _excelTableForm.IsDisposed)
             {
-                _excelTableForm = new TableEditorForm(_fileManager) { };
+                _excelTableForm = new TableEditorForm(_fileManager);
             }
 
             bool isOpen = _excelTableForm.IsTabOpen(item.Key);
@@ -62,7 +56,6 @@ namespace Reanimator.Controls
 
             _excelTableForm.Show();
         }
-
 
         /// <summary>
         /// Defines the list format.

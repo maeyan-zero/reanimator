@@ -735,11 +735,169 @@ namespace Hellgate
 
         private UInt32 _GenerateStructureId()
         {
-            // this is not finished and probably never will be
-            // we need type arrays and all sorts of other bullshit that I can't be bothered finding
-            // it's much easier to just use our hard-coded array
+            // this is not finished and probably never will be... (update: it might be...)
+            // we need type arrays and all sorts of other bullshit that I can't be bothered finding (got most now)
+            // it's much easier to just use our hard-coded array (still kind of true, but it'd be nice to have the correct method for Resurrection stuff)
             // below is the very quick hard-coded version of the (mostly-completed; see comments) strings_files.txt.cooked StructureId
             throw new NotImplementedException();
+
+            // I got bored and decided to check it out again - C-style implementation... Almost got it...
+            /*
+            unsigned int __usercall CryptStringHash<eax>(char *szString<ecx>, unsigned int baseHash<eax>)
+            unsigned int __usercall CryptBytesHash<eax>(char *szString<ecx>, int len<edx>, unsigned int baseHash)
+
+            00000000 XlsTypeDefintion struc ; (sizeof=0x34) // I think there might be another 0x10 bytes at least in the client version
+            00000000 szName          dd ?                  	// column name
+            00000004 typeId          dd ?					// element type (see XlsType)
+            00000008 offset          dd ?					// byte offset in row
+            0000000C count           dd ?					// the number of elements (i.e. 1 for single, >1 for array)
+            00000010 size            dd ?					// the byte count of each element (e.g. Int32 = 4)
+            00000014 unknown1        dd ?
+            00000018 unknown2        dd ?					// some sort of flags
+            0000001C unknown3        dd ?
+            00000020 unknown4        dd ?                    ; offset // need to figure this unknown4 out before it'll work... I think it might be the default value...
+            00000024 unknown5        dd ?
+            00000028 unknown6        dd ?
+            0000002C unknown7        dd ?
+            00000030 index           dd ?					// bit index for flags, table index for excel elements
+            00000034 XlsTypeDefintion ends
+
+            public enum XlsType : int
+            {
+	            String = 1,
+	            StringOffset = 2, // also StringOffsetDefault
+	            GroupStyle = 3,
+	            Flag = 4,
+	            Byte_06 = 6,
+	            Int32 = 9,
+	            Bool = 11,
+	            Float = 12, // Float1 and Float2
+	            Byte_0D = 13,
+	            CodeInt32 = 14,
+	            CodeInt16 = 16,
+	            CodeInt8 = 17,
+	            ExcelIndex = 20,
+	            FolderCode = 21,
+	            Unknown2 = 26,
+	            Enum = 29,
+	            EnumArray 30,
+	            UseFixedDRLGSeed = 36,
+	            ExcelIndexArray = 40,
+	            Qualities = 45,
+	            StringIndex = 46,
+	            TugboatUnknown = 47,
+	            File = 48,
+	            Script = 50,
+	            MaxSlots = 51,
+	            Unknown1 = 52,
+	            AimHeight = 53,
+	            UnitType = 54,
+	            MultipleRelations = 55
+            }
+
+            // this is run for every element (column) in the table, with the hash result added to previous hash results
+            unsigned int __usercall XLS_GenereateElementHash<eax>(XlsTypeDefintion *xlsDefinitionObj<esi>)
+            {
+	            unsigned int hashResult = CryptStringHash((char *)xlsDefinitionObj->szName, 0);
+	            hashResult = CryptBytesHash((char *)&xlsDefinitionObj->typeId, 4, hashResult);
+	
+	            XlsType type = xlsDefinitionObj->typeId;
+	            if (type != StringOffset) // StringOffset = 2
+	            {
+		            hashResult = CryptBytesHash((char *)&xlsDefinitionObj->offset, 4, hashResult);
+		            hashResult = CryptBytesHash((char *)&xlsDefinitionObj->size, 4, hashResult);
+	            }
+	
+	            hashResult = CryptBytesHash((char *)&xlsDefinitionObj->count, 4, hashResult);
+	            hashResult = CryptBytesHash((char *)&xlsDefinitionObj->unknown2, 4, hashResult);
+	
+	            if (type <= InternalIndexArray) // InternalIndexArray = 30
+	            {
+		            if (type >= 27)
+		            {
+			            if (xlsDefinitionObj->unknown4)
+			            {
+				            CryptStringHash(xlsDefinitionObj->unknown4, hashResult);
+			            }
+		            }
+		            else
+		            {
+			            // String_ = 1, StringOffset = 2
+			            if (type == String_ || type == StringOffset)
+                        {
+			                if (xlsDefinitionObj->unknown4)
+			                {
+				                hashResult = CryptStringHash(xlsDefinitionObj->unknown4, hashResult);
+			                }
+      
+			                return CryptBytesHash((char *)&xlsDefinitionObj->index, 24, hashResult);
+                        }
+				
+			            if (type != GroupStyle) // GroupStyle = 3
+			            {
+				            if (type > CodeInt8 && (type <= 24 || type == Unknown2))
+                            {
+			                    if (xlsDefinitionObj->unknown4)
+			                    {
+				                    hashResult = CryptStringHash(xlsDefinitionObj->unknown4, hashResult);
+			                    }
+      
+			                    return CryptBytesHash((char *)&xlsDefinitionObj->index, 24, hashResult);
+                            }
+				
+		                    hashResult = CryptBytesHash((char *)&xlsDefinitionObj->unknown4, 16, hashResult);
+		                    return CryptBytesHash((char *)&xlsDefinitionObj->index, 24, hashResult);
+			            }
+			
+			            hashResult = CryptBytesHash((char *)&xlsDefinitionObj->unknown4, 16, hashResult);
+		            }
+		
+		            return XLS_GenerateElementIndexHash(hashResult, xlsDefinitionObj->index); // need to look into this as well...
+	            } // end if (type <= InternalIndexArray)
+	
+	            if (type > 49)
+	            {
+		            int isNotUnitType = type - UnitType; // UnitType = 54
+		            if (!isNotUnitType)
+		            {
+			            if (xlsDefinitionObj->unknown4)
+			            {
+				            hashResult = CryptStringHash(xlsDefinitionObj->unknown4, hashResult);
+			            }
+      
+			            return CryptBytesHash((char *)&xlsDefinitionObj->index, 24, hashResult);
+		            }
+	
+		            if (isNotUnitType == 1) return hashResult;
+		
+		            hashResult = CryptBytesHash((char *)&xlsDefinitionObj->unknown4, 16, hashResult);
+		            return CryptBytesHash((char *)&xlsDefinitionObj->index, 24, hashResult);
+	            }
+
+	            if (type < File_) // File_ = 48
+	            {
+		            if (type >= 38 && (type <= 44 || type > Qualities && type <= TugboatUnknown))
+                    {
+			            if (xlsDefinitionObj->unknown4)
+			            {
+				            hashResult = CryptStringHash(xlsDefinitionObj->unknown4, hashResult);
+			            }
+      
+			            return CryptBytesHash((char *)&xlsDefinitionObj->index, 24, hashResult);
+                    }
+		
+		            hashResult = CryptBytesHash((char *)&xlsDefinitionObj->unknown4, 16, hashResult);
+		            return CryptBytesHash((char *)&xlsDefinitionObj->index, 24, hashResult);
+	            }
+
+	            if (xlsDefinitionObj->index)
+	            {
+		            hashResult = CryptStringHash((char *)xlsDefinitionObj->index, hashResult);
+	            }
+	
+	            return hashResult;
+            }
+             */
 
             //UInt32 finalHash = 0x4C; // total structure byte size (not including header)
             //finalHash += 0x20;
