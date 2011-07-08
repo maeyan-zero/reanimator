@@ -626,7 +626,7 @@ namespace Hellgate.Excel.JapaneseBeta
         public Int64 qualities;                                     // 123  0x0000000000000A10  XLS_ReadBits - I think this reads 8 bytes (64 bits); input = 0x40 = 64
         [ExcelOutput(IsTableIndex = true, TableStringId = "ITEM_QUALITY")]
         public Int32 requiredQuality;//index                        // 124  0x0000000000000A18  XLS_ReadIndex
-        public Int32 qualityName; // XLS_InternalIndex_QualityName (XLS_UNIT_DATA+91E), 0x04  // 125  0x0000000000000A1C  XLS_ReadInternalIndex
+        public QualityName qualityName; // XLS_InternalIndex_QualityName (XLS_UNIT_DATA+91E), 0x04  // 125  0x0000000000000A1C  XLS_ReadInternalIndex
         [ExcelOutput(IsTableIndex = true, TableStringId = "MISSILES")]
         public Int32 fieldMissile;//index                           // 84   0x0000000000000A20  XLS_ReadIndex
         [ExcelOutput(IsTableIndex = true, TableStringId = "SKILLS")]
@@ -858,8 +858,8 @@ namespace Hellgate.Excel.JapaneseBeta
         public Int32 requiresItemOfUnitType1;//index                // 66   0x0000000000000CCC  XLS_ReadIndex
         [ExcelOutput(IsTableIndex = true, TableStringId = "TREASURE")]
         public Int32 spawnTreasureClassInLevel;//index              // 67   0x0000000000000CD0  XLS_ReadIndex
-        public Int32 oneWayVisualPortalDir; // XLS_InternalIndex_OneWayVisualPortalDir (XLS_UNIT_DATA+445A), 0x04   // 410  0x0000000000000CD4  XLS_ReadInternalIndex
-        public Int32 warpResolveTime; // XLS_InternalIndex_WarpResolveTime (XLS_UNIT_DATA+59FB), 0x05               // 473  0x0000000000000CD8  XLS_ReadInternalIndex
+        public OneWayVisualPortalDir oneWayVisualPortalDir; // XLS_InternalIndex_OneWayVisualPortalDir (XLS_UNIT_DATA+445A), 0x04   // 410  0x0000000000000CD4  XLS_ReadInternalIndex
+        public WarpResolveTime warpResolveTime; // XLS_InternalIndex_WarpResolveTime (XLS_UNIT_DATA+59FB), 0x05               // 473  0x0000000000000CD8  XLS_ReadInternalIndex
         public float labelScale;                                    // 413  0x0000000000000CDC  XLS_ReadFloat
         public float labelForwardOffset;                            // 414  0x0000000000000CE0  XLS_ReadFloat
         public float heightpercent;                                 // 469  0x0000000000000CE4  XLS_ReadFloat_0 ??
@@ -904,7 +904,7 @@ namespace Hellgate.Excel.JapaneseBeta
         Int32[] unknownBytes27;                                     // 0x0000000000000D88 to 0x0000000000000DB8
         public bool noUseWithConsumableItem;        
         public bool noItemMode;
-        public Int32 bindability;
+        public Bindability bindability;
         public Int32 defenceType;
         [MarshalAs(UnmanagedType.ByValArray, SizeConst = 9)]
         Int32[] unknownBytes28;
@@ -1191,6 +1191,34 @@ namespace Hellgate.Excel.JapaneseBeta
             newDirectionOnBounce = 4,                           // 85,3, 2
             canNotRicochet = 8,                                 // 85,4, 3
             reTargetOnBounce = 16                               // 85,5, 4
+        }
+
+        public enum QualityName
+        {
+            Null = -1,
+            ItemQuality = 0,
+            Affix = 1
+        }
+
+        public enum OneWayVisualPortalDir
+        {
+            Null = -1,
+            From = 0,
+            To = 1
+        }
+        public enum WarpResolveTime
+        {
+            Null = -1,
+            SublevelPopulate = 0,//Not entirely sure about this one.
+            LevelActivate = 1,
+            OnUse = 2
+        }
+
+        public enum Bindability
+        {
+            None = -1,
+            Disable = 0,
+            Enable = 1
         }
 
         /* Unknown/Not Added

@@ -40,15 +40,20 @@ namespace Hellgate.Excel.JapaneseBeta
         public float pvpPointsPerTeamCommonExp;
         public float pvpPointPerIndividualContribution;
         public float pvpPointsPerPenaltyExp;
-        //[ExcelOutput(IsTableIndex = true, TableStringId = "")]
-        public Int32 winConditionPriority1;//idx
-        //[ExcelOutput(IsTableIndex = true, TableStringId = "")]
-        public Int32 winConditionPriority2;//idx
-        //[ExcelOutput(IsTableIndex = true, TableStringId = "")]
-        public Int32 winConditionPriority3;//idx
-        //[ExcelOutput(IsTableIndex = true, TableStringId = "")]
-        public Int32 winConditionPriority4;//idx
-        //[ExcelOutput(IsTableIndex = true, TableStringId = "")]
-        public Int32 winConditionPriority5;//idx
+        public WinConditionPriority winConditionPriority1;
+        public WinConditionPriority winConditionPriority2;
+        public WinConditionPriority winConditionPriority3;
+        public WinConditionPriority winConditionPriority4;
+        public WinConditionPriority winConditionPriority5;
+
+        public enum WinConditionPriority
+        {
+            Null = -1,
+            Score = 0,
+            Kills = 1,
+            LevelSum = 2,
+            NodeCount = 3,
+            PlayersLeft = 4,
+        }
     }
 }

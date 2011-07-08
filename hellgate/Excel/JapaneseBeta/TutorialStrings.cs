@@ -11,16 +11,31 @@ namespace Hellgate.Excel.JapaneseBeta
         public Int32 relatedQuest;
         [MarshalAs(UnmanagedType.ByValTStr, SizeConst = 64)]
         public string name;
-        //[ExcelFile.OutputAttribute(IsTableIndex = true, TableStringId = "TUTORIALS")]//table C6 - No file in the dats, or exe, by that name
+        [ExcelFile.OutputAttribute(IsTableIndex = true, TableStringId = "TUTORIALSTRINGS")]//table C6 labeled Tutorials, perhaps really tutorialtrings
         public Int32 nextRow;
         [MarshalAs(UnmanagedType.ByValTStr, SizeConst = 64)]
         public string linkData;
         [MarshalAs(UnmanagedType.ByValArray, SizeConst = 2)]
         Int32[] undefined1;
-        public Int32 dataType;
+        public DataType dataType;
         public Int32 duration;
         public Int32 delay;
-        [ExcelFile.OutputAttribute(IsTableIndex = true, TableStringId = "PLAYER_CONDITION")]
-        public Int32 startCondition;
+        public StartCondition startCondition;
+
+        public enum DataType
+        {
+            Null = -1,
+            String = 0,
+            Communicator = 1,
+            Image = 2
+        }
+
+        public enum StartCondition
+        {
+            Null = -1,
+            Activate = 0,
+            Complete = 1
+        }
+
     }
 }
