@@ -146,6 +146,7 @@ namespace Hellgate
             dataFileFields = dataFileFields.OrderBy(f => f.MetadataToken).ToArray(); // order by defined order - GetFields does not guarantee ordering
             Delegator = new ObjectDelegator(dataFileFields);
 
+
             // parse data
             int peek = FileTools.ByteArrayToInt32(buffer, 0);
             bool isCooked = (peek == Token.cxeh);

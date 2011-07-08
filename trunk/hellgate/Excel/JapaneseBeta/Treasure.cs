@@ -21,7 +21,7 @@ namespace Hellgate.Excel.JapaneseBeta
         public Int32 globalThemeProbBoostTheme;
 		public Int32 globalThemeBoostPct;
         Int32 unknown02;
-        public Int32 pickType; // XLS_ReadInternalIndex_PickType (XLS_TREASURE_DATA+1D5), 0x08
+        public PickTypes pickType; // XLS_ReadInternalIndex_PickType (XLS_TREASURE_DATA+1D5), 0x08
         [MarshalAs(UnmanagedType.ByValArray, SizeConst = 20)]
         public Int32[] picks;
         public float noDrop;
@@ -96,6 +96,17 @@ namespace Hellgate.Excel.JapaneseBeta
             MultiplayerOnly = (1 << 7),
             SinglePlayerOnly = (1 << 8),
             baseOnPlayerLevel = (1 << 9)
+        }
+
+        public enum PickTypes
+        {
+            Null = -1,
+            one = 0,
+            all = 1,
+            modifiers_only = 2,
+            ind_percent = 3,
+            one_eliminate = 4,
+            first_valid = 5
         }
     }
 }

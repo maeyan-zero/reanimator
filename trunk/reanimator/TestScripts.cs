@@ -10,11 +10,138 @@ using System.Runtime.InteropServices;
 using System.Xml;
 using Hellgate;
 using Revival.Common;
+using FieldDelegate = Revival.Common.ObjectDelegator.FieldDelegate;
+using ExcelAttributes = Hellgate.ExcelFile.OutputAttribute;
 
 namespace Reanimator
 {
     public static class TestScripts
     {
+        public static void TestAllExcelScripts()
+        {
+            ExcelScript.GlobalDebug(true);
+            FileManager fileManager = new FileManager(Config.HglDir);
+            fileManager.BeginAllDatReadAccess();
+            fileManager.LoadTableFiles();
+            fileManager.EndAllDatAccess();
+
+            StringWriter results = new StringWriter();
+            Dictionary<String, int> excelScriptFails = new Dictionary<String, int>();
+            int grandTotalScripts = 0;
+            int grandTotalScriptsDecompiled = 0;
+            int grandTotalScriptsFailedDecompilation = 0;
+
+            foreach (ExcelFile excelFile in fileManager.DataFiles.Values.Where(dataFile => dataFile.IsExcelFile))
+            {
+                String excelStringId = String.Format("{0}...", excelFile.StringId);
+                Debug.Write(excelStringId);
+                results.Write(excelStringId);
+
+                if (excelFile.Delegator == null || excelFile.ScriptCode == null || excelFile.ScriptCode.Length == 0)
+                {
+                    Debug.WriteLine(" No script data");
+                    results.WriteLine(" No script data");
+                    continue;
+                }
+
+                String scriptIntValues = String.Format(" {0} script int values...", excelFile.ScriptCode.Length);
+                Debug.WriteLine(scriptIntValues);
+                results.WriteLine(scriptIntValues);
+
+                StringWriter excelFileResults = new StringWriter();
+                int colIndex = -1;
+                int totalScriptsFound = 0;
+                int totalScriptsDecompiled = 0;
+                int totalScriptsFailedDecompilation = 0;
+
+                foreach (FieldDelegate fieldDelegate in excelFile.Delegator)
+                {
+                    colIndex++;
+                    ExcelAttributes excelAtributes = (ExcelAttributes)fieldDelegate.Info.GetCustomAttributes(typeof (ExcelAttributes), true).FirstOrDefault();
+                    if (excelAtributes == null || !excelAtributes.IsScript) continue;
+
+                    String currentColumn = String.Format("\tColumn[{0}] = {1}", colIndex, fieldDelegate.Name);
+                    Debug.WriteLine(currentColumn);
+                    results.WriteLine(currentColumn);
+                    excelFileResults.WriteLine(currentColumn);
+
+                    int rowIndex = -1;
+                    int prevOffset = 0;
+                    int scriptCount = 0;
+                    int scriptsDecompiled = 0;
+                    int scriptsFailedDecompilation = 0;
+                    foreach (Object row in excelFile.Rows)
+                    {
+                        rowIndex++;
+                        int byteOffset = (int)fieldDelegate.GetValue(row);
+                        if (byteOffset == 0) continue;
+                        Debug.Assert(byteOffset > prevOffset);
+                        prevOffset = byteOffset;
+
+                        excelFileResults.WriteLine(String.Format("\t\tColumn({0}) = {3}, Row({1}), ByteOffset({2}):", colIndex, rowIndex, byteOffset, fieldDelegate.Name));
+                        ExcelScript excelScript = new ExcelScript(fileManager);
+
+                        scriptCount++;
+                        String script;
+                        try
+                        {
+                            script = excelScript.Decompile(excelFile.ScriptBuffer, byteOffset, "asdf", excelFile.StringId, rowIndex, colIndex, fieldDelegate.Name);
+                            scriptsDecompiled++;
+                        }
+                        catch (Exception e)
+                        {
+                            if (!excelScriptFails.ContainsKey(excelFile.StringId))
+                            {
+                                excelScriptFails.Add(excelFile.StringId, 1);
+                            }
+                            else
+                            {
+                                excelScriptFails[excelFile.StringId]++;
+                            }
+                            scriptsFailedDecompilation++;
+                            excelFileResults.WriteLine("Script Decompile Failed:\n" + e + "\n");
+                            continue;
+                        }
+
+                        excelFileResults.WriteLine(script + "\n");
+                    }
+
+                    totalScriptsFound += scriptCount;
+                    totalScriptsDecompiled += scriptsDecompiled;
+                    totalScriptsFailedDecompilation += scriptsFailedDecompilation;
+
+                    String columnStats = String.Format("\t\t{0} scripts found, {1} scripts decompiled, {2} scripts failed to decompile.", scriptCount, scriptsDecompiled, scriptsFailedDecompilation);
+                    Debug.WriteLine(columnStats);
+                    excelFileResults.WriteLine(columnStats);
+                }
+
+                grandTotalScripts += totalScriptsFound;
+                grandTotalScriptsDecompiled += totalScriptsDecompiled;
+                grandTotalScriptsFailedDecompilation += totalScriptsFailedDecompilation;
+
+                String totalStats = String.Format("Totals: {0} scripts found, {1} scripts decompiled, {2} scripts failed to decompile.", totalScriptsFound, totalScriptsDecompiled, totalScriptsFailedDecompilation);
+                Debug.WriteLine(totalStats);
+                results.WriteLine(totalStats);
+                excelFileResults.WriteLine(totalStats);
+
+                File.WriteAllText(@"C:\TestScripts\excelScripts_" + excelFile.StringId + ".txt", excelFileResults.ToString());
+                excelFileResults.Close();
+            }
+
+            foreach (KeyValuePair<String, int> keyValuePair in excelScriptFails)
+            {
+                String excelFileFails = String.Format("{0} had {1} failed decompilation.", keyValuePair.Key, keyValuePair.Value);
+                Debug.WriteLine(excelFileFails);
+                results.WriteLine(excelFileFails);
+            }
+
+            String grandTotalStats = String.Format("Grand Totals: {0} scripts found, {1} scripts decompiled, {2} scripts failed to decompile.", grandTotalScripts, grandTotalScriptsDecompiled, grandTotalScriptsFailedDecompilation);
+            Debug.WriteLine(grandTotalStats);
+            results.WriteLine(grandTotalStats);
+
+            File.WriteAllText(@"C:\TestScripts\excelScripts__Results.txt", results.ToString());
+        }
+
         public static void CheckIdenticalFieldsToTCv4()
         {
             FileManager fileManager = new FileManager(Config.HglDir);
@@ -1435,7 +1562,7 @@ namespace Reanimator
 
         public static void UncookAllXml()
         {
-            System.Security.Cryptography.MD5CryptoServiceProvider md5 = new System.Security.Cryptography.MD5CryptoServiceProvider();
+            //System.Security.Cryptography.MD5CryptoServiceProvider md5 = new System.Security.Cryptography.MD5CryptoServiceProvider();
             const String root = @"D:\Games\Hellgate\Data\";
             //const String root = @"D:\Games\Hellgate London\data\mp_hellgate_1.10.180.3416_1.0.86.4580\";
             //const String root = @"D:\Games\Hellgate London\data\mp_hellgate_1.10.180.3416_1.0.86.4580\data\background\";

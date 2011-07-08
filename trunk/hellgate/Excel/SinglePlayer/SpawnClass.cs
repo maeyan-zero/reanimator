@@ -14,7 +14,7 @@ namespace Hellgate.Excel
         public string spawnClass;
         [ExcelOutput(SortColumnOrder = 2)]
         public Int32 code;
-        public Int32 pickType; // XLS_InternalIndex_PickType (XLS_SPAWN_CLASS_DATA+7F), 0x0C
+        public Int32 pickType; // XLS_InternalIndex_PickType (XLS_SPAWN_CLASS_DATA+7F), 0x0C /* 0 = all, 1 = one, 2 = two, 3 = three, 4 = four, 5 = five, 6 = six, 7 = seven, 8 = eight, 9 = nine */
         [ExcelOutput(IsBool = true)]
         public Int32 rememberPick;//bool
         public Int32 pick1; // 1 = MONSTERS, 2 = UNITTYPES, 3 = SPAWN_CLASS, 4 = OBJECTS
