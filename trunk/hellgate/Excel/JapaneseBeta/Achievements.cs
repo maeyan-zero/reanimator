@@ -27,11 +27,11 @@ namespace Hellgate.Excel.JapaneseBeta
         public Int32 linkedAchievement;
         [ExcelFile.OutputAttribute(IsTableIndex = true, TableStringId = "ACHIEVEMENTS")]
         public Int32 progressionAchievement;
-        public Int32 revealCondition;
+        public RevealCondition revealCondition;
         public Int32 revealValue;
         [ExcelFile.OutputAttribute(IsTableIndex = true, TableStringId = "ACHIEVEMENTS")]
         public Int32 revealParentAchievement;
-        public Int32 hideCondition;
+        public HideCondition hideCondition;
         public Int32 hideValue;
         [ExcelFile.OutputAttribute(IsTableIndex = true, TableStringId = "ACHIEVEMENTS")]
         public Int32 hideParentAchievement;
@@ -55,7 +55,7 @@ namespace Hellgate.Excel.JapaneseBeta
         public Int32 playerClass8;
         [ExcelFile.OutputAttribute(IsTableIndex = true, TableStringId = "UNITTYPES")]
         public Int32 playerClass9;
-        public Int32 type;
+        public Type type;
         [ExcelFile.OutputAttribute(IsTableIndex = true, TableStringId = "ACHIEVEMENTS")]
         public Int32 notActiveTillParentComplete;
         public Int32 completeNumber;
@@ -144,6 +144,55 @@ namespace Hellgate.Excel.JapaneseBeta
 		public bool cheatComplete;
         [ExcelFile.OutputAttribute(IsTableIndex = true, TableStringId = "QUEST")]
         public Int32 quest;
-		
+
+        public enum RevealCondition
+        {
+            Always = 0,
+            AmtComplete = 1,
+            Completion = 2,
+            ParentComplete = 3
+        }
+
+        public enum HideCondition
+        {
+            never = 0,
+            AmtComplete = 1,
+            ParentComplete = 2
+        }
+        public enum Type
+        {
+            Null = -1,
+            Kill = 0,
+            KilledBy = 1,
+            WeaponKill = 2,
+            Equip = 3,
+            SkillKill = 4,
+            TimedKills = 5,
+            StatValue = 6,
+            Collect = 7,
+            QuestComplete = 8,
+            TutorialComplete = 9,
+            MainQuestComplete = 10,
+            TwoInventoryComplete = 11,
+            AbyssQuestComplete = 12,
+            TokyoAct1QuestComplete = 13,
+            EachQuestComplete = 14,
+            MinigameWin = 15,
+            ItemUse = 16,
+            ItemMod = 17,
+            ItemCraft = 18,
+            ItemUpgrade = 19,
+            ItemIdentify = 20,
+            ItemDismantle = 21,
+            LevelTime = 22,
+            SkillToLevel = 23,
+            FinishSkillTree = 24,
+            LevelFind = 25,
+            PartyInvite = 26,
+            PartyAccept = 27,
+            InventoryFill = 28,
+            PvPGameWon = 29,
+            PvPTopKills = 30
+        }
     }
 }

@@ -14,7 +14,7 @@ namespace Hellgate.Excel.JapaneseBeta
         public string name;
         [ExcelOutput(SortColumnOrder = 2)]
         public Int32 code;
-        public Int32 style;
+        public Style style;
         [ExcelOutput(IsStringIndex = true)]
         public Int32 nameStringKey;
         [ExcelOutput(IsBool = true)]
@@ -433,8 +433,8 @@ namespace Hellgate.Excel.JapaneseBeta
         [ExcelOutput(IsTableIndex = true, TableStringId = "MONSTERS")]
         public Int32 objectiveMonster;//idx
         //[ExcelOutput(IsTableIndex = true, TableStringId = "")]//internal index array count1 type5
-        public Int32 objectiveMonsterQuality;//idx
-        [ExcelOutput(IsTableIndex = true, TableStringId = "UNITTYPES")]
+        public ObjectiveMonsterQualityType objectiveMonsterQualityType;//idx
+        //[ExcelOutput(IsTableIndex = true, TableStringId = "UNITTYPES")]
         public Int32 objectiveUnitType;//idx
         [ExcelOutput(IsTableIndex = true, TableStringId = "OBJECTS")]
         public Int32 objectiveObject;//idx
@@ -463,10 +463,10 @@ namespace Hellgate.Excel.JapaneseBeta
         public Int32 dialogOverrideState;
         //[ExcelOutput(IsTableIndex = true, TableStringId = "")]//table 77
         public Int32 dialogOverrideMonsterClass;
-        [ExcelOutput(IsTableIndex = true, TableStringId = "SUBLEVEL")]
-        public Int32 subLevelTypeTruthOld;
-        [ExcelOutput(IsTableIndex = true, TableStringId = "SUBLEVEL")]
-        public Int32 subLevelTypeTruthNew;
+        //[ExcelOutput(IsTableIndex = true, TableStringId = "SUBLEVEL")]
+        public SubLevelTypeTruth subLevelTypeTruthOld;
+        //[ExcelOutput(IsTableIndex = true, TableStringId = "SUBLEVEL")]
+        public SubLevelTypeTruth subLevelTypeTruthNew;
         [ExcelOutput(IsTableIndex = true, TableStringId = "QUEST_STATE")]
         public Int32 questStateAdvanceToAtSubLevelTruthOld;//idx
         [ExcelOutput(IsTableIndex = true, TableStringId = "MONSTERS")]
@@ -485,5 +485,43 @@ namespace Hellgate.Excel.JapaneseBeta
         public Int32 eventDialog;//idx
         [ExcelOutput(IsTableIndex = true, TableStringId = "SKILLS")]
         public Int32 skillToUseOnComplete;//idx
+
+        public enum Style
+        {
+            Null = -1,
+            Story = 0,
+            Faction = 1,
+            Class = 2,
+            Random = 3,
+            Adventure = 4,
+            Event = 5,
+            Daily = 6
+        }
+
+        public enum ObjectiveMonsterQualityType
+        {
+            Null = -1,
+            None = 0,
+            Champion = 1,
+            TopChampion = 2,
+            Unique = 3
+        }
+
+        public enum SubLevelTypeTruth
+        {
+            Null = -1,
+            None = 0,
+            Hellrift = 1,
+            TruthAOld = 2,
+            TruthANew = 3,
+            TruthBOld = 4,
+            TruthBNew = 5,
+            TruthCOld = 6,
+            TruthCNew = 7,
+            TruthDOld = 8,
+            TruthDNew = 9,
+            TruthEOld = 10,
+            TruthENew = 11
+        }
     }
 }

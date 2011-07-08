@@ -23,7 +23,7 @@ namespace Hellgate.Excel
         public Int32 championFormatStringKey;//stridx
         [ExcelOutput(IsBool = true)]
         public Int32 pickProperName;//bool
-        public Int32 type;
+        public Type type;
         public Int32 undefined1;
         public byte AppearanceHeightMin;
         public byte AppearanceHeightMax;
@@ -70,5 +70,15 @@ namespace Hellgate.Excel
         public Int32 ShowLabel;//bool
         [ExcelOutput(IsTableIndex = true, TableStringId = "TREASURE")]
         public Int32 TreasureClass;//idx
+
+        public enum Type
+        {
+            Null = -1,
+            None = 0,
+            Champion = 1,
+            TopChampion = 2,
+            Unique = 3
+        }
+
     }
 }
