@@ -36,22 +36,55 @@ namespace Hellgate.Excel
         public Int32 titlescreenMovie;//idx;
         [ExcelOutput(IsTableIndex = true, TableStringId = "MOVIES")]
         public Int32 titlescreenMovieWide;//idx;
-        [MarshalAs(UnmanagedType.ByValArray, SizeConst = 24)]
-        public Int32[] languages;
+        public Language language1;
+        public Language language2;
+        public Language language3;
+        public Language language4;
+        [MarshalAs(UnmanagedType.ByValArray, SizeConst = 20)]
+        public Language[] languages;
         [ExcelOutput(ConstantValue = -1)]
         [MarshalAs(UnmanagedType.ByValArray, SizeConst = 40)]
         Int32[] languagesUnused;
         Int32 undefined3;
-        [ExcelOutput(IsTableIndex = true, TableStringId = "REGION")]
-        public Int32 regions1;
-        [ExcelOutput(IsTableIndex = true, TableStringId = "REGION")]
-        public Int32 regions2;
-        [ExcelOutput(IsTableIndex = true, TableStringId = "REGION")]
-        public Int32 regions3;
-        [ExcelOutput(IsTableIndex = true, TableStringId = "REGION")]
-        public Int32 regions4;
+        public Regions regions1;
+        public Regions regions2;
+        public Regions regions3;
+        public Regions regions4;
         [ExcelOutput(ConstantValue = -1)]
         [MarshalAs(UnmanagedType.ByValArray, SizeConst = 28)]
         Int32[] regions;
+
+        public enum Language
+        {
+            Null = -1,
+            English = 0,
+            Korean = 1,
+            ChineseSimplified = 2,
+            ChineseTraditional = 3,
+            Japanese = 4,
+            French = 5,
+            Spanish = 6,
+            German = 7,
+            Italian = 8,
+            Polish = 9,
+            Czech = 10,
+            Hungarian = 11,
+            Russian = 12,
+            Thai = 13,
+            Vietnamese = 14
+        }
+        public enum Regions
+        {
+            Null = -1,
+            NorthAmerica = 0,
+            Europe = 1,
+            Japan = 2,
+            Korea = 3,
+            China = 4,
+            Taiwan = 5,
+            SouthEastAsia = 6,
+            SouthAmerica = 7,
+            Australia = 8
+        }
     }
 }

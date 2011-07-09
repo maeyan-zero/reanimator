@@ -10,8 +10,18 @@ namespace Hellgate.Excel
     {
         RowHeader header;
         [ExcelOutput(SortColumnOrder = 1)]
-        public Int32 group;
+        public Group group;
         [ExcelOutput(DebugIgnoreConstantCheck = true)]
         public float lodRate;
+
+        public enum Group
+        {
+            Null = -1,
+            Background = 0,
+            Units = 1,
+            Particle = 2,
+            UI = 3,
+            Wardrobe = 4
+        }
     }
 }

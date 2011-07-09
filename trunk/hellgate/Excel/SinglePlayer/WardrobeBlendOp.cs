@@ -61,7 +61,7 @@ namespace Hellgate.Excel
         short undefined1;
         [ExcelOutput(ConstantValue = -1)]
         Int32 undefined2;
-        public Int32 target; // XLS_InternalIndex_TargetTexture (XLS_WARDROBE_BLENDOP_DATA+14B), 0x09
+        public Target target; // XLS_InternalIndex_TargetTexture (XLS_WARDROBE_BLENDOP_DATA+14B), 0x09
         [ExcelOutput(IsTableIndex = true, TableStringId = "WARDROBE_BLENDOP")]
         public Int32 covers1;
         [ExcelOutput(IsTableIndex = true, TableStringId = "WARDROBE_BLENDOP")]
@@ -82,5 +82,14 @@ namespace Hellgate.Excel
         public Int32 covers9;
         [ExcelOutput(IsTableIndex = true, TableStringId = "WARDROBE_BLENDOP")]
         public Int32 covers10;
+
+        public enum Target
+        {
+            Null = -1,
+            Body_Right = 0,
+            Head_Other_Left = 1,
+            Cape = 2,
+            Helmet = 3
+        }
     }
 }

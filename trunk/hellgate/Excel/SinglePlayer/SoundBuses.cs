@@ -36,6 +36,14 @@ namespace Hellgate.Excel
         public Int32 vca7;//idx
         [ExcelOutput(DebugIgnoreConstantCheck = true)]
         public Int32 vca8;//idx
-        public Int32 userControl;
+        public UserControl userControl;
+
+        public enum UserControl
+        {
+            Null = -1,
+            Sfx = 0,
+            Mx = 1,
+            Uix = 2
+        }
     }
 }

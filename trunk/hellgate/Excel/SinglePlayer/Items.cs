@@ -1141,6 +1141,7 @@ namespace Hellgate.Excel
             reTargetOnBounce = 16                               // 85,5, 4
         }
 
+
         /* Unknown/Not Added
         XLS_UNIT_DATA+22BE 0A8 and     dword ptr [rsp+0A8h+var_80], 0
         XLS_UNIT_DATA+22C3 0A8 and     dword ptr [rsp+0A8h+var_88], 0

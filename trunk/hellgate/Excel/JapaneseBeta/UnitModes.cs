@@ -104,7 +104,7 @@ namespace Hellgate.Excel.JapaneseBeta
         Int32[] undefined4;
         [ExcelOutput(IsTableIndex = true, TableStringId = "UNITMODES")]
         public Int32 endMode;//idx
-        public Int32 velocityName; // XLS_InternalIndex_VelocityName (XLS_UNITMODE_DATA+3DB), 0x09
+        public VelocityName velocityName; // XLS_InternalIndex_VelocityName (XLS_UNITMODE_DATA+3DB), 0x09
         public Int32 velocityPriority;
         public Int32 animPriority;
         public Int32 loadPriorityPercent;
@@ -162,5 +162,17 @@ namespace Hellgate.Excel.JapaneseBeta
         public Int32 emoteAllowHellgate;//bool
         [ExcelOutput(IsBool = true)]
         public Int32 emoteAllowMythos;//bool
+
+        public enum VelocityName
+        {
+            Null = -1,
+            Walk = 0,
+            Strafe = 1,
+            Jump = 2,
+            Run = 3,
+            Backup = 4,
+            Knockback = 5,
+            Melee = 6
+        }
     }
 }

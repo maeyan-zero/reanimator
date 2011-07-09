@@ -89,7 +89,7 @@ namespace Hellgate.Excel.JapaneseBeta
         public Int32 assocState3;            // always -1
         [ExcelOutput(IsBitmask = true, DefaultBitmask = 0)]
         public BitMask01 bitmask01;
-        public Int32 gameFlag;
+        public GameFlag gameFlag;
         [ExcelOutput(IsBitmask = true, DefaultBitmask = 0)]
         public BitMask02 bitmask02;
         Int32 unknown48;            // always 0
@@ -133,5 +133,13 @@ namespace Hellgate.Excel.JapaneseBeta
         triggerDigestSave = 8388608,
 		isShared = 16777216,
 		isRealTime = 33554432
+    }
+    public enum GameFlag
+    {
+        Null = -1,
+        Hardcore = 0,
+        Elite = 1,
+        League = 2,
+        PvpWorld = 3
     }
 }

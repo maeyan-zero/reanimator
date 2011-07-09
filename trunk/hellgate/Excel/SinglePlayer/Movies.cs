@@ -16,33 +16,21 @@ namespace Hellgate.Excel
         public string fileName;
         [MarshalAs(UnmanagedType.ByValTStr, SizeConst = 64)]
         public string lowResFileName;
-        [ExcelOutput(IsTableIndex = true, TableStringId = "LANGUAGE")]
-        public Int32 audioLanguages0;
-        [ExcelOutput(IsTableIndex = true, TableStringId = "LANGUAGE")]
-        public Int32 audioLanguages1;
-        [ExcelOutput(IsTableIndex = true, TableStringId = "LANGUAGE")]
-        public Int32 audioLanguages2;
+        public Language audioLanguages0;
+        public Language audioLanguages1;
+        public Language audioLanguages2;
         [ExcelOutput(ConstantValue = -1)]
         [MarshalAs(UnmanagedType.ByValArray, SizeConst = 7)]
         Int32[] audioLanguages;
-        [ExcelOutput(IsTableIndex = true, TableStringId = "REGION")]
-        public Int32 regionList0;
-        [ExcelOutput(IsTableIndex = true, TableStringId = "REGION")]
-        public Int32 regionList1;
-        [ExcelOutput(IsTableIndex = true, TableStringId = "REGION")]
-        public Int32 regionList2;
-        [ExcelOutput(IsTableIndex = true, TableStringId = "REGION")]
-        public Int32 regionList3;
-        [ExcelOutput(IsTableIndex = true, TableStringId = "REGION")]
-        public Int32 regionList4;
-        [ExcelOutput(IsTableIndex = true, TableStringId = "REGION")]
-        public Int32 regionList5;
-        [ExcelOutput(IsTableIndex = true, TableStringId = "REGION")]
-        public Int32 regionList6;
-        [ExcelOutput(IsTableIndex = true, TableStringId = "REGION")]
-        public Int32 regionList7;
-        [ExcelOutput(IsTableIndex = true, TableStringId = "REGION")]
-        public Int32 regionList8;
+        public RegionList regionList0;
+        public RegionList regionList1;
+        public RegionList regionList2;
+        public RegionList regionList3;
+        public RegionList regionList4;
+        public RegionList regionList5;
+        public RegionList regionList6;
+        public RegionList regionList7;
+        public RegionList regionList8;
         [ExcelOutput(ConstantValue = -1)]
         [MarshalAs(UnmanagedType.ByValArray, SizeConst = 23)]
         Int32[] regionList;
@@ -67,5 +55,38 @@ namespace Hellgate.Excel
         [ExcelOutput(IsBool = true)]
         public Int32 disallowInCensoredSku;//bool
         public float creditMovieDisplayedInSeconds;
+
+        public enum Language
+        {
+            Null = -1,
+            English = 0,
+            Korean = 1,
+            ChineseSimplified = 2,
+            ChineseTraditional = 3,
+            Japanese = 4,
+            French = 5,
+            Spanish = 6,
+            German = 7,
+            Italian = 8,
+            Polish = 9,
+            Czech = 10,
+            Hungarian = 11,
+            Russian = 12,
+            Thai = 13,
+            Vietnamese = 14
+        }
+        public enum RegionList
+        {
+            Null = -1,
+            NorthAmerica = 0,
+            Europe = 1,
+            Japan = 2,
+            Korea = 3,
+            China = 4,
+            Taiwan = 5,
+            SouthEastAsia = 6,
+            SouthAmerica = 7,
+            Australia = 8
+        }
     }
 }

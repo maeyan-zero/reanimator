@@ -12,8 +12,8 @@ namespace Hellgate.Excel.JapaneseBeta
         public string type;
         public Int32 code;
         public Int32 priority;
-        public Int32 choiceCheck;
-        public Int32 spawnLevelType;
+        public ChoiceCheck choiceCheck;
+        public SpawnLevelType spawnLevelType;
         public Int32 identified;//bool
         [ExcelFile.OutputAttribute(IsTableIndex = true, TableStringId = "TREASURE")]//table 69h
         public Int32 treasureResult;
@@ -34,5 +34,19 @@ namespace Hellgate.Excel.JapaneseBeta
         public Int32 ingredient3ItemCount;
         [MarshalAs(UnmanagedType.ByValArray, SizeConst = 9)]
         public Int32[] undefined1;
+
+        public enum ChoiceCheck
+        {
+            Null = -1,
+            Same = 0,
+            Ingredient = 1
+        }
+        public enum SpawnLevelType
+        {
+            Avg = 0,
+            Min = 1,
+            Max = 2,
+            Owner = 3
+        }
     }
 }

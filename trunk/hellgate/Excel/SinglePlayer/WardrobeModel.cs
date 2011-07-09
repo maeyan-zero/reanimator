@@ -22,7 +22,7 @@ namespace Hellgate.Excel
         [MarshalAs(UnmanagedType.ByValTStr, SizeConst = 128)]
         public string defaultMaterial;
         public Int32 undefined3;
-        public Int32 partGroup; // XLS_InternalIndex_PartGroup (XLS_WARDROBE_MODEL+10F), 0x05
+        public PartGroup partGroup; // XLS_InternalIndex_PartGroup (XLS_WARDROBE_MODEL+10F), 0x05
         public Int32 undefinedBool1;
         public Int32 undefinedBool2;
         public Int32 undefinedBool3;
@@ -34,5 +34,12 @@ namespace Hellgate.Excel
         public float boxMaxX;
         public float boxMaxY;
         public float boxMaxZ;
+
+        public enum PartGroup
+        {
+            Monster = -1,
+            ThirdPerson = 0,
+            FirstPerson = 1
+        }
     }
 }

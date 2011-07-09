@@ -330,7 +330,7 @@ namespace Hellgate.Excel.JapaneseBeta
         public Int32 censorClassNoHumans;//index                    // 39   0x00000000000005E4  XLS_ReadIndex
         [ExcelOutput(IsTableIndex = true, TableStringId = "MONSTERS")]
         public Int32 censorClassNoGore;//index                      // 40   0x00000000000005E8  XLS_ReadIndex
-        public Int32 sex; // XLS_InternalIndex_Sex (XLS_UNIT_DATA+623), 0x04    // 41   0x00000000000005EC  XLS_ReadInternalIndex
+        public Sex sex; // XLS_InternalIndex_Sex (XLS_UNIT_DATA+623), 0x04    // 41   0x00000000000005EC  XLS_ReadInternalIndex
         [ExcelOutput(IsTableIndex = true, TableStringId = "PLAYER_RACE")]
         public Int32 race;//index                                   // 42   0x00000000000005F0  XLS_ReadIndex
         public Int32 rarity;                                        // 107  0x00000000000005F4  XLS_ReadInt32
@@ -368,8 +368,8 @@ namespace Hellgate.Excel.JapaneseBeta
         [ExcelOutput(IsScript = true)]
         public Int32 luckBonus;//intptr                             // 102  0x0000000000000654  XLS_ReadScript
         public Int32 luckChanceToSpawn;                             // 103  0x0000000000000658  XLS_ReadInt32
-        public Int32 roomPopulatePass; // XLS_InternalIndex_RoomPopulatePass (XLS_UNIT_DATA+AD1), 0x05  // 58   0x000000000000065C  XLS_ReadInternalIndex
-        public Int32 weaponBoneIndex; // XLS_InternalIndex_WeaponBoneIndex (XLS_UNIT_DATA+91E), 0x04    // 57   0x0000000000000660  XLS_ReadInternalIndex
+        public RoomPopulatePass roomPopulatePass; // XLS_InternalIndex_RoomPopulatePass (XLS_UNIT_DATA+AD1), 0x05  // 58   0x000000000000065C  XLS_ReadInternalIndex
+        public WeaponBoneIndex weaponBoneIndex; // XLS_InternalIndex_WeaponBoneIndex (XLS_UNIT_DATA+91E), 0x04    // 57   0x0000000000000660  XLS_ReadInternalIndex
         public Int32 requiresAffixOrSuffix;                         // 108  0x0000000000000664  XLS_ReadInt32
         public float autoPickupDistance;                            // 86   0x0000000000000668  XLS_ReadFloat
         [ExcelOutput(IsTableIndex = true, TableStringId = "STATES")]
@@ -1193,6 +1193,26 @@ namespace Hellgate.Excel.JapaneseBeta
             reTargetOnBounce = 16                               // 85,5, 4
         }
 
+        public enum Sex
+        {
+            Null = -1,
+            Male = 0,
+            Female = 1
+        }
+        public enum WeaponBoneIndex
+        {
+            Null = -1,
+            Generic = 0,
+            Focus = 1
+        }
+
+        public enum RoomPopulatePass
+        {
+            Null = -1,
+            SublevelPopulate = 0,
+            Setup = 1,
+            Content = 2
+        }
         public enum QualityName
         {
             Null = -1,

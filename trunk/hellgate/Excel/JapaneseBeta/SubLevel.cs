@@ -26,7 +26,7 @@ namespace Hellgate.Excel.JapaneseBeta
         public Int32 respawnAtEntrance;//bool
         [ExcelOutput(IsBool = true)]
         public Int32 partyPortalsAtEntrance;//bool
-        public Int32 type;
+        public Type type;
         public float defaultPositionX;
         public float defaultPositionY;
         public float defaultPositionZ;
@@ -59,5 +59,22 @@ namespace Hellgate.Excel.JapaneseBeta
         public Int32 weather;//idx
         [ExcelOutput(IsTableIndex = true, TableStringId = "STATES")]
         public Int32 stateWhenInsideSubLevel;//idx
+
+        public enum Type
+        {
+            Null = -1,
+            None = 0,
+            Hellrift = 1,
+            TruthAOld = 2,
+            TruthANew = 3,
+            TruthBOld = 4,
+            TruthBNew = 5,
+            TruthCOld = 6,
+            TruthCNew = 7,
+            TruthDOld = 8,
+            TruthDNew = 9,
+            TruthEOld = 10,
+            TruthENew = 11
+        }
     }
 }

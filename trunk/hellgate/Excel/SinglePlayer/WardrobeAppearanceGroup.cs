@@ -26,7 +26,7 @@ namespace Hellgate.Excel
         public Int32 noBodyParts;//bool;
         [ExcelOutput(IsBool = true)]
         public Int32 dontRandomlyPick;//bool;
-        public Int32 blendOpGroup; // XLS_InternalIndex_BlendOpGroup (XLS_WARDROBE_APPEARANCE_GROUP_DATA+16C), 0x06
+        public BlendOpGroup blendOpGroup; // XLS_InternalIndex_BlendOpGroup (XLS_WARDROBE_APPEARANCE_GROUP_DATA+16C), 0x06
         [ExcelOutput(IsTableIndex = true, TableStringId = "WARDROBE_APPEARANCE_GROUP")]
         public Int32 firstPerson;//idx;
         [ExcelOutput(IsTableIndex = true, TableStringId = "WARDROBE_APPEARANCE_GROUP")]
@@ -163,7 +163,44 @@ namespace Hellgate.Excel
 
         [MarshalAs(UnmanagedType.ByValArray, SizeConst = 31)]
         Int32[] undefined1;
-        public Int32 category; // XLS_InternalIndex_AppearanceGroupCategory (XLS_WARDROBE_APPEARANCE_GROUP_DATA+F0), 0x0D
-        public Int32 section; // XLS_InternalIndex_Section (XLS_WARDROBE_APPEARANCE_GROUP_DATA+132), 0x08
+        public Category category; // XLS_InternalIndex_AppearanceGroupCategory (XLS_WARDROBE_APPEARANCE_GROUP_DATA+F0), 0x0D
+        public Section section; // XLS_InternalIndex_Section (XLS_WARDROBE_APPEARANCE_GROUP_DATA+132), 0x08
+
+        public enum BlendOpGroup
+        {
+            Default = 0,
+            Templar = 1,
+            Cabalist = 2,
+            Hunter = 3,
+            Adventurer = 4
+        }
+
+        public enum Category
+        {
+            None = -2,
+            Ignore = -1,
+            Zombie = 0,
+            Minion = 1,
+            ThreeP_Gender = 2,
+            ThreeP_Faction = 3,
+            OneP_Gender = 4,
+            OneP_Faction = 5,
+            Body = 6,
+            Head = 7,
+            Hair = 8,
+            FaceExtras = 9
+        }
+
+        public enum Section
+        {
+            None = -2,
+            Null = -1,
+            Base = 0,
+            Head = 1,
+            Hair = 2,
+            FacialHair = 3,
+            Skin = 4,
+            Haircolor = 5
+        }
     }
 }

@@ -65,7 +65,7 @@ namespace Hellgate.Excel.JapaneseBeta
         [ExcelOutput(IsTableIndex = true, TableStringId = "WARDROBE_LAYER")]
         public Int32 offHandlayer;//idx;                                                    // 0xAC
         public Int32 undefined2;
-        public Int32 attachType; // XLS_InternalIndex_AttachType (XLS_WARDROBE_LAYER_DATA+265), 0x05    // 0xB4
+        public AttachType attachType; // XLS_InternalIndex_AttachType (XLS_WARDROBE_LAYER_DATA+265), 0x05    // 0xB4
         [MarshalAs(UnmanagedType.ByValArray, SizeConst = 2)]
         Int32[] undefined4;
         [MarshalAs(UnmanagedType.ByValTStr, SizeConst = 256)]
@@ -78,8 +78,26 @@ namespace Hellgate.Excel.JapaneseBeta
         Int32[] undefined7;
         [ExcelOutput(IsBool = true)]
         public Int32 hasBoneIndex;//bool                                                    // 0x2F0
-        public Int32 boneIndex; // XLS_InternalIndex_BoneIndex (XLS_WARDROBE_LAYER_DATA+231), 0x07      // 0x2F4
+        public BoneIndex boneIndex; // XLS_InternalIndex_BoneIndex (XLS_WARDROBE_LAYER_DATA+231), 0x07      // 0x2F4
         [ExcelOutput(IsTableIndex = true, TableStringId = "STATES")]
         public Int32 state;//idx                                                            // 0x2F8
+
+        public enum BoneIndex
+        {
+            Null = -1,
+            None = 0,
+            Slot_fuel = 1,
+            Slot_rocketclip = 2,
+            Slot_battery = 3,
+            Slot_relic = 4,
+            Slot_tech = 5,
+        }
+        public enum AttachType
+        {
+            Null = -1,
+            Light = 0,
+            Particle = 1,
+            Model = 2
+        }
     }
 }
