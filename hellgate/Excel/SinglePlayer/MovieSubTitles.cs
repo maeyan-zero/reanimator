@@ -20,11 +20,30 @@ namespace Hellgate.Excel
         public Int32 movie2;
         [ExcelOutput(DebugIgnoreConstantCheck = true)]
         public Int32 movie3;
-        [ExcelOutput(IsTableIndex = true, TableStringId = "LANGUAGE")]
-        public Int32 language;//idx
+        public Language language;//idx
         [ExcelOutput(IsStringIndex = true)]
         public Int32 String;//stridx
         [MarshalAs(UnmanagedType.ByValArray, SizeConst = 2)]
         Int32[] undefined;
+
+        public enum Language
+        {
+            Null = -1,
+            English = 0,
+            Korean = 1,
+            ChineseSimplified = 2,
+            ChineseTraditional = 3,
+            Japanese = 4,
+            French = 5,
+            Spanish = 6,
+            German = 7,
+            Italian = 8,
+            Polish = 9,
+            Czech = 10,
+            Hungarian = 11,
+            Russian = 12,
+            Thai = 13,
+            Vietnamese = 14
+        }
     }
 }

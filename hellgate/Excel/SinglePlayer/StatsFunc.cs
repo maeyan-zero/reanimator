@@ -11,7 +11,7 @@ namespace Hellgate.Excel
         RowHeader header;
         [ExcelOutput(IsTableIndex = true, TableStringId = "STATS")]
         public Int32 target;
-        public Int32 app;
+        public App app;
         [ExcelOutput(IsTableIndex = true, TableStringId = "UNITTYPES")]
         public Int32 controlUnit;
         [MarshalAs(UnmanagedType.ByValArray, SizeConst = 4)]
@@ -20,5 +20,13 @@ namespace Hellgate.Excel
         public string formula;
         [MarshalAs(UnmanagedType.ByValArray, SizeConst = 8)]
         byte[] undefined2;
+
+        public enum App
+        {
+            Null = -1,
+            Common = 0,
+            Hellgate = 1,
+            Mythos = 2
+        }
     }
 }

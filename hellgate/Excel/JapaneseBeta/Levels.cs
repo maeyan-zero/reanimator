@@ -113,7 +113,7 @@ namespace Hellgate.Excel.JapaneseBeta
         public Int32 useTeamColors;
         [ExcelOutput(IsTableIndex = true, TableStringId = "OBJECTS")]
         public Int32 waypoint;//index
-        public Int32 srvLevelType; // XLS_InternalIndex_SrvLevelType (XLS_LEVEL_DEFINITION+576), 0x07
+        public SrvLevelType srvLevelType; // XLS_InternalIndex_SrvLevelType (XLS_LEVEL_DEFINITION+576), 0x07
         public Int32 playerMax;
         [ExcelOutput(IsScript = true)]
         public Int32 monsterLevel;
@@ -123,7 +123,7 @@ namespace Hellgate.Excel.JapaneseBeta
         [ExcelOutput(IsBool = true)]
         public Int32 monsterLevelFromParentLevel;
         [ExcelOutput(IsBool = true)]
-        public Int32 monsterLevelFromActivator;
+        public MonsterLevelFromActivator monsterLevelFromActivator;
 		public Int32 monsterMaxLevelLimit;
 		public Int32 monsterMinLevelLimit;
         public Int32 monsterLevelActivatorDelta;
@@ -164,7 +164,7 @@ namespace Hellgate.Excel.JapaneseBeta
         byte[] undefinedByte;
         [ExcelOutput(IsTableIndex = true, TableStringId = "FONTCOLORS")]
         public Int32 worldMapColor;
-        public Int32 worldMapLabelPos; // XLS_InternalIndex_WorldMapLabelPos (XLS_LEVEL_DEFINITION+A61), 0x0C
+        public WorldMapLabelPos worldMapLabelPos; // XLS_InternalIndex_WorldMapLabelPos (XLS_LEVEL_DEFINITION+A61), 0x0C
         public float worldMapLabelXOffs;
         public float worldMapLabelYOffs;
         [ExcelOutput(IsTableIndex = true, TableStringId = "LEVEL")]
@@ -203,5 +203,43 @@ namespace Hellgate.Excel.JapaneseBeta
         public Int32 loadingUixName;//stridx
         [MarshalAs(UnmanagedType.ByValArray, SizeConst = 4)]
         Int32[] unknown4;
+
+        public enum SrvLevelType
+        {
+            Null = -1,
+            Default = 0,
+            Soloinst = 1,
+            Minitown = 2,
+            Bigtown = 3,
+            Custom = 4,
+            CTF = 6,
+            TDM = 7,
+            CTL = 8,
+            ELM = 9
+        }
+
+        public enum MonsterLevelFromActivator
+        {
+            Null = -1,
+            None = 1,
+            First = 2,
+            OverDiff = 3,
+            Max = 4,
+            Min = 5,
+            PartyLeader = 6
+        }
+        public enum WorldMapLabelPos
+        {
+            Null = -1,
+            TopLeft = 0,
+            Top = 1,
+            TopRight = 2,
+            Right = 3,
+            Center = 4,
+            Left = 5,
+            BottomLeft = 6,
+            Bottom = 7,
+            BottomRight = 8
+        }
     }
 }

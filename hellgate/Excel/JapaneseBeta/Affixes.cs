@@ -86,7 +86,7 @@ namespace Hellgate.Excel.JapaneseBeta
         public Int32 suffix;
         [ExcelFile.OutputAttribute(SortColumnOrder = 4, IsSecondaryString = true)]
         public Int32 group;
-        public Int32 style;
+        public Style style;
         [ExcelFile.OutputAttribute(IsBool = true)]
         public Int32 useWhenAugmenting;
         [ExcelFile.OutputAttribute(IsBool = true)]
@@ -169,5 +169,12 @@ namespace Hellgate.Excel.JapaneseBeta
         public Int32 property6;
         [ExcelFile.OutputAttribute(IsTableIndex = true, TableStringId = "UNITTYPES")]
         public Int32 onlyOnItemsRequiringUnitType;
+
+        public enum Style
+        {
+            Null = -1,
+            Stat = 0,
+            Proc = 1
+        }
     }
 }

@@ -29,12 +29,46 @@ namespace Hellgate.Excel.JapaneseBeta
         public Int32 localisedFolders6;
         [ExcelOutput(IsTableIndex = true, TableStringId = "LEVEL_FILE_PATHS")]
         public Int32 localisedFolders7;
-        public Int32 language; // XLS_InternalIndex_Language (XLS_LEVEL_FILE_PATH+A6), 0x0F
-        public Int32 pakFlie; // XLS_InternalIndex_Pakfile (XLS_LEVEL_FILE_PATH+DA), 0x09
+        public Language language; // XLS_InternalIndex_Language (XLS_LEVEL_FILE_PATH+A6), 0x0F
+        public PakFile pakFlie; // XLS_InternalIndex_Pakfile (XLS_LEVEL_FILE_PATH+DA), 0x09
 		public Int32 overrideFolderCodeMask1;
 		public Int32 overrideFolderCodeMask2;
 		public Int32 overrideFolderCodeMask3;
 		public Int32 overrideFolderCodeMask4;
 		public Int32 overrideFolderCodeMask5;
+
+        public enum Language
+        {
+            Null = -1,
+            English = 0,
+            Korean = 1,
+            ChineseSimplified = 2,
+            ChineseTraditional = 3,
+            Japanese = 4,
+            French = 5,
+            Spanish = 6,
+            German = 7,
+            Italian = 8,
+            Polish = 9,
+            Czech = 10,
+            Hungarian = 11,
+            Russian = 12,
+            Thai = 13,
+            Vietnamese = 14
+        }
+
+        public enum PakFile
+        {
+            Null = -1,
+            Default = 0,
+            GraphicsHigh = 1,
+            Sound = 2,
+            SoundHigh = 3,
+            SoundLow = 4,
+            SoundMusic = 5,
+            Localized = 6,
+            Advert = 12,
+            AdvertLocalized = 13
+        }
     }
 }

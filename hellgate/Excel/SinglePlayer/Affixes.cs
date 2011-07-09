@@ -49,7 +49,7 @@ namespace Hellgate.Excel
         public Int32 suffix;
         [ExcelOutput(SortColumnOrder = 4, IsSecondaryString = true)]
         public Int32 group;
-        public Int32 style;
+        public Style style;
         [ExcelOutput(IsBool = true)]
         public Int32 useWhenAugmenting;
         [ExcelOutput(IsBool = true)]
@@ -119,5 +119,12 @@ namespace Hellgate.Excel
         public Int32 property6;
         [ExcelOutput(IsTableIndex = true, TableStringId = "UNITTYPES")]
         public Int32 onlyOnItemsRequiringUnitType;
+
+        public enum Style
+        {
+            Null = -1,
+            Stat = 0,
+            Proc = 1
+        }
     }
 }

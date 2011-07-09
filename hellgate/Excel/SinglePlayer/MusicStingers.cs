@@ -12,7 +12,7 @@ namespace Hellgate.Excel
         [ExcelOutput(SortColumnOrder = 1)]
         [MarshalAs(UnmanagedType.ByValTStr, SizeConst = 64)]
         public string name;//first entry in index is empty.
-        public Int32 type;
+        public Type type;
         public Int32 fadeOutBeats;
         public Int32 fadeInBeats;
         public Int32 fadeInDelayBeats;
@@ -23,5 +23,12 @@ namespace Hellgate.Excel
         public Int32 soundGroup;//idx
         [MarshalAs(UnmanagedType.ByValArray, SizeConst = 4)]
         Int32[] undefined;
+
+        public enum Type
+        {
+            Layer = 0,
+            Interrupt_Breakdown = 1,
+            Override = 2
+        }
     }
 }

@@ -22,11 +22,11 @@ namespace Hellgate.Excel
         public Int32 maxScore;
         public Mood mood;
 
-        public enum Mood : uint
+        public enum Mood
         {
-            Apprehensive,
-            Neutral,
-            Fiendly
+            Bad = 0,
+            Neutral = 1,
+            Good = 2
         }
     }
 }

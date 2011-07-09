@@ -19,14 +19,13 @@ namespace Hellgate.Excel.JapaneseBeta
         public Int32 lqExtension; //pchar
         Int32 undefined03a;
         Int32 undefined03b;
-        public Int32 pickType;//internalIndexArray count-1 type-4
-        [ExcelOutput(IsTableIndex = true, TableStringId = "LANGUAGE")]
-        public Int32 language;//internalIndexArray count-1 type-7
+        public PickType pickType;//internalIndexArray count-1 type-4
+        public Language language;//internalIndexArray count-1 type-7
         public Int32 volume;
         public float undefinedFloat02;
         public float minRange;
         public float maxRange;
-        public Int32 rollOffType;//internalIndexArray count-1 type-5
+        public RollOffType rollOffType;//internalIndexArray count-1 type-5
         public Int32 reverbSend;
         [ExcelOutput(IsBitmask = true, DefaultBitmask = 0)]
         public BitMask01 bitmask01;
@@ -295,6 +294,40 @@ namespace Hellgate.Excel.JapaneseBeta
             dontCrossfadeVariations = (1 << 12),
             unk02 = (1 << 13),
             loadAtStartup = (1 << 14)
+        }
+
+        public enum PickType
+        {
+            Null = -1,
+            Rand = 0,
+            All = 1
+        }
+        public enum Language
+        {
+            Null = -1,
+            English = 0,
+            Korean = 1,
+            ChineseSimplified = 2,
+            ChineseTraditional = 3,
+            Japanese = 4,
+            French = 5,
+            Spanish = 6,
+            German = 7,
+            Italian = 8,
+            Polish = 9,
+            Czech = 10,
+            Hungarian = 11,
+            Russian = 12,
+            Thai = 13,
+            Vietnamese = 14
+        }
+        public enum RollOffType
+        {
+            Null = -1,
+            None= 0,
+            Log = 1,
+            Linear = 2,
+            Inverse = 3
         }
     }
 }
