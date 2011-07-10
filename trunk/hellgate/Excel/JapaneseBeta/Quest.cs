@@ -23,15 +23,23 @@ namespace Hellgate.Excel.JapaneseBeta
         public Int32 PCBangOnly;
         [ExcelOutput(IsBool = true)]
         public Int32 multiplayerOnly;
+        [ExcelOutput(IsBool = true)]
         public Int32 startingQuestCheat;
+        [ExcelOutput(IsBool = true)]
         public Int32 questCheatCompleted;
+        [ExcelOutput(IsBool = true)]
         public Int32 closeOnComplete;
+        [ExcelOutput(IsBool = true)]
         public Int32 repeatable;
+        [ExcelOutput(IsBool = true)]
         public Int32 hideQuestLog;
         public Int32 repeatRateInSeconds;
+        [ExcelOutput(IsBool = true)]
         public Int32 skipActivateFanfare;
+        [ExcelOutput(IsBool = true)]
         public Int32 skipCompleteFanfare;
         public Int32 endOfActNumber;
+        [ExcelOutput(IsBool = true)]
         public Int32 autoTrackOnActivate;
         [ExcelOutput(IsTableIndex = true, TableStringId = "LEVEL")]
         public Int32 autoActivateLevel;//idx
@@ -41,7 +49,7 @@ namespace Hellgate.Excel.JapaneseBeta
         public Int32 activateByTransmission;
         [ExcelOutput(IsTableIndex = true, TableStringId = "LEVEL")]
         public Int32 transmissionIncomingLevel;
-        //[ExcelOutput(IsTableIndex = true, TableStringId = "")]//table 9F
+        [ExcelOutput(IsTableIndex = true, TableStringId = "QUEST_STATE")]//table 9F
         public Int32 autoCompleteState;
         [ExcelOutput(IsBool = true)]
         public Int32 useLabelNode;
@@ -63,7 +71,9 @@ namespace Hellgate.Excel.JapaneseBeta
         public Int32 questPreReqs08;
         [ExcelOutput(IsTableIndex = true, TableStringId = "ITEMS")]
         public Int32 itemPreReq;
-		public Int32 itemPreReqsCount;
+        public Int32 itemPreReqsCount;
+        [ExcelOutput(IsTableIndex = true, TableStringId = "STATES")]
+        public Int32 statePreReq;
         [ExcelOutput(IsBool = true)]
         public Int32 currentlyUnavailable;
         public Int32 minLevelPreReq;
@@ -73,7 +83,7 @@ namespace Hellgate.Excel.JapaneseBeta
         public Int32 factionAmountPreReq;
         [ExcelOutput(IsTableIndex = true, TableStringId = "LEVEL")]
         public Int32 levelsPreLoadedWith01;
-        //[ExcelOutput(IsTableIndex = true, TableStringId = "LEVEL")]
+        [ExcelOutput(IsTableIndex = true, TableStringId = "LEVEL")]
         public Int32 levelsPreLoadedWith02;
         //[ExcelOutput(IsTableIndex = true, TableStringId = "LEVEL")]
         public Int32 levelsPreLoadedWith03;
@@ -126,6 +136,7 @@ namespace Hellgate.Excel.JapaneseBeta
         public float giverItemDropRate;
         public Int32 level;
         public Int32 levelNightmare;
+        public Int32 unknownAA;
         public float experienceMultiplier;
         public float moneyMultiplier;
         public Int32 statPoints;
@@ -281,17 +292,17 @@ namespace Hellgate.Excel.JapaneseBeta
         public Int32 itemsToRemoveOnComplete31;
         //[ExcelOutput(IsTableIndex = true, TableStringId = "ITEMS")]
         public Int32 itemsToRemoveOnComplete32;
-        //[ExcelOutput(IsTableIndex = true, TableStringId = "")]//table 6D
+        [ExcelOutput(IsTableIndex = true, TableStringId = "LEVEL")]//table 6D
         public Int32 mapLocationsToRevealOnActivate1;
-        //[ExcelOutput(IsTableIndex = true, TableStringId = "")]//table 6D
+        [ExcelOutput(IsTableIndex = true, TableStringId = "LEVEL")]//table 6D
         public Int32 mapLocationsToRevealOnActivate2;
-        //[ExcelOutput(IsTableIndex = true, TableStringId = "")]//table 6D
+        [ExcelOutput(IsTableIndex = true, TableStringId = "LEVEL")]//table 6D
         public Int32 mapLocationsToRevealOnActivate3;
-        //[ExcelOutput(IsTableIndex = true, TableStringId = "")]//table 6D
+        [ExcelOutput(IsTableIndex = true, TableStringId = "LEVEL")]//table 6D
         public Int32 mapLocationsToRevealOnActivate4;
-        //[ExcelOutput(IsTableIndex = true, TableStringId = "")]//table 6D
+        [ExcelOutput(IsTableIndex = true, TableStringId = "LEVEL")]//table 6D
         public Int32 mapLocationsToRevealOnActivate5;
-        //[ExcelOutput(IsTableIndex = true, TableStringId = "")]//table 6D
+        [ExcelOutput(IsTableIndex = true, TableStringId = "LEVEL")]//table 6D
         public Int32 mapLocationsToRevealOnActivate6;
         //[ExcelOutput(IsTableIndex = true, TableStringId = "")]//table 6D
         public Int32 mapLocationsToRevealOnActivate7;
@@ -345,19 +356,22 @@ namespace Hellgate.Excel.JapaneseBeta
         public Int32 mapLocationsToRevealOnActivate31;
         //[ExcelOutput(IsTableIndex = true, TableStringId = "")]//table 6D
         public Int32 mapLocationsToRevealOnActivate32;
-        [MarshalAs(UnmanagedType.ByValArray, SizeConst = 2)]
-        Int32[] undefined5a;
+        //[MarshalAs(UnmanagedType.ByValArray, SizeConst = 2)]
+        //Int32[] undefined5a;
         [MarshalAs(UnmanagedType.ByValTStr, SizeConst = 256)]
         public string versionFunction;
         [MarshalAs(UnmanagedType.ByValArray, SizeConst = 4)]
         Int32[] undefined6;
+        [ExcelOutput(IsBool = true)]
         public Int32 removeOnJoinGame;
+        [ExcelOutput(IsBool = true)]
         public Int32 beatGameOnComplete;
         Int32 undefined7;
         public Int32 weight;
         public float radius;
         public float height;
         public float flatZTolerance;
+        [ExcelOutput(IsTableIndex = true, TableStringId = "LEVEL_DRLGS")]
         public Int32 allowedDRLGStyles01;
         [ExcelOutput(IsTableIndex = true, TableStringId = "LEVEL_DRLGS")]
         public Int32 allowedDRLGStyles02;
@@ -391,17 +405,17 @@ namespace Hellgate.Excel.JapaneseBeta
         public Int32 allowedDRLGStyles16;
         [ExcelOutput(IsTableIndex = true, TableStringId = "LEVEL")]
         public Int32 levelDestinations01;
-        //[ExcelOutput(IsTableIndex = true, TableStringId = "LEVEL")]
+        [ExcelOutput(IsTableIndex = true, TableStringId = "LEVEL")]
         public Int32 levelDestinations02;
-        //[ExcelOutput(IsTableIndex = true, TableStringId = "LEVEL")]
+        [ExcelOutput(IsTableIndex = true, TableStringId = "LEVEL")]
         public Int32 levelDestinations03;
-        //[ExcelOutput(IsTableIndex = true, TableStringId = "LEVEL")]
+        [ExcelOutput(IsTableIndex = true, TableStringId = "LEVEL")]
         public Int32 levelDestinations04;
-        //[ExcelOutput(IsTableIndex = true, TableStringId = "LEVEL")]
+        [ExcelOutput(IsTableIndex = true, TableStringId = "LEVEL")]
         public Int32 levelDestinations05;
-        //[ExcelOutput(IsTableIndex = true, TableStringId = "LEVEL")]
+        [ExcelOutput(IsTableIndex = true, TableStringId = "LEVEL")]
         public Int32 levelDestinations06;
-        //[ExcelOutput(IsTableIndex = true, TableStringId = "LEVEL")]
+        [ExcelOutput(IsTableIndex = true, TableStringId = "LEVEL")]
         public Int32 levelDestinations07;
         //[ExcelOutput(IsTableIndex = true, TableStringId = "LEVEL")]
         public Int32 levelDestinations08;
@@ -413,7 +427,7 @@ namespace Hellgate.Excel.JapaneseBeta
         public Int32 objectAdventure;//idx
         [ExcelOutput(IsTableIndex = true, TableStringId = "TREASURE")]
         public Int32 treasureRoomClass;//idx
-        [ExcelOutput(IsTableIndex = true, TableStringId = "DIALOG")]
+        [ExcelOutput(IsTableIndex = true, TableStringId = "QUEST_TEMPLATE")]//12h
         public Int32 template;//idx
         [ExcelOutput(IsTableIndex = true, TableStringId = "DIALOG")]
         public Int32 descriptionDialog;//idx
@@ -432,16 +446,15 @@ namespace Hellgate.Excel.JapaneseBeta
         public Int32 objectiveAct;//idx
         [ExcelOutput(IsTableIndex = true, TableStringId = "MONSTERS")]
         public Int32 objectiveMonster;//idx
-        //[ExcelOutput(IsTableIndex = true, TableStringId = "")]//internal index array count1 type5
         public ObjectiveMonsterQualityType objectiveMonsterQualityType;//idx
-        //[ExcelOutput(IsTableIndex = true, TableStringId = "UNITTYPES")]
+        [ExcelOutput(IsTableIndex = true, TableStringId = "UNITTYPES")]//17h
         public Int32 objectiveUnitType;//idx
         [ExcelOutput(IsTableIndex = true, TableStringId = "OBJECTS")]
         public Int32 objectiveObject;//idx
         [ExcelOutput(IsBool = true)]
         public Int32 disableSpawning;//bool
         public Int32 objectiveCount1;
-        public Int32 objectiveCount2;
+        public Int32 unknownBB;
         public float collectDropRate;
         [ExcelOutput(IsBool = true)]
         public Int32 doNotUseKillDropArray;//bool
@@ -455,17 +468,15 @@ namespace Hellgate.Excel.JapaneseBeta
         public Int32 nameOverrideStringKey;
         [ExcelOutput(IsStringIndex = true)]
         public Int32 nameInLogOverrideStringKey;
-        //[ExcelOutput(IsTableIndex = true, TableStringId = "")]//table 4B
+        [ExcelOutput(IsTableIndex = true, TableStringId = "STATES")]//table 4B
         public Int32 logOverrideState;
         [ExcelOutput(IsStringIndex = true)]
         public Int32 logOverrideString;
-        //[ExcelOutput(IsTableIndex = true, TableStringId = "")]//table 4B
+        [ExcelOutput(IsTableIndex = true, TableStringId = "STATES")]//table 4B
         public Int32 dialogOverrideState;
-        //[ExcelOutput(IsTableIndex = true, TableStringId = "")]//table 77
+        [ExcelOutput(IsTableIndex = true, TableStringId = "MONSTERS")]//table 77
         public Int32 dialogOverrideMonsterClass;
-        //[ExcelOutput(IsTableIndex = true, TableStringId = "SUBLEVEL")]
         public SubLevelTypeTruth subLevelTypeTruthOld;
-        //[ExcelOutput(IsTableIndex = true, TableStringId = "SUBLEVEL")]
         public SubLevelTypeTruth subLevelTypeTruthNew;
         [ExcelOutput(IsTableIndex = true, TableStringId = "QUEST_STATE")]
         public Int32 questStateAdvanceToAtSubLevelTruthOld;//idx
@@ -481,7 +492,7 @@ namespace Hellgate.Excel.JapaneseBeta
         public Int32 globalthemeRequired4;//idx
         [ExcelOutput(IsTableIndex = true, TableStringId = "GLOBAL_THEMES")]
         public Int32 globalthemeRequired5;//idx
-        //[ExcelOutput(IsTableIndex = true, TableStringId = "")]//table 36
+        [ExcelOutput(IsTableIndex = true, TableStringId = "DIALOG")]//table 36h
         public Int32 eventDialog;//idx
         [ExcelOutput(IsTableIndex = true, TableStringId = "SKILLS")]
         public Int32 skillToUseOnComplete;//idx
