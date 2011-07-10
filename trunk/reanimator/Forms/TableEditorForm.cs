@@ -71,6 +71,7 @@ namespace Reanimator.Forms
 
             _tabControl.SuspendLayout();
             tabPage.Controls.Add(editor);
+            editor.AddedToTabPage = true;
             _tabControl.ResumeLayout();
         }
 

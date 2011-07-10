@@ -5,6 +5,8 @@ using System.IO;
 using System.Runtime.InteropServices;
 using System.Xml;
 using System.Xml.Serialization;
+using Hellgate.Excel;
+using Hellgate.Excel.JapaneseBeta;
 using Revival.Common;
 
 namespace Hellgate
@@ -63,12 +65,16 @@ namespace Hellgate
         public class Room
         {
             [MarshalAs(UnmanagedType.ByValTStr, SizeConst = 256)]
-            public String RoomName;             // has zero terminated string
+            public String RoomDesc;             // has zero terminated string
 
             public Int32 Unknown;               // not seen used, but is used - haven't finished going through entire function
-            private Int32 _internalUnknown1;    // not seen used, but tested on all files - always 0
-            private Int32 _internalUnknown2;    // not seen used, but tested on all files - always 0
-            private Int32 _internalUnknown3;    // not seen used, but tested on all files - always 0
+            [XmlIgnore]
+            public String Name;                 // (always 0 etc; was Int32 _internalUnknown1)
+            [XmlIgnore]
+            public String Quest;                // (always 0 etc; was Int32 _internalUnknown2)
+            [XmlIgnore]
+            public String Folder;               // (always 0 etc; was Int32 _internalUnknown3)
+
 
             // the three position floats have some weird calcs done to them, however they always seem to just be set to their same value. todo: look into.
             /*
@@ -85,13 +91,14 @@ namespace Hellgate
                 ParseLevelRuleRooms+12F  10A8 movss   dword ptr [rsi+118h], xmm0
                 ParseLevelRuleRooms+137  10A8 mov     [rsi+120h], eax
              */
-            public float xPosition;             // x offset of room                                     // ParseLevelRuleRooms+EA   10A8 movss   xmm0, dword ptr [rsi+110h]
-            public float yPosition;             // y offset of room                                     // ParseLevelRuleRooms+103  10A8 addss   xmm1, dword ptr [rsi+114h]
-            public float zPosition;             // z offset of room                                     // ParseLevelRuleRooms+113  10A8 movss   xmm0, dword ptr [rsi+118h]
-            public float rotation;              // rotation of room (about as yet unknown axis)         // ParseLevelRuleRooms+2AB  10A8 movss   xmm0, dword ptr [rsi+11Ch]
+            public float X;                     // x offset of room                                     // ParseLevelRuleRooms+EA   10A8 movss   xmm0, dword ptr [rsi+110h]
+            public float Y;                     // y offset of room                                     // ParseLevelRuleRooms+103  10A8 addss   xmm1, dword ptr [rsi+114h]
+            public float Z;                     // z offset of room                                     // ParseLevelRuleRooms+113  10A8 movss   xmm0, dword ptr [rsi+118h]
+            public float Rotation;              // rotation of room (about as yet unknown axis)         // ParseLevelRuleRooms+2AB  10A8 movss   xmm0, dword ptr [rsi+11Ch]
             // must be in radians - e.g. 90 degrees = pi/2 = 1.57079633
 
-            private int _internalEAXValue;      // not seen used, but tested on all files - always 0    // see above float calcs - has value being assigned
+            [XmlIgnore]
+            public uint FolderCode;      // not seen used, but tested on all files - always 0 (was _internalEAXValue)    // see above float calcs - has value being assigned
 
             // only seen these six floats as 0x00 in file, but are used/set further down - all internal so doesn't matter
             /* RSI = ptr to start of room
@@ -132,16 +139,26 @@ namespace Hellgate
                 ParseLevelRuleRooms+480  10A8 addss   xmm0, dword ptr [rsi+138h]
                 ParseLevelRuleRooms+488  10A8 movss   dword ptr [rsi+138h], xmm0
              */
-            private float _internalFloat1;      // not seen used, but tested on all files - always 0
-            private float _internalFloat2;      // not seen used, but tested on all files - always 0
-            private float _internalFloat3;      // not seen used, but tested on all files - always 0
-            private float _internalFloat4;      // not seen used, but tested on all files - always 0
-            private float _internalFloat5;      // not seen used, but tested on all files - always 0
-            private float _internalFloat6;      // not seen used, but tested on all files - always 0
 
-            private Int32 _internalUnknown4;    // not seen used, but tested on all files - always 0
-            private Int32 _internalRAXValue;    // not seen used, but tested on all files - always 0    // ParseLevelRuleRooms+386  10A8 mov     [rsi+140h], rax (rax or 0x00)
-            private Int32 _internalUnknown5;    // not seen used, but tested on all files - always 0
+            [XmlIgnore]
+            public Int32 RotationDegrees;                   // float; not seen used, but tested on all files - always 0 (was _internalFloat1)
+            private float _internalFloat2;                  // float; always 0 etc
+            private float _internalFloat3;                  // float; always 0 etc
+            private float _internalFloat4;                  // float; always 0 etc
+            [XmlIgnore]
+            [MarshalAs(UnmanagedType.Interface)]
+            public RoomDefinitionFile RoomDefinition;       // (always 0 etc; was float _internalFloat5)
+            [XmlIgnore]
+            public String UnknownNum;                       // (always 0 etc; was float _internalFloat6)
+
+            [XmlIgnore]
+            [MarshalAs(UnmanagedType.Interface)]
+            public RoomIndexRow RoomData;           // (always 0 etc; was float Int32 _internalUnknown4)
+            [XmlIgnore]
+            public Int32 RoomDataRowIndex;          // (always 0 etc; was float Int32 _internalRAXValue)    // ParseLevelRuleRooms+386  10A8 mov     [rsi+140h], rax (rax or 0x00)
+            [XmlIgnore]
+            [MarshalAs(UnmanagedType.Interface)]
+            public LevelFilePathsRow LevelPathData; // (always 0 etc; was float Int32 _internalUnknown5)
         }
 
         [XmlRootAttribute("LevelRule")]
@@ -170,8 +187,16 @@ namespace Hellgate
         #endregion
 
         private XmlLevelRules _xmlLevelRules;
-        public IEnumerable<LevelRule> LevelRules { get { return _xmlLevelRules.LevelRules; } }
+        public LevelRule[] LevelRules { get { return _xmlLevelRules.LevelRules; } }
         public String Name { get { return _xmlLevelRules.FileHeader.RuleName; } }
+        public String FilePath { get; private set; }
+        public LevelRulesRow LevelRulesData { get; private set; }
+
+        public LevelRulesFile(String path, LevelRulesRow levelRulesRow)
+        {
+            FilePath = path;
+            LevelRulesData = levelRulesRow;
+        }
 
         /// <summary>
         /// Parses a level rules file bytes.
@@ -215,12 +240,10 @@ namespace Hellgate
                         StaticRooms = FileTools.ByteArrayToArray<Room>(fileBytes, roomsOffset, roomsCount)
                     };
                     offset += Marshal.SizeOf(typeof(Room)) * roomsCount + 16;
+                    _UpdateRoomsDesc(_xmlLevelRules.LevelRules[i].StaticRooms);
                 }
             }
-
-
-            // random rules
-            if (header.RandomRulesCount != 0 && header.RandomRulesFooterOffset != 0)
+            else if (header.RandomRulesCount != 0 && header.RandomRulesFooterOffset != 0)
             {
                 _xmlLevelRules.LevelRules = new LevelRule[header.RandomRulesCount]; // checked all files an no files have both static and random, so no chance of overwriting static above
                 LevelRulesRandomFooter[] levelRulesFooters = FileTools.ByteArrayToArray<LevelRulesRandomFooter>(fileBytes, (int)header.RandomRulesFooterOffset, (int)header.RandomRulesCount);
@@ -230,25 +253,91 @@ namespace Hellgate
                 {
                     _xmlLevelRules.LevelRules[i] = new LevelRule
                     {
-                        // get first "connector" (?) rule
+                        // get rule connector rooms
                         ConnectorRooms = FileTools.ByteArrayToArray<Room>(fileBytes, (Int32)levelRulesFooters[i].ConnectorRuleOffset, (Int32)levelRulesFooters[i].ConnectorRoomCount),
 
                         // then the actual level rules
                         Rules = new Room[levelRulesFooters[i].RuleCount][]
                     };
                     offset += Marshal.SizeOf(typeof(Room)) * (int)levelRulesFooters[i].ConnectorRoomCount;
+                    _UpdateRoomsDesc(_xmlLevelRules.LevelRules[i].ConnectorRooms);
 
                     for (int j = 0; j < levelRulesFooters[i].RuleCount; j++)
                     {
                         _xmlLevelRules.LevelRules[i].Rules[j] = FileTools.ByteArrayToArray<Room>(fileBytes, (Int32)levelRulesFooters[i].RuleOffsets[j], levelRulesFooters[i].RoomCounts[j]);
                         offset += Marshal.SizeOf(typeof(Room)) * levelRulesFooters[i].RoomCounts[j];
+                        _UpdateRoomsDesc(_xmlLevelRules.LevelRules[i].Rules[j]);
                     }
                 }
             }
 
 
-            // final debug check
-            Debug.Assert(offset == fileBytes.Length);
+            // final debug check CT_Rule100 is corrupt or something - has extra bytes at end of it
+            //Debug.Assert(offset == fileBytes.Length); 
+        }
+
+        private static void _UpdateRoomsDesc(IEnumerable<Room> rooms)
+        {
+            char[] invalidChars = Path.GetInvalidPathChars();
+
+            foreach (Room room in rooms)
+            {
+                String roomName = room.RoomDesc;
+                //if (roomName.Contains("\t"))
+                //{
+                //    int bp = 0;
+                //}
+
+                // does this room have a quest?
+                int questStrStart = roomName.IndexOf('['); 
+                int questStrEnd = roomName.IndexOf(']');
+                if (questStrStart > 0)
+                {
+                    if (questStrEnd < questStrStart) throw new Exceptions.LevelRuleException("Rule contains invalid room defintion quest: " + roomName);
+
+                    room.Quest = roomName.Substring(questStrStart + 1, questStrEnd - questStrStart - 1);
+
+                    if (roomName.Length > questStrEnd+1)
+                    {
+                        int charsRemaining = roomName.Length - (questStrEnd + 1);
+                        if (roomName[questStrEnd + 1] != '.' && charsRemaining >= 2) // then numbers
+                        {
+                            room.UnknownNum = roomName.Substring(questStrEnd + 1, charsRemaining);
+                            roomName = roomName.Remove(questStrEnd + 1, charsRemaining);
+                        }
+                    }
+                    roomName = roomName.Remove(questStrStart, questStrEnd - questStrStart + 1);
+                }
+
+                // is the room outside of current theme?
+                int folderPath = roomName.IndexOf('.');
+                if (folderPath > 0)
+                {
+                    room.Folder = roomName.Substring(folderPath + 1, roomName.Length - folderPath - 1);
+                    if (room.Folder.Length != 4 && room.Folder.Length > 7) throw new Exceptions.LevelRuleException(String.Format("Room {0} has FolderCode = {1} of incorrect format.", roomName, room.Folder));
+                    if (room.Folder.Length > 4)
+                    {
+                        //Debug.WriteLine(String.Format("Warning: Room {0} has FolderCode = {1}; greater than 4 chars.", roomName, room.Folder));
+                        room.UnknownNum = room.Folder.Substring(4, room.Folder.Length-4);
+                        room.Folder = room.Folder.Substring(0, 4);
+                    }
+                    Debug.Assert(room.Folder.Length == 4);
+                    room.FolderCode = (uint)ExcelFile.StringToCode(room.Folder);
+                    roomName = roomName.Remove(folderPath, roomName.Length - folderPath);
+                }
+
+                // remove invalid path characters
+                foreach (char c in invalidChars)
+                {
+                    if (roomName.IndexOf(c) == -1) continue;
+
+                    roomName = roomName.Replace(c.ToString(), "");
+                }
+                room.Name = roomName;
+
+                // set our rotiation degrees for easier matrix usage
+                room.RotationDegrees = (int) Math.Round(room.Rotation*180/Math.PI);
+            }
         }
 
         /// <summary>
@@ -306,7 +395,7 @@ namespace Hellgate
                         RuleOffset = offset
                     };
 
-                    foreach (Room room in levelRule.StaticRooms) FileTools.WriteToBuffer(ref fileBytes, ref offset, room);
+                    _WriteRooms(levelRule.StaticRooms, ref fileBytes, ref offset);
                 }
                 else if (_xmlLevelRules.LevelRules[i].Rules != null) // random rules
                 {
@@ -319,7 +408,7 @@ namespace Hellgate
                     {
                         levelRulesRandomFooters[i].ConnectorRoomCount = levelRule.ConnectorRooms.Length;
                         levelRulesRandomFooters[i].ConnectorRuleOffset = offset;
-                        foreach (Room room in levelRule.ConnectorRooms) FileTools.WriteToBuffer(ref fileBytes, ref offset, room);
+                        _WriteRooms(levelRule.ConnectorRooms, ref fileBytes, ref offset);
                     }
 
                     levelRulesRandomFooters[i].RuleCount = levelRule.Rules.Length;
@@ -329,7 +418,7 @@ namespace Hellgate
                     {
                         levelRulesRandomFooters[i].RoomCounts[j] = levelRule.Rules[j].Length;
                         levelRulesRandomFooters[i].RuleOffsets[j] = offset;
-                        foreach (Room room in levelRule.Rules[j]) FileTools.WriteToBuffer(ref fileBytes, ref offset, room);
+                        _WriteRooms(levelRule.Rules[j], ref fileBytes, ref offset);
                     }
                 }
                 else
@@ -362,6 +451,23 @@ namespace Hellgate
             // and we're done
             Array.Resize(ref fileBytes, offset);
             return fileBytes;
+        }
+
+        private static void _WriteRooms(IEnumerable<Room> rooms, ref byte[] fileBytes, ref int offset)
+        {
+            Room tmpRoom = new Room(); // need to create a temp room with all value zero, as only 6x fields are written to file
+
+            foreach (Room room in rooms)
+            {
+                tmpRoom.RoomDesc = room.RoomDesc;
+                tmpRoom.Unknown = room.Unknown;
+                tmpRoom.X = room.X;
+                tmpRoom.Y = room.Y;
+                tmpRoom.Z = room.Z;
+                tmpRoom.Rotation = room.Rotation;
+
+                FileTools.WriteToBuffer(ref fileBytes, ref offset, tmpRoom);
+            }
         }
 
         public override byte[] ExportAsDocument()

@@ -4,6 +4,8 @@ using System.IO;
 using System.Runtime.InteropServices;
 using System.Xml;
 using System.Xml.Serialization;
+using Hellgate.Excel.JapaneseBeta;
+using Hellgate.Xml;
 using Revival.Common;
 
 namespace Hellgate
@@ -37,12 +39,12 @@ namespace Hellgate
             private Int32 _internalUnknown4;                        // 0x13C    316     // is always 0 in every file; probably internal/reserved
             private Int32 _internalUnknown5;                        // 0x140    320     // is always 0 in every file; probably internal/reserved
             private Int32 _internalUnknown6;                        // 0x144    324     // is always 0 in every file; probably internal/reserved
-            public float UnknownFloat2;                             // 0x148    328
-            public float UnknownFloat3;                             // 0x14C    332
-            public float UnknownFloat4;                             // 0x150    336
-            public float UnknownFloat5;                             // 0x154    340
-            public float UnknownFloat6;                             // 0x158    344
-            public float UnknownFloat7;                             // 0x15C    348
+            public float MinX;                                      // 0x148    328
+            public float MinY;                                      // 0x14C    332
+            public float MinZ;                                      // 0x150    336
+            public float MaxX;                                      // 0x154    340
+            public float MaxY;                                      // 0x158    344
+            public float MaxZ;                                      // 0x15C    348
             internal Int32 Count160;                                // 0x160    352
             private Int32 _internalUnknown7;                        // 0x164    356     // is always 0 in every file; probably internal/reserved
             internal Int64 Offset168;                               // 0x168    360     // is offset, but not seen used
@@ -58,8 +60,8 @@ namespace Hellgate
             [MarshalAs(UnmanagedType.ByValArray, SizeConst = 47)]
             private Int32[] _internalUnknowns;                      // 0x198    406     // is all 0's in every file; probably internal/reserved
             public Int32 RoomVersion;                               // 0x264    612     // room version from excel table ROOM_INDEX - file must equal excel value
-            internal Int64 Offset268;                               // 0x268    616
-            internal Int32 Count270;                                // 0x270    624
+            internal Int64 VerticesOffset;                          // 0x268    616
+            internal Int32 VertexCount;                             // 0x270    624     // this is the "box" vertices of the room (8 points of cube etc)
             private Int32 _internalUnknown10;                       // 0x274    628     // is always 0 in every file; probably internal/reserved
             internal Int64 Offset278;                               // 0x278    632
             internal Int32 Count280;                                // 0x280    640
@@ -133,15 +135,15 @@ namespace Hellgate
         }
 
         // total size = 12 bytes (0x0C)
-        [Serializable]
-        [StructLayout(LayoutKind.Sequential, Pack = 1)]
-        public class UnknownStruct4
-        {
-            public float UnknownFloat1;         // 0x00     0
-            public float UnknownFloat2;         // 0x04     4
-            public float UnknownFloat3;         // 0x08     8
-            // end of struct                    // 0x0C     12
-        }
+        //[Serializable]
+        //[StructLayout(LayoutKind.Sequential, Pack = 1)]
+        //public class Vector3
+        //{
+        //    public float X;                     // 0x00     0
+        //    public float Y;                     // 0x04     4
+        //    public float Z;                     // 0x08     8
+        //    // end of struct                    // 0x0C     12
+        //}
 
         // total size = 12 bytes (0x0C)
         [Serializable]
@@ -217,15 +219,33 @@ namespace Hellgate
             public UnknownStruct2[] UnknownStruct2Array;
             public UnknownStruct3[][] UnknownStruct3Arrays;
             public Int32[] UnknownStruct3Int32Array;
-            public UnknownStruct4[] UnknownStruct4Array;
+            public Vector3[] Vertices;
             public UnknownStruct5[] UnknownStruct5Array;
             public UnknownStruct6[] UnknownStruct6Array;
-            public UnknownStruct4[] UnknownStruct7Array;
+            public Vector3[] UnknownStruct7Array;
             public UnknownStruct7[] UnknownStruct8Array;
             public UnknownStruct5[] UnknownStructFooter;
         }
 
         public RoomDefinitionStruct RoomDefinition;
+        public float Width { get { return (RoomDefinition.FileHeader.MaxX - RoomDefinition.FileHeader.MinX); } }
+        public float Length { get { return (RoomDefinition.FileHeader.MaxY - RoomDefinition.FileHeader.MinY); } }
+        public float Height { get { return (RoomDefinition.FileHeader.MaxZ - RoomDefinition.FileHeader.MinZ); } }
+        public String FilePath { get; private set; }
+        public RoomIndexRow RoomIndexData { get; private set; }
+        public RoomLayoutGroupDefinition Layout { get; private set; }
+
+        public RoomDefinitionFile(String filePath)
+        {
+            FilePath = filePath;
+        }
+
+        public RoomDefinitionFile(String filePath, RoomIndexRow roomIndexRow, RoomLayoutGroupDefinition roomLayout)
+        {
+            FilePath = filePath;
+            RoomIndexData = roomIndexRow;
+            Layout = roomLayout;
+        }
 
         /// <summary>
         /// Parses a level rules file bytes.
@@ -254,7 +274,7 @@ namespace Hellgate
             int count10C = header.Count10C;
             if (offset > 0 && count10C > 0)
             {
-                RoomDefinition.UnknownStruct1Array = FileTools.ByteArrayToArray<UnknownStruct1>(fileBytes, ref offset, count10C);
+                RoomDefinition.UnknownStruct1Array = _ReadUnknownStruct1Array(fileBytes, ref offset, count10C); // FileTools.ByteArrayToArray<UnknownStruct1>(fileBytes, ref offset, count10C);
             }
 
             // read UnknownStruct2 array
@@ -262,7 +282,7 @@ namespace Hellgate
             int count118 = header.Count118;
             if (offset > 0 && count118 > 0)
             {
-                RoomDefinition.UnknownStruct2Array = FileTools.ByteArrayToArray<UnknownStruct2>(fileBytes, ref offset, count118);
+                RoomDefinition.UnknownStruct2Array = _ReadUnknownStruct2Array(fileBytes, ref offset, count118); // FileTools.ByteArrayToArray<UnknownStruct2>(fileBytes, ref offset, count118);
             }
 
             // read UnknownStruct3 arrays
@@ -274,7 +294,7 @@ namespace Hellgate
                 RoomDefinition.UnknownStruct3Arrays = new UnknownStruct3[count29C][];
                 for (int i = 0; i < count29C; i++)
                 {
-                    RoomDefinition.UnknownStruct3Arrays[i] = FileTools.ByteArrayToArray<UnknownStruct3>(fileBytes, ref offset, count298);
+                    RoomDefinition.UnknownStruct3Arrays[i] = _ReadUnknownStruct3Array(fileBytes, ref offset, count298); // FileTools.ByteArrayToArray<UnknownStruct3>(fileBytes, ref offset, count298);
                 }
             }
             // read UnknownStruct3 Int32 array
@@ -285,12 +305,12 @@ namespace Hellgate
                 RoomDefinition.UnknownStruct3Int32Array = FileTools.ByteArrayToInt32Array(fileBytes, ref offset, count2A8);
             }
 
-            // read UnknownStruct4 array
-            offset = (int)header.Offset268;
-            int count270 = header.Count270;
-            if (offset > 0 && count270 > 0)
+            // read room vertices array
+            offset = (int)header.VerticesOffset;
+            int vertexCount = header.VertexCount;
+            if (offset > 0 && vertexCount > 0)
             {
-                RoomDefinition.UnknownStruct4Array = FileTools.ByteArrayToArray<UnknownStruct4>(fileBytes, ref offset, count270);
+                RoomDefinition.Vertices = _ReadVector3Array(fileBytes, ref offset, vertexCount); // FileTools.ByteArrayToArray<Vector3>(fileBytes, ref offset, vertexCount);
             }
 
             // read UnknownStruct5 array
@@ -314,7 +334,7 @@ namespace Hellgate
             int count174 = header.Count174;
             if (offset > 0 && count174 > 0)
             {
-                RoomDefinition.UnknownStruct7Array = FileTools.ByteArrayToArray<UnknownStruct4>(fileBytes, ref offset, count174);
+                RoomDefinition.UnknownStruct7Array = _ReadVector3Array(fileBytes, ref offset, count174); // FileTools.ByteArrayToArray<Vector3>(fileBytes, ref offset, count174);
             }
 
             // read UnknownStruct8 array (not seen read like this - but it works)
@@ -322,7 +342,7 @@ namespace Hellgate
             int count184 = header.Count184;
             if (offset > 0 && count184 > 0)
             {
-                RoomDefinition.UnknownStruct8Array = FileTools.ByteArrayToArray<UnknownStruct7>(fileBytes, ref offset, count184);
+                RoomDefinition.UnknownStruct8Array = _ReadUnknownStruct7Array(fileBytes, ref offset, count184); // FileTools.ByteArrayToArray<UnknownStruct7>(fileBytes, ref offset, count184);
             }
 
             // read UnknownStruct9 array
@@ -335,6 +355,106 @@ namespace Hellgate
 
             // final debug check
             Debug.Assert(offset == fileBytes.Length);
+        }
+
+        private static UnknownStruct1[] _ReadUnknownStruct1Array(byte[] fileBytes, ref int offset, int count) // because Marshal.PtrToStructure IS SO FUCKING SLOW
+        {
+            UnknownStruct1[] arr = new UnknownStruct1[count];
+
+            for (int i = 0; i < count; i++)
+            {
+                arr[i] = new UnknownStruct1
+                {
+                    UnknownFloat1 = StreamTools.ReadFloat(fileBytes, ref offset),
+                    UnknownFloat2 = StreamTools.ReadFloat(fileBytes, ref offset),
+                    UnknownFloat3 = StreamTools.ReadFloat(fileBytes, ref offset),
+                    Index = StreamTools.ReadInt32(fileBytes, ref offset)
+                };
+            }
+
+            return arr;
+        }
+
+        private static UnknownStruct2[] _ReadUnknownStruct2Array(byte[] fileBytes, ref int offset, int count) // because Marshal.PtrToStructure IS SO FUCKING SLOW
+        {
+            UnknownStruct2[] arr = new UnknownStruct2[count];
+
+            for (int i = 0; i < count; i++)
+            {
+                arr[i] = new UnknownStruct2
+                {
+                    Struct1Index1 = StreamTools.ReadInt64(fileBytes, ref offset),
+                    Struct1Index2 = StreamTools.ReadInt64(fileBytes, ref offset),
+                    Struct1Index3 = StreamTools.ReadInt64(fileBytes, ref offset),
+                    UnknownFloat1 = StreamTools.ReadFloat(fileBytes, ref offset),
+                    UnknownFloat2 = StreamTools.ReadFloat(fileBytes, ref offset),
+                    UnknownFloat3 = StreamTools.ReadFloat(fileBytes, ref offset),
+                    UnknownFloat4 = StreamTools.ReadFloat(fileBytes, ref offset),
+                    UnknownFloat5 = StreamTools.ReadFloat(fileBytes, ref offset),
+                    UnknownFloat6 = StreamTools.ReadFloat(fileBytes, ref offset),
+                    UnknownFloat7 = StreamTools.ReadFloat(fileBytes, ref offset),
+                    UnknownFloat8 = StreamTools.ReadFloat(fileBytes, ref offset),
+                    UnknownFloat9 = StreamTools.ReadFloat(fileBytes, ref offset)
+                };
+                offset += 4; // _internalUnknown
+            }
+
+            return arr;
+        }
+
+        private static UnknownStruct3[] _ReadUnknownStruct3Array(byte[] fileBytes, ref int offset, int count) // because Marshal.PtrToStructure IS SO FUCKING SLOW
+        {
+            UnknownStruct3[] arr = new UnknownStruct3[count];
+
+            for (int i = 0; i < count; i++)
+            {
+                arr[i] = new UnknownStruct3
+                {
+                    Offset1 = StreamTools.ReadInt64(fileBytes, ref offset),
+                    Offset2 = StreamTools.ReadInt64(fileBytes, ref offset),
+                    Offset3 = StreamTools.ReadInt64(fileBytes, ref offset),
+                    Int32Count1 = StreamTools.ReadInt32(fileBytes, ref offset),
+                    Int32Count2 = StreamTools.ReadInt32(fileBytes, ref offset),
+                    Int32Count3 = StreamTools.ReadInt32(fileBytes, ref offset)
+                };
+                offset += 4; // _internalUnknown
+            }
+
+            return arr;
+        }
+
+        private static Vector3[] _ReadVector3Array(byte[] fileBytes, ref int offset, int count) // because Marshal.PtrToStructure IS SO FUCKING SLOW
+        {
+            Vector3[] arr = new Vector3[count];
+
+            for (int i = 0; i < count; i++)
+            {
+                arr[i] = new Vector3
+                {
+                    X = StreamTools.ReadFloat(fileBytes, ref offset),
+                    Y = StreamTools.ReadFloat(fileBytes, ref offset),
+                    Z = StreamTools.ReadFloat(fileBytes, ref offset),
+                };
+            }
+
+            return arr;
+        }
+
+        private static UnknownStruct7[] _ReadUnknownStruct7Array(byte[] fileBytes, ref int offset, int count) // because Marshal.PtrToStructure IS SO FUCKING SLOW
+        {
+            UnknownStruct7[] arr = new UnknownStruct7[count];
+
+            for (int i = 0; i < count; i++)
+            {
+                arr[i] = new UnknownStruct7
+                {
+                    UnknownShort1 = StreamTools.ReadInt16(fileBytes, ref offset),
+                    UnknownShort2 = StreamTools.ReadInt16(fileBytes, ref offset),
+                    UnknownShort3 = StreamTools.ReadInt16(fileBytes, ref offset)
+                };
+            }
+
+            return arr;
         }
 
         /// <summary>
@@ -388,14 +508,14 @@ namespace Hellgate
             RoomDefinition.FileHeader.Count298 = RoomDefinition.UnknownStruct3Arrays[0].Length;
             FileTools.WriteToBuffer(ref fileBytes, ref offset, RoomDefinition.UnknownStruct3Arrays);
 
-            // write unknown struct 4
-            RoomDefinition.FileHeader.Offset268 = 0;
-            RoomDefinition.FileHeader.Count270 = 0;
-            if (RoomDefinition.UnknownStruct4Array != null)
+            // write room vertices
+            RoomDefinition.FileHeader.VerticesOffset = 0;
+            RoomDefinition.FileHeader.VertexCount = 0;
+            if (RoomDefinition.Vertices != null)
             {
-                RoomDefinition.FileHeader.Offset268 = offset;
-                RoomDefinition.FileHeader.Count270 = RoomDefinition.UnknownStruct4Array.Length;
-                FileTools.WriteToBuffer(ref fileBytes, ref offset, RoomDefinition.UnknownStruct4Array);
+                RoomDefinition.FileHeader.VerticesOffset = offset;
+                RoomDefinition.FileHeader.VertexCount = RoomDefinition.Vertices.Length;
+                FileTools.WriteToBuffer(ref fileBytes, ref offset, RoomDefinition.Vertices);
             }
 
             // write unknown struct 5

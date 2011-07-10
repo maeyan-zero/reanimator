@@ -1486,7 +1486,7 @@ namespace Reanimator
                 //path = "D:\\Games\\Hellgate London\\data\\background\\props\\vehicles\\ambulance_a.rom";
 
                 byte[] roomFileBytes = File.ReadAllBytes(path);
-                RoomDefinitionFile roomDefinitionFile = new RoomDefinitionFile();
+                RoomDefinitionFile roomDefinitionFile = new RoomDefinitionFile(path, null, null);
 
                 String fileName = path.Replace(@"D:\Games\Hellgate London\data\background\", "");
                 String xmlPath = path.Replace(RoomDefinitionFile.Extension, RoomDefinitionFile.ExtensionDeserialised);
@@ -1499,7 +1499,7 @@ namespace Reanimator
 
                     XmlDocument xmlDocument = new XmlDocument();
                     xmlDocument.Load(xmlPath);
-                    RoomDefinitionFile roomDefinitionFile2 = new RoomDefinitionFile();
+                    RoomDefinitionFile roomDefinitionFile2 = new RoomDefinitionFile(xmlPath);
                     roomDefinitionFile2.ParseXmlDocument(xmlDocument);
                     byte[] bytes = roomDefinitionFile2.ToByteArray();
 
@@ -1528,7 +1528,7 @@ namespace Reanimator
                 //path = @"D:\Games\Hellgate London\data\background\city\rule_pmt02.drl";
 
                 byte[] levelRulesBytes = File.ReadAllBytes(path);
-                LevelRulesFile levelRulesFile = new LevelRulesFile();
+                LevelRulesFile levelRulesFile = new LevelRulesFile(path, null);
 
                 String fileName = path.Replace(@"D:\Games\Hellgate London\data\background\", "");
                 String xmlPath = path.Replace(LevelRulesFile.Extension, LevelRulesFile.ExtensionDeserialised);
@@ -1541,7 +1541,7 @@ namespace Reanimator
 
                     XmlDocument xmlDocument = new XmlDocument();
                     xmlDocument.Load(xmlPath);
-                    LevelRulesFile levelRulesFile2 = new LevelRulesFile();
+                    LevelRulesFile levelRulesFile2 = new LevelRulesFile(xmlPath, null);
                     levelRulesFile2.ParseXmlDocument(xmlDocument);
                     byte[] bytes = levelRulesFile2.ToByteArray();
 

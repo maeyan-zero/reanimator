@@ -755,7 +755,7 @@ namespace Hellgate
             00000014 unknown1        dd ?
             00000018 unknown2        dd ?					// some sort of flags
             0000001C unknown3        dd ?
-            00000020 unknown4        dd ?                    ; offset // need to figure this unknown4 out before it'll work... I think it might be the default value...
+            00000020 defaultValue    dd ?
             00000024 unknown5        dd ?
             00000028 unknown6        dd ?
             0000002C unknown7        dd ?
@@ -815,41 +815,41 @@ namespace Hellgate
 	            {
 		            if (type >= 27)
 		            {
-			            if (xlsDefinitionObj->unknown4)
+			            if (xlsDefinitionObj->defaultValue)
 			            {
-				            CryptStringHash(xlsDefinitionObj->unknown4, hashResult);
+				            CryptStringHash(xlsDefinitionObj->defaultValue, hashResult);
 			            }
 		            }
 		            else
 		            {
 			            // String_ = 1, StringOffset = 2
 			            if (type == String_ || type == StringOffset)
-                        {
-			                if (xlsDefinitionObj->unknown4)
+		                {
+			                if (xlsDefinitionObj->defaultValue)
 			                {
-				                hashResult = CryptStringHash(xlsDefinitionObj->unknown4, hashResult);
+				                hashResult = CryptStringHash(xlsDefinitionObj->defaultValue, hashResult);
 			                }
       
 			                return CryptBytesHash((char *)&xlsDefinitionObj->index, 24, hashResult);
-                        }
+		                }
 				
 			            if (type != GroupStyle) // GroupStyle = 3
-			            {
+                        {
 				            if (type > CodeInt8 && (type <= 24 || type == Unknown2))
                             {
-			                    if (xlsDefinitionObj->unknown4)
+			                    if (xlsDefinitionObj->defaultValue)
 			                    {
-				                    hashResult = CryptStringHash(xlsDefinitionObj->unknown4, hashResult);
+				                    hashResult = CryptStringHash(xlsDefinitionObj->defaultValue, hashResult);
 			                    }
       
 			                    return CryptBytesHash((char *)&xlsDefinitionObj->index, 24, hashResult);
                             }
 				
-		                    hashResult = CryptBytesHash((char *)&xlsDefinitionObj->unknown4, 16, hashResult);
+		                    hashResult = CryptBytesHash((char *)&xlsDefinitionObj->defaultValue, 16, hashResult);
 		                    return CryptBytesHash((char *)&xlsDefinitionObj->index, 24, hashResult);
-			            }
+                        }
 			
-			            hashResult = CryptBytesHash((char *)&xlsDefinitionObj->unknown4, 16, hashResult);
+			            hashResult = CryptBytesHash((char *)&xlsDefinitionObj->defaultValue, 16, hashResult);
 		            }
 		
 		            return XLS_GenerateElementIndexHash(hashResult, xlsDefinitionObj->index); // need to look into this as well...
@@ -860,9 +860,9 @@ namespace Hellgate
 		            int isNotUnitType = type - UnitType; // UnitType = 54
 		            if (!isNotUnitType)
 		            {
-			            if (xlsDefinitionObj->unknown4)
+			            if (xlsDefinitionObj->defaultValue)
 			            {
-				            hashResult = CryptStringHash(xlsDefinitionObj->unknown4, hashResult);
+				            hashResult = CryptStringHash(xlsDefinitionObj->defaultValue, hashResult);
 			            }
       
 			            return CryptBytesHash((char *)&xlsDefinitionObj->index, 24, hashResult);
@@ -870,25 +870,25 @@ namespace Hellgate
 	
 		            if (isNotUnitType == 1) return hashResult;
 		
-		            hashResult = CryptBytesHash((char *)&xlsDefinitionObj->unknown4, 16, hashResult);
+		            hashResult = CryptBytesHash((char *)&xlsDefinitionObj->defaultValue, 16, hashResult);
 		            return CryptBytesHash((char *)&xlsDefinitionObj->index, 24, hashResult);
 	            }
 
 	            if (type < File_) // File_ = 48
-	            {
+                {
 		            if (type >= 38 && (type <= 44 || type > Qualities && type <= TugboatUnknown))
                     {
-			            if (xlsDefinitionObj->unknown4)
+			            if (xlsDefinitionObj->defaultValue)
 			            {
-				            hashResult = CryptStringHash(xlsDefinitionObj->unknown4, hashResult);
+				            hashResult = CryptStringHash(xlsDefinitionObj->defaultValue, hashResult);
 			            }
       
 			            return CryptBytesHash((char *)&xlsDefinitionObj->index, 24, hashResult);
                     }
 		
-		            hashResult = CryptBytesHash((char *)&xlsDefinitionObj->unknown4, 16, hashResult);
+		            hashResult = CryptBytesHash((char *)&xlsDefinitionObj->defaultValue, 16, hashResult);
 		            return CryptBytesHash((char *)&xlsDefinitionObj->index, 24, hashResult);
-	            }
+                }
 
 	            if (xlsDefinitionObj->index)
 	            {

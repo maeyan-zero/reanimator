@@ -5,7 +5,6 @@ using System.Diagnostics;
 using System.Drawing;
 using System.Drawing.Drawing2D;
 using System.IO;
-using System.Linq;
 using System.Windows.Forms;
 using Hellgate;
 
@@ -14,7 +13,7 @@ namespace Reanimator.Forms
     public sealed partial class LevelRulesEditor : Form
     {
         private readonly FileManager _fileManager;
-        private readonly LevelRulesFile _levelRules = new LevelRulesFile();
+        private readonly LevelRulesFile _levelRules;
         private readonly Dictionary<String, RoomDefinitionFile> _roomDefinitions = new Dictionary<String, RoomDefinitionFile>();
         private readonly Font _font = new Font("Verdana", 8);
         private readonly Color[] _colors = new[] { Color.DeepSkyBlue, Color.DarkSeaGreen, Color.Goldenrod, Color.Cornsilk };
@@ -34,6 +33,7 @@ namespace Reanimator.Forms
 
             _fileManager = fileManager;
             byte[] fileBytes = fileManager.GetFileBytes(fileEntry);
+            _levelRules = new LevelRulesFile(fileEntry.Path, null);
             _levelRules.ParseFileBytes(fileBytes);
 
             foreach (LevelRulesFile.LevelRule levelRule in _levelRules.LevelRules)
@@ -100,27 +100,27 @@ namespace Reanimator.Forms
         {
             foreach (LevelRulesFile.Room room in rooms)
             {
-                String roomPathName = _GetRoomPathName(room.RoomName);
+                String roomPathName = _GetRoomPathName(room.RoomDesc);
                 if (_roomDefinitions.ContainsKey(roomPathName)) continue;
 
 
                 // do we need to change our directory?
-                int codeDot = room.RoomName.IndexOf('.');
+                int codeDot = room.RoomDesc.IndexOf('.');
                 if (codeDot > 0)
                 {
                     // debug check
-                    Debug.Assert(codeDot == room.RoomName.Length - 5);
+                    Debug.Assert(codeDot == room.RoomDesc.Length - 5);
 
                     String excelError = "The level rule loaded has rooms that require a directory change.\n" +
                                         "This act requires access to an initialised FileManager instance with loaded Excel files.\n" +
-                                        "The room \"" + room.RoomName + "\" cannot be loaded.";
+                                        "The room \"" + room.RoomDesc + "\" cannot be loaded.";
                     if (_fileManager == null)
                     {
                         MessageBox.Show(excelError, "Warning", MessageBoxButtons.OK, MessageBoxIcon.Exclamation);
                         continue;
                     }
 
-                    String codeString = room.RoomName.Substring(codeDot + 1);
+                    String codeString = room.RoomDesc.Substring(codeDot + 1);
                     int code = codeString[3] << 24 | codeString[2] << 16 | codeString[1] << 8 | codeString [0];
 
                     // get data table
@@ -139,19 +139,22 @@ namespace Reanimator.Forms
 
                 // read file
                 byte[] fileBytes;
+                RoomDefinitionFile roomDefinitionFile;
                 if (_fileManager != null)
                 {
                     String relativeDirectory = Path.GetDirectoryName(rootDir);
+                    Debug.Assert(relativeDirectory != null);
                     String relativePath = Path.Combine(relativeDirectory, roomPathName + RoomDefinitionFile.Extension);
                     fileBytes = _fileManager.GetFileBytes(relativePath);
+                    roomDefinitionFile = new RoomDefinitionFile(relativePath);
                 }
                 else
                 {
                     String roomPath = Path.Combine(rootDir, roomPathName + RoomDefinitionFile.Extension);
                     fileBytes = File.ReadAllBytes(roomPath);
+                    roomDefinitionFile = new RoomDefinitionFile(roomPath);
                 }
 
-                RoomDefinitionFile roomDefinitionFile = new RoomDefinitionFile();
                 roomDefinitionFile.ParseFileBytes(fileBytes);
                 _roomDefinitions.Add(roomPathName, roomDefinitionFile);
             }
@@ -176,26 +179,26 @@ namespace Reanimator.Forms
             int i = 0;
             foreach (LevelRulesFile.Room room in rooms)
             {
-                float yPos = room.xPosition * _graphicsScale + offset.X + _graphicsOffsetX;
-                float xPos = room.yPosition * _graphicsScale + offset.Y + _graphicsOffsetY;
+                float yPos = room.X * _graphicsScale + offset.X + _graphicsOffsetX;
+                float xPos = room.Y * _graphicsScale + offset.Y + _graphicsOffsetY;
                 if (_flipXYOffsets)
                 {
-                    yPos = room.yPosition * _graphicsScale + offset.X + _graphicsOffsetX;
-                    xPos = room.xPosition * _graphicsScale + offset.Y + _graphicsOffsetY;
+                    yPos = room.Y * _graphicsScale + offset.X + _graphicsOffsetX;
+                    xPos = room.X * _graphicsScale + offset.Y + _graphicsOffsetY;
                 }
 
-                String roomPathName = _GetRoomPathName(room.RoomName);
+                String roomPathName = _GetRoomPathName(room.RoomDesc);
                 RoomDefinitionFile roomDefinition = _roomDefinitions[roomPathName];
                 float roomWidth = roomDefinition.RoomDefinition.FileHeader.UnknownFloat1 * _graphicsScale;
-                float roomHeight = roomDefinition.RoomDefinition.FileHeader.UnknownFloat2 * _graphicsScale;
+                float roomHeight = roomDefinition.RoomDefinition.FileHeader.MinX * _graphicsScale;
                 if (_flipWidthHeight)
                 {
-                    roomWidth = roomDefinition.RoomDefinition.FileHeader.UnknownFloat2 * _graphicsScale;
+                    roomWidth = roomDefinition.RoomDefinition.FileHeader.MinX * _graphicsScale;
                     roomHeight = roomDefinition.RoomDefinition.FileHeader.UnknownFloat1 * _graphicsScale;
                 }
 
                 Matrix myMatrix = new Matrix();
-                float rotateDeg = -room.rotation * 180.0f / (float)Math.PI;
+                float rotateDeg = -room.Rotation * 180.0f / (float)Math.PI;
                 if (_reverseRotation) rotateDeg *= -1;
 
 
@@ -270,7 +273,7 @@ namespace Reanimator.Forms
                 //g.Transform = new Matrix();
                 if (paintType == PaintType.Text && !_disableRoomNames)
                 {
-                    g.DrawString(room.RoomName, _font, new SolidBrush(Color.Black), strX, strY);
+                    g.DrawString(room.RoomDesc, _font, new SolidBrush(Color.Black), strX, strY);
                 }
                 i++;
             }
