@@ -646,7 +646,7 @@ namespace Reanimator.Forms
                 }
                 else if (relativePath.EndsWith(RoomDefinitionFile.Extension))
                 {
-                    hellgateFile = new RoomDefinitionFile();
+                    hellgateFile = new RoomDefinitionFile(relativePath);
                 }
                 else if (relativePath.EndsWith(MLIFile.Extension))
                 {

@@ -539,7 +539,7 @@ namespace Revival
                     XmlDocument xmlDocument = new XmlDocument();
                     xmlDocument.Load(filePath);
 
-                    LevelRulesFile levelRulesFile = new LevelRulesFile();
+                    LevelRulesFile levelRulesFile = new LevelRulesFile(filePath, null);
                     levelRulesFile.ParseXmlDocument(xmlDocument);
                     byte[] fileBytes = levelRulesFile.ToByteArray();
 
@@ -562,7 +562,7 @@ namespace Revival
                     XmlDocument xmlDocument = new XmlDocument();
                     xmlDocument.Load(filePath);
 
-                    RoomDefinitionFile roomDefinitionFile = new RoomDefinitionFile();
+                    RoomDefinitionFile roomDefinitionFile = new RoomDefinitionFile(filePath);
                     roomDefinitionFile.ParseXmlDocument(xmlDocument);
                     byte[] fileBytes = roomDefinitionFile.ToByteArray();
 

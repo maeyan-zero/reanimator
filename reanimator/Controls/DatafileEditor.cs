@@ -1,28 +1,29 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.ComponentModel;
+using System.Diagnostics;
 using System.Drawing;
 using System.Data;
 using System.Linq;
-using System.Text;
 using System.Windows.Forms;
-
-using Hellgate;
-using OutputAttribute = Hellgate.ExcelFile.OutputAttribute;
-using Revival.Common;
-using Reanimator.Forms;
 using System.Collections;
 using System.IO;
-using System.Reflection;
+using Hellgate;
+using Revival.Common;
+using Reanimator.Forms;
+using OutputAttribute = Hellgate.ExcelFile.OutputAttribute;
 
 namespace Reanimator.Controls
 {
     public partial class DatafileEditor : UserControl, IMdiChildBase
     {
-        private FileManager _fileManager { get; set; }
-        private DataFile _dataFile { get; set; }
-        private DataTable _dataTable { get; set; }
-        private Hashtable _specialControls;
+        public bool AddedToTabPage { get; set; }
+
+        private readonly FileManager _fileManager;
+        private readonly DataFile _dataFile;
+        private readonly Hashtable _specialControls;
+
+        private DataTable _dataTable;
         private bool _selectedIndexChange;
 
         /// <summary>
@@ -105,6 +106,14 @@ namespace Reanimator.Controls
             DataGridViewColumn codeColumn = _tableData_DataGridView.Columns["code"];
             if (codeColumn != null) codeColumn.DefaultCellStyle.Format = "X04";
 
+            //int rowIndex = 0;
+            //foreach (DataGridViewRow row in _tableData_DataGridView.Rows)
+            //{
+            //    row.Tag = rowIndex++;
+            //}
+
+            //_tableData_DataGridView.CurrentCell = _tableData_DataGridView.Rows[2].Cells[0];
+
             _tableData_DataGridView.ResumeLayout();
         }
 
@@ -134,7 +143,7 @@ namespace Reanimator.Controls
 
                 if (dc.ExtendedProperties.ContainsKey(ExcelFile.ColumnTypeKeys.IsBool) && (bool)dc.ExtendedProperties[ExcelFile.ColumnTypeKeys.IsBool])
                 {
-                    CheckBox cb = new CheckBox
+                    CheckBox checkBox = new CheckBox
                     {
                         Parent = _rows_LayoutPanel,
                         AutoSize = true,
@@ -143,13 +152,12 @@ namespace Reanimator.Controls
                         CheckAlign = ContentAlignment.MiddleLeft
                     };
 
-                    cb.CheckedChanged += _RowView_CheckBox_ItemCheck;
-                    _specialControls.Add(dc.ColumnName, cb);
+                    checkBox.CheckedChanged += _RowView_CheckBox_ItemCheck;
+                    _specialControls.Add(dc.ColumnName, checkBox);
                 }
-                else if (dc.ExtendedProperties.ContainsKey(ExcelFile.ColumnTypeKeys.IsBitmask) &&
-                        (bool)dc.ExtendedProperties[ExcelFile.ColumnTypeKeys.IsBitmask])
+                else if (dc.ExtendedProperties.ContainsKey(ExcelFile.ColumnTypeKeys.IsBitmask) && (bool)dc.ExtendedProperties[ExcelFile.ColumnTypeKeys.IsBitmask])
                 {
-                    CheckedListBox clb = new CheckedListBox
+                    CheckedListBox checkedListBox = new CheckedListBox
                     {
                         Parent = _rows_LayoutPanel,
                         AutoSize = true,
@@ -158,11 +166,11 @@ namespace Reanimator.Controls
                         Name = dc.ColumnName
                     };
 
-                    clb.ItemCheck += _RowView_CheckedListBox_ItemCheck;
-                    _specialControls.Add(dc.ColumnName, clb);
+                    checkedListBox.ItemCheck += _RowView_CheckedListBox_ItemCheck;
+                    _specialControls.Add(dc.ColumnName, checkedListBox);
 
 
-                    ExcelFile.OutputAttribute attribute = ExcelFile.GetExcelAttribute(_dataFile.DataType.GetField(dc.ColumnName));
+                    OutputAttribute attribute = ExcelFile.GetExcelAttribute(_dataFile.DataType.GetField(dc.ColumnName));
 
                     // Populate the checklist by either a enum or (less commonly) table indices
                     if (!String.IsNullOrEmpty(attribute.TableStringId))
@@ -172,34 +180,42 @@ namespace Reanimator.Controls
                         //
                         DataTable dataTable = _fileManager.GetDataTable(attribute.TableStringId);
                         foreach (DataRow row in dataTable.Rows)
-                            clb.Items.Add(row[2], false);
+                        {
+                            checkedListBox.Items.Add(row[2], false);
+                        }
                     }
                     else
                     {
                         Type cellType = dc.DataType;
                         foreach (Enum type in Enum.GetValues(cellType))
-                            clb.Items.Add(type, false);
+                        {
+                            checkedListBox.Items.Add(type, false);
+                        }
                     }
                 }
-                else if (dc.ExtendedProperties.ContainsKey(ExcelFile.ColumnTypeKeys.IsEnum) &&
-                        (bool)dc.ExtendedProperties[ExcelFile.ColumnTypeKeys.IsEnum])
+                else if (dc.ExtendedProperties.ContainsKey(ExcelFile.ColumnTypeKeys.IsEnum) && (bool)dc.ExtendedProperties[ExcelFile.ColumnTypeKeys.IsEnum])
                 {
-                    ComboBox cb = new ComboBox
+                    ComboBox comboBox = new ComboBox
                     {
                         Parent = _rows_LayoutPanel,
                         Dock = DockStyle.Fill,
                         Name = dc.ColumnName
                     };
-                    cb.DataBindings.Add("SelectedIndex", _dataTable, dc.ColumnName);
-                    cb.SelectedIndexChanged += new EventHandler(_RowView_ComboList_ItemChange);
 
-                    Type cellType = dc.DataType;
-                    foreach (Enum type in Enum.GetValues(cellType))
-                        cb.Items.Add(type);
+                    // todo: consider lookomg into overloaded FindString or FindExactString methods and check (change) the startIndex parameter
+                    Binding comboBoxBinding = comboBox.DataBindings.Add("SelectedIndex", _dataTable, dc.ColumnName, true);
+                    comboBoxBinding.Format += _ComboBoxFormat;
+                    comboBox.SelectedIndexChanged += _RowView_ComboList_ItemChange;
+
+                    // need order as VALUE order - Enum.GetValues provides sorted as UNSIGNED values e.g. {0, 1, 2, 3, -3, -2, -1} instead of {-3, -2, -1, 0, 1, 2, 3}
+                    List<Enum> enumValues = Enum.GetValues(dc.DataType).Cast<Enum>().ToList();
+                    enumValues.Sort(); // List sort works as SIGNED
+                    comboBox.Items.AddRange(enumValues.ToArray());
+                    comboBox.Tag = Math.Abs(Convert.ToInt32(enumValues.Min())); // we need a minimum value to get our base offset
                 }
                 else
                 {
-                    TextBox tb = new TextBox
+                    TextBox textBox = new TextBox
                     {
                         Text = String.Empty,
                         Parent = _rows_LayoutPanel,
@@ -207,18 +223,21 @@ namespace Reanimator.Controls
                         Dock = DockStyle.Fill,
                         Name = dc.ColumnName
                     };
-                    tb.DataBindings.Add("Text", _dataTable, dc.ColumnName);
+                    textBox.DataBindings.Add("Text", _dataTable, dc.ColumnName);
 
                     if ((dc.ExtendedProperties.ContainsKey(ExcelFile.ColumnTypeKeys.IsRelationGenerated) && (bool)dc.ExtendedProperties[ExcelFile.ColumnTypeKeys.IsRelationGenerated]) || column == 0)
                     {
-                        tb.ReadOnly = true;
-                        if (relationTextBox != null) relationTextBox.TextChanged += (sender, e) => tb.ResetText();
+                        textBox.ReadOnly = true;
+                        if (relationTextBox != null)
+                        {
+                            relationTextBox.TextChanged += (sender, e) => textBox.ResetText();
+                        }
                     }
 
                     if ((dc.ExtendedProperties.ContainsKey(ExcelFile.ColumnTypeKeys.IsStringIndex) && (bool)dc.ExtendedProperties[ExcelFile.ColumnTypeKeys.IsStringIndex]) ||
                         (dc.ExtendedProperties.ContainsKey(ExcelFile.ColumnTypeKeys.IsStringOffset) && (bool)dc.ExtendedProperties[ExcelFile.ColumnTypeKeys.IsStringOffset]))
                     {
-                        relationTextBox = tb;
+                        relationTextBox = textBox;
                     }
                     else
                     {
@@ -286,15 +305,16 @@ namespace Reanimator.Controls
         /// </summary>
         public void Import()
         {
-            OpenFileDialog fileDialog = new OpenFileDialog()
+            OpenFileDialog fileDialog = new OpenFileDialog
             {
                 InitialDirectory = Config.LastDirectory,
                 Filter = "Text Files (.txt)|*.txt|All Types (*.*)|*.*"
             };
             if (fileDialog.ShowDialog() != DialogResult.OK) return;
-            Config.LastDirectory = Path.GetDirectoryName(fileDialog.FileName);
 
+            Config.LastDirectory = Path.GetDirectoryName(fileDialog.FileName);
             byte[] buffer;
+
             try
             {
                 buffer = File.ReadAllBytes(fileDialog.FileName);
@@ -308,7 +328,7 @@ namespace Reanimator.Controls
             try
             {
                 bool parseSuccess = _dataFile.ParseCSV(buffer, _fileManager);
-                if (parseSuccess == true)
+                if (parseSuccess)
                 {
                     _RegenTable();
                 }
@@ -366,6 +386,21 @@ namespace Reanimator.Controls
             }
         }
 
+        private void _ComboBoxFormat(object sender, ConvertEventArgs convertEventArgs)
+        {
+            // we need to wait until we've added this editor control to the tab page before we format it
+            // otherwise we actually modify the DataGridView value for whatever reason I couldn't be bothered figuring out
+            if (!AddedToTabPage) return;
+
+            Binding binding = (Binding)sender;
+            ComboBox comboBox = (ComboBox)binding.Control;
+            Debug.Assert(comboBox != null);
+
+            //Debug.WriteLine("_ComboBoxFormat: " + comboBox.Name);
+
+            convertEventArgs.Value = (Int32)convertEventArgs.Value + (Int32)comboBox.Tag;
+        }
+
         /// <summary>
         /// Opens views specific to the cell context.
         /// </summary>
@@ -400,7 +435,10 @@ namespace Reanimator.Controls
         {
             if (e.KeyCode != Keys.C || !e.Control) return;
 
-            Clipboard.SetDataObject(_tableData_DataGridView.GetClipboardContent());
+            Object clipboardContent = _tableData_DataGridView.GetClipboardContent();
+            if (clipboardContent == null) return;
+
+            Clipboard.SetDataObject(clipboardContent);
         }
 
         /// <summary>
@@ -416,25 +454,27 @@ namespace Reanimator.Controls
             _selectedIndexChange = true;
 
             _rows_LayoutPanel.SuspendLayout();
-            BindingContext[_dataTable].Position = _tableData_DataGridView.CurrentRow.Index;
+
+            int dataTableIndex = (Int32)_tableData_DataGridView.CurrentRow.Cells[0].Value;
+            BindingContext[_dataTable].Position = dataTableIndex;
 
             foreach (DataColumn dc in _dataTable.Columns)
             {
                 if (dc.ExtendedProperties.ContainsKey(ExcelFile.ColumnTypeKeys.IsBool) && (bool)dc.ExtendedProperties[ExcelFile.ColumnTypeKeys.IsBool])
                 {
-                    CheckBox cb = _specialControls[dc.ColumnName] as CheckBox;
-                    if (cb == null) continue;
+                    CheckBox checkBox = _specialControls[dc.ColumnName] as CheckBox;
+                    if (checkBox == null) continue;
 
                     DataRow dr = _dataTable.Rows[_tableData_DataGridView.CurrentRow.Index];
-                    cb.Checked = ((int)dr[dc]) == 1 ? true : false;
+                    checkBox.Checked = (((int)dr[dc]) == 1);
                 }
                 else if (dc.ExtendedProperties.ContainsKey(ExcelFile.ColumnTypeKeys.IsBitmask) && (bool)dc.ExtendedProperties[ExcelFile.ColumnTypeKeys.IsBitmask])
                 {
-                    CheckedListBox clb = _specialControls[dc.ColumnName] as CheckedListBox;
-                    if (clb == null) continue;
+                    CheckedListBox checkedListBox = _specialControls[dc.ColumnName] as CheckedListBox;
+                    if (checkedListBox == null) continue;
 
                     DataRow dr = _dataTable.Rows[_tableData_DataGridView.CurrentRow.Index];
-                    _UpdateCheckedListBox(clb, dr, dc);
+                    _UpdateCheckedListBox(checkedListBox, dr, dc);
                 }
             }
 
@@ -459,12 +499,13 @@ namespace Reanimator.Controls
         /// <param name="clb">The checkbox in context.</param>
         /// <param name="dr">The row containing the integer.</param>
         /// <param name="dc">The column containing the integer.</param>
-        private void _UpdateCheckedListBox(CheckedListBox clb, DataRow dr, DataColumn dc)
+        private static void _UpdateCheckedListBox(CheckedListBox clb, DataRow dr, DataColumn dc)
         {
             uint value = (uint)dr[dc];
             for (int i = 0; i < clb.Items.Count; i++)
             {
-                clb.SetItemChecked(i, ((1 << i) & value) > 0 ? true : false);
+                bool isChecked = (((1 << i) & value) > 0);
+                clb.SetItemChecked(i, isChecked);
             }
         }
 
@@ -512,29 +553,38 @@ namespace Reanimator.Controls
         {
             if (_selectedIndexChange) return;
 
-            ComboBox cb = (ComboBox)sender;
-            DataRow dr = _dataTable.Rows[_tableData_DataGridView.CurrentRow.Index];
-            dr[cb.Name] = cb.SelectedIndex;
+            ComboBox comboBox = (ComboBox)sender;
+            DataGridViewRow currentRow = _tableData_DataGridView.CurrentRow;
+            Debug.Assert(currentRow != null);
+
+            DataRow dr = _dataTable.Rows[currentRow.Index];
+            dr[comboBox.Name] = comboBox.SelectedIndex;
         }
 
         private void _RowView_CheckBox_ItemCheck(object sender, EventArgs e)
         {
             if (_selectedIndexChange) return;
 
-            CheckBox cb = (CheckBox)sender;
-            DataRow dr = _dataTable.Rows[_tableData_DataGridView.CurrentRow.Index];
-            dr[cb.Name] = (cb.CheckState == CheckState.Checked ? 1 : 0);
+            CheckBox checkBox = (CheckBox)sender;
+            DataGridViewRow currentRow = _tableData_DataGridView.CurrentRow;
+            Debug.Assert(currentRow != null);
+
+            DataRow dr = _dataTable.Rows[currentRow.Index];
+            dr[checkBox.Name] = (checkBox.CheckState == CheckState.Checked ? 1 : 0);
         }
 
         private void _RowView_CheckedListBox_ItemCheck(object sender, ItemCheckEventArgs e)
         {
             if (_selectedIndexChange) return;
 
-            CheckedListBox clb = (CheckedListBox)sender;
-            DataRow dr = _dataTable.Rows[_tableData_DataGridView.CurrentRow.Index];
-            uint value = (uint)dr[clb.Name];
+            CheckedListBox checkedListBox = (CheckedListBox)sender;
+            DataGridViewRow currentRow = _tableData_DataGridView.CurrentRow;
+            Debug.Assert(currentRow != null);
+
+            DataRow dr = _dataTable.Rows[currentRow.Index];
+            uint value = (uint)dr[checkedListBox.Name];
             value ^= (uint)(1 << (e.Index));
-            dr[clb.Name] = value;
+            dr[checkedListBox.Name] = value;
         }
 
         private void _nud_ValueChanged(object sender, EventArgs e)
@@ -563,84 +613,82 @@ namespace Reanimator.Controls
 
         private void InitializeComponent()
         {
-            this._splitContainer = new System.Windows.Forms.SplitContainer();
-            this._tableData_DataGridView = new System.Windows.Forms.DataGridView();
-            this._rows_LayoutPanel = new System.Windows.Forms.TableLayoutPanel();
-            this.button1 = new System.Windows.Forms.Button();
-            this._splitContainer.Panel1.SuspendLayout();
-            this._splitContainer.Panel2.SuspendLayout();
-            this._splitContainer.SuspendLayout();
-            ((System.ComponentModel.ISupportInitialize)(this._tableData_DataGridView)).BeginInit();
-            this.SuspendLayout();
+            _splitContainer = new SplitContainer();
+            _tableData_DataGridView = new DataGridView();
+            _rows_LayoutPanel = new TableLayoutPanel();
+            button1 = new Button();
+            _splitContainer.Panel1.SuspendLayout();
+            _splitContainer.Panel2.SuspendLayout();
+            _splitContainer.SuspendLayout();
+            ((System.ComponentModel.ISupportInitialize)(_tableData_DataGridView)).BeginInit();
+            SuspendLayout();
             // 
             // _splitContainer
             // 
-            this._splitContainer.Dock = System.Windows.Forms.DockStyle.Fill;
-            this._splitContainer.FixedPanel = System.Windows.Forms.FixedPanel.Panel2;
-            this._splitContainer.Location = new System.Drawing.Point(0, 0);
-            this._splitContainer.Name = "_splitContainer";
+            _splitContainer.Dock = DockStyle.Fill;
+            _splitContainer.FixedPanel = FixedPanel.Panel2;
+            _splitContainer.Location = new Point(0, 0);
+            _splitContainer.Name = "_splitContainer";
             // 
             // _splitContainer.Panel1
             // 
-            this._splitContainer.Panel1.Controls.Add(this.button1);
-            this._splitContainer.Panel1.Controls.Add(this._tableData_DataGridView);
+            _splitContainer.Panel1.Controls.Add(button1);
+            _splitContainer.Panel1.Controls.Add(_tableData_DataGridView);
             // 
             // _splitContainer.Panel2
             // 
-            this._splitContainer.Panel2.Controls.Add(this._rows_LayoutPanel);
-            this._splitContainer.Size = new System.Drawing.Size(869, 640);
-            this._splitContainer.SplitterDistance = 543;
-            this._splitContainer.TabIndex = 0;
+            _splitContainer.Panel2.Controls.Add(_rows_LayoutPanel);
+            _splitContainer.Size = new Size(869, 640);
+            _splitContainer.SplitterDistance = 543;
+            _splitContainer.TabIndex = 0;
             // 
             // _tableData_DataGridView
             // 
-            this._tableData_DataGridView.ColumnHeadersHeightSizeMode = System.Windows.Forms.DataGridViewColumnHeadersHeightSizeMode.AutoSize;
-            this._tableData_DataGridView.Dock = System.Windows.Forms.DockStyle.Fill;
-            this._tableData_DataGridView.Location = new System.Drawing.Point(0, 0);
-            this._tableData_DataGridView.Name = "_tableData_DataGridView";
-            this._tableData_DataGridView.Size = new System.Drawing.Size(543, 640);
-            this._tableData_DataGridView.TabIndex = 0;
-            this._tableData_DataGridView.CellDoubleClick += new System.Windows.Forms.DataGridViewCellEventHandler(this._tableData_DataGridView_CellDoubleClick);
-            this._tableData_DataGridView.SelectionChanged += new System.EventHandler(this._tableData_DataGridView_SelectionChanged);
-            this._tableData_DataGridView.KeyUp += new System.Windows.Forms.KeyEventHandler(this._tableData_DataGridView_KeyUp);
+            _tableData_DataGridView.ColumnHeadersHeightSizeMode = DataGridViewColumnHeadersHeightSizeMode.AutoSize;
+            _tableData_DataGridView.Dock = DockStyle.Fill;
+            _tableData_DataGridView.Location = new Point(0, 0);
+            _tableData_DataGridView.Name = "_tableData_DataGridView";
+            _tableData_DataGridView.Size = new Size(543, 640);
+            _tableData_DataGridView.TabIndex = 0;
+            _tableData_DataGridView.CellDoubleClick += _tableData_DataGridView_CellDoubleClick;
+            _tableData_DataGridView.SelectionChanged += _tableData_DataGridView_SelectionChanged;
+            _tableData_DataGridView.KeyUp += _tableData_DataGridView_KeyUp;
             // 
             // _rows_LayoutPanel
             // 
-            this._rows_LayoutPanel.AutoScroll = true;
-            this._rows_LayoutPanel.ColumnCount = 2;
-            this._rows_LayoutPanel.ColumnStyles.Add(new System.Windows.Forms.ColumnStyle(System.Windows.Forms.SizeType.Percent, 50F));
-            this._rows_LayoutPanel.ColumnStyles.Add(new System.Windows.Forms.ColumnStyle(System.Windows.Forms.SizeType.Percent, 50F));
-            this._rows_LayoutPanel.Dock = System.Windows.Forms.DockStyle.Fill;
-            this._rows_LayoutPanel.Location = new System.Drawing.Point(0, 0);
-            this._rows_LayoutPanel.Name = "_rows_LayoutPanel";
-            this._rows_LayoutPanel.RowCount = 1;
-            this._rows_LayoutPanel.RowStyles.Add(new System.Windows.Forms.RowStyle());
-            this._rows_LayoutPanel.Size = new System.Drawing.Size(322, 640);
-            this._rows_LayoutPanel.TabIndex = 0;
+            _rows_LayoutPanel.AutoScroll = true;
+            _rows_LayoutPanel.ColumnCount = 2;
+            _rows_LayoutPanel.ColumnStyles.Add(new ColumnStyle(SizeType.Percent, 50F));
+            _rows_LayoutPanel.ColumnStyles.Add(new ColumnStyle(SizeType.Percent, 50F));
+            _rows_LayoutPanel.Dock = DockStyle.Fill;
+            _rows_LayoutPanel.Location = new Point(0, 0);
+            _rows_LayoutPanel.Name = "_rows_LayoutPanel";
+            _rows_LayoutPanel.RowCount = 1;
+            _rows_LayoutPanel.RowStyles.Add(new RowStyle());
+            _rows_LayoutPanel.Size = new Size(322, 640);
+            _rows_LayoutPanel.TabIndex = 0;
             // 
             // button1
             // 
-            this.button1.Anchor = System.Windows.Forms.AnchorStyles.Right;
-            this.button1.FlatStyle = System.Windows.Forms.FlatStyle.Popup;
-            this.button1.Location = new System.Drawing.Point(533, 298);
-            this.button1.Name = "button1";
-            this.button1.Size = new System.Drawing.Size(10, 54);
-            this.button1.TabIndex = 1;
-            this.button1.UseVisualStyleBackColor = true;
-            this.button1.Click += new System.EventHandler(this._toggleRowViewButton_Click);
+            button1.Anchor = AnchorStyles.Right;
+            button1.FlatStyle = FlatStyle.Popup;
+            button1.Location = new Point(533, 298);
+            button1.Name = "button1";
+            button1.Size = new Size(10, 54);
+            button1.TabIndex = 1;
+            button1.UseVisualStyleBackColor = true;
+            button1.Click += _toggleRowViewButton_Click;
             // 
             // DatafileEditor
             // 
-            this.Controls.Add(this._splitContainer);
-            this.Name = "DatafileEditor";
-            this.Size = new System.Drawing.Size(869, 640);
-            this._splitContainer.Panel1.ResumeLayout(false);
-            this._splitContainer.Panel2.ResumeLayout(false);
-            this._splitContainer.ResumeLayout(false);
-            ((System.ComponentModel.ISupportInitialize)(this._tableData_DataGridView)).EndInit();
-            this.ResumeLayout(false);
-
+            Controls.Add(_splitContainer);
+            Name = "DatafileEditor";
+            Size = new Size(869, 640);
+            _splitContainer.Panel1.ResumeLayout(false);
+            _splitContainer.Panel2.ResumeLayout(false);
+            _splitContainer.ResumeLayout(false);
+            ((System.ComponentModel.ISupportInitialize)(_tableData_DataGridView)).EndInit();
+            ResumeLayout(false);
         }
-
     }
 }

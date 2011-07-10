@@ -24,7 +24,7 @@ namespace Hellgate.Xml
             DefaultValue = null,
             TableCode = Xls.TableCodes.CONDITION_FUNCTIONS, // 26417 CONDITION_FUNCTIONS
             ElementType = ElementType.ExcelIndex)]
-        public ConditionFunctionsRow Type;
+        public ConditionFunctionsRow CondFunc;
         public int CondFuncRowIndex;
 
         [XmlCookedAttribute(
