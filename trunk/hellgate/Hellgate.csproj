@@ -267,11 +267,11 @@
     <Compile Include="Excel\JapaneseBeta\Wardrobe.cs" />
     <Compile Include="Excel\SinglePlayer\Language.cs" />
     <Compile Include="Excel\SinglePlayer\Level.cs" />
+    <Compile Include="Excel\SinglePlayer\LevelFilePath.cs" />
     <Compile Include="Excel\SinglePlayer\LevelScaling.cs" />
     <Compile Include="Excel\SinglePlayer\LevelDrlgChoice.cs" />
     <Compile Include="Excel\SinglePlayer\LevelDrlgs.cs" />
     <Compile Include="Excel\SinglePlayer\LevelEnvironments.cs" />
-    <Compile Include="Excel\SinglePlayer\LevelFilePaths.cs" />
     <Compile Include="Excel\SinglePlayer\RoomIndex.cs" />
     <Compile Include="Excel\SinglePlayer\LevelRules.cs" />
     <Compile Include="Excel\SinglePlayer\LevelsThemes.cs" />

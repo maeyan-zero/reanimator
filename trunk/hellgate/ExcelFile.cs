@@ -707,7 +707,7 @@ namespace Hellgate
                 // Gets string from string buffer
                 if (field.FieldType == typeof(Int32))
                 {
-                    int nameOffset = (Int32)field.GetValue(Rows[i]);
+                    int nameOffset = (Int32)field.GetValue(Rows[i]); // No string buffer, just use "value" for string // todo: GetValue is *very* slow - change to delegates
                     nameString = ReadStringTable(nameOffset) ?? nameOffset.ToString();
                 }
                 else if (field.FieldType == typeof(String))
