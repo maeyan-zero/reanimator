@@ -1,7 +1,8 @@
 ﻿using System;
-using System.Runtime.InteropServices;
-using Revival.Common;
 using System.IO;
+using System.Runtime.InteropServices;
+using System.Xml.Serialization;
+using Revival.Common;
 
 namespace Hellgate
 {
@@ -9,16 +10,17 @@ namespace Hellgate
     {
         public new const String Extension = ".hg1";
         public new const String ExtensionDeserialised = ".hg1.xml";
+        public const int UnitObjectOffset = 0x2028;
         private const UInt32 RequiredVersion = 0x01; // 1
         private const UInt32 FileMagicWord = 0x484D4752;            // 'RGMH'
 
         [StructLayout(LayoutKind.Sequential, Pack = 1)]
         private struct FileHeader
         {
-            public Int32 MagicWord;
-            public Int32 Version;
-            public Int32 DataOffset1;
-            public Int32 DataOffset2;
+            public UInt32 MagicWord;
+            public UInt32 Version;
+            public UInt32 DataOffset1;
+            public UInt32 DataOffset2;
         };
 
         public String Path { get; private set; }
@@ -50,8 +52,8 @@ namespace Hellgate
             if (fileHeader.MagicWord != FileMagicWord) throw new Exceptions.UnexpectedMagicWordException();
             if (fileHeader.Version != RequiredVersion) throw new Exceptions.NotSupportedFileVersionException();
 
-            byteOffset = 0x2028;
-            Character.ParseUnitObject(fileBytes, byteOffset, fileBytes.Length);
+            byteOffset = UnitObjectOffset;
+            Character.ParseUnitObject(fileBytes, byteOffset, fileBytes.Length - byteOffset);
         }
 
         public void CreateNewCharacter(String name)
@@ -61,32 +63,32 @@ namespace Hellgate
 
         public override byte[] ToByteArray()
         {
-            throw new NotImplementedException();
+            byte[] characterBytes = Character.ToByteArray();
+            byte[] buffer = new byte[UnitObjectOffset + characterBytes.Length];
+
+            FileHeader fileHeader = new FileHeader
+            {
+                MagicWord = FileMagicWord,
+                Version = RequiredVersion,
+                DataOffset1 = UnitObjectOffset,
+                DataOffset2 = UnitObjectOffset
+            };
+
+            FileTools.WriteToBuffer(ref buffer, 0, fileHeader);
+            Buffer.BlockCopy(characterBytes, 0, buffer, UnitObjectOffset, characterBytes.Length);
+
+            return buffer;
         }
 
         public override byte[] ExportAsDocument()
         {
-            throw new NotImplementedException();
-        }
+            if (Character == null) throw new Exceptions.NotInitializedException();
 
-        public CharacterFile()
-        {
-        }
+            MemoryStream memoryStream = new MemoryStream();
+            XmlSerializer xmlSerializer = new XmlSerializer(Character.GetType());
+            xmlSerializer.Serialize(memoryStream, Character);
 
-        public void LoadCharacterFromFile(string filePath)
-        {
-            Path = filePath;
-
-            byte[] charBytes = File.ReadAllBytes(Path);
-            ParseFileBytes(charBytes);
-        }
-
-        public static CharacterFile LoadCharacter(string filePath)
-        {
-            CharacterFile character = new CharacterFile();
-            character.LoadCharacterFromFile(filePath);
-
-            return character;
+            return memoryStream.ToArray();
         }
     }
 }
