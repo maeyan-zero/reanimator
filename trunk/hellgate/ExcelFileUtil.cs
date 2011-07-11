@@ -18,7 +18,7 @@ namespace Hellgate
         public const String ExtensionDeserialised = ".txt";
         private const byte CSVDelimiter = (byte)'\t';
 
-        private List<object> backupRows; // required for prescedence hack
+        private List<Object> _backupRows; // required for prescedence hack
 
         #region Excel Types
         [StructLayout(LayoutKind.Sequential, Pack = 1)]
@@ -123,97 +123,7 @@ namespace Hellgate
                 Parameters = new List<Parameter>();
             }
         }
-
-        //[StructLayout(LayoutKind.Sequential, CharSet = CharSet.Ansi)]
-        //public struct Code : IComparable
-        //{
-        //    [MarshalAs(UnmanagedType.ByValArray, SizeConst = 4)]
-        //    private char[] _code;
-
-        //    public static implicit operator String(Code source)
-        //    {
-        //        return new String(source._code);
-        //    }
-
-        //    public static implicit operator int(Code source)
-        //    {
-        //        return source._code[0] + (source._code[1] << 8) + (source._code[2] << 16) + (source._code[3] << 24);
-        //    }
-
-        //    public static implicit operator Code(String source)
-        //    {
-        //        Code code = new Code { _code = new char[4] };
-        //        if (source.Length > 0) code._code[0] = source[0];
-        //        if (source.Length > 1) code._code[1] = source[1];
-        //        if (source.Length > 2) code._code[2] = source[2];
-        //        if (source.Length > 3) code._code[3] = source[3];
-        //        return code;
-        //    }
-
-        //    int IComparable.CompareTo(Object obj)
-        //    {
-        //        int code1 = this;
-        //        int code2 = (Code)obj;
-
-        //        if (code1 < code2) return -1;
-        //        if (code1 > code2) return 1;
-        //        return 0;
-        //    }
-
-        //    public override string ToString()
-        //    {
-        //        return new String(_code);
-        //    }
-        //}
         #endregion
-
-        //public static String[] OrderExcelFileCooking(FileManager fileManager, IEnumerable<String> excelFilePaths)
-        //{
-        //    // get all StringIds first
-        //    List<String> excelStringIds = new List<String>();
-        //    foreach (String excelPath in excelFilePaths)
-        //    {
-        //        String stringId = GetStringId(excelPath, fileManager.MPVersion);
-        //        if (String.IsNullOrEmpty(stringId))
-        //        {
-        //            Console.WriteLine("Error: Unable to obtain StringId for excel file: " + excelPath);
-        //            return null;
-        //        }
-
-        //        excelStringIds.Add(stringId);
-        //    }
-
-        //    List<String> orderedExcel = new List<String>();
-        //    int i = -1;
-        //    foreach (String stringId in excelStringIds)
-        //    {
-        //        i++;
-
-        //        ObjectDelegator excelDelegator = fileManager.DataFileDelegators[stringId];
-        //        foreach (ObjectDelegator.FieldDelegate fieldDelegate in excelDelegator)
-        //        {
-        //            if (!fieldDelegate.IsPublic) continue;
-
-        //            OutputAttribute excelAttribute = GetExcelAttribute(fieldDelegate.Info);
-        //            if (excelAttribute == null) continue;
-        //            if (!excelAttribute.IsTableIndex || String.IsNullOrEmpty(excelAttribute.TableStringId)) continue;
-
-        //            String tableStringId = excelAttribute.TableStringId;
-        //            if (fileManager.MPVersion) tableStringId = "_TCv4_" + tableStringId;
-        //            if (tableStringId == stringId)
-        //            {
-        //                int bp = 0;
-        //            }
-
-        //            int indexOf = excelStringIds.IndexOf(tableStringId);
-        //            if (indexOf == -1) continue;
-
-        //            int bp2 = 0;
-        //        }
-        //    }
-
-        //    return orderedExcel.ToArray();
-        //}
 
         /// <summary>
         /// CSV method only.
@@ -301,7 +211,7 @@ namespace Hellgate
             String baseStringId = Path.GetFileNameWithoutExtension(Path.GetFileNameWithoutExtension(filePath)).ToUpper();
             String stringIdAsKey = baseStringId;
 
-            Dictionary<String, DataFileAttributes>[] dataFileMaps = new[] { DataFileMap, DataFileMapTestCenter, DataFileMapResurrection };
+            Dictionary<String, DataFileAttributes>[] dataFileMaps = new[] { DataFileMap, DataFileMapTestCenter, DataFileMapResurrection, DataFileMapMod };
             foreach (Dictionary<String, DataFileAttributes> dataFileMap in dataFileMaps)
             {
                 // check if the file name is the same as the string id
@@ -604,7 +514,7 @@ namespace Hellgate
             const char scoreReplace = '9';
 
             // back it up, these changes can't be undone
-            backupRows = new List<object>(Rows);
+            _backupRows = new List<object>(Rows);
 
             if (fieldInfo.FieldType == typeof(string))
             {
@@ -643,8 +553,8 @@ namespace Hellgate
 
         private void _UndoPrecedenceHack()
         {
-            Rows = new List<object>(backupRows);
-            backupRows.Clear();
+            Rows = new List<object>(_backupRows);
+            _backupRows.Clear();
         }
 
         private IEnumerable<int[]> _GenerateSortedIndexArrays()

@@ -53,7 +53,7 @@ namespace Hellgate
         };
         #endregion
 
-        public ExcelFile(String filePath, FileManager.ClientVersionFlags clientVersion = FileManager.ClientVersionFlags.SinglePlayer)
+        public ExcelFile(String filePath, FileManager.ClientVersions clientVersion = FileManager.ClientVersions.SinglePlayer)
         {
             Thread.CurrentThread.CurrentCulture = Common.EnglishUSCulture;
 
@@ -64,11 +64,15 @@ namespace Hellgate
 
             // get the excel type attributes
             DataFileAttributes dataFileAttributes = null;
-            if ((clientVersion & FileManager.ClientVersionFlags.Resurrection) > 0)
+            if (clientVersion == FileManager.ClientVersions.Mod)
+            {
+                DataFileMapMod.TryGetValue(StringId, out dataFileAttributes);
+            }
+            if (dataFileAttributes == null && (clientVersion == FileManager.ClientVersions.Resurrection || clientVersion == FileManager.ClientVersions.Mod))
             {
                 DataFileMapResurrection.TryGetValue(StringId, out dataFileAttributes);
             }
-            if (dataFileAttributes == null && (clientVersion & FileManager.ClientVersionFlags.TestCenter) > 0)
+            if (dataFileAttributes == null && clientVersion == FileManager.ClientVersions.TestCenter)
             {
                 DataFileMapTestCenter.TryGetValue(StringId, out dataFileAttributes);
             }
@@ -79,9 +83,16 @@ namespace Hellgate
             Attributes = dataFileAttributes;
 
             // create field delegators
-            FieldInfo[] dataFileFields = Attributes.RowType.GetFields(BindingFlags.Public | BindingFlags.NonPublic | BindingFlags.Instance);
-            dataFileFields = dataFileFields.OrderBy(f => f.MetadataToken).ToArray(); // order by defined order - GetFields does not guarantee ordering
-            Delegator = new ObjectDelegator(dataFileFields);
+            if (Attributes.RowType != null)
+            {
+                FieldInfo[] dataFileFields = Attributes.RowType.GetFields(BindingFlags.Public | BindingFlags.NonPublic | BindingFlags.Instance);
+                dataFileFields = dataFileFields.OrderBy(f => f.MetadataToken).ToArray(); // order by defined order - GetFields does not guarantee ordering
+                Delegator = new ObjectDelegator(dataFileFields);
+            }
+            else
+            {
+                Debug.WriteLine("Warning: Excel Definition has no RowType defined: " + StringId);
+            }
 
             // if we're empty, then just return
             if (Attributes.IsEmpty)
@@ -94,11 +105,8 @@ namespace Hellgate
             // we're using hard-coded mysh script table for SKILLS
             if (StringId == "SKILLS") _myshBuffer = Skills.Mysh.Data;
 
-            // CSV file
-            if (_excelFileHeader.StructureID == 0)
-            {
-                _excelFileHeader.StructureID = Attributes.StructureId;
-            }
+            // we aren't parsing file data, so need to manually assign a structure id
+            _excelFileHeader.StructureID = Attributes.StructureId;
         }
 
         /// <summary>
@@ -107,55 +115,16 @@ namespace Hellgate
         /// <param name="buffer">Byte array of the given Excel file object.</param>
         /// <param name="filePath">Path to file being loaded.</param>
         /// <param name="clientVersion">The versions of excel files to try to load from.</param>
-        public ExcelFile(byte[] buffer, String filePath, FileManager.ClientVersionFlags clientVersion = FileManager.ClientVersionFlags.SinglePlayer)
+        public ExcelFile(byte[] buffer, String filePath, FileManager.ClientVersions clientVersion = FileManager.ClientVersions.SinglePlayer) : this(filePath, clientVersion)
         {
-            Thread.CurrentThread.CurrentCulture = Common.EnglishUSCulture;
-
-            IsExcelFile = true;
-            FilePath = filePath;
-            StringId = _GetStringId(filePath);
-            if (StringId == null) throw new Exceptions.DataFileStringIdNotFound(filePath);
-
-            // get the excel type attributes
-            DataFileAttributes dataFileAttributes = null;
-            if ((clientVersion & FileManager.ClientVersionFlags.Resurrection) > 0)
-            {
-                DataFileMapResurrection.TryGetValue(StringId, out dataFileAttributes);
-            }
-            if (dataFileAttributes == null && (clientVersion & FileManager.ClientVersionFlags.TestCenter) > 0)
-            {
-                DataFileMapTestCenter.TryGetValue(StringId, out dataFileAttributes);
-            }
-            if (dataFileAttributes == null)
-            {
-                DataFileMap.TryGetValue(StringId, out dataFileAttributes);
-            }
-            Attributes = dataFileAttributes;
-
-            // if we're empty, then just return
-            if (Attributes.IsEmpty)
-            {
-                HasIntegrity = true;
-                Rows = new List<Object>();
-                return;
-            }
-
-            // create field delegators
-            Debug.Assert(Attributes != null && Attributes.RowType != null);
-            FieldInfo[] dataFileFields = Attributes.RowType.GetFields(BindingFlags.Public | BindingFlags.NonPublic | BindingFlags.Instance);
-            dataFileFields = dataFileFields.OrderBy(f => f.MetadataToken).ToArray(); // order by defined order - GetFields does not guarantee ordering
-            Delegator = new ObjectDelegator(dataFileFields);
-
+            if (Attributes.IsEmpty) return;
 
             // parse data
             int peek = FileTools.ByteArrayToInt32(buffer, 0);
             bool isCooked = (peek == Token.cxeh);
             HasIntegrity = isCooked ? ParseData(buffer) : ParseCSV(buffer);
 
-            // we're using hard-coded mysh script table for SKILLS
-            if (HasIntegrity && StringId == "SKILLS") _myshBuffer = Skills.Mysh.Data;
-
-            // CSV file
+            // if we parsed the buffer, but still not structure id, we parsed a CSV document and need to manually assign it
             if (_excelFileHeader.StructureID == 0)
             {
                 _excelFileHeader.StructureID = Attributes.StructureId;
@@ -179,7 +148,11 @@ namespace Hellgate
         {
             int offset = 0;
             int colCount = 1;
-            while (csvBytes[offset++] != '\n') if (csvBytes[offset] == '\t') colCount++;
+            while (csvBytes[offset++] != '\n')
+            {
+                if (csvBytes[offset] == '\t') colCount++;
+            }
+
             _csvTable = FileTools.CSVToStringArray(csvBytes, colCount, (byte)'\t');
         }
 
@@ -197,6 +170,7 @@ namespace Hellgate
         {
             if (csvBytes == null) return false;
             if (fileManager != null && fileManager.DataFiles.Count == 0) fileManager = null;
+
             bool result = false;
             try
             {
@@ -206,6 +180,7 @@ namespace Hellgate
             {
                 ExceptionLogger.LogException(e, true);
             }
+
             return result;
         }
 
@@ -727,13 +702,12 @@ namespace Hellgate
                 }
                 if (field == null) continue;
 
-                int nameOffset;
                 String nameString = "";
 
                 // Gets string from string buffer
                 if (field.FieldType == typeof(Int32))
                 {
-                    nameOffset = (Int32)field.GetValue(Rows[i]); // No string buffer, just use "value" for string // todo: GetValue is *very* slow - change to delegates
+                    int nameOffset = (Int32)field.GetValue(Rows[i]);
                     nameString = ReadStringTable(nameOffset) ?? nameOffset.ToString();
                 }
                 else if (field.FieldType == typeof(String))

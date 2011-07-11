@@ -101,7 +101,7 @@ namespace Reanimator.Forms.DropOverviewForm
             //the index of the first item entry 13 for SP, 19 for MP
             int tablePosition = 13;
 
-            if ((_fileManager.ClientVersion & FileManager.ClientVersionFlags.Resurrection) == FileManager.ClientVersionFlags.Resurrection)
+            if (_fileManager.ClientVersion  == FileManager.ClientVersions.Resurrection)
             {
                 tablePosition = 19;
             }
