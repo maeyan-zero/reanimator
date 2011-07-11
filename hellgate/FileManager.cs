@@ -15,12 +15,12 @@ namespace Hellgate
 {
     public partial class FileManager : IDisposable
     {
-        [Flags]
-        public enum ClientVersionFlags
+        public enum ClientVersions
         {
-            SinglePlayer = (1 << 0),
-            TestCenter = (1 << 1),
-            Resurrection = (1 << 2)
+            SinglePlayer,
+            TestCenter,
+            Resurrection,
+            Mod
         }
 
         private const String ExcelTablesStringId = "EXCELTABLES";
@@ -29,11 +29,11 @@ namespace Hellgate
         private const String StatesTableStringId = "STATES";
 
         public readonly Dictionary<String, ObjectDelegator> DataFileDelegators = new Dictionary<String, ObjectDelegator>();
-        public readonly ClientVersionFlags ClientVersion;
+        public readonly ClientVersions ClientVersion;
 
         public bool HasIntegrity { get; private set; }
-        public bool IsVersionTestCenter { get { return (ClientVersion & ClientVersionFlags.TestCenter) > 0; } }
-        public bool IsVersionResurrection { get { return (ClientVersion & ClientVersionFlags.Resurrection) > 0; } }
+        public bool IsVersionTestCenter { get; private set; }
+        public bool IsVersionResurrection { get; private set; }
         public String HellgatePath { get; private set; }
         public String HellgateDataPath { get { return Path.Combine(HellgatePath, Common.DataPath); } }
         public String HellgateDataCommonPath { get { return Path.Combine(HellgatePath, Common.DataCommonPath); } }
@@ -50,20 +50,27 @@ namespace Hellgate
         /// Initialize the File Manager by the given Hellgate path.
         /// </summary>
         /// <param name="hellgatePath">Path to the Hellgate installation.</param>
-        /// <param name="mpVersion">Set true to initialize only the MP files data.</param>
-        public FileManager(String hellgatePath, bool mpVersion = false)
+        /// <param name="clientVersion">Specifies which DataFileMap to use.</param>
+        public FileManager(String hellgatePath, ClientVersions clientVersion = ClientVersions.SinglePlayer)
         {
-            // what version are we loading from
-            ClientVersion = ClientVersionFlags.SinglePlayer;
-            if (mpVersion) ClientVersion |= ClientVersionFlags.TestCenter;
-
-            String versionDat = Path.Combine(hellgatePath, "Version.dat");
-            if (File.Exists(versionDat)) ClientVersion |= ClientVersionFlags.Resurrection;
-
-
-            // rest of ctor
+            ClientVersion = clientVersion;
             HellgatePath = hellgatePath;
             Language = Config.StringsLanguage;
+
+            // check if we're actually loading from the resurrection .dat files
+            if (ClientVersion == ClientVersions.SinglePlayer)
+            {
+                String versionDat = Path.Combine(hellgatePath, "Version.dat");
+                if (File.Exists(versionDat))
+                {
+                    ClientVersion = ClientVersions.Resurrection;
+                }
+            }
+
+            IsVersionTestCenter = (ClientVersion == ClientVersions.TestCenter);
+            IsVersionResurrection = (ClientVersion == ClientVersions.Resurrection);
+
+            // load file table
             Reload();
         }
 
@@ -249,42 +256,43 @@ namespace Hellgate
                     continue;
                 }
 
+                //if (fileEntry.Name.Contains("stats"))
+                //{
+                //    int bp = 0;
+                //}
+
                 // parse file data
                 DataFile dataFile;
-                if (fileEntry.Name.EndsWith(ExcelFile.Extension))
+                try
                 {
-                    try
+                    if (fileEntry.Name.EndsWith(ExcelFile.Extension))
                     {
                         dataFile = new ExcelFile(fileBytes, fileEntry.Path, ClientVersion);
                     }
-                    catch (Exceptions.DataFileStringIdNotFound dataFileStringIdNotFound)
+                    else
                     {
-                        Debug.WriteLine(dataFileStringIdNotFound.ToString());
-                        ExceptionLogger.LogException(dataFileStringIdNotFound);
-                        continue;
-                    }
-                    catch (Exception ex)
-                    {
-                        Debug.WriteLine(ex.ToString());
-                        ExceptionLogger.LogException(ex);
-                        Console.WriteLine(String.Format("Critical Error: Failed to load excel file {0} (ClientVersion = {1})", fileEntry.Name, ClientVersion));
-                        continue;
+                        dataFile = new StringsFile(fileBytes, fileEntry.Path);
                     }
                 }
-                else
+                catch (Exceptions.DataFileStringIdNotFound dataFileStringIdNotFound)
                 {
-                    //if (MPVersion) continue; // todo: need to add _TCv4_ stringId keys to DataFileMap before we can load them 
-                    dataFile = new StringsFile(fileBytes, fileEntry.Path);
+                    Debug.WriteLine(dataFileStringIdNotFound.ToString());
+                    ExceptionLogger.LogException(dataFileStringIdNotFound);
+                    continue;
+                }
+                catch (Exception ex)
+                {
+                    Debug.WriteLine(ex.ToString());
+                    ExceptionLogger.LogException(ex);
+                    Console.WriteLine(String.Format("Critical Error: Failed to load data file {0} (ClientVersion = {1})", fileEntry.Name, ClientVersion));
+                    continue;
                 }
 
                 if (!dataFile.HasIntegrity)
                 {
-                    Console.WriteLine("Error: Failed to load data file: " + dataFile.StringId);
-                    continue;
-                }
-                if (dataFile.StringId == null)
-                {
-                    Console.WriteLine(String.Format("Error: StringId is null. {0} was not indexed.", fileEntry.Name));
+                    String failedParse = "Error: Failed to load data file: " + dataFile.StringId;
+                    Debug.WriteLine(failedParse); // Console.WriteLine randomly (more often than not) just doesn't output to the Ouput window in VS during debugging
+                    Console.WriteLine(failedParse);
                     continue;
                 }
 
@@ -295,6 +303,7 @@ namespace Hellgate
                 }
                 catch (Exception e)
                 {
+                    Debug.WriteLine("Critical Error: Cannot add table data file to dictionary: " + dataFile + "\n" + e);
                     Console.WriteLine("Critical Error: Cannot add table data file to dictionary: " + dataFile + "\n" + e);
                 }
             }
@@ -986,8 +995,8 @@ namespace Hellgate
         public string[] GetLanguages()
         {
             var stringDirs = (from PackFileEntry fileEntry in FileEntries.Values
-             where fileEntry.Directory.Contains(@"\data\excel\strings\")
-             select Path.GetDirectoryName(fileEntry.Directory));
+                              where fileEntry.Directory.Contains(@"\data\excel\strings\")
+                              select Path.GetDirectoryName(fileEntry.Directory));
             return stringDirs.ToArray();
         }
 

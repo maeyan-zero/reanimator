@@ -11,7 +11,7 @@ namespace Hellgate.Excel
         RowHeader header;
         [ExcelOutput(SortColumnOrder = 1)]
         [MarshalAs(UnmanagedType.ByValTStr, SizeConst = 64)]
-        public string stat;
+        public string damagetype;
         [ExcelOutput(SortColumnOrder = 2)]
         public Int16 code;
         [MarshalAs(UnmanagedType.ByValTStr, SizeConst = 64)]

@@ -702,7 +702,7 @@ namespace Reanimator.Forms
         private void _DoLoading(ProgressForm progressForm, Object var)
         {
             progressForm.SetCurrentItemText("Loading File Manager...");
-            _fileManager = new FileManager(Config.HglDir, false);
+            _fileManager = new FileManager(Config.HglDir);
 
             foreach (PackFile file in _fileManager.IndexFiles) file.BeginDatReading();
             progressForm.SetCurrentItemText("Loading Excel and Strings Tables...");
@@ -717,7 +717,7 @@ namespace Reanimator.Forms
 
             if (!Config.LoadTCv4DataFiles) return;
             progressForm.SetCurrentItemText("Loading TCv4 File Manager...");
-            _fileManagerTCv4 = new FileManager(Config.HglDir, true);
+            _fileManagerTCv4 = new FileManager(Config.HglDir, FileManager.ClientVersions.TestCenter);
 
             foreach (PackFile file in _fileManagerTCv4.IndexFiles) file.BeginDatReading();
             progressForm.SetCurrentItemText("Loading TCv4 Excel and Strings Tables...");

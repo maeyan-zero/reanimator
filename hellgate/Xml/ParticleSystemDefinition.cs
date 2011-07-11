@@ -79,7 +79,7 @@ namespace Hellgate.Xml
             DefaultValue = null,
             ElementType = ElementType.ExcelIndex,
             TableCode = Xls.TableCodes.SOUNDS)] // 20784 SOUNDS
-        public SoundsRow SoundGroup;
+        public Sounds SoundGroup;
         public Int32 SoundGroupRowIndex;
 
         [XmlCookedAttribute(

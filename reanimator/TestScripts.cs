@@ -146,7 +146,7 @@ namespace Reanimator
         {
             FileManager fileManager = new FileManager(Config.HglDir);
             fileManager.ExtractAllExcel();
-            FileManager fileManagerTCv4 = new FileManager(Config.HglDir, true);
+            FileManager fileManagerTCv4 = new FileManager(Config.HglDir, FileManager.ClientVersions.TestCenter);
 
             fileManager.LoadTableFiles();
             fileManagerTCv4.LoadTableFiles(true);
@@ -376,11 +376,16 @@ namespace Reanimator
         public static void TestExcelCooking(bool doTCv4 = false)
         {
             String root = @"C:\excel_debug";
-            if (doTCv4) root = Path.Combine(root, "tcv4");
+            FileManager.ClientVersions clientVersion = FileManager.ClientVersions.SinglePlayer;
+            if (doTCv4)
+            {
+                root = Path.Combine(root, "tcv4");
+                clientVersion = FileManager.ClientVersions.TestCenter;
+            }
             root += @"\"; // lazy
             Directory.CreateDirectory(root);
 
-            FileManager fileManager = new FileManager(Config.HglDir, doTCv4);
+            FileManager fileManager = new FileManager(Config.HglDir, clientVersion);
             fileManager.LoadTableFiles();
             ExcelFile.EnableDebug = true;
 
@@ -684,7 +689,7 @@ namespace Reanimator
             // init file manager and load excel files
             FileManager fileManager = new FileManager(Config.HglDir);
             fileManager.ExtractAllExcel();
-            FileManager fileManagerTCv4 = new FileManager(Config.HglDir, true);
+            FileManager fileManagerTCv4 = new FileManager(Config.HglDir, FileManager.ClientVersions.TestCenter);
 
             fileManager.LoadTableFiles();
             fileManagerTCv4.LoadTableFiles(true);
@@ -1348,9 +1353,12 @@ namespace Reanimator
                                       where dataTableAttribute.Value.StructureId == forStructureId
                                       select dataTableAttribute.Key).ToArray();
                 String[] stringIds3 = (from dataTableAttribute in DataFile.DataFileMapResurrection
-                                      where dataTableAttribute.Value.StructureId == forStructureId
-                                      select dataTableAttribute.Key).ToArray();
-                String stringIdPrepend = String.Join(",", stringIds1) + String.Join(",", stringIds2) + String.Join(",", stringIds3);
+                                       where dataTableAttribute.Value.StructureId == forStructureId
+                                       select dataTableAttribute.Key).ToArray();
+                String[] stringIds4 = (from dataTableAttribute in DataFile.DataFileMapMod
+                                       where dataTableAttribute.Value.StructureId == forStructureId
+                                       select dataTableAttribute.Key).ToArray();
+                String stringIdPrepend = String.Join(",", stringIds1) + String.Join(",", stringIds2) + String.Join(",", stringIds3) + String.Join(",", stringIds4);
 
                 if (previousStringId != stringIdPrepend)
                 {

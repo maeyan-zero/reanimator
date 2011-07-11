@@ -5,6 +5,7 @@ using System.Diagnostics;
 using System.Linq;
 using Hellgate.Excel;
 using Hellgate.Excel.JapaneseBeta;
+using Hellgate.Excel.SinglePlayer;
 using Revival.Common;
 
 namespace Hellgate
@@ -29,7 +30,7 @@ namespace Hellgate
             //public short StatCount;                               // 16
             public readonly List<Stat> Stats = new List<Stat>();
 
-            public ExcelTableRow StatSelectorRow;
+            public ExcelTablesRow StatSelectorRow;
 
             public String Name { get { return (StatSelectorRow != null) ? StatSelectorRow.name : null; } }
         };
@@ -616,12 +617,12 @@ namespace Hellgate
                 if (stats.Context == StatContext.UseRows)
                 {
                     statSelector.RowIndex = bitBuffer.ReadBits(5);
-                    statSelector.StatSelectorRow = (ExcelTableRow)_fileManager.GetRowFromIndex(Xls.TableCodes.STATS_SELECTOR, statSelector.RowIndex); // StatsSelector table
+                    statSelector.StatSelectorRow = (ExcelTablesRow)_fileManager.GetRowFromIndex(Xls.TableCodes.STATS_SELECTOR, statSelector.RowIndex); // StatsSelector table
                 }
                 else
                 {
                     statSelector.Code = bitBuffer.ReadUInt16();
-                    statSelector.StatSelectorRow = (ExcelTableRow)_fileManager.GetRowFromCode(Xls.TableCodes.STATS_SELECTOR, (short)statSelector.Code); // StatsSelector table
+                    statSelector.StatSelectorRow = (ExcelTablesRow)_fileManager.GetRowFromCode(Xls.TableCodes.STATS_SELECTOR, (short)statSelector.Code); // StatsSelector table
                 }
 
                 int selectorStatCount = bitBuffer.ReadInt16();
