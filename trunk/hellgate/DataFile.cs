@@ -330,7 +330,7 @@ namespace Hellgate
         public static readonly Dictionary<String, DataFileAttributes> DataFileMapResurrection = new Dictionary<String, DataFileAttributes>
         {
             {"ACHIEVEMENTS", new DataFileAttributes {RowType = typeof(AchievementsBeta), HasScriptTable = true}},
-            {"ACHIEVEMENTSLOTS", new DataFileAttributes {RowType = typeof(AchievementSlotsBeta)}},
+            {"ACHIEVEMENT_SLOTS", new DataFileAttributes {RowType = typeof(AchievementSlotsBeta), FileName = "ACHIEVEMENTSLOTS"}},
             {"ACT", new DataFileAttributes {RowType = typeof(ActBeta), StructureId = 0x72F729DD}},
             {"ACTION", new DataFileAttributes {RowType = typeof(ActionBeta)}},
             {"AFFIXES", new DataFileAttributes {RowType = typeof(AffixesBeta)}},

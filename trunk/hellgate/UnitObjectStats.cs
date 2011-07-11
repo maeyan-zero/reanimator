@@ -681,6 +681,7 @@ namespace Hellgate
         {
             Stat stat = new Stat();
 
+            int statIndex = statBlock.Stats.Count;
             int valueShift = 0;
             int valueOffset = 0;
             bool isOffset = false;
@@ -693,7 +694,7 @@ namespace Hellgate
             {
                 int rowIndex = bitBuffer.ReadBits(11); // todo: make this a static value - this bit count is determined by FileManager._GetTableRowBitMax() of the Stats row count
                 statData = stat.StatRow = _fileManager.GetStatRowFromIndex(rowIndex);
-                if (statData == null) throw new Exceptions.UnitObjectException(String.Format("Error stat.RowIndex = {0} not found.\nCannot have null stat - not known param count will break bit offset.", rowIndex));
+                if (statData == null) throw new Exceptions.UnitObjectException(String.Format("Error stats[{0}].RowIndex = {1} not found.\nCannot have null stat - not known param count will break bit offset.", statIndex, rowIndex));
                 valueBitCount = statData.valbits;
 
                 if (statData.ParamCount > 0 && bitBuffer.ReadBool()) paramsBitCounts[0] = statData.param1Bits;
@@ -703,16 +704,16 @@ namespace Hellgate
 
                 if (_debugOutputLoadingProgress)
                 {
-                    Debug.WriteLine(String.Format("stat.Name = {0}, .Code = {1} (0x{2:X4}), .ParamCount = {3}", stat.Name, stat.Code, (uint)stat.Code, statData.ParamCount));
+                    Debug.WriteLine(String.Format("stats[{0}].Name = {1}, .Code = {2} (0x{3:X4}), .ParamCount = {4}", statIndex, stat.Name, stat.Code, (uint)stat.Code, statData.ParamCount));
 
                     Xls.TableCodes tableCode = (stat.ValueTable == null) ? Xls.TableCodes.Null : stat.ValueTable.TableCode;
                     int noValueTableCode = (stat.ValueTable == null) ? 1 : 0;
-                    Debug.WriteLine(String.Format("stat.NoValueTableCode = {2}, .ValueTableCode = 0x{0:X4}, .ValueTable = {1}", (uint)tableCode, tableCode, noValueTableCode));
+                    Debug.WriteLine(String.Format("stats[{0}].NoValueTableCode = {1}, .ValueTableCode = 0x{2:X4}, .ValueTable = {3}", statIndex, noValueTableCode, (uint)tableCode, tableCode));
 
-                    if (statData.ParamCount >= 1) Debug.WriteLine(String.Format("param1.BitCount = {0}, .Table = {1}", paramsBitCounts[0], stat.Param1TableCode));
-                    if (statData.ParamCount >= 2) Debug.WriteLine(String.Format("param2.BitCount = {0}, .Table = {1}", paramsBitCounts[1], stat.Param2TableCode));
-                    if (statData.ParamCount >= 3) Debug.WriteLine(String.Format("param3.BitCount = {0}, .Table = {1}", paramsBitCounts[2], stat.Param3TableCode));
-                    if (statData.ParamCount >= 4) Debug.WriteLine(String.Format("param4.BitCount = {0}, .Table = {1}", paramsBitCounts[3], stat.Param4TableCode));
+                    if (statData.ParamCount >= 1) Debug.WriteLine(String.Format("stats[{0}].Param1.BitCount = {1}, .Table = {2}", statIndex, paramsBitCounts[0], stat.Param1TableCode));
+                    if (statData.ParamCount >= 2) Debug.WriteLine(String.Format("stats[{0}].Param2.BitCount = {1}, .Table = {2}", statIndex, paramsBitCounts[1], stat.Param2TableCode));
+                    if (statData.ParamCount >= 3) Debug.WriteLine(String.Format("stats[{0}].Param3.BitCount = {1}, .Table = {2}", statIndex, paramsBitCounts[2], stat.Param3TableCode));
+                    if (statData.ParamCount >= 4) Debug.WriteLine(String.Format("stats[{0}].Param4.BitCount = {1}, .Table = {2}", statIndex, paramsBitCounts[3], stat.Param4TableCode));
                 }
             }
             else
@@ -724,7 +725,7 @@ namespace Hellgate
                 int paramsCount = bitBuffer.ReadBits(2);
                 if (_debugOutputLoadingProgress)
                 {
-                    Debug.WriteLine(String.Format("stat.Name = {0}, stat.Code = {1} (0x{2:X4}), stat.ParamCount = {3}", stat.Name, code, (uint)code, paramsCount));
+                    Debug.WriteLine(String.Format("stats[{0}].Name = {1}, stat.Code = {2} (0x{3:X4}), stat.ParamCount = {4}", statIndex, stat.Name, code, (uint)code, paramsCount));
                 }
                 if (paramsCount > statData.ParamCount) Debug.WriteLine(String.Format("Unexpected large params count of {0}. Expecting count <= {1}", paramsCount, statData.ParamCount));
 
@@ -767,8 +768,8 @@ namespace Hellgate
 
                     if (_debugOutputLoadingProgress)
                     {
-                        Debug.WriteLine(String.Format("param.BitCount = {0}, .ParamOperationsFlags = {1}, .ParamShift = {2}, .ParamIsOffset = {3}, .HasTableCode = {4}, .TableCode = {5}, .Table = {6}",
-                            paramsBitCounts[i], paramOperationsFlags, paramShift, paramIsOffset, hasTableCode, (uint)paramTableCode, paramTableCode));
+                        Debug.WriteLine(String.Format("stats[{0}].Param{1}.BitCount = {2}, .ParamOperationsFlags = {3}, .ParamShift = {4}, .ParamIsOffset = {5}, .HasTableCode = {6}, .TableCode = {7}, .Table = {8}",
+                            statIndex, i, paramsBitCounts[i], paramOperationsFlags, paramShift, paramIsOffset, hasTableCode, (uint)paramTableCode, paramTableCode));
                     }
                 }
 
@@ -789,12 +790,12 @@ namespace Hellgate
                 }
                 if (_debugOutputLoadingProgress)
                 {
-                    Debug.WriteLine(String.Format("stat.BitCount = {0}, .ValueOperationsFlags = {1}, .ValueShift = {2}, .ValueOffset = {3}, .IsOffset = {4}",
-                        valueBitCount, valueOperationsFlags, valueShift, valueOffset, isOffset));
+                    Debug.WriteLine(String.Format("stats[{0}].BitCount = {1}, .ValueOperationsFlags = {2}, .ValueShift = {3}, .ValueOffset = {4}, .IsOffset = {5}",
+                        statIndex, valueBitCount, valueOperationsFlags, valueShift, valueOffset, isOffset));
                 }
 
                 int noValueTableCode = bitBuffer.ReadBits(2);
-                //Debug.Assert(noValueTableCode != 2); // never seen... seen in stats column in Monsters table
+                Debug.Assert(noValueTableCode != 2); // never seen... seen in stats column in Monsters table
 
                 Xls.TableCodes tableCode = Xls.TableCodes.Null;
                 if (noValueTableCode == 0)
@@ -806,7 +807,7 @@ namespace Hellgate
                 }
                 if (_debugOutputLoadingProgress)
                 {
-                    Debug.WriteLine(String.Format("stat.NoValueTableCode = {0}, .ValueTableCode = 0x{1:X4}, .ValueTable = {2}", noValueTableCode, (uint)tableCode, tableCode));
+                    Debug.WriteLine(String.Format("stats[{0}].NoValueTableCode = {1}, .ValueTableCode = 0x{2:X4}, .ValueTable = {3}", statIndex, noValueTableCode, (uint)tableCode, tableCode));
                 }
             }
 
@@ -814,13 +815,13 @@ namespace Hellgate
             int valueCount = 1;
             if (hasMultipleValues)
             {
-                int valueCountBits = (statBlock._version <= 7) ? 7 : 10;
+                int valueCountBits = (statBlock._version <= 7) ? 8 : 10;
                 valueCount = bitBuffer.ReadBits(valueCountBits);
             }
 
             if (_debugOutputLoadingProgress)
             {
-                Debug.WriteLine(String.Format("stat.HasMultipleValues = {0}, .ValueCount = {1}", hasMultipleValues, valueCount));
+                Debug.WriteLine(String.Format("stats[{0}].HasMultipleValues = {1}, .ValueCount = {2}", statIndex, hasMultipleValues, valueCount));
             }
 
             for (int i = 0; i < valueCount; i++)
@@ -849,11 +850,11 @@ namespace Hellgate
 
                 if (_debugOutputLoadingProgress)
                 {
-                    if (paramsBitCounts[0] > 0) Debug.WriteLine("stat.Param1 = " + statValue.Param1);
-                    if (paramsBitCounts[1] > 0) Debug.WriteLine("stat.Param2 = " + statValue.Param2);
-                    if (paramsBitCounts[2] > 0) Debug.WriteLine("stat.Param3 = " + statValue.Param3);
-                    if (paramsBitCounts[3] > 0) Debug.WriteLine("stat.Param4 = " + statValue.Param4);
-                    Debug.WriteLine(String.Format("stat.Value = {0}", statValue.Value));
+                    if (paramsBitCounts[0] > 0) Debug.WriteLine(String.Format("stats[{0}].Param1 = {1}", statIndex, statValue.Param1));
+                    if (paramsBitCounts[1] > 0) Debug.WriteLine(String.Format("stats[{0}].Param2 = {1}", statIndex, statValue.Param2));
+                    if (paramsBitCounts[2] > 0) Debug.WriteLine(String.Format("stats[{0}].Param3 = {1}", statIndex, statValue.Param3));
+                    if (paramsBitCounts[3] > 0) Debug.WriteLine(String.Format("stats[{0}].Param4 = {1}", statIndex, statValue.Param4));
+                    Debug.WriteLine(String.Format("stats[{0}].Value = {1}", statIndex, statValue.Value));
                 }
             }
 

@@ -48,7 +48,19 @@ namespace Reanimator.Forms
             //int bitCount = 6;
             //int shift = (1 << (bitCount - 1));
             //bitCount -= shift;
+            //if (true) return;
+            //ExcelScript.GlobalDebug(true);
+            //FileManager fileManager = new FileManager(Config.HglDir, FileManager.ClientVersions.Mod);
+            //fileManager.BeginAllDatReadAccess();
+            //fileManager.LoadTableFiles();
+            //fileManager.EndAllDatAccess();
+            //fileManager.ProcessTables();
+            //UnitObject.FileManager = fileManager;
+            //byte[] charBytes = FileTools.HexFileToByteArray(File.ReadAllText("C:\\stats.txt"));
+            //UnitObject character = new UnitObject(true);
+            //character.ParseUnitObject(charBytes, 0, charBytes.Length);
             
+            //if (true) return;
 
             //byte[] charBytes = {
             //                       0xCD,
@@ -703,6 +715,7 @@ namespace Reanimator.Forms
         {
             progressForm.SetCurrentItemText("Loading File Manager...");
             _fileManager = new FileManager(Config.HglDir);
+            //_fileManager = new FileManager(Config.HglDir, FileManager.ClientVersions.Mod);
 
             foreach (PackFile file in _fileManager.IndexFiles) file.BeginDatReading();
             progressForm.SetCurrentItemText("Loading Excel and Strings Tables...");
@@ -712,8 +725,7 @@ namespace Reanimator.Forms
             }
             foreach (PackFile file in _fileManager.IndexFiles) file.EndDatAccess();
 
-            //XmlCookedFile.Initialize(_fileManager);
-
+            if (_fileManager.IsVersionMod) _fileManager.ProcessTables();
 
             if (!Config.LoadTCv4DataFiles) return;
             progressForm.SetCurrentItemText("Loading TCv4 File Manager...");
