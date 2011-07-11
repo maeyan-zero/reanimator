@@ -6,7 +6,6 @@ using System.Globalization;
 using System.IO;
 using System.Linq;
 using System.Reflection;
-using Hellgate.Excel;
 using Hellgate.Excel.JapaneseBeta;
 using Hellgate.Excel.SinglePlayer;
 using Revival.Common;
@@ -34,6 +33,7 @@ namespace Hellgate
         public bool HasIntegrity { get; private set; }
         public bool IsVersionTestCenter { get; private set; }
         public bool IsVersionResurrection { get; private set; }
+        public bool IsVersionMod { get; private set; }
         public String HellgatePath { get; private set; }
         public String HellgateDataPath { get { return Path.Combine(HellgatePath, Common.DataPath); } }
         public String HellgateDataCommonPath { get { return Path.Combine(HellgatePath, Common.DataCommonPath); } }
@@ -69,6 +69,7 @@ namespace Hellgate
 
             IsVersionTestCenter = (ClientVersion == ClientVersions.TestCenter);
             IsVersionResurrection = (ClientVersion == ClientVersions.Resurrection);
+            IsVersionMod = (ClientVersion == ClientVersions.Mod);
 
             // load file table
             Reload();
@@ -690,10 +691,22 @@ namespace Hellgate
 
         public ExcelFile GetExcelTableFromIndex(int tableIndex)
         {
-            if (tableIndex < 0) return null;
+            if (tableIndex < 0) throw new ArgumentOutOfRangeException("tableIndex", "The table index must be be at least 0.");
 
             Xls.TableCodes tableCode = _GetTableCodeFromTableIndex(tableIndex);
-            return GetExcelTableFromCode(tableCode);
+            ExcelFile excelFile = GetExcelTableFromCode(tableCode);
+
+            //if (tableCode == Xls.TableCodes.LEVEL_AREAS || tableCode == Xls.TableCodes.QUEST_COUNT_TUGBOAT ||
+            //    tableCode == Xls.TableCodes.QUESTS_TASKS_FOR_TUGBOAT || tableCode == Xls.TableCodes.QUEST_TITLES_FOR_TUGBOAT ||
+            //    tableCode == Xls.TableCodes.CRAFTING_SLOTS) return excelFile;
+
+            //if (excelFile == null && tableCode != Xls.TableCodes.Null && tableIndex < _excelIndexToCodeList.Count)
+            //{
+            //    throw new Exceptions.UnknownExcelCodeException((int)tableCode,
+            //        "The excel table code was not found!\nThis means the DataMap has a StringId as a FileName instead of using the FileName attribute parameter.");
+            //}
+
+            return excelFile;
         }
 
         private Xls.TableCodes _GetTableCodeFromTableIndex(int tableIndex)

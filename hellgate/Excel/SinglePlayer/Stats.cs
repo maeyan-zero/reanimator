@@ -24,13 +24,16 @@ namespace Hellgate.Excel
         public Int32 regenDelayOnDec;
         public Int32 regenDelayOnZero;
         public Int32 regenDelayMonster;
-        public Int32 undefined1;
-        public Int32 undefined2;
+        [ExcelOutput(IsTableIndex = true, TableStringId = "STATS")]
+        public Int32 undefined1; // excel index on table 27
+        [ExcelOutput(IsTableIndex = true, TableStringId = "STATS")]
+        public Int32 undefined2; // excel index on table 27
         public Int32 offset;
         public Int32 shift;
         public Int32 minSet;
         public Int32 maxSet;
-        public Int32 undefined3;
+        [ExcelOutput(IsTableIndex = true, TableStringId = "STATS")]
+        public Int32 undefined3; // excel index on table 27
         public Int32 minAssert;
         public Int32 maxAssert;
         public Int32 undefined4;

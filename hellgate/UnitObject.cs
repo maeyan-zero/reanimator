@@ -526,7 +526,7 @@ namespace Hellgate
             // unit object versions
             _version = _bitBuffer.ReadInt16();
             _context = (ObjectContext)_bitBuffer.ReadByte();
-            if (_version != 0x00BF && _version != 0x00CD) throw new Exceptions.NotSupportedVersionException("0x00BF or 0x00CD", "0x" + _version.ToString("X4"));
+            if (_version != 0x00BF && _version != 0x00CD && _version != 0x00CF) throw new Exceptions.NotSupportedVersionException("0x00BF or 0x00CD or 0x00CF", "0x" + _version.ToString("X4"));
             if (_context != ObjectContext.Save && _context != ObjectContext.CharSelect &&
                 _context != ObjectContext.CharStats && _context != ObjectContext.ItemDrop)
             {

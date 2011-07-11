@@ -70,7 +70,7 @@ namespace Hellgate
             }
 
             _fileManager = fileManager;
-            if (_fileManager.IsVersionResurrection)
+            if (_fileManager.IsVersionResurrection || _fileManager.IsVersionMod)
             {
                 _callFunctions = CallFunctionsResurrection;
                 _initCallFunctionsCount = _initCallFunctionsResurrectionCount;
