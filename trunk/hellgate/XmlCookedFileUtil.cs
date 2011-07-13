@@ -50,7 +50,7 @@ namespace Hellgate
                     Type childType = xmlElement.XmlAttribute.ChildType;
                     foreach (XmlCookedDefinition xmlDef in XmlDefinitions.Values.Where(xmlDef => xmlDef.XmlObjectType == childType))
                     {
-                        xmlElement.XmlAttribute.ChildTypeHash = xmlDef.RootHash;
+                        xmlElement.XmlAttribute.ChildTypeHash = xmlDef.Hash;
                         break;
                     }
 
@@ -115,9 +115,9 @@ namespace Hellgate
                     if (xAttribute == null || yAttribute == null || zAttribute == null) throw new Exceptions.InvalidXmlElement(xmlAttribute.Name, "The XML Element does not have all 3 vector names defined in definition = " + type.FullName);
 
                     xmlElement.IsCustomOrigin = true;
-                    xmlElements.Add(xAttribute.NameHash, new XmlCookedElement(xAttribute, _xVectorDelegate, xmlElement));
-                    xmlElements.Add(yAttribute.NameHash, new XmlCookedElement(yAttribute, _yVectorDelegate, xmlElement));
-                    xmlElements.Add(zAttribute.NameHash, new XmlCookedElement(zAttribute, _zVectorDelegate, xmlElement));
+                    xmlElements.Add(xAttribute.NameHash, new XmlCookedElement(xAttribute, _xVectorDelegate));
+                    xmlElements.Add(yAttribute.NameHash, new XmlCookedElement(yAttribute, _yVectorDelegate));
+                    xmlElements.Add(zAttribute.NameHash, new XmlCookedElement(zAttribute, _zVectorDelegate));
                 }
 
                 // is it a Flags Enum?
@@ -630,7 +630,7 @@ namespace Hellgate
                         desc = XmlDoc.CreateElement(xmlAttribute.Name);
                         xmlRoot.AppendChild(desc);
 
-                        root = XmlDoc.CreateElement(xmlTree.TwinRoot.Definition.RootElement.Name);
+                        root = XmlDoc.CreateElement(xmlTree.TwinRoot.Definition.Attributes.Name);
                         xmlRoot.AppendChild(root);
                     }
 
@@ -656,7 +656,7 @@ namespace Hellgate
                     desc = XmlDoc.CreateElement(xmlAttribute.Name);
                     xmlRoot.AppendChild(desc);
 
-                    root = XmlDoc.CreateElement(xmlTree.TwinRoot.Definition.RootElement.Name);
+                    root = XmlDoc.CreateElement(xmlTree.TwinRoot.Definition.Attributes.Name);
                     xmlRoot.AppendChild(root);
                 }
 
@@ -1135,7 +1135,7 @@ namespace Hellgate
             for (int i = 0; i < tableCount; i++)
             {
                 XmlNode tableNode = xmlNode.NextSibling;
-                if (tableNode == null || tableNode.Name != xmlTableCountDefinition.RootElement.Name) return -1;
+                if (tableNode == null || tableNode.Name != xmlTableCountDefinition.Attributes.Name) return -1;
 
                 if (_ParseXmlData(xmlTableCountDefinition, tableNode) == -1) return -1;
                 tablesAdded++;

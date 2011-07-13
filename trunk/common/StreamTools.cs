@@ -172,11 +172,15 @@ namespace Hellgate
         /// <param name="byteArray">The byte array containing the Float.</param>
         /// <param name="offset">The initial offset within byteArray.</param>
         /// <returns>The converted Float value.</returns>
-        public static float ReadFloat(byte[] byteArray, ref int offset)
+        public static unsafe float ReadFloat(byte[] byteArray, ref int offset)
         {
-            float value = BitConverter.ToSingle(byteArray, offset);
+            float fValue;
+            fixed (byte* b = &byteArray[offset])
+            {
+                fValue = *(((float*)b));
+            }
             offset += 4;
-            return value;
+            return fValue;
         }
 
         /// <summary>

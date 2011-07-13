@@ -134,7 +134,7 @@ namespace Hellgate
 
             XmlCookedDefinition xmlDefinition = _GetXmlDefinition(header.XmlRootDefinition);
             if (xmlDefinition == null) throw new Exceptions.NotSupportedFileDefinitionException();
-            if (xmlDefinition.Count < header.XmlRootElementCount) throw new Exceptions.NotSupportedXmlElementCount(xmlDefinition.RootElement.Name);
+            if (xmlDefinition.Count < header.XmlRootElementCount) throw new Exceptions.NotSupportedXmlElementCount(xmlDefinition.Attributes.Name);
 
             XmlCookedTree xmlTree = new XmlCookedTree(xmlDefinition, header.XmlRootElementCount);
             _ParseCookedDefinition(xmlTree);
@@ -186,7 +186,7 @@ namespace Hellgate
             XmlCookedDefinition xmlDefinition = _GetXmlDefinition(header.XmlRootDefinition);
             Definition = xmlDefinition;
             if (xmlDefinition == null) throw new Exceptions.NotSupportedFileDefinitionException();
-            if (xmlDefinition.Count < header.XmlRootElementCount) throw new Exceptions.NotSupportedXmlElementCount(xmlDefinition.RootElement.Name);
+            if (xmlDefinition.Count < header.XmlRootElementCount) throw new Exceptions.NotSupportedXmlElementCount(xmlDefinition.Attributes.Name);
 
             XmlCookedTree xmlTree = new XmlCookedTree(xmlDefinition, header.XmlRootElementCount);
             _ParseCookedDefinition(xmlTree);
@@ -198,7 +198,7 @@ namespace Hellgate
             if (_generateXml)
             {
                 XmlDoc = new XmlDocument();
-                root = XmlDoc.CreateElement(xmlDefinition.RootElement.Name);
+                root = XmlDoc.CreateElement(xmlDefinition.Attributes.Name);
                 XmlDoc.AppendChild(root);
             }
 
@@ -384,16 +384,16 @@ namespace Hellgate
                             Debug.Assert(xmlAttribute.Count == tableArrayCount);
                         }
 
-                        UInt32 stringHash = StreamTools.ReadUInt32(_buffer, ref _offset);       // table string hash
+                        UInt32 definitionHash = StreamTools.ReadUInt32(_buffer, ref _offset);       // table string hash
                         Int32 elementCount = StreamTools.ReadInt32(_buffer, ref _offset);       // table element count
 
-                        XmlCookedDefinition tableXmlDefition = _GetXmlDefinition(stringHash);
+                        XmlCookedDefinition tableXmlDefition = _GetXmlDefinition(definitionHash);
                         if (tableXmlDefition == null) throw new Exceptions.NotSupportedFileDefinitionException();
-                        if (tableXmlDefition.Count < elementCount) throw new Exceptions.NotSupportedXmlElementCount(tableXmlDefition.RootElement.Name);
+                        if (tableXmlDefition.Count < elementCount) throw new Exceptions.NotSupportedXmlElementCount(tableXmlDefition.Attributes.Name);
 
                         if (elementCount == -1)
                         {
-                            xmlTree.AddExistingTree(stringHash);
+                            xmlTree.AddExistingTree(definitionHash);
                         }
                         else
                         {
@@ -624,7 +624,7 @@ namespace Hellgate
 
         private int _ParseXmlDefinition(XmlCookedDefinition xmlDefinition, ICollection<UInt32> cookedDefinitions)
         {
-            cookedDefinitions.Add(xmlDefinition.RootHash);
+            cookedDefinitions.Add(xmlDefinition.Hash);
 
             int offsetStart = _offset;
             foreach (XmlCookedElement xmlElement in xmlDefinition.Elements.Values)

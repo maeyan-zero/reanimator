@@ -101,7 +101,7 @@ namespace Hellgate
         // total size = 64 bytes (0x40)
         [Serializable]
         [StructLayout(LayoutKind.Sequential, Pack = 1)]
-        public class UnknownStruct2
+        public struct UnknownStruct2
         {
             public Int64 Struct1Index1;         // 0x00     0       // these are the index to UnknownStruct1 array (above)
             public Int64 Struct1Index2;         // 0x08     8
@@ -122,7 +122,7 @@ namespace Hellgate
         // total size = 40 bytes (0x28)
         [Serializable]
         [StructLayout(LayoutKind.Sequential, Pack = 1)]
-        public class UnknownStruct3
+        public struct UnknownStruct3
         {
             public Int64 Offset1;               // 0x00     0       // note: these offset values are file bytes offsets to Int32 arrays in _unknownStruct1Int32Array
             public Int64 Offset2;               // 0x08     8
@@ -135,15 +135,15 @@ namespace Hellgate
         }
 
         // total size = 12 bytes (0x0C)
-        //[Serializable]
-        //[StructLayout(LayoutKind.Sequential, Pack = 1)]
-        //public class Vector3
-        //{
-        //    public float X;                     // 0x00     0
-        //    public float Y;                     // 0x04     4
-        //    public float Z;                     // 0x08     8
-        //    // end of struct                    // 0x0C     12
-        //}
+        [Serializable]
+        [StructLayout(LayoutKind.Sequential, Pack = 1)]
+        public struct UnknownStruct7Vector3
+        {
+            public float X;                     // 0x00     0
+            public float Y;                     // 0x04     4
+            public float Z;                     // 0x08     8
+            // end of struct                    // 0x0C     12
+        }
 
         // total size = 12 bytes (0x0C)
         [Serializable]
@@ -222,7 +222,7 @@ namespace Hellgate
             public Vector3[] Vertices;
             public UnknownStruct5[] UnknownStruct5Array;
             public UnknownStruct6[] UnknownStruct6Array;
-            public Vector3[] UnknownStruct7Array;
+            public UnknownStruct7Vector3[] UnknownStruct7Array;
             public UnknownStruct7[] UnknownStruct8Array;
             public UnknownStruct5[] UnknownStructFooter;
         }
@@ -334,7 +334,7 @@ namespace Hellgate
             int count174 = header.Count174;
             if (offset > 0 && count174 > 0)
             {
-                RoomDefinition.UnknownStruct7Array = _ReadVector3Array(fileBytes, ref offset, count174); // FileTools.ByteArrayToArray<Vector3>(fileBytes, ref offset, count174);
+                RoomDefinition.UnknownStruct7Array = _ReadUnknownStruct7Vector3Array(fileBytes, ref offset, count174); // FileTools.ByteArrayToArray<Vector3>(fileBytes, ref offset, count174);
             }
 
             // read UnknownStruct8 array (not seen read like this - but it works)
@@ -375,52 +375,90 @@ namespace Hellgate
             return arr;
         }
 
-        private static UnknownStruct2[] _ReadUnknownStruct2Array(byte[] fileBytes, ref int offset, int count) // because Marshal.PtrToStructure IS SO FUCKING SLOW
+        private static unsafe UnknownStruct2[] _ReadUnknownStruct2Array(byte[] fileBytes, ref int offset, int count) // because Marshal.PtrToStructure IS SO FUCKING SLOW
         {
-            UnknownStruct2[] arr = new UnknownStruct2[count];
-
-            for (int i = 0; i < count; i++)
+            fixed (byte* pBytes = &fileBytes[offset])
             {
-                arr[i] = new UnknownStruct2
+                UnknownStruct2[] arr = new UnknownStruct2[count];
+                for (int i = 0; i < count; i++)
                 {
-                    Struct1Index1 = StreamTools.ReadInt64(fileBytes, ref offset),
-                    Struct1Index2 = StreamTools.ReadInt64(fileBytes, ref offset),
-                    Struct1Index3 = StreamTools.ReadInt64(fileBytes, ref offset),
-                    UnknownFloat1 = StreamTools.ReadFloat(fileBytes, ref offset),
-                    UnknownFloat2 = StreamTools.ReadFloat(fileBytes, ref offset),
-                    UnknownFloat3 = StreamTools.ReadFloat(fileBytes, ref offset),
-                    UnknownFloat4 = StreamTools.ReadFloat(fileBytes, ref offset),
-                    UnknownFloat5 = StreamTools.ReadFloat(fileBytes, ref offset),
-                    UnknownFloat6 = StreamTools.ReadFloat(fileBytes, ref offset),
-                    UnknownFloat7 = StreamTools.ReadFloat(fileBytes, ref offset),
-                    UnknownFloat8 = StreamTools.ReadFloat(fileBytes, ref offset),
-                    UnknownFloat9 = StreamTools.ReadFloat(fileBytes, ref offset)
-                };
-                offset += 4; // _internalUnknown
+                    arr[i] = *(UnknownStruct2*) (pBytes + i*sizeof (UnknownStruct2));
+                }
+                return arr;
             }
 
-            return arr;
+            //UnknownStruct2[] arr = new UnknownStruct2[count];
+
+            //fixed (byte* pBytes = &fileBytes[offset])
+            //{
+            //    for (int i = 0; i < count; i++)
+            //    {
+            //        arr[i] = new UnknownStruct2
+            //        {
+            //            Struct1Index1 = *(((Int64*)pBytes)),
+            //            Struct1Index2 = *(((Int64*)pBytes + 8)),
+            //            Struct1Index3 = *(((Int64*)pBytes + 16)),
+            //            UnknownFloat1 = *(((float*)pBytes + 24)),
+            //            UnknownFloat2 = *(((float*)pBytes + 28)),
+            //            UnknownFloat3 = *(((float*)pBytes + 32)),
+            //            UnknownFloat4 = *(((float*)pBytes + 36)),
+            //            UnknownFloat5 = *(((float*)pBytes + 40)),
+            //            UnknownFloat6 = *(((float*)pBytes + 44)),
+            //            UnknownFloat7 = *(((float*)pBytes + 48)),
+            //            UnknownFloat8 = *(((float*)pBytes + 52)),
+            //            UnknownFloat9 = *(((float*)pBytes + 56))
+            //            // int _internalUnknown @ 60
+            //        };
+
+            //        offset += 64;
+            //    }
+            //}
+
+            //return arr;
         }
 
-        private static UnknownStruct3[] _ReadUnknownStruct3Array(byte[] fileBytes, ref int offset, int count) // because Marshal.PtrToStructure IS SO FUCKING SLOW
+        private static unsafe UnknownStruct3[] _ReadUnknownStruct3Array(byte[] fileBytes, ref int offset, int count) // because Marshal.PtrToStructure IS SO FUCKING SLOW
         {
-            UnknownStruct3[] arr = new UnknownStruct3[count];
-
-            for (int i = 0; i < count; i++)
+            fixed (byte* pBytes = &fileBytes[offset])
             {
-                arr[i] = new UnknownStruct3
+                UnknownStruct3[] arr = new UnknownStruct3[count];
+                for (int i = 0; i < count; i++)
                 {
-                    Offset1 = StreamTools.ReadInt64(fileBytes, ref offset),
-                    Offset2 = StreamTools.ReadInt64(fileBytes, ref offset),
-                    Offset3 = StreamTools.ReadInt64(fileBytes, ref offset),
-                    Int32Count1 = StreamTools.ReadInt32(fileBytes, ref offset),
-                    Int32Count2 = StreamTools.ReadInt32(fileBytes, ref offset),
-                    Int32Count3 = StreamTools.ReadInt32(fileBytes, ref offset)
-                };
-                offset += 4; // _internalUnknown
+                    arr[i] = *(UnknownStruct3*)(pBytes + i * sizeof(UnknownStruct3));
+                }
+                return arr;
             }
 
-            return arr;
+            //UnknownStruct3[] arr = new UnknownStruct3[count];
+
+            //for (int i = 0; i < count; i++)
+            //{
+            //    arr[i] = new UnknownStruct3
+            //    {
+            //        Offset1 = StreamTools.ReadInt64(fileBytes, ref offset),
+            //        Offset2 = StreamTools.ReadInt64(fileBytes, ref offset),
+            //        Offset3 = StreamTools.ReadInt64(fileBytes, ref offset),
+            //        Int32Count1 = StreamTools.ReadInt32(fileBytes, ref offset),
+            //        Int32Count2 = StreamTools.ReadInt32(fileBytes, ref offset),
+            //        Int32Count3 = StreamTools.ReadInt32(fileBytes, ref offset)
+            //    };
+            //    offset += 4; // _internalUnknown
+            //}
+
+            //return arr;
+        }
+
+        private static unsafe UnknownStruct7Vector3[] _ReadUnknownStruct7Vector3Array(byte[] fileBytes, ref int offset, int count)
+        {
+            fixed (byte* pBytes = &fileBytes[offset])
+            {
+                UnknownStruct7Vector3[] arr = new UnknownStruct7Vector3[count];
+                for (int i = 0; i < count; i++)
+                {
+                    arr[i] = *(UnknownStruct7Vector3*)(pBytes + i * sizeof(UnknownStruct7Vector3));
+                }
+                return arr;
+            }
         }
 
         private static Vector3[] _ReadVector3Array(byte[] fileBytes, ref int offset, int count) // because Marshal.PtrToStructure IS SO FUCKING SLOW

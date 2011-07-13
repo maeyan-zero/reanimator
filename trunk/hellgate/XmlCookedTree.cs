@@ -7,16 +7,27 @@ namespace Hellgate
 {
     public class XmlCookedTree
     {
-        public uint DefinitionNameHash { get { return Definition.RootElement.NameHash; } }
-        public XmlCookedElement Element { get; private set; }
+        private class Branch
+        {
+            public readonly XmlCookedElement Element;
+            public readonly XmlCookedTree Tree;
+
+            public Branch(XmlCookedElement element, XmlCookedTree tree=null)
+            {
+                Element = element;
+                Tree = tree;
+            }
+        }
+
+        private uint DefinitionHash { get { return Definition.Attributes.NameHash; } }
+        private readonly XmlCookedElement _element;
         public XmlCookedDefinition Definition { get; private set; }
 
-        //private readonly Dictionary<uint, XmlElement> _elements;
-        private readonly List<KeyValuePair<UInt32, XmlCookedElement>> _elements;
+        private readonly Dictionary<uint, Branch> _elements; 
         public int Count { get; private set; }
 
-        public XmlCookedTree Parent { get; private set; }
-        public XmlCookedTree Root { get { return (Parent == null) ? this : Parent.Root; } }
+        private XmlCookedTree Parent { get; set; }
+        private XmlCookedTree Root { get { return (Parent == null) ? this : Parent.Root; } }
 
         private readonly XmlCookedTree _twinTree;
         public XmlCookedTree TwinRoot { get { return (_twinTree == null) ? this : _twinTree.TwinRoot; } }
@@ -30,7 +41,7 @@ namespace Hellgate
         {
             Definition = xmlDefinition;
             Count = elementCount;
-            _elements = new List<KeyValuePair<UInt32, XmlCookedElement>>();
+            _elements = new Dictionary<uint, Branch>();
         }
 
         /// <summary>
@@ -43,10 +54,10 @@ namespace Hellgate
         public XmlCookedTree(XmlCookedDefinition xmlDefinition, XmlCookedElement xmlElement, XmlCookedTree parentTree, int elementCount)
         {
             Definition = xmlDefinition;
-            Element = xmlElement;
+            _element = xmlElement;
             Parent = parentTree;
             Count = elementCount;
-            _elements = new List<KeyValuePair<UInt32, XmlCookedElement>>();
+            _elements = new Dictionary<uint, Branch>();
         }
 
         /// <summary>
@@ -57,7 +68,7 @@ namespace Hellgate
         /// <param name="twinTree">The original XML tree.</param>
         private XmlCookedTree(XmlCookedElement xmlElement, XmlCookedTree parentTree, XmlCookedTree twinTree)
         {
-            Element = xmlElement;
+            _element = xmlElement;
             Parent = parentTree;
             Definition = twinTree.Definition;
             _twinTree = twinTree;
@@ -69,7 +80,7 @@ namespace Hellgate
         /// <param name="xmlElement">The XML Element to add to the tree.</param>
         public void AddElement(XmlCookedElement xmlElement)
         {
-            _elements.Add(new KeyValuePair<UInt32, XmlCookedElement>(xmlElement.NameHash, xmlElement));
+            _elements.Add(xmlElement.NameHash, new Branch(xmlElement));
         }
 
         /// <summary>
@@ -78,23 +89,21 @@ namespace Hellgate
         /// <param name="xmlCookedFileTree">The tree to the previous element.</param>
         public void AddTree(XmlCookedTree xmlCookedFileTree)
         {
-            //_elements.Remove(_elements.Last().Key);
-            //_elements.Add(xmlCookedFileTree.DefinitionNameHash, new XmlElement(xmlCookedFileTree));
-            _elements[_elements.Count - 1] = new KeyValuePair<UInt32, XmlCookedElement>(xmlCookedFileTree.DefinitionNameHash, new XmlCookedElement(xmlCookedFileTree));
+            _elements[_elements.Last().Key] = new Branch(xmlCookedFileTree._element, xmlCookedFileTree);
         }
 
         /// <summary>
         /// Replaces last added element with tree. Automatically links the XML Element to tree.
         /// </summary>
-        /// <param name="elementHash">The element name hash of the existing tree.</param>
-        public void AddExistingTree(UInt32 elementHash)
+        /// <param name="definitionHash">The element name hash of the existing tree.</param>
+        public void AddExistingTree(UInt32 definitionHash)
         {
-            XmlCookedTree tree = _GetExistingTree(Root, elementHash);
+            XmlCookedTree tree = _GetExistingTree(Root, definitionHash);
             Debug.Assert(tree != null, "AddExistingTree: tree not found!");
             tree = tree.TwinRoot;
             Debug.Assert(tree != null, "AddExistingTree: tree not found!");
 
-            XmlCookedElement xmlElement = this[_elements.Count - 1];
+            XmlCookedElement xmlElement = _elements.Last().Value.Element;
             XmlCookedTree newTree = new XmlCookedTree(xmlElement, this, tree);
             AddTree(newTree);
         }
@@ -110,127 +119,33 @@ namespace Hellgate
         }
 
         /// <summary>
-        /// todo: this function is gross and executes a lot of unnecessary - optimize me
+        /// Get an already defined definition.
         /// </summary>
         /// <param name="xmlTree"></param>
         /// <param name="elementHash"></param>
         /// <returns></returns>
-        private XmlCookedTree _GetExistingTree(XmlCookedTree xmlTree, UInt32 elementHash)
+        private static XmlCookedTree _GetExistingTree(XmlCookedTree xmlTree, UInt32 elementHash)
         {
-            // check current branch
-            foreach (XmlCookedElement xmlCookedElement in _elements.Select(keyValuePair => keyValuePair.Value))
+            foreach (Branch branch in xmlTree._elements.Select(keyValuePair => keyValuePair.Value))
             {
-                if (xmlCookedElement.XmlTree == null) continue;
-                if (xmlCookedElement.XmlTree.DefinitionNameHash == elementHash) return xmlCookedElement.XmlTree;
-            }
-            //XmlCookedTree existingTree = xmlTree.GetTree(elementHash);
-            //if (existingTree != null) return existingTree;
+                if (branch.Tree == null) continue;
+                if (branch.Tree.DefinitionHash == elementHash) return branch.Tree;
 
-            // check entire tree set
-            foreach (XmlCookedElement xmlCookedElement in xmlTree._elements.Select(keyValuePair => keyValuePair.Value))
-            {
-                if (xmlCookedElement.XmlTree == null) continue;
-                if (xmlCookedElement.XmlTree.DefinitionNameHash == elementHash) return xmlCookedElement.XmlTree;
-
-                XmlCookedTree existingTree = _GetExistingTree(xmlCookedElement.XmlTree, elementHash);
+                XmlCookedTree existingTree = _GetExistingTree(branch.Tree, elementHash);
                 if (existingTree != null) return existingTree;
             }
-
-            //foreach (XmlElement xmlCookedElement in xmlTree._elements.Values)
-            //{
-            //    if (xmlCookedElement.XmlTree == null) continue;
-            //    if (xmlCookedElement.XmlTree.DefinitionNameHash == elementHash) return xmlCookedElement.XmlTree;
-
-            //    existingTree = _GetExistingTree(xmlCookedElement.XmlTree, elementHash);
-            //    if (existingTree != null) return existingTree;
-            //}
 
             return null;
         }
 
         public bool ContainsElement(uint elementHash)
         {
-            //if (_elements.ContainsKey(elementHash)) return true;
-
-            //foreach (XmlElement xmlElement in _elements.Values)
-            //{
-            //    if (xmlElement.XmlTree == null) continue;
-            //    if (xmlElement.XmlTree.Element.NameHash == elementHash) return true;
-            //}
-
-            //return false;
-
-            foreach (KeyValuePair<UInt32, XmlCookedElement> keyValuePair in _elements)
-            {
-                if (keyValuePair.Key == elementHash) return true;
-                if (keyValuePair.Value.XmlTree == null) continue;
-                //if (keyValuePair.Value.XmlTree.DefinitionNameHash == elementHash) return true;
-                if (keyValuePair.Value.XmlTree.Element.NameHash == elementHash) return true;
-
-                //if (keyValuePair.Value.NameHash == elementHash) return true;
-                //if (keyValuePair.Value.)
-
-                //XmlCookedAttribute xmlCookElement = keyValuePair.Value as XmlCookedAttribute;
-                //if (xmlCookElement == null)
-                //{
-                //    XmlCookedFileTree xmlCookedFileTree = keyValuePair.Value as XmlCookedFileTree;
-                //    if (xmlCookedFileTree != null && xmlCookedFileTree.CookElement.NameHash == elementHash) return true;
-                //}
-                //else
-                //{
-                //    if (xmlCookElement.NameHash == elementHash) return true;
-                //}
-            }
-
-            return false;
-        }
-
-        public XmlCookedTree GetTree(UInt32 elementHash)
-        {
-            //XmlElement xmlElement;
-            //return (_elements.TryGetValue(elementHash, out xmlElement)) ? xmlElement.XmlTree : null;
-
-            foreach (XmlCookedElement xmlCookedElement in _elements.Select(keyValuePair => keyValuePair.Value))
-            {
-                if (xmlCookedElement.XmlTree == null) continue;
-                if (xmlCookedElement.XmlTree.DefinitionNameHash == elementHash) return xmlCookedElement.XmlTree;
-            }
-
-            //foreach (XmlCookedTree xmlChildTree in _elements.Select(keyValuePair => keyValuePair.Value).OfType<XmlCookedTree>())
-            //{
-            //    if (xmlChildTree.DefinitionNameHash == elementHash) return xmlChildTree;
-            //}
-
-            return null;
-        }
-
-        public XmlCookedElement this[int i]
-        {
-            get
-            {
-                //XmlElement xmlElement = _elements.Values.ElementAt(i);
-                //return (xmlElement.XmlTree == null) ? xmlElement : xmlElement.XmlTree.Element;
-
-                XmlCookedElement xmlElement = _elements[i].Value;
-                return (xmlElement.XmlTree == null) ? xmlElement : xmlElement.XmlTree.Element;
-
-                //KeyValuePair<UInt32, Object> keyValuePair = _elements[i];
-
-                //XmlElement xmlElement = keyValuePair.Value as XmlElement;
-                //if (xmlElement != null) return xmlElement;
-
-                //XmlCookedTree xmlCookedFileTree = keyValuePair.Value as XmlCookedTree;
-                //return xmlCookedFileTree == null ? null : xmlCookedFileTree.Element;
-            }
+            return _elements.ContainsKey(elementHash);
         }
 
         public XmlCookedTree GetTree(int i)
         {
-            //XmlElement xmlElement = _elements.Values.ElementAt(i);
-            //return xmlElement.XmlTree;
-
-            return _elements[i].Value.XmlTree;
+            return _elements.Values.ElementAt(i).Tree;
         }
-
     }
 }
