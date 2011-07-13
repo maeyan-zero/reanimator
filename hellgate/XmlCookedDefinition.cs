@@ -85,18 +85,18 @@ namespace Hellgate
 
         public readonly Dictionary<uint, XmlCookedElement> Elements;
 
-        public readonly XmlCookedAttribute RootElement;
+        public readonly XmlCookedAttribute Attributes;
         public readonly Type XmlObjectType;
         public readonly int SinglePlayerElementCount;
         public readonly int TestCentreElementCount;
         public readonly int ResurrectionElementCount;
 
         public int Count { get { return Elements.Count; } }
-        public UInt32 RootHash { get { return RootElement.NameHash; } }
+        public UInt32 Hash { get { return Attributes.NameHash; } }
 
         public XmlCookedDefinition(XmlCookedAttribute rootElement, Dictionary<uint, XmlCookedElement> xmlElements, Type xmlObjectType)
         {
-            RootElement = rootElement;
+            Attributes = rootElement;
             Elements = xmlElements;
             XmlObjectType = xmlObjectType;
 
@@ -123,7 +123,7 @@ namespace Hellgate
 
         public override string ToString()
         {
-            return RootElement.Name;
+            return Attributes.Name;
         }
     }
 }

@@ -4,7 +4,7 @@ using Revival.Common;
 
 namespace Hellgate
 {
-    static public class Crypt
+    public static class Crypt
     {
         ////// IDX String Crypt Stuffs //////
         private static readonly SHA1 SHA1Crypto = new SHA1CryptoServiceProvider();
@@ -44,7 +44,7 @@ namespace Hellgate
         public static UInt32 GetStringHash(byte[] bytes, UInt32 baseHash)
         {
             if (bytes == null || bytes.Length == 0) return 0;
-            if (_needStringHash) GenerateStringHash();
+            if (_needStringHash) _GenerateStringHash();
 
             UInt32 stringHash = baseHash;
             for (int i = 0; i < bytes.Length; i++)
@@ -61,7 +61,7 @@ namespace Hellgate
         public static UInt32 GetStringHash(String str)
         {
             if (String.IsNullOrEmpty(str)) return 0;
-            if (_needStringHash) GenerateStringHash();
+            if (_needStringHash) _GenerateStringHash();
 
             #region hash asm
             /* String Hashing Algorithm - hellgate_sp_dx9_x64.exe (1.18074.70.4256)
@@ -92,7 +92,7 @@ namespace Hellgate
             return stringHash;
         }
 
-        private static void GenerateStringHash()
+        private static void _GenerateStringHash()
         {
             #region hash key asm
             /* String Hash Key Generation - hellgate_sp_dx9_x64.exe (1.18074.70.4256)
@@ -167,49 +167,49 @@ namespace Hellgate
             {
                 Int32 hashValue = i << 0x18;
 
-                Int32 hashSalt1 = hashValue*2;
+                Int32 hashSalt1 = hashValue * 2;
                 Int32 hashSalt2 = 0;
                 if ((UInt32)hashValue >= StringKey1) hashSalt2--;
 
                 hashSalt2 &= StringKey2;
                 hashSalt2 ^= hashSalt1;
-                hashSalt1 = hashSalt2*2;
+                hashSalt1 = hashSalt2 * 2;
                 hashValue = 0;
                 if ((UInt32)hashSalt2 >= StringKey1) hashValue--;
 
                 hashValue &= StringKey2;
                 hashValue ^= hashSalt1;
-                hashSalt1 = hashValue*2;
+                hashSalt1 = hashValue * 2;
                 hashSalt2 = 0;
                 if ((UInt32)hashValue >= StringKey1) hashSalt2--;
 
                 hashSalt2 &= StringKey2;
                 hashSalt2 ^= hashSalt1;
-                hashSalt1 = hashSalt2*2;
+                hashSalt1 = hashSalt2 * 2;
                 hashValue = 0;
                 if ((UInt32)hashSalt2 >= StringKey1) hashValue--;
 
                 hashValue &= StringKey2;
                 hashValue ^= hashSalt1;
-                hashSalt1 = hashValue*2;
+                hashSalt1 = hashValue * 2;
                 hashSalt2 = 0;
                 if ((UInt32)hashValue >= StringKey1) hashSalt2--;
 
                 hashSalt2 &= StringKey2;
                 hashSalt2 ^= hashSalt1;
-                hashSalt1 = hashSalt2*2;
+                hashSalt1 = hashSalt2 * 2;
                 hashValue = 0;
                 if ((UInt32)hashSalt2 >= StringKey1) hashValue--;
 
                 hashValue &= StringKey2;
                 hashValue ^= hashSalt1;
-                hashSalt1 = hashValue*2;
+                hashSalt1 = hashValue * 2;
                 hashSalt2 = 0;
                 if ((UInt32)hashValue >= StringKey1) hashSalt2--;
 
                 hashSalt2 &= StringKey2;
                 hashSalt2 ^= hashSalt1;
-                hashSalt1 = hashSalt2*2;
+                hashSalt1 = hashSalt2 * 2;
                 hashValue = 0;
                 if ((UInt32)hashSalt2 >= StringKey1) hashValue--;
 
@@ -223,12 +223,13 @@ namespace Hellgate
 
 
         ////// IDX Crypt Stuffs //////
-        class CryptState
+        private class CryptState
         {
             public const int Key1 = 0x10DCD;
             public const int Key2 = 0xF4559D5;
             public const int Key3 = 666;
             public const int BlockSize = 32;
+            public const int TableSize = BlockSize * sizeof(Int32);
 
             public Byte[] Data { get; private set; }
             public Byte[] Table { get; private set; }
@@ -245,7 +246,7 @@ namespace Hellgate
             }
         }
 
-        static byte GetCryptByte(CryptState cryptState)
+        private static byte _GetCryptByte(CryptState cryptState)
         {
             UInt32 value = cryptState.Offset / (CryptState.BlockSize * sizeof(Int32)) * (CryptState.BlockSize * sizeof(Int32));
 
@@ -264,16 +265,44 @@ namespace Hellgate
             return cryptState.Table[cryptState.Offset - cryptState.BlockIndex];
         }
 
-        public static void Decrypt(byte[] indexBuffer)
+        // much much faster decrypt
+        public static unsafe void Decrypt(byte[] indexBuffer)
         {
-            CryptState cryptState = new CryptState(indexBuffer);
-
-            while (cryptState.Offset < cryptState.Size)
+            int prevValue = -1;
+            int length = indexBuffer.Length;
+            byte[] cryptTable = new byte[CryptState.TableSize];
+            fixed (byte* pTable = cryptTable)
             {
-                cryptState.Data[cryptState.Offset] -= GetCryptByte(cryptState);
-                cryptState.Offset++;
+                for (int offset = 0; offset < length; offset++)
+                {
+                    int value = offset / CryptState.TableSize * CryptState.TableSize;
+
+                    if (prevValue != value)
+                    {
+                        prevValue = value;
+                        value += CryptState.Key3;
+                        for (int i = 0; i < CryptState.BlockSize; i++)
+                        {
+                            value = (value * CryptState.Key1) + CryptState.Key2;
+                            *(Int32*)(pTable + i * sizeof(Int32)) = value;
+                        }
+                    }
+
+                    indexBuffer[offset] -= pTable[offset - prevValue];
+                }
             }
         }
+
+        //public static void Decrypt(byte[] indexBuffer)
+        //{
+        //    CryptState cryptState = new CryptState(indexBuffer);
+
+        //    while (cryptState.Offset < cryptState.Size)
+        //    {
+        //        cryptState.Data[cryptState.Offset] -= _GetCryptByte(cryptState);
+        //        cryptState.Offset++;
+        //    }
+        //}
 
         public static void Encrypt(byte[] indexBuffer)
         {
@@ -281,7 +310,7 @@ namespace Hellgate
 
             while (cryptState.Offset < cryptState.Size)
             {
-                cryptState.Data[cryptState.Offset] += GetCryptByte(cryptState);
+                cryptState.Data[cryptState.Offset] += _GetCryptByte(cryptState);
                 cryptState.Offset++;
             }
         }
