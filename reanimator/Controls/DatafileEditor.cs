@@ -9,6 +9,8 @@ using System.Windows.Forms;
 using System.Collections;
 using System.IO;
 using Hellgate;
+using Hellgate.Excel;
+using Hellgate.Excel.TestCentre;
 using Revival.Common;
 using Reanimator.Forms;
 using OutputAttribute = Hellgate.ExcelFile.OutputAttribute;
@@ -48,8 +50,14 @@ namespace Reanimator.Controls
         /// <param name="var"></param>
         public void InitThreadedComponents(ProgressForm progressForm, Object var)
         {
-            _CreateDataTable(); // intensive call
+            _CreateDataTable();
             _CreateTableView();
+
+            // don't create row view for UnitData type until specifically asked to due to large number of columns
+            //if (_dataFile.StringId == "ITEMS" || _dataFile.StringId == "MONSTERS" ||
+            //    _dataFile.StringId == "PLAYERS" || _dataFile.StringId == "OBJECTS" ||
+            //    _dataFile.StringId == "MISSILES") return;
+
             _CreateRowView();
         }
 
@@ -75,6 +83,10 @@ namespace Reanimator.Controls
             _tableData_DataGridView.AlternatingRowsDefaultCellStyle.BackColor = Color.AliceBlue;
             _tableData_DataGridView.DataSource = _fileManager.XlsDataSet;
             _tableData_DataGridView.DataMember = null;
+
+            //_tableData_DataGridView.DataSourceChanged += new EventHandler(_tableData_DataGridView_DataSourceChanged);
+            //_tableData_DataGridView.DataMemberChanged += new EventHandler(_tableData_DataGridView_DataMemberChanged);
+            //_tableData_DataGridView.DataBindingComplete += new DataGridViewBindingCompleteEventHandler(_tableData_DataGridView_DataBindingComplete);
 
             // need to manually populate columns due to fillweight = 100 by default (overflow crap; 655 * 100 > max int)
             if (_dataTable.Columns.Count > 655)
@@ -116,6 +128,21 @@ namespace Reanimator.Controls
 
             _tableData_DataGridView.ResumeLayout();
         }
+
+        //private void _tableData_DataGridView_DataBindingComplete(object sender, DataGridViewBindingCompleteEventArgs e)
+        //{
+        //    int bp = 0;
+        //}
+
+        //private void _tableData_DataGridView_DataMemberChanged(object sender, EventArgs e)
+        //{
+        //    int bp = 0;
+        //}
+
+        //private void _tableData_DataGridView_DataSourceChanged(object sender, EventArgs e)
+        //{
+        //    int bp = 0;
+        //}
 
         /// <summary>
         /// Defines the row view section of the form.
@@ -555,7 +582,8 @@ namespace Reanimator.Controls
 
             ComboBox comboBox = (ComboBox)sender;
             DataGridViewRow currentRow = _tableData_DataGridView.CurrentRow;
-            Debug.Assert(currentRow != null);
+            if (currentRow == null) return;
+            //Debug.Assert(currentRow != null);
 
             DataRow dr = _dataTable.Rows[currentRow.Index];
             dr[comboBox.Name] = comboBox.SelectedIndex;
