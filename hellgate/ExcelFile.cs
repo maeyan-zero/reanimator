@@ -904,7 +904,7 @@ namespace Hellgate
                                 Debug.Assert(arraySize > 0);
                             }
 
-                            string strValue = value.ToString();
+                            String strValue = value.ToString();
 
                             String[] indexStrs = strValue.Split(new[] { ',' });
                             Int32[] rowIndexValues = new int[arraySize];
@@ -917,59 +917,66 @@ namespace Hellgate
                                 maxElements = arraySize;
                             }
 
+                            int[] rowIndices = new int[maxElements];
                             for (int i = 0; i < maxElements; i++)
                             {
-                                strValue = indexStrs[i];
-                                if (strValue == "-1") continue;
-
-
-                                String tableStringId = attribute.TableStringId;
-                                bool hasCodeColumn = fileManager.DataTableHasColumn(tableStringId, "code");
-                                if (strValue.Length == 0 && hasCodeColumn) continue;
-
-
-                                //LEVEL references multiple blank TREASURE row index values - all appear to be empty rows though, so meh...
-                                //Debug.Assert(!String.IsNullOrEmpty(value));
-
-                                int isNegative = 1;
-                                if (strValue.Length > 0 && strValue[0] == '-')
-                                {
-                                    isNegative = -1;
-                                    strValue = strValue.Substring(1, strValue.Length - 1);
-                                }
-
-                                int rowIndex = -1;
-                                DataFile relatedDataFile = null;
-                                ExcelFile relatedExcel = null;
-                                if (fileManager.DataFiles.TryGetValue(tableStringId, out relatedDataFile))
-                                {
-                                    relatedExcel = relatedDataFile as ExcelFile;
-                                    rowIndex = relatedExcel._GetRowIndexFromValue(strValue, hasCodeColumn ? "code" : null);
-                                }
-
-                                if (relatedExcel == null)
-                                {
-                                    if (hasCodeColumn && strValue.Length <= 4)
-                                    {
-                                        int code = StringToCode(strValue);
-                                        rowIndex = fileManager.GetExcelRowIndexFromStringId(tableStringId, code, "code");
-                                    }
-                                    else
-                                    {
-                                        rowIndex = fileManager.GetExcelRowIndex(tableStringId, strValue);
-                                    }
-                                }
-
-                                rowIndexValues[i] = rowIndex * isNegative;
+                                rowIndices[i] = int.Parse(indexStrs[i]);
                             }
+
+                            // this is CSV code - the DataTables already have row index
+                            //for (int i = 0; i < maxElements; i++)
+                            //{
+                            //    strValue = indexStrs[i];
+                            //    if (strValue == "-1") continue;
+
+
+                            //    String tableStringId = attribute.TableStringId;
+                            //    bool hasCodeColumn = fileManager.DataTableHasColumn(tableStringId, "code");
+                            //    if (strValue.Length == 0 && hasCodeColumn) continue;
+
+
+                            //    //LEVEL references multiple blank TREASURE row index values - all appear to be empty rows though, so meh...
+                            //    //Debug.Assert(!String.IsNullOrEmpty(value));
+
+                            //    int isNegative = 1;
+                            //    if (strValue.Length > 0 && strValue[0] == '-')
+                            //    {
+                            //        isNegative = -1;
+                            //        strValue = strValue.Substring(1, strValue.Length - 1);
+                            //    }
+
+                            //    int rowIndex = -1;
+                            //    DataFile relatedDataFile = null;
+                            //    ExcelFile relatedExcel = null;
+                            //    if (fileManager.DataFiles.TryGetValue(tableStringId, out relatedDataFile))
+                            //    {
+                            //        relatedExcel = relatedDataFile as ExcelFile;
+                            //        rowIndex = relatedExcel._GetRowIndexFromValue(strValue, hasCodeColumn ? "code" : null);
+                            //    }
+
+                            //    if (relatedExcel == null)
+                            //    {
+                            //        if (hasCodeColumn && strValue.Length <= 4)
+                            //        {
+                            //            int code = StringToCode(strValue);
+                            //            rowIndex = fileManager.GetExcelRowIndexFromStringId(tableStringId, code, "code");
+                            //        }
+                            //        else
+                            //        {
+                            //            rowIndex = fileManager.GetExcelRowIndex(tableStringId, strValue);
+                            //        }
+                            //    }
+
+                            //    rowIndexValues[i] = rowIndex * isNegative;
+                            //}
 
                             if (isArray)
                             {
-                                objectDelegator[fieldInfo.Name, rowInstance] = rowIndexValues;
+                                objectDelegator[fieldInfo.Name, rowInstance] = rowIndices;
                             }
                             else
                             {
-                                objectDelegator[fieldInfo.Name, rowInstance] = rowIndexValues[0];
+                                objectDelegator[fieldInfo.Name, rowInstance] = rowIndices[0];
                             }
 
                             col++; // Skip lookup
