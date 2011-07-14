@@ -973,13 +973,14 @@ namespace Hellgate
                             if (isArray)
                             {
                                 objectDelegator[fieldInfo.Name, rowInstance] = rowIndices;
+                                // note: isArray type doesn't have a relation column yet
                             }
                             else
                             {
                                 objectDelegator[fieldInfo.Name, rowInstance] = rowIndices[0];
+                                col++; // skip relation column
                             }
 
-                            col++; // Skip lookup
                             continue;
                         }
 
@@ -1072,6 +1073,23 @@ namespace Hellgate
 
                     try
                     {
+
+                        if (fieldInfo.FieldType != value.GetType()) // i.e. if the type hasn't been converted yet (attributes means it wasn't converted above)
+                        {
+                            if (fieldInfo.FieldType.BaseType == typeof(Enum))
+                            {
+                                value = Enum.Parse(fieldInfo.FieldType, value.ToString());
+                            }
+                            else if (fieldInfo.FieldType == typeof(Int32[]))
+                            {
+                                value = ((String)value).ToArray<Int32>(',');
+                            }
+                            else
+                            {
+                                throw new NotImplementedException("if (fieldInfo.FieldType != value.GetType()) :: Type = " + fieldInfo.FieldType);
+                            }
+                        }
+
                         fieldInfo.SetValue(rowInstance, value);
                     }
                     catch (Exception e)
@@ -1512,10 +1530,10 @@ namespace Hellgate
                     {
                         rowStr[col] = ((float)outValue).ToString("r");
                     }
-                    else if (fieldDelegate.FieldType.BaseType == typeof(Enum))
-                    {
-                        rowStr[col] = ((UInt32)outValue).ToString();
-                    }
+                    //else if (fieldDelegate.FieldType.BaseType == typeof(Enum)) // might as well export enums as their string representations
+                    //{
+                    //    rowStr[col] = ((UInt32)outValue).ToString();
+                    //}
                     else
                     {
                         rowStr[col] = outValue.ToString();

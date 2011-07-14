@@ -118,7 +118,7 @@ namespace Revival.Common
             try
             {
                 // Open file for reading
-                FileStream fileStream = new FileStream("packets\\"+fileName, FileMode.Open, FileAccess.Read);
+                FileStream fileStream = new FileStream("packets\\" + fileName, FileMode.Open, FileAccess.Read);
 
                 // attach filestream to stream reader
                 StreamReader streamReader = new StreamReader(fileStream, Encoding.UTF8);
@@ -610,8 +610,8 @@ namespace Revival.Common
 
         public static T[] StringToArray<T>(String array, String delimiter)
         {
-            Type type = typeof (T);
-            String[] elements = array.Split(new[] {delimiter}, StringSplitOptions.None);
+            Type type = typeof(T);
+            String[] elements = array.Split(new[] { delimiter }, StringSplitOptions.None);
             T[] returnArray = new T[elements.Length];
 
             for (int i = 0; i < elements.Length; i++)
@@ -874,7 +874,7 @@ namespace Revival.Common
             }
         }
 
-        public static string[][] CSVToStringArray(byte[] source, int columns, byte delimiter, bool ignoreFirstRow=false)
+        public static string[][] CSVToStringArray(byte[] source, int columns, byte delimiter, bool ignoreFirstRow = false)
         {
             if (source == null) return null;
             if (source.Length == 0) return null;
@@ -1038,7 +1038,7 @@ namespace Revival.Common
             [FieldOffset(0)]
             public Int32[] Int64s;
             [FieldOffset(0)]
-            public short[] Shorts;            
+            public short[] Shorts;
         }
 
         public static byte[] ToByteArray(this float[] floatArray)
@@ -1090,7 +1090,7 @@ namespace Revival.Common
             for (int i = 0; i < arrayCount; i++)
             {
                 byte[] bytes = StructureToByteArray(objectArray[i]);
-                Buffer.BlockCopy(bytes, 0, byteArray, i*length, length);
+                Buffer.BlockCopy(bytes, 0, byteArray, i * length, length);
             }
 
             return byteArray;
@@ -1124,6 +1124,26 @@ namespace Revival.Common
             {
                 arr[i] = val;
             }
+        }
+
+        public static T[] ToArray<T>(this String source, char separator)
+        {
+            return source.ToArray<T>(new[] { separator });
+        }
+
+        public static T[] ToArray<T>(this String source, char[] separator)
+        {
+            String[] elements = source.Split(separator, StringSplitOptions.None);
+            int elementCount = elements.Length;
+            Type returnType = typeof(T);
+
+            T[] retArr = new T[elementCount];
+            for (int i = 0; i < elementCount; i++)
+            {
+                retArr[i] = (T)Convert.ChangeType(elements[i], returnType);
+            }
+
+            return retArr;
         }
     }
 }
