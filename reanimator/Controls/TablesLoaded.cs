@@ -24,7 +24,7 @@ namespace Reanimator.Controls
             _excelTableForm = excelTableForm;
 
             if (_fileManager == null || _fileManager.DataFiles.Count == 0) return;
-            _loadedTables_ListBox.DataSource = new BindingSource(_fileManager.DataFiles, null);
+            _loadedTables_ListBox.DataSource = new BindingSource { DataSource = _fileManager.DataFiles }; // new BindingSource(_fileManager.DataFiles, null); // fix for .net know issue
             _loadedTables_ListBox.DoubleClick += _loadedTables_ListBox_MouseDoubleClick;
             _loadedTables_ListBox.Format += _loadedTables_ListBox_Format;
         }

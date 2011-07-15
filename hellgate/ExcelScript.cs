@@ -127,6 +127,11 @@ namespace Hellgate
                 _debugOutput = String.Format(DebugFormat, _debugRow, _debugCol, _debugColName, _debugStringId, _debugScriptByteString);
             }
 
+            //if (script == "SetStat673('stamina_feed', (int)(double)GetStat666('strength_bonus'));")
+            //{
+            //    int bp = 0;
+            //}
+
             return ScriptCode = _Compile('\0', null);
         }
 
@@ -182,7 +187,7 @@ namespace Hellgate
                         _offset++;
                         break;
 
-                    case ')':       // clossing paranthesis
+                    case ')':       // closing paranthesis
                         if (_level > 0 && withinCondition || overloadedFunction)
                         {
                             endOfCondition = true;
@@ -474,7 +479,7 @@ namespace Hellgate
                         }
 
                         // is it an if-statement?
-                        if (_script[_offset] == 'i')
+                        if (_script[_offset] == 'i' && _script[_offset + 1] == 'f')
                         {
                             if (_offset + 3 >= _script.Length) throw new Exceptions.ScriptUnexpectedScriptTerminationException();
                             if (_script[_offset + 1] == 'f' && (_script[_offset + 2] == ' ' || _script[_offset + 2] == '('))
@@ -656,6 +661,32 @@ namespace Hellgate
 
                                 _offset++; // closing parenthesis
                             }
+                        }
+                        else if (_script[_offset] == ')') // we have a type cast
+                        {
+                            // casts appear at the end of the arg segment
+                            // i.e. (int)(double)GetStat666('strength_bonus') -> 666,176160768,648,598 NOT 598,648,666,176160768
+                            // so while I bit messy, it's easier to just loop back and call ourself again and treat as function call essentially
+                            ScriptOpCodes typeCast;
+                            switch (nameStr)
+                            {
+                                case "int":
+                                    typeCast = ScriptOpCodes.TypeCastDoubleInt; // 598
+                                    break;
+
+                                case "double":
+                                    typeCast = ScriptOpCodes.TypeCastIntDouble; // 648
+                                    break;
+
+                                default:
+                                    throw new NotImplementedException("Type cast not implemented: " + nameStr);
+                            }
+
+                            _offset++;
+                            Int32[] scriptBytes = _Compile(terminator, null);
+                            _offset--; // because a type cast begines with an opening paranthesis, it means we'll be returning at a case which *also* increases our offset [ case '(':       // opening paranthesis]
+                            scriptByteCode.AddRange(scriptBytes);
+                            scriptByteCode.Add((Int32)typeCast);
                         }
                         else // we have a variable
                         {

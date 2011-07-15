@@ -31,8 +31,8 @@ namespace Hellgate
         {
             String tableName = excelFile.StringId;
             DataTable dataTable = XlsDataSet.Tables[tableName];
-            if (dataTable != null && force == false) return dataTable;
-            if (dataTable != null && force == true)
+            if (dataTable != null && !force) return dataTable;
+            if (dataTable != null)
             {
                 XlsDataSet.Relations.Clear();
                 XlsDataSet.Tables.Remove(tableName);
@@ -40,7 +40,7 @@ namespace Hellgate
             dataTable = XlsDataSet.Tables.Add(tableName);
             dataTable.TableName = tableName;
 
-            Type dataType = excelFile.Rows[0].GetType();
+            Type dataType = excelFile.Attributes.RowType;
             List<OutputAttribute> outputAttributes = new List<OutputAttribute>();
 
             #region Generate Columns
@@ -64,7 +64,6 @@ namespace Hellgate
                     dataTable.Columns.Add(fieldInfo.Name, typeof(String));
                     continue;
                 }
-
 
                 Type fieldType = fieldInfo.FieldType;
                 bool isArray = false;
@@ -231,6 +230,11 @@ namespace Hellgate
                             {
                                 script = excelScript.Decompile(excelFile.ScriptBuffer, valueInt);
                             }
+
+                            //if (script == "SetStat673('stamina_feed', (int)(double)GetStat666('strength_bonus'));")
+                            //{
+                            //    int bp = 0;
+                            //}
                         }
                         catch (Exception)
                         {
@@ -275,7 +279,7 @@ namespace Hellgate
             #endregion
 
             // Generate Relationships as required
-            if (doRelations) GenerateRelations(excelFile);
+            if (doRelations) _GenerateRelations(excelFile);
 
             return dataTable;
         }
@@ -324,7 +328,7 @@ namespace Hellgate
             return dataTable;
         }
 
-        private DataTable LoadRelatedTable(String stringId)
+        private DataTable _LoadRelatedTable(String stringId)
         {
             if ((String.IsNullOrEmpty(stringId))) return null;
 
@@ -335,7 +339,7 @@ namespace Hellgate
             return (dataFile != null) ? LoadTable(dataFile, true) : null;
         }
 
-        private void GenerateRelations(ExcelFile excelFile)
+        private void _GenerateRelations(ExcelFile excelFile)
         {
             if ((excelFile == null)) return;
 
@@ -369,8 +373,7 @@ namespace Hellgate
                     continue;
                 }
 
-                OutputAttribute excelOutputAttribute =
-                    ExcelFile.GetExcelAttribute(fieldInfo);
+                OutputAttribute excelOutputAttribute = ExcelFile.GetExcelAttribute(fieldInfo);
 
                 if ((excelOutputAttribute == null))
                 {
@@ -406,7 +409,7 @@ namespace Hellgate
                 {
                     String tableStringId = excelOutputAttribute.TableStringId;
 
-                    DataTable dt = XlsDataSet.Tables[tableStringId] ?? LoadRelatedTable(tableStringId);
+                    DataTable dt = XlsDataSet.Tables[tableStringId] ?? _LoadRelatedTable(tableStringId);
 
                     if (dt != null)
                     {
@@ -419,8 +422,15 @@ namespace Hellgate
                             continue;
                         }
 
-                        String relationName = excelFile.StringId + dcChild.ColumnName + ExcelFile.ColumnTypeKeys.IsTableIndex;
+                        //String relationNameOld = excelFile.StringId + dcChild.ColumnName + ExcelFile.ColumnTypeKeys.IsTableIndex;
+                        String relationName = String.Format("{0}_{1}_{2}", excelFile.StringId, dcChild.ColumnName, ExcelFile.ColumnTypeKeys.IsTableIndex);
                         DataRelation relation = new DataRelation(relationName, dcParent, dcChild, false);
+
+                        //if (relationName == "SKILLS_uiThrobsOnState_IsTableIndex")
+                        //{
+                        //    int bp = 0;
+                        //}
+
                         XlsDataSet.Relations.Add(relation);
 
                         DataColumn dcString = mainDataTable.Columns.Add(dcChild.ColumnName + "_string", typeof(String), String.Format("Parent({0}).{1}", relationName, relatedColumn));
@@ -443,7 +453,7 @@ namespace Hellgate
         public DataTable GetDataTable(String stringId)
         {
             if ((String.IsNullOrEmpty(stringId))) return null;
-            return XlsDataSet.Tables[stringId] ?? LoadRelatedTable(stringId);
+            return XlsDataSet.Tables[stringId] ?? _LoadRelatedTable(stringId);
         }
     }
 }

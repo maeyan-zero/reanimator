@@ -1026,8 +1026,8 @@ namespace Hellgate
             And = 516,                      // 0x204    .rdata:000000014060AB50     aLandjmpOffse_6 db 'landjmp  offset = %u  type = int'
             Or = 527,                       // 0x20F    .rdata:000000014060AF00     aLorjmpOffset_6 db 'lorjmp  offset = %u  type = int'
             EndCond = 538,                  // 0x21A    .rdata:000000014060B198     aLogendTypeInt  db 'logend  type = int'
-            TypeCastDoubleInt = 598,        // 0x256
-            TypeCastIntDouble = 648,        // 0x288
+            TypeCastDoubleInt = 598,        // 0x256        IF ADDING TO THESE OP CODE TYPES (TypeCastXXX) you must inform Alex as the Compile function assumes only these two present
+            TypeCastIntDouble = 648,        // 0x288        More detection code is required to differentiate a TypeCastDoubleInt from a TypeCastFloatInt etc
             GetStat666 = 666,               // 0x29A    these are used for different arg/return types (int/uint/float/double/etc)
             GetStat667 = 667,               // 0x29B    not sure which are which yet - do it later
             SetStat669 = 669,               // 0x29D
