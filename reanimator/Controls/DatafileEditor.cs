@@ -78,56 +78,63 @@ namespace Reanimator.Controls
         {
             _tableData_DataGridView.SuspendLayout();
 
-            _tableData_DataGridView.DoubleBuffered(true);
-            _tableData_DataGridView.EnableHeadersVisualStyles = false;
-            _tableData_DataGridView.AlternatingRowsDefaultCellStyle.BackColor = Color.AliceBlue;
+            _tableData_DataGridView.DoubleBuffered(true); // performance enhancement
+            _tableData_DataGridView.EnableHeadersVisualStyles = false; // performance enhancement
+            _tableData_DataGridView.AlternatingRowsDefaultCellStyle.BackColor = Color.AliceBlue; // make it look pretty
+            _tableData_DataGridView.AutoGenerateColumns = false; // it's quicker to generate them manually
             _tableData_DataGridView.DataSource = _fileManager.XlsDataSet;
             _tableData_DataGridView.DataMember = null;
 
+            // just some debug stuff - left for easy access the next time
             //_tableData_DataGridView.DataSourceChanged += new EventHandler(_tableData_DataGridView_DataSourceChanged);
             //_tableData_DataGridView.DataMemberChanged += new EventHandler(_tableData_DataGridView_DataMemberChanged);
             //_tableData_DataGridView.DataBindingComplete += new DataGridViewBindingCompleteEventHandler(_tableData_DataGridView_DataBindingComplete);
+            //_tableData_DataGridView.ColumnAdded += new DataGridViewColumnEventHandler(_tableData_DataGridView_ColumnAdded);
+            //_tableData_DataGridView.ColumnRemoved += new DataGridViewColumnEventHandler(_tableData_DataGridView_ColumnRemoved);
+            //_tableData_DataGridView.Columns.CollectionChanged += new CollectionChangeEventHandler(Columns_CollectionChanged);
 
-            // need to manually populate columns due to fillweight = 100 by default (overflow crap; 655 * 100 > max int)
-            if (_dataTable.Columns.Count > 655)
-            {
-                _tableData_DataGridView.AutoGenerateColumns = false;
-                DataGridViewColumn[] columns = new DataGridViewColumn[_dataTable.Columns.Count];
+            // manually populate columns - using AutoGenerateColumn causes massive lag issues when called in the wrong order
+            // and this happens to be slightly faster than auto generated columns anyways, so might as well use it
+            DataGridViewColumn[] columns = new DataGridViewColumn[_dataTable.Columns.Count];
 
-                int i = 0;
-                foreach (DataGridViewTextBoxColumn dataGridViewColumn in
-                    from DataColumn dataColumn in _dataTable.Columns
-                    select new DataGridViewTextBoxColumn
-                    {
-                        Name = dataColumn.ColumnName,
-                        FillWeight = 1,
-                        DataPropertyName = dataColumn.ColumnName
-                    })
+            int i = 0;
+            foreach (DataGridViewTextBoxColumn dataGridViewColumn in
+                from DataColumn dataColumn in _dataTable.Columns
+                select new DataGridViewTextBoxColumn
                 {
-                    columns[i++] = dataGridViewColumn;
-                }
-
-                _tableData_DataGridView.Columns.AddRange(columns);
-                _tableData_DataGridView.DataMember = _dataFile.StringId;
-            }
-            else
+                    Name = dataColumn.ColumnName,
+                    FillWeight = 1,
+                    DataPropertyName = dataColumn.ColumnName
+                })
             {
-                _tableData_DataGridView.DataMember = _dataFile.IsStringsFile ? FileManager.StringsTableName : _dataFile.StringId;
+                columns[i++] = dataGridViewColumn;
             }
 
+            _tableData_DataGridView.Columns.AddRange(columns);
+            _tableData_DataGridView.DataMember = _dataFile.IsStringsFile ? FileManager.StringsTableName : _dataFile.StringId;
+
+            // set the code column to display as hex
             DataGridViewColumn codeColumn = _tableData_DataGridView.Columns["code"];
             if (codeColumn != null) codeColumn.DefaultCellStyle.Format = "X04";
 
-            //int rowIndex = 0;
-            //foreach (DataGridViewRow row in _tableData_DataGridView.Rows)
-            //{
-            //    row.Tag = rowIndex++;
-            //}
-
-            //_tableData_DataGridView.CurrentCell = _tableData_DataGridView.Rows[2].Cells[0];
-
             _tableData_DataGridView.ResumeLayout();
         }
+
+        #region debug stuff
+        //private void _tableData_DataGridView_ColumnAdded(object sender, DataGridViewColumnEventArgs e)
+        //{
+        //    //Debug.WriteLine("Column Added: " + e.Column.Name);
+        //}
+
+        //private void _tableData_DataGridView_ColumnRemoved(object sender, DataGridViewColumnEventArgs e)
+        //{
+        //    Debug.WriteLine("[" + _dataFile.StringId + "] Column Removed: " + e.Column.Name);
+        //}
+
+        //private void Columns_CollectionChanged(object sender, CollectionChangeEventArgs e)
+        //{
+        //    //Debug.WriteLine("[" + _dataFile.StringId + "] Column Collection Changed (Action = " + e.Action + ", Element = " + e.Element + ")");
+        //}
 
         //private void _tableData_DataGridView_DataBindingComplete(object sender, DataGridViewBindingCompleteEventArgs e)
         //{
@@ -143,6 +150,7 @@ namespace Reanimator.Controls
         //{
         //    int bp = 0;
         //}
+        #endregion
 
         /// <summary>
         /// Defines the row view section of the form.
@@ -477,9 +485,9 @@ namespace Reanimator.Controls
         {
             if (_tableData_DataGridView.CurrentRow == null) return;
             if (_tableData_DataGridView.CurrentRow.IsNewRow) return;
+            if (_tableData_DataGridView.Columns[0].Name != "Index") return; // seems to happen sometimes when lots of tables are open...
 
             _selectedIndexChange = true;
-
             _rows_LayoutPanel.SuspendLayout();
 
             int dataTableIndex = (Int32)_tableData_DataGridView.CurrentRow.Cells[0].Value;
