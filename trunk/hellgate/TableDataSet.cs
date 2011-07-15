@@ -207,28 +207,49 @@ namespace Hellgate
 
                     if (excelOutputAttribute.IsScript)
                     {
-                        int valueInt = (int)value;
-                        if (valueInt == 0)
+                        int scriptOffset = (int)value;
+                        if (scriptOffset == 0)
                         {
                             baseRow[col++] = String.Empty;
                             continue;
                         }
 
-                        ExcelScript excelScript = new ExcelScript(this);
                         String script;
+                        if (scriptOffset == 9649 && excelFile.StringId == "SKILLS") // todo: not sure what's with this script...
+                        {
+                            /* Compiled Bytes:
+                             * 26,30,700,6,26,1,399,358,669,616562688,711,26,62,3,17,669,641728512,26,8,711,26,62,3,17,358,669,322961408,26,5,700,6,26,1,399,358,388,0
+                             * 
+                             * Ending Stack (FIFO):
+                             * SetStat669('sfx_attack_pct', 'all', 30 * ($sklvl - 1))
+                             * SetStat669('sfx_duration_pct', 'all', get_skill_level(@unit, 'Shield_Mastery'))
+                             * SetStat669('damage_percent_skill', 8 * get_skill_level(@unit, 'Shield_Mastery'))
+                             * SetStat669('damage_percent_skill', 8 * get_skill_level(@unit, 'Shield_Mastery')) + 5 * ($sklvl - 1)
+                             * 
+                             * The last SetStat has strange overhang - decompiling wrong?
+                             * Or is it "supposed" to be there?
+                             * i.e. It's actually decompiling correctly, but because I've assumed such scripts to be wrong (as the end +5... segment is useless) we get the Stack exception
+                             */
+                            int[] scriptCode = excelFile.ReadScriptTable(scriptOffset);
+                            script = scriptCode != null ? FileTools.ArrayToStringGeneric(scriptCode, ",") : "ScriptError";
+                            baseRow[col++] = script;
+                            continue;
+                        }
+
+                        ExcelScript excelScript = new ExcelScript(this);
 
                         try
                         {
                             if (ExcelScript.DebugEnabled)
                             {
-                                int[] scriptCode = excelFile.ReadScriptTable(valueInt);
+                                int[] scriptCode = excelFile.ReadScriptTable(scriptOffset);
                                 script = scriptCode != null ? FileTools.ArrayToStringGeneric(scriptCode, ",") : String.Empty;
 
-                                script = excelScript.Decompile(excelFile.ScriptBuffer, valueInt, script, excelFile.StringId, row, col, fieldInfo.Name);
+                                script = excelScript.Decompile(excelFile.ScriptBuffer, scriptOffset, script, excelFile.StringId, row, col, fieldInfo.Name);
                             }
                             else
                             {
-                                script = excelScript.Decompile(excelFile.ScriptBuffer, valueInt);
+                                script = excelScript.Decompile(excelFile.ScriptBuffer, scriptOffset);
                             }
 
                             //if (script == "SetStat673('stamina_feed', (int)(double)GetStat666('strength_bonus'));")
@@ -238,7 +259,7 @@ namespace Hellgate
                         }
                         catch (Exception)
                         {
-                            int[] scriptCode = excelFile.ReadScriptTable(valueInt);
+                            int[] scriptCode = excelFile.ReadScriptTable(scriptOffset);
                             script = scriptCode != null ? FileTools.ArrayToStringGeneric(scriptCode, ",") : "ScriptError";
                         }
 
