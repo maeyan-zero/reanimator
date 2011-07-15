@@ -863,6 +863,11 @@ namespace Hellgate
                 Object rowInstance = Activator.CreateInstance(DataType);
                 foreach (ObjectDelegator.FieldDelegate fieldInfo in objectDelegator)
                 {
+                    //if (fieldInfo.Name == "spawnFromMonsterUnitType" && row == 13)
+                    //{
+                    //    int bp = 0;
+                    //}
+
                     // Initialize private fields 
                     if ((fieldInfo.IsPrivate))
                     {
@@ -1073,8 +1078,7 @@ namespace Hellgate
 
                     try
                     {
-
-                        if (fieldInfo.FieldType != value.GetType()) // i.e. if the type hasn't been converted yet (attributes means it wasn't converted above)
+                        if (fieldInfo.FieldType != value.GetType()) // i.e. if the type hasn't been converted yet (no attributes means it wasn't converted above)
                         {
                             if (fieldInfo.FieldType.BaseType == typeof(Enum))
                             {
@@ -1099,7 +1103,6 @@ namespace Hellgate
                         failedParsing = true;
                         break;
                     }
-
                 }
                 if (failedParsing) break;
 
@@ -1358,6 +1361,11 @@ namespace Hellgate
                 col++;
                 OutputAttribute excelAttribute = GetExcelAttribute(fieldDelegate.Info);
 
+                //if (fieldDelegate.Name == "spawnFromMonsterUnitType")
+                //{
+                //    int bp = 0;
+                //}
+
                 int row = 0;
                 foreach (Object rowObject in Rows)
                 {
@@ -1393,7 +1401,7 @@ namespace Hellgate
                         }
                         else
                         {
-                            rowStr[col] = "\"" + CodeToString(code) + "\"";
+                            rowStr[col] = "\"" + _CodeToString(code) + "\"";
                         }
 
                         continue;
@@ -1412,7 +1420,7 @@ namespace Hellgate
                             }
                             else
                             {
-                                indexValues = new[] { (int)fieldDelegate.GetValue(rowObject) };
+                                indexValues = new[] { (int)indexObj };
                             }
 
                             String[] indexStrs = new String[indexValues.Length];
@@ -1436,7 +1444,7 @@ namespace Hellgate
                                 if (fileManager.DataTableHasColumn(tableStringId, "code"))
                                 {
                                     int code = fileManager.GetExcelIntFromStringId(tableStringId, "code", indexValues[i]);
-                                    if (code != 0) indexStr = CodeToString(code);
+                                    if (code != 0) indexStr = _CodeToString(code);
                                 }
 
                                 if (indexStr == null)
@@ -1470,12 +1478,18 @@ namespace Hellgate
                                 continue;
                             }
                             int[] buffer = ReadScriptTable(offset);
+                            if (buffer == null) throw new Exceptions.ScriptFormatException("The script bytes were unable to be read using ReadScriptTable.", offset);
 
                             String scriptString = FileTools.ArrayToStringGeneric(buffer, ",");
                             if (fileManager != null)
                             {
                                 try
                                 {
+                                    //if (offset == 162141)
+                                    //{
+                                    //    int bp = 0;
+                                    //}
+
                                     //String debugScriptString = scriptString;
                                     ExcelScript excelScript = new ExcelScript(fileManager);
                                     scriptString = "\"" + excelScript.Decompile(_scriptBuffer, offset, scriptString, StringId, row, col, fieldDelegate.Name) + "\"";

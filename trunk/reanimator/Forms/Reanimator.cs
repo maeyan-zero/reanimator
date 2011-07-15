@@ -29,7 +29,7 @@ namespace Reanimator.Forms
         public Reanimator()
         {
             InitializeComponent();
-            setIcon();
+            _SetIcon();
 
             #region snotz_stuff
             //TestScripts.ExtractFunctionList();
@@ -42,6 +42,8 @@ namespace Reanimator.Forms
             //TestScripts.UncookAllXml();
             //TestScripts.ExtractFunctionList();
             //TestScripts.TestAllExcelScripts();
+            //TestScripts.TestExcelCooking();
+            //ExcelFile.GenerateExcelTables(File.ReadAllLines(@"C:\hellgate.c"));
             if (true) return;
             //Config.HglDir = @"D:\Projects\Hellgate London\Flagshipped\ServerTest\bin\Debug";
             ////Config.HglDir = @"D:\Games\Hellgate";
@@ -193,7 +195,7 @@ namespace Reanimator.Forms
         /// <summary>
         /// Checks the Windows Version and sets the coresponding icon
         /// </summary>
-        private void setIcon()
+        private void _SetIcon()
         {
             OperatingSystem osInfo = Environment.OSVersion;
             Icon pathName = Resources.icon2;

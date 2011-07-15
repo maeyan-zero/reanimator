@@ -4,8 +4,10 @@ using System.Collections.Specialized;
 using System.Diagnostics;
 using System.IO;
 using System.Linq;
+using System.Linq.Expressions;
 using System.Reflection;
 using System.Runtime.InteropServices;
+using System.Text.RegularExpressions;
 using Revival.Common;
 
 namespace Hellgate
@@ -95,12 +97,19 @@ namespace Hellgate
 
         private static class IntTableDef
         {
+            // todo: might be an idea to convert this int values to ScriptOpCodes values for easier reference at some point
+
             // t, x, 0
             public static readonly int[] Case01 = new[] { 2, 98, 707 };
             // t, x
             public static readonly int[] Case02 = new[] { 1, 3, 4, 5, 6, 14, 26, 50, 86, 516, 527, 700 };
             // t
-            public static readonly int[] Case03 = new[] { 320, 333, 339, 347, 358, 369, 388, 399, 418, 426, 437, 448, 459, 470, 481, 538, 708, 709, 710, 711, 712 };
+            public static readonly int[] Case03 = new[]
+            {
+                320, 333, 339, 347, 358, 369, 388, 399, 418, 426, 437, 448, 459, 470, 481, 538, 708, 709, 710, 711, 712,
+                (int) ExcelScript.ScriptOpCodes.TypeCastDoubleInt,          // 598
+                (int) ExcelScript.ScriptOpCodes.TypeCastIntDouble           // 648
+            };
             // t, x
             public static readonly int[] BitField = new[] { 666, 667, 669, 673, 674, 680, 683, 687, 688 };
         }
@@ -168,7 +177,7 @@ namespace Hellgate
             return (found) ? row : -1;
         }
 
-        public static String CodeToString(int code)
+        private static String _CodeToString(int code)
         {
             if (code == 0) return String.Empty;
 

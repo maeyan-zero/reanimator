@@ -57,7 +57,7 @@ namespace Reanimator.Forms
         /// Creates a new data table inside a tabbed control.
         /// </summary>
         /// <param name="id">string id associated with the datafile</param>
-        public void CreateTab(string id)
+        public void CreateTab(String id)
         {
             DataFile dataFile = _fileManager.GetDataFile(id);
             DatafileEditor editor = new DatafileEditor(dataFile, _fileManager) { Dock = DockStyle.Fill };
@@ -70,8 +70,10 @@ namespace Reanimator.Forms
             progress.ShowDialog(this);
 
             _tabControl.SuspendLayout();
+            tabPage.SuspendLayout();
             tabPage.Controls.Add(editor);
             editor.AddedToTabPage = true;
+            tabPage.ResumeLayout();
             _tabControl.ResumeLayout();
         }
 
