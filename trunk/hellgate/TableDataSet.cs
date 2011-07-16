@@ -236,6 +236,11 @@ namespace Hellgate
                             continue;
                         }
 
+                        //if (fieldInfo.Name == "props1" && row == 45)
+                        //{
+                        //    int bp = 0;
+                        //}
+
                         ExcelScript excelScript = new ExcelScript(this);
 
                         try
@@ -252,7 +257,7 @@ namespace Hellgate
                                 script = excelScript.Decompile(excelFile.ScriptBuffer, scriptOffset);
                             }
 
-                            //if (script == "SetStat673('stamina_feed', (int)(double)GetStat666('strength_bonus'));")
+                            //if (script.StartsWith("SetStat669('unlimited_in_merchant_inventory', 1);"))
                             //{
                             //    int bp = 0;
                             //}
@@ -437,8 +442,13 @@ namespace Hellgate
                         DataColumn dcParent = dt.Columns["Index"];
                         String relatedColumn = dt.Columns[2].ColumnName;
 
+                        // todo
                         if (dcChild.ExtendedProperties.ContainsKey(ExcelFile.ColumnTypeKeys.IsArray) && (bool)dcChild.ExtendedProperties[ExcelFile.ColumnTypeKeys.IsArray])
                         {
+                            //if (excelFile.StringId == "ITEMS")
+                            //{
+                            //    int bp = 0;
+                            //}
                             col++;
                             continue;
                         }

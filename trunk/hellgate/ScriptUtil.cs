@@ -1207,7 +1207,7 @@ namespace Hellgate
 
             if (isSetStat)
             {
-                if (_script[_offset] != ',') throw new Exceptions.ScriptFunctionArgumentCountException(nameStr, 2, String.Format("\nThe GetStat for stat '{0}' requires an value to set it to at offset '{1}'.", excelStr, _offset));
+                if (_script[_offset] != ',') throw new Exceptions.ScriptFunctionArgumentCountException(nameStr, 2, String.Format("\nThe SetStat for stat '{0}' requires a value to set it to at offset '{1}'.", excelStr, _offset));
                 _offset++;
 
                 Int32[] getStatArgBytes = _Compile(')', null, false, _GetByteOffset(scriptByteCode));
@@ -1636,7 +1636,7 @@ namespace Hellgate
             }
 
             // format paramStr if needed
-            if (!String.IsNullOrEmpty(paramStr))
+            if (paramStr != null) // we can have empty excel strings (e.g. STATES row 0); just not null strings (i.e. no or invalid param)
             {
                 paramStr = String.Format(", '{0}'", paramStr);
             }

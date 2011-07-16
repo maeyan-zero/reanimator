@@ -863,7 +863,7 @@ namespace Hellgate
                 Object rowInstance = Activator.CreateInstance(DataType);
                 foreach (ObjectDelegator.FieldDelegate fieldInfo in objectDelegator)
                 {
-                    //if (fieldInfo.Name == "spawnFromMonsterUnitType" && row == 13)
+                    //if (fieldInfo.Name == "warpToFloor")
                     //{
                     //    int bp = 0;
                     //}
@@ -897,93 +897,49 @@ namespace Hellgate
                     Object value = dataTable.Rows[row][col++];
                     OutputAttribute attribute = GetExcelAttribute(fieldInfo.Info);
                     bool isArray = (fieldInfo.FieldType.BaseType == typeof(Array));
+
                     if (attribute != null)
                     {
                         if (attribute.IsTableIndex)
                         {
-                            int arraySize = 1;
                             if (isArray)
                             {
-                                MarshalAsAttribute arrayMarshal = (MarshalAsAttribute)fieldInfo.Info.GetCustomAttributes(typeof(MarshalAsAttribute), false).First();
+                                int arraySize = 1;
+                                MarshalAsAttribute arrayMarshal = (MarshalAsAttribute) fieldInfo.Info.GetCustomAttributes(typeof (MarshalAsAttribute), false).First();
                                 arraySize = arrayMarshal.SizeConst;
                                 Debug.Assert(arraySize > 0);
-                            }
 
-                            String strValue = value.ToString();
+                                String strValue = value.ToString();
 
-                            String[] indexStrs = strValue.Split(new[] { ',' });
-                            Int32[] rowIndexValues = new int[arraySize];
-                            for (int i = 0; i < arraySize; i++) rowIndexValues[i] = -1;
+                                String[] indexStrs = strValue.Split(new[] {','});
+                                Int32[] rowIndexValues = new int[arraySize];
+                                for (int i = 0; i < arraySize; i++) rowIndexValues[i] = -1;
 
-                            int maxElements = indexStrs.Length;
-                            if (maxElements > arraySize)
-                            {
-                                Debug.WriteLine(String.Format("{0}: Loss of array elements detected. row = {1}, col = {2}.", StringId, row, col));
-                                maxElements = arraySize;
-                            }
+                                int maxElements = indexStrs.Length;
+                                if (maxElements > arraySize)
+                                {
+                                    Debug.WriteLine(String.Format("{0}: Loss of array elements detected. row = {1}, col = {2}.", StringId, row, col));
+                                    maxElements = arraySize;
+                                }
 
-                            int[] rowIndices = new int[maxElements];
-                            for (int i = 0; i < maxElements; i++)
-                            {
-                                rowIndices[i] = int.Parse(indexStrs[i]);
-                            }
+                                int[] rowIndices = new int[maxElements];
+                                for (int i = 0; i < maxElements; i++)
+                                {
+                                    rowIndices[i] = int.Parse(indexStrs[i]);
+                                }
 
-                            // this is CSV code - the DataTables already have row index
-                            //for (int i = 0; i < maxElements; i++)
-                            //{
-                            //    strValue = indexStrs[i];
-                            //    if (strValue == "-1") continue;
-
-
-                            //    String tableStringId = attribute.TableStringId;
-                            //    bool hasCodeColumn = fileManager.DataTableHasColumn(tableStringId, "code");
-                            //    if (strValue.Length == 0 && hasCodeColumn) continue;
-
-
-                            //    //LEVEL references multiple blank TREASURE row index values - all appear to be empty rows though, so meh...
-                            //    //Debug.Assert(!String.IsNullOrEmpty(value));
-
-                            //    int isNegative = 1;
-                            //    if (strValue.Length > 0 && strValue[0] == '-')
-                            //    {
-                            //        isNegative = -1;
-                            //        strValue = strValue.Substring(1, strValue.Length - 1);
-                            //    }
-
-                            //    int rowIndex = -1;
-                            //    DataFile relatedDataFile = null;
-                            //    ExcelFile relatedExcel = null;
-                            //    if (fileManager.DataFiles.TryGetValue(tableStringId, out relatedDataFile))
-                            //    {
-                            //        relatedExcel = relatedDataFile as ExcelFile;
-                            //        rowIndex = relatedExcel._GetRowIndexFromValue(strValue, hasCodeColumn ? "code" : null);
-                            //    }
-
-                            //    if (relatedExcel == null)
-                            //    {
-                            //        if (hasCodeColumn && strValue.Length <= 4)
-                            //        {
-                            //            int code = StringToCode(strValue);
-                            //            rowIndex = fileManager.GetExcelRowIndexFromStringId(tableStringId, code, "code");
-                            //        }
-                            //        else
-                            //        {
-                            //            rowIndex = fileManager.GetExcelRowIndex(tableStringId, strValue);
-                            //        }
-                            //    }
-
-                            //    rowIndexValues[i] = rowIndex * isNegative;
-                            //}
-
-                            if (isArray)
-                            {
                                 objectDelegator[fieldInfo.Name, rowInstance] = rowIndices;
-                                // note: isArray type doesn't have a relation column yet
                             }
                             else
                             {
-                                objectDelegator[fieldInfo.Name, rowInstance] = rowIndices[0];
-                                col++; // skip relation column
+                                objectDelegator[fieldInfo.Name, rowInstance] = int.Parse(value.ToString());
+                            }
+
+                            // we need to make sure the following data column is a relational column; some tables (and thus the relational column) aren't present, even though the column "links" to them (e.g. LEVEL_AREAS)
+                            DataColumn dataColumn = dataTable.Columns[col];
+                            if (dataColumn.ExtendedProperties.ContainsKey(ColumnTypeKeys.IsRelationGenerated) && (bool)dataColumn.ExtendedProperties[ColumnTypeKeys.IsRelationGenerated])
+                            {
+                                col++;
                             }
 
                             continue;
@@ -1032,6 +988,11 @@ namespace Hellgate
                                 newIntegerBuffer = new byte[1024];
                                 newIntegerBuffer[0] = 0x00;
                             }
+
+                            //if (fieldInfo.Name == "props1" && row == 44)
+                            //{
+                            //    int bp = 0;
+                            //}
 
                             int[] scriptByteCode;
                             if (fileManager != null)
@@ -1088,9 +1049,28 @@ namespace Hellgate
                             {
                                 value = ((String)value).ToArray<Int32>(',');
                             }
+                            else if (fieldInfo.FieldType.BaseType == typeof(Array))
+                            {
+                                Type elementType = fieldInfo.FieldType.GetElementType();
+                                if (elementType.BaseType == typeof(Enum))
+                                {
+                                    String[] enumStrs = ((String) value).Split(new[] {','}, StringSplitOptions.None);
+                                    Array enumsArray = Array.CreateInstance(elementType, enumStrs.Length);
+                                    int i = 0;
+                                    foreach (String enumStr in enumStrs)
+                                    {
+                                        enumsArray.SetValue(Enum.Parse(elementType, enumStr), i++);
+                                    }
+                                    value = enumsArray;
+                                }
+                                else
+                                {
+                                    throw new NotImplementedException("if (fieldInfo.FieldType.BaseType == typeof(Array)) :: Type = " + elementType.BaseType);
+                                }
+                            }
                             else
                             {
-                                throw new NotImplementedException("if (fieldInfo.FieldType != value.GetType()) :: Type = " + fieldInfo.FieldType);
+                                value = Convert.ChangeType(value, fieldInfo.FieldType);
                             }
                         }
 
