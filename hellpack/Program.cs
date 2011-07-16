@@ -507,7 +507,7 @@ namespace Revival
                 }
             }
 
-            foreach (IndexFile file in _fileManager.IndexFiles)
+            foreach (PackFile file in _fileManager.IndexFiles)
                 file.EndDatAccess();
 
             string thisPack = Path.GetFileNameWithoutExtension(outputPath);

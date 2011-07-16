@@ -185,10 +185,10 @@ namespace Hellgate
         /// <param name="fileEntry">The file entry details.</param>
         protected void _AddFileToDat(byte[] fileData, PackFileEntry fileEntry)
         {
-            Debug.Assert(DatFile != null && fileData != null && fileEntry != null);
-
             // ensure .dat file open
             BeginDatWriting();
+
+            Debug.Assert(DatFile != null && fileData != null && fileEntry != null);
 
             DatFile.Seek(0, SeekOrigin.End);
 
