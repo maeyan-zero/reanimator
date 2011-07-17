@@ -989,7 +989,7 @@ namespace Hellgate
                                 newIntegerBuffer[0] = 0x00;
                             }
 
-                            //if (fieldInfo.Name == "props1" && row == 44)
+                            //if (strValue == "GetStat666('skill_points_bonus_total', '') > -1;")
                             //{
                             //    int bp = 0;
                             //}

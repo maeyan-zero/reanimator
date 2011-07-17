@@ -257,7 +257,7 @@ namespace Hellgate
                                 script = excelScript.Decompile(excelFile.ScriptBuffer, scriptOffset);
                             }
 
-                            //if (script.StartsWith("SetStat669('unlimited_in_merchant_inventory', 1);"))
+                            //if (script.StartsWith("GetStat666('skill_points_bonus_total', '') > -1;"))
                             //{
                             //    int bp = 0;
                             //}

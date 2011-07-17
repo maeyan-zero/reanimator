@@ -26,16 +26,24 @@ namespace Reanimator
             fileManager.EndAllDatAccess();
 
             StringWriter results = new StringWriter();
-            Dictionary<String, int> excelScriptFails = new Dictionary<String, int>();
+            Dictionary<String, int> excelScriptDecompileFails = new Dictionary<String, int>();
+            Dictionary<String, int> excelScriptRecompileFails = new Dictionary<String, int>();
+            Dictionary<String, int> excelScriptComparisonFails = new Dictionary<String, int>();
             int grandTotalScripts = 0;
             int grandTotalScriptsDecompiled = 0;
             int grandTotalScriptsFailedDecompilation = 0;
+            int grandTotalScriptsRecompiled = 0;
+            int grandTotalScriptsFailedRecompilation = 0;
+            int grandTotalScriptsCompared = 0;
+            int grandTotalScriptsFailedComparison = 0;
 
             foreach (ExcelFile excelFile in fileManager.DataFiles.Values.Where(dataFile => dataFile.IsExcelFile))
             {
                 String excelStringId = String.Format("{0}...", excelFile.StringId);
                 Debug.Write(excelStringId);
                 results.Write(excelStringId);
+
+                //if (excelFile.StringId != "SKILLS") continue;
 
                 if (excelFile.Delegator == null || excelFile.ScriptCode == null || excelFile.ScriptCode.Length == 0)
                 {
@@ -53,6 +61,10 @@ namespace Reanimator
                 int totalScriptsFound = 0;
                 int totalScriptsDecompiled = 0;
                 int totalScriptsFailedDecompilation = 0;
+                int totalScriptsRecompiled = 0;
+                int totalScriptsFailedRecompilation = 0;
+                int totalScriptsCompared = 0;
+                int totalScriptsFailedComparison = 0;
 
                 foreach (FieldDelegate fieldDelegate in excelFile.Delegator)
                 {
@@ -70,6 +82,10 @@ namespace Reanimator
                     int scriptCount = 0;
                     int scriptsDecompiled = 0;
                     int scriptsFailedDecompilation = 0;
+                    int scriptsRecompiled = 0;
+                    int scriptsFailedRecompilation = 0;
+                    int scriptsCompared = 0;
+                    int scriptsFailedComparison = 0;
                     foreach (Object row in excelFile.Rows)
                     {
                         rowIndex++;
@@ -78,28 +94,84 @@ namespace Reanimator
                         Debug.Assert(byteOffset > prevOffset);
                         prevOffset = byteOffset;
 
+                        if (byteOffset == 9649 && excelFile.StringId == "SKILLS") // todo: not sure what's with this script...
+                        {
+                            continue;
+                        }
+
                         excelFileResults.WriteLine(String.Format("\t\tColumn({0}) = {3}, Row({1}), ByteOffset({2}):", colIndex, rowIndex, byteOffset, fieldDelegate.Name));
                         ExcelScript excelScript = new ExcelScript(fileManager);
 
                         scriptCount++;
                         String script;
+                        int[] scriptCodes = excelFile.ReadScriptTable(byteOffset);
+                        String scriptCodesStr = scriptCodes.ToString(",");
+                        String semiDecompiledScript = _ReadScriptTable(excelScript, scriptCodes);
+
+                        //if (scriptCodesStr == "707,0,714,666,0,3,201,673,603979779,26,5,2,284,0,0")
+                        //{
+                        //    int bp = 0;
+                        //}
+
+                        // test decompiling
                         try
                         {
-                            script = excelScript.Decompile(excelFile.ScriptBuffer, byteOffset, "asdf", excelFile.StringId, rowIndex, colIndex, fieldDelegate.Name);
+                            script = excelScript.Decompile(excelFile.ScriptBuffer, byteOffset, scriptCodesStr, excelFile.StringId, rowIndex, colIndex, fieldDelegate.Name);
                             scriptsDecompiled++;
                         }
                         catch (Exception e)
                         {
-                            if (!excelScriptFails.ContainsKey(excelFile.StringId))
+                            if (!excelScriptDecompileFails.ContainsKey(excelFile.StringId))
                             {
-                                excelScriptFails.Add(excelFile.StringId, 1);
+                                excelScriptDecompileFails.Add(excelFile.StringId, 1);
                             }
                             else
                             {
-                                excelScriptFails[excelFile.StringId]++;
+                                excelScriptDecompileFails[excelFile.StringId]++;
                             }
                             scriptsFailedDecompilation++;
-                            excelFileResults.WriteLine("Script Decompile Failed:\n" + e + "\n");
+                            excelFileResults.WriteLine("Script Decompile Failed:\n" + semiDecompiledScript + "\n" + e + "\n");
+                            continue;
+                        }
+
+                        // test compiling of decompiled script
+                        int[] recompiledScriptCode;
+                        try
+                        {
+                            ExcelScript excelScriptCompile = new ExcelScript(fileManager);
+                            recompiledScriptCode = excelScriptCompile.Compile(script, scriptCodesStr, excelFile.StringId, rowIndex, colIndex, fieldDelegate.Name);
+                            scriptsRecompiled++;
+                        }
+                        catch (Exception e)
+                        {
+                            if (!excelScriptRecompileFails.ContainsKey(excelFile.StringId))
+                            {
+                                excelScriptRecompileFails.Add(excelFile.StringId, 1);
+                            }
+                            else
+                            {
+                                excelScriptRecompileFails[excelFile.StringId]++;
+                            }
+                            scriptsFailedRecompilation++;
+                            excelFileResults.WriteLine("Script Recompile Failed:\n" + semiDecompiledScript + "\n" + e + "\n");
+                            continue;
+                        }
+
+                        // check recompiled fidelity
+                        scriptsCompared++;
+                        if (!scriptCodes.SequenceEqual(recompiledScriptCode))
+                        {
+                            if (!excelScriptComparisonFails.ContainsKey(excelFile.StringId))
+                            {
+                                excelScriptComparisonFails.Add(excelFile.StringId, 1);
+                            }
+                            else
+                            {
+                                excelScriptComparisonFails[excelFile.StringId]++;
+                            }
+                            scriptsFailedComparison++;
+                            String compareFailed = String.Format("Script Comparison Failed:\nOriginal Script: {0} = {1}\nRecompiled Script: {2}\nSemi-Decompiled:\n{3}", scriptCodesStr, script, recompiledScriptCode.ToString(","), semiDecompiledScript);
+                            excelFileResults.WriteLine(compareFailed);
                             continue;
                         }
 
@@ -109,8 +181,14 @@ namespace Reanimator
                     totalScriptsFound += scriptCount;
                     totalScriptsDecompiled += scriptsDecompiled;
                     totalScriptsFailedDecompilation += scriptsFailedDecompilation;
+                    totalScriptsRecompiled += scriptsRecompiled;
+                    totalScriptsFailedRecompilation += scriptsFailedRecompilation;
+                    totalScriptsCompared += scriptsCompared;
+                    totalScriptsFailedComparison += scriptsFailedComparison;
 
-                    String columnStats = String.Format("\t\t{0} scripts found, {1} scripts decompiled, {2} scripts failed to decompile.", scriptCount, scriptsDecompiled, scriptsFailedDecompilation);
+                    String columnStats = String.Format("\t\t{0} scripts found, {1} scripts decompiled, {2} scripts failed to decompile.\n", scriptCount, scriptsDecompiled, scriptsFailedDecompilation);
+                    columnStats += String.Format("\t\t\t{0} scripts recompiled, {1} scripts failed to recompile, {2} scripts compared, {3} scripts failed comparison",
+                                                 scriptsRecompiled, scriptsFailedRecompilation, scriptsCompared, scriptsFailedComparison);
                     Debug.WriteLine(columnStats);
                     excelFileResults.WriteLine(columnStats);
                 }
@@ -118,8 +196,14 @@ namespace Reanimator
                 grandTotalScripts += totalScriptsFound;
                 grandTotalScriptsDecompiled += totalScriptsDecompiled;
                 grandTotalScriptsFailedDecompilation += totalScriptsFailedDecompilation;
+                grandTotalScriptsRecompiled += totalScriptsRecompiled;
+                grandTotalScriptsFailedRecompilation += totalScriptsFailedRecompilation;
+                grandTotalScriptsCompared += totalScriptsCompared;
+                grandTotalScriptsFailedComparison += totalScriptsFailedComparison;
 
-                String totalStats = String.Format("Totals: {0} scripts found, {1} scripts decompiled, {2} scripts failed to decompile.", totalScriptsFound, totalScriptsDecompiled, totalScriptsFailedDecompilation);
+                String totalStats = String.Format("Totals: {0} scripts found, {1} scripts decompiled, {2} scripts failed to decompile.\n", totalScriptsFound, totalScriptsDecompiled, totalScriptsFailedDecompilation);
+                totalStats += String.Format("\t{0} scripts recompiled, {1} scripts failed to recompile, {2} scripts compared, {3} scripts failed comparison",
+                                            totalScriptsRecompiled, totalScriptsFailedRecompilation, totalScriptsCompared, totalScriptsFailedComparison);
                 Debug.WriteLine(totalStats);
                 results.WriteLine(totalStats);
                 excelFileResults.WriteLine(totalStats);
@@ -128,19 +212,65 @@ namespace Reanimator
                 excelFileResults.Close();
             }
 
-            foreach (KeyValuePair<String, int> keyValuePair in excelScriptFails)
+            foreach (KeyValuePair<String, int> keyValuePair in excelScriptDecompileFails)
             {
                 String excelFileFails = String.Format("{0} had {1} failed decompilation.", keyValuePair.Key, keyValuePair.Value);
                 Debug.WriteLine(excelFileFails);
                 results.WriteLine(excelFileFails);
             }
 
-            String grandTotalStats = String.Format("Grand Totals: {0} scripts found, {1} scripts decompiled, {2} scripts failed to decompile.", grandTotalScripts, grandTotalScriptsDecompiled, grandTotalScriptsFailedDecompilation);
+            String grandTotalStats = String.Format("Grand Totals: {0} scripts found, {1} scripts decompiled, {2} scripts failed to decompile.\n", grandTotalScripts, grandTotalScriptsDecompiled, grandTotalScriptsFailedDecompilation);
+            grandTotalStats += String.Format("\t{0} scripts recompiled, {1} scripts failed to recompile, {2} scripts compared, {3} scripts failed comparison",
+                                        grandTotalScriptsRecompiled, grandTotalScriptsFailedRecompilation, grandTotalScriptsCompared, grandTotalScriptsFailedComparison);
             Debug.WriteLine(grandTotalStats);
             results.WriteLine(grandTotalStats);
 
-            File.WriteAllText(@"C:\TestScripts\excelScripts__Results.txt", results.ToString());
+            File.WriteAllText(@"C:\TestScripts\excelScripts_Results.txt", results.ToString());
         }
+
+        private static String _ReadScriptTable(ExcelScript script, IList<int> scriptCodes)
+        {
+            String semiParsedCode = String.Empty;
+            for (int i = 0; i < scriptCodes.Count; i++)
+            {
+                int offset = i * 4;
+                ExcelScript.ScriptOpCodes opCode = (ExcelScript.ScriptOpCodes)scriptCodes[i];
+                semiParsedCode += String.Format("{0}\t\t{1}\t\t{2}", offset, (int)opCode, opCode);
+
+                if (opCode == ExcelScript.ScriptOpCodes.Call)
+                {
+                    int funcIndex = scriptCodes[++i];
+                    semiParsedCode += String.Format("({0}) = {1}\n", funcIndex, script.CallFunctions[funcIndex]);
+                }
+                else if (opCode == ExcelScript.ScriptOpCodes.Push)
+                {
+                    semiParsedCode += String.Format(" {0}\n", scriptCodes[++i]);
+                }
+                else if (ExcelFile.ScriptOpCodeSizes.Case01.Contains((int)opCode))
+                {
+                    semiParsedCode += String.Format("({0}, {1})\n", scriptCodes[++i], scriptCodes[++i]);
+                }
+                else if (ExcelFile.ScriptOpCodeSizes.Case02.Contains((int)opCode) || ExcelFile.ScriptOpCodeSizes.BitField.Contains((int)opCode))
+                {
+                    semiParsedCode += String.Format("({0})\n", scriptCodes[++i]);
+                }
+                else if (ExcelFile.ScriptOpCodeSizes.Case03.Contains((int)opCode))
+                {
+                    semiParsedCode += "()\n";
+                }
+                else if (opCode == ExcelScript.ScriptOpCodes.Return)
+                {
+                    // nothing
+                }
+                else
+                {
+                    throw new NotImplementedException(opCode + " not implemented!");
+                }
+            }
+
+            return semiParsedCode;
+        }
+
 
         public static void CheckIdenticalFieldsToTCv4()
         {
@@ -174,7 +304,7 @@ namespace Reanimator
                         Debug.WriteLine(String.Format("Field '{0}' not found in TCv4 table.", fieldDelegate.Name));
                         continue;
                     }
-                    
+
                     // check excel attributes
                     ExcelFile.OutputAttribute outputAttribute = ExcelFile.GetExcelAttribute(fieldDelegate.Info);
                     ExcelFile.OutputAttribute outputAttributeTCv4 = ExcelFile.GetExcelAttribute(fieldDelegateTCv4.Info);
@@ -583,7 +713,7 @@ namespace Reanimator
                         lastPercent = percent;
 
                         ExcelFile.OutputAttribute excelAttribute = ExcelFile.GetExcelAttribute(fieldDelegate.Info);
-                        bool isArray = (fieldDelegate.FieldType.BaseType == typeof (Array));
+                        bool isArray = (fieldDelegate.FieldType.BaseType == typeof(Array));
 
                         for (int row = 0; row < excelFile.Rows.Count; row++)
                         {
@@ -622,8 +752,8 @@ namespace Reanimator
                             {
                                 if (excelAttribute.IsStringOffset)
                                 {
-                                    int offset1 = (int) obj1;
-                                    int offset2 = (int) obj2;
+                                    int offset1 = (int)obj1;
+                                    int offset2 = (int)obj2;
 
                                     String str1 = excelFile.ReadStringTable(offset1);
                                     String str2 = finalExcel.ReadStringTable(offset2);
@@ -652,7 +782,7 @@ namespace Reanimator
                             String str = obj1 as String;
                             if ((str != null && str.StartsWith("+N%-N% base damage as [elem]")) ||  // '+N%-N% base damage as [elem]…' != '+N%-N% base damage as [elem]?' on col(2) = 'exampleDescription', row(132)
                                 fieldDelegate.Name == "bonusStartingTreasure")                      // refernces multiple different blank rows
-                                continue; 
+                                continue;
 
                             Debug.WriteLine(String.Format("'{0}' != '{1}' on col({2}) = '{3}', row({4})", obj1, obj2, col, fieldDelegate.Name, row));
                             failed = true;
@@ -1347,11 +1477,11 @@ namespace Reanimator
                 if (structureCount != msgCount) continue; // if not equal, then we have a message in one table, but in another table it's not applicable
 
                 String[] stringIds1 = (from dataTableAttribute in DataFile.DataFileMap
-                                      where dataTableAttribute.Value.StructureId == forStructureId
-                                      select dataTableAttribute.Key).ToArray();
+                                       where dataTableAttribute.Value.StructureId == forStructureId
+                                       select dataTableAttribute.Key).ToArray();
                 String[] stringIds2 = (from dataTableAttribute in DataFile.DataFileMapTestCenter
-                                      where dataTableAttribute.Value.StructureId == forStructureId
-                                      select dataTableAttribute.Key).ToArray();
+                                       where dataTableAttribute.Value.StructureId == forStructureId
+                                       select dataTableAttribute.Key).ToArray();
                 String[] stringIds3 = (from dataTableAttribute in DataFile.DataFileMapResurrection
                                        where dataTableAttribute.Value.StructureId == forStructureId
                                        select dataTableAttribute.Key).ToArray();

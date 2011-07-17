@@ -36,7 +36,7 @@ namespace Hellgate
         private Function _excelFunction;
 
         // members for excel handling
-        private readonly List<Function> _callFunctions;
+        public readonly List<Function> CallFunctions;
         private readonly FileManager _fileManager;
         private readonly ExcelFile _statsTable;
         private readonly ObjectDelegator _statsDelegator;
@@ -64,7 +64,7 @@ namespace Hellgate
             // these initial counts are required for script compiling when determing if a function is from the .exe or from an Excel table
             if (!_haveExcelFunctions)
             {
-                _initCallFunctionsCountSinglePlayer = CallFunctions.Count;
+                _initCallFunctionsCountSinglePlayer = CallFunctionsSinglePlayer.Count;
                 _initCallFunctionsTestCenterCount = CallFunctionsTestCenter.Count;
                 _initCallFunctionsResurrectionCount = CallFunctionsResurrection.Count;
             }
@@ -72,19 +72,19 @@ namespace Hellgate
             _fileManager = fileManager;
             if (_fileManager.IsVersionResurrection || _fileManager.IsVersionMod)
             {
-                _callFunctions = CallFunctionsResurrection;
+                CallFunctions = CallFunctionsResurrection;
                 _initCallFunctionsCount = _initCallFunctionsResurrectionCount;
                 _debugRoot = DebugRootResurrection;
             }
             else if (_fileManager.IsVersionTestCenter)
             {
-                _callFunctions = CallFunctionsTestCenter;
+                CallFunctions = CallFunctionsTestCenter;
                 _initCallFunctionsCount = _initCallFunctionsTestCenterCount;
                 _debugRoot = DebugRootTestCenter;
             }
             else
             {
-                _callFunctions = CallFunctions;
+                CallFunctions = CallFunctionsSinglePlayer;
                 _initCallFunctionsCount = _initCallFunctionsCountSinglePlayer;
                 _debugRoot = DebugRoot;
             }
@@ -93,7 +93,7 @@ namespace Hellgate
             _statsDelegator = _fileManager.DataFileDelegators["STATS"];
             if (_globalDebug) EnableDebug(true);
 
-            if (_callFunctions.Count == _initCallFunctionsCount) _GenerateExcelScriptFunctions();
+            if (CallFunctions.Count == _initCallFunctionsCount) _GenerateExcelScriptFunctions();
         }
 
         #region Compiler Functions
@@ -288,7 +288,7 @@ namespace Hellgate
                         _SkipWhite();
                         if (_script[_offset] == '[') _offset = _script.IndexOf(']', ++_offset) + 1; // is debug script skip over
 
-                        Int32[] ternaryFalseBytes = _Compile((char)0xFF, null);
+                        Int32[] ternaryFalseBytes = _Compile((char)0xFF, null); // continue until ';' or ')'
 
                         int byteOffsetToEndFalse = (scriptByteCode.Count + ternaryFalseBytes.Length + 2) * 4 + byteOffset; // +2 for 2x codes for TernaryFalse
 
@@ -384,7 +384,7 @@ namespace Hellgate
                         break;
 
                     case '-':
-                        if (scriptByteCode.Count == 0)
+                        if (scriptByteCode.Count == 0 || operatorStack.Count > 0)
                         {
                             // is is a negative number
                             if (_IsNumber())
@@ -530,7 +530,29 @@ namespace Hellgate
                                         ifByteOffsetToEndTrue += 8; // +8 for 2x codes for TernaryFalse
 
                                         // todo: we are assuming all else-blocks are within braces... though maybe this would be better practice anyways?
+                                        _SkipWhite();
+                                        bool isElseIf = false;
+                                        if (_script[_offset] == '{') // if-else
+                                        {
+                                            _offset++;
+                                        }
+                                        else if (_script[_offset] == 'i') // is-else if (we don't want to increase offset here as we're already at begining of if-statement (unlike above)
+                                        {
+                                            isElseIf = true; // the if() statement will leave us at the end (_offset = .Length)
+                                        }
+                                        else // i.e. not opening block and not if-else if block
+                                        {
+                                            throw new Exceptions.ScriptFormatException("Expected begining of else-block; expected opening '{'.", _offset); 
+                                        }
+
                                         ifFalseByteCode = _Compile('}', null, false, ifByteOffsetToEndTrue);
+
+                                        _SkipWhite();
+                                        if (!isElseIf) // can't check end of if-else if block as the if() statement takes us to the end of the script code... possibly should fix this...
+                                        {
+                                            if (_script[_offset] != '}') throw new Exceptions.ScriptFormatException("Expected end of else-block; expected closing '}'.", _offset);
+                                            _offset++;
+                                        }
                                     }
                                     else
                                     {
@@ -649,8 +671,8 @@ namespace Hellgate
                                     }
                                 }
 
-                                int functionIndex = _callFunctions.IndexOf(function);
-                                if (functionIndex > _initCallFunctionsCount) // properties etc functions
+                                int functionIndex = CallFunctions.IndexOf(function);
+                                if (functionIndex >= _initCallFunctionsCount) // properties etc functions
                                 {
                                     scriptByteCode.AddRange(new[] { (Int32)ScriptOpCodes.CallPropery, functionIndex, 0 });
                                 }
@@ -739,7 +761,11 @@ namespace Hellgate
 
                 _SkipWhite();
 
-                if (terminator == (char)0xFF) break;
+                if (terminator == (char)0xFF) // if in a TernaryFalse segment
+                {
+                    _SkipWhite();
+                    if (_script[_offset] == ';' || _script[_offset] == ')') break;
+                }
                 if ((withinCondition || overloadedFunction) && (endOfStatement || endOfCondition)) break;
 
                 if (operatorOpCode == 0) continue;
@@ -959,7 +985,7 @@ namespace Hellgate
                             Debug.Assert(stackObject1.StatementCount > 0 || stackObject1.IfLevel > 0);
                             stackObject1.FalseStatements = stackObject1.StatementCount;
                             stackObject1.TrueStatements = trueStatementCount;
-                            processStackOnReturn = false;
+                            processStackOnReturn = (trueStatementCount > 1); // if more than 1 true statement, then we need to amalgamte them before returning for processing in the TernaryTrue block
 
                             if (!String.IsNullOrEmpty(stackObject1.Value)) _stack.Push(stackObject1);
                             break;
@@ -992,6 +1018,7 @@ namespace Hellgate
 
                             String ternaryTrueFormat;
                             String conditionsScript;
+                            bool isTernaryIf = false;
                             if (ifLevel > 0)
                             {
                                 const String elseIfRel = "else if ({0})\n{{\n{2}\n}}";
@@ -1032,7 +1059,13 @@ namespace Hellgate
                                         ternaryTrueFormat = _debugFormatConditionalByteCounts ? ifDebug : ifRel;
                                     }
 
-                                    ifElseBlock = addNewLine + String.Format(ternaryTrueFormat, stackObject2.Value, byteOffset, stackObject1.Value + addSemiColon) + ifElseBlock;
+                                    String statementString = stackObject1.Value;
+                                    if (!stackObject1.IsIf && stackObject1.StatementCount <= 1)
+                                    {
+                                        statementString = "\t" + statementString;
+                                    }
+
+                                    ifElseBlock = addNewLine + String.Format(ternaryTrueFormat, stackObject2.Value, byteOffset, statementString + addSemiColon) + ifElseBlock;
                                 }
 
                                 // if we were in an if() within an if(), then we need to also grab the preceeding statements within the current block
@@ -1063,8 +1096,8 @@ namespace Hellgate
                                 }
                                 else
                                 {
-                                    const String onlyTrueRel = "if ({0})\n{{\n{2}\n}}";
-                                    const String onlyTrueDebug = "if ({0})[{1}]\n{{\n{2}\n}}";
+                                    const String onlyTrueRel = "if ({0})\n{{\n\t{2}\n}}";
+                                    const String onlyTrueDebug = "if ({0})[{1}]\n{{\n\t{2}\n}}";
                                     ternaryTrueFormat = _debugFormatConditionalByteCounts ? onlyTrueDebug : onlyTrueRel;
                                 }
 
@@ -1081,6 +1114,7 @@ namespace Hellgate
                                     const String true1False1Rel = "({0}) ? {2} : {3}";
                                     const String true1False1Debug = "({0}) ?[{1}] {2} : {3}";
                                     ternaryTrueFormat = _debugFormatConditionalByteCounts ? true1False1Debug : true1False1Rel;
+                                    isTernaryIf = true;
                                 }
                                 else
                                 {
@@ -1088,11 +1122,11 @@ namespace Hellgate
                                     const String trueFalseDebug = "if ({0})[{1}]\n{{\n{2}}}\nelse\n{{\n{3}}}";
                                     ternaryTrueFormat = _debugFormatConditionalByteCounts ? trueFalseDebug : trueFalseRel;
 
-                                    String[] code = trueObj.Value.Split(new[] { ";" }, StringSplitOptions.RemoveEmptyEntries);
+                                    String[] code = trueObj.Value.Split(new[] { ";", "\n" }, StringSplitOptions.RemoveEmptyEntries);
                                     String codeStr = code.Aggregate(String.Empty, (current, line) => current + ("\t" + line + ";\n"));
                                     trueObj.Value = codeStr;
 
-                                    code = falseObj.Value.Split(new[] { ";" }, StringSplitOptions.RemoveEmptyEntries);
+                                    code = falseObj.Value.Split(new[] { ";", "\n" }, StringSplitOptions.RemoveEmptyEntries);
                                     codeStr = code.Aggregate(String.Empty, (current, line) => current + ("\t" + line + ";\n"));
                                     falseObj.Value = codeStr;
                                 }
@@ -1100,7 +1134,7 @@ namespace Hellgate
                                 conditionsScript = String.Format(ternaryTrueFormat, ifObj.Value, byteOffset, trueObj.Value, falseObj.Value);
                             }
 
-                            _stack.Push(new StackObject { Value = conditionsScript, IsIf = true });
+                            _stack.Push(new StackObject { Value = conditionsScript, IsIf = true, IsTernaryIf = isTernaryIf });
                             break;
 
                         case ScriptOpCodes.Push:                     // 26   0x1A
@@ -1219,11 +1253,11 @@ namespace Hellgate
                             break;
 
                         case ScriptOpCodes.And:                      // 516  0x204
-                            _DecompileCondion(scriptBytes, opCode, ifLevel);
+                            _DecompileCondition(scriptBytes, opCode, ifLevel);
                             break;
 
                         case ScriptOpCodes.Or:                       // 527  0x20F
-                            _DecompileCondion(scriptBytes, opCode, ifLevel);
+                            _DecompileCondition(scriptBytes, opCode, ifLevel);
                             break;
 
                         case ScriptOpCodes.EndCond:                    // 538  0x21A
@@ -1257,8 +1291,13 @@ namespace Hellgate
                                 }
                             }
 
-                            int conditionCount = (stackObject1.StatementCount == -1) ? 1 : stackObject1.StatementCount + 1;
-                            _stack.Push(new StackObject { Value = String.Format(endIfFormat, stackObject1.Value, stackObject2.Value), OpCode = stackObject1.OpCode, StatementCount = conditionCount });
+                            StackObject endCondStackObj = new StackObject
+                            {
+                                Value = String.Format(endIfFormat, stackObject1.Value, stackObject2.Value),
+                                OpCode = stackObject1.OpCode,
+                                StatementCount = (stackObject1.StatementCount == -1) ? 1 : stackObject1.StatementCount + 1
+                            };
+                            _stack.Push(endCondStackObj);
                             break;
 
                         case ScriptOpCodes.TypeCastDoubleInt:        // 598  0x256

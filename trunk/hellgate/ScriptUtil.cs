@@ -42,9 +42,24 @@ namespace Hellgate
             public Argument[] Args;         // function arguments (null if none)
             public int ArgCount { get { return Args == null ? 0 : Args.Length; } }
             public String ExcelScript;      // used for excel script functions - contains the decompiled script
+
+            public override string ToString()
+            {
+                if (Args == null) return Name + "()";
+
+                String args = String.Empty;
+                int i = 0;
+                foreach (Argument arg in Args)
+                {
+                    if (i > 0) args += ", ";
+                    args += String.Format("{0} {1}", arg.Type, arg.Name);
+                    i++;
+                }
+                return String.Format("{0}({1})", Name, args);
+            }
         }
 
-        private static readonly List<Function> CallFunctions = new List<Function>
+        private static readonly List<Function> CallFunctionsSinglePlayer = new List<Function>
         {
             /*  0*/ new Function { Name = "setUnitTypeAreaFloorVis", Args = new[] { new Argument { Name = "context", Type = ArgType.Context }, new Argument { Name = "nLevelArea", Type = ArgType.ExcelIndex, TableIndex = 138 }, new Argument { Name = "nFloor", Type = ArgType.Int32 }, new Argument { Name = "nVis", Type = ArgType.Int32 } } },
             /*  1*/ new Function { Name = "setUnitTypeAreaFloorInteractive", Args = new[] { new Argument { Name = "context", Type = ArgType.Context }, new Argument { Name = "nLevelArea", Type = ArgType.ExcelIndex, TableIndex = 138 }, new Argument { Name = "nFloor", Type = ArgType.Int32 } } },
@@ -1072,6 +1087,7 @@ namespace Hellgate
             public String Value;
             public int Precedence;              // using chart from http://en.wikipedia.org/wiki/Operators_in_C_and_C%2B%2B (with exponent = 4)
             public bool IsIf;
+            public bool IsTernaryIf;            // we want ';' terminator for ternary if statements
             public bool IsFunction;
             public bool IsVarAssign;            // for local vars
             public uint ByteOffset;             // for local vars
@@ -1317,12 +1333,12 @@ namespace Hellgate
 
         private Function _GetFunction(String functionName)
         {
-            return _callFunctions.FirstOrDefault(function => function.Name == functionName);
+            return CallFunctions.FirstOrDefault(function => function.Name == functionName);
         }
 
         private Function[] _GetFunctions(String functionName)
         {
-            return (from function in _callFunctions
+            return (from function in CallFunctions
                     where function.Name == functionName
                     select function).ToArray();
         }
@@ -1331,7 +1347,7 @@ namespace Hellgate
 
         #region Decomiler Helper Functions
 
-        private void _DecompileCondion(byte[] scriptBytes, ScriptOpCodes opCode, int ifLevel)
+        private void _DecompileCondition(byte[] scriptBytes, ScriptOpCodes opCode, int ifLevel)
         {
             _CheckStack(1, opCode);
 
@@ -1389,6 +1405,16 @@ namespace Hellgate
             int statementCount = _stack.Count - startStackCount; // will be > 0 for if, else, ||, &&
             int stackCount = _stack.Count;
 
+            StackObject falseStackObject = null;
+            if (processStackOnReturn && stackObject.FalseStatements > 1 && stackObject.TrueStatements > 1) // then we need to format (amalgamate) the True segment before returning to TernaryTrue
+            {
+                falseStackObject = _stack.Pop(); // keep our already formatted False segment
+
+                // update counts (left down here to make it easier to debug/understand; instead of placing this block before initial statements above)
+                statementCount = _stack.Count - startStackCount;
+                stackCount = _stack.Count;
+            }
+
             for (int i = stackCount; processStackOnReturn && i > startStackCount; i--)
             {
                 stackObject = _stack.Pop();
@@ -1410,7 +1436,14 @@ namespace Hellgate
 
                 if (stackObject.IsIf)
                 {
-                    script = stackObject.Value + newLine + script;
+                    if (stackObject.IsTernaryIf && startStackCount == 0) // if we have a ternary if, and start stack = 0 (i.e. in root _Decompile call) then we have no further code and do want a terminating ';'
+                    {
+                        script = stackObject.Value + semiColon + newLine + script;
+                    }
+                    else
+                    {
+                        script = stackObject.Value + newLine + script;
+                    }
                 }
                 else
                 {
@@ -1440,17 +1473,25 @@ namespace Hellgate
                 returnStackObject.TrueStatements = statementCount;
             }
 
+            // if returning from TernaryFalse segment, and we've just cleaned/amalgamated the True segment - then need to add False segment back in
+            if (falseStackObject != null)
+            {
+                _stack.Push(returnStackObject);
+                _stack.Push(falseStackObject);
+                returnStackObject = falseStackObject; // reset the return stack object to what it was originally
+            }
+
             return returnStackObject;
         }
 
         private void _CallFunction(int functionIndex)
         {
-            if (functionIndex < 0 || functionIndex > _callFunctions.Count)
+            if (functionIndex < 0 || functionIndex > CallFunctions.Count)
             {
                 throw new Exceptions.ScriptUnexpectedFunctionIndexException(functionIndex);
             }
 
-            Function excelScriptFunction = _callFunctions[functionIndex];
+            Function excelScriptFunction = CallFunctions[functionIndex];
             _CheckStack(excelScriptFunction.ArgCount, ScriptOpCodes.Call, excelScriptFunction);
             String argsString = String.Empty;
 
@@ -1732,7 +1773,7 @@ namespace Hellgate
                     {
                         function.Name = parameter.Name;
                         int functionIndex = parameter.TypeValues[4];
-                        if (functionIndex != _callFunctions.Count) throw new Exceptions.ScriptFunctionCountError(functionIndex, _callFunctions.Count);
+                        if (functionIndex != CallFunctions.Count) throw new Exceptions.ScriptFunctionCountError(functionIndex, CallFunctions.Count);
 
                         continue;
                     }
@@ -1775,7 +1816,7 @@ namespace Hellgate
                     Debug.WriteLine(funcString);
                 }
 
-                _callFunctions.Add(function);
+                CallFunctions.Add(function);
             }
         }
 

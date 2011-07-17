@@ -297,6 +297,8 @@ namespace Hellgate
                     continue;
                 }
 
+                if (dataFile.Attributes.IsEmpty) continue;
+
                 try
                 {
                     DataFiles.Add(dataFile.StringId, dataFile);
@@ -644,7 +646,7 @@ namespace Hellgate
             Object row = excelFile.Rows[rowIndex];
 
             Object value = excelDelegator[colName](row);
-            if (value.GetType() == typeof(int)) return (int)value;
+            if (value is int) return (int)value;
 
             return (int)(short)value;
         }
