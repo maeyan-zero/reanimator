@@ -1,14 +1,13 @@
 ﻿using System;
 using System.Collections.Generic;
-using System.Collections.Specialized;
 using System.Diagnostics;
 using System.IO;
 using System.Linq;
-using System.Linq.Expressions;
 using System.Reflection;
 using System.Runtime.InteropServices;
 using System.Text.RegularExpressions;
 using Revival.Common;
+using ScriptOpCodes = Hellgate.ExcelScript.ScriptOpCodes;
 
 namespace Hellgate
 {
@@ -95,9 +94,9 @@ namespace Hellgate
             public const String IsEnum = "IsEnum";
         }
 
-        private static class IntTableDef
+        public static class ScriptOpCodeSizes
         {
-            // todo: might be an idea to convert this int values to ScriptOpCodes values for easier reference at some point
+            // todo: might be an idea to convert these int values to ScriptOpCodes values for easier reference at some point
 
             // t, x, 0
             public static readonly int[] Case01 = new[] { 2, 98, 707 };
@@ -107,8 +106,8 @@ namespace Hellgate
             public static readonly int[] Case03 = new[]
             {
                 320, 333, 339, 347, 358, 369, 388, 399, 418, 426, 437, 448, 459, 470, 481, 538, 708, 709, 710, 711, 712,
-                (int) ExcelScript.ScriptOpCodes.TypeCastDoubleInt,          // 598
-                (int) ExcelScript.ScriptOpCodes.TypeCastIntDouble           // 648
+                (int) ScriptOpCodes.TypeCastDoubleInt,          // 598
+                (int) ScriptOpCodes.TypeCastIntDouble           // 648
             };
             // t, x
             public static readonly int[] BitField = new[] { 666, 667, 669, 673, 674, 680, 683, 687, 688 };
@@ -269,10 +268,10 @@ namespace Hellgate
 
             while (value != 0)
             {
-                if (IntTableDef.Case01.Contains(value)) position += (3 * sizeof(int));
-                else if (IntTableDef.Case02.Contains(value)) position += (2 * sizeof(int));
-                else if (IntTableDef.Case03.Contains(value)) position += (1 * sizeof(int));
-                else if (IntTableDef.BitField.Contains(value)) position += (2 * sizeof(int));
+                if (ScriptOpCodeSizes.Case01.Contains(value)) position += (3 * sizeof(int));
+                else if (ScriptOpCodeSizes.Case02.Contains(value)) position += (2 * sizeof(int));
+                else if (ScriptOpCodeSizes.Case03.Contains(value)) position += (1 * sizeof(int));
+                else if (ScriptOpCodeSizes.BitField.Contains(value)) position += (2 * sizeof(int));
                 else return null;
 
                 value = FileTools.ByteArrayToInt32(_scriptBuffer, position);
