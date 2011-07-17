@@ -995,20 +995,17 @@ namespace Hellgate
                             //}
 
                             int[] scriptByteCode;
-                            if (fileManager != null)
+                            int firstComma = -1; // is it an uncompiled int array
+                            if (strValue[0] >= '0' && strValue[0] <= '9') firstComma = strValue.IndexOf(',');
+
+                            if (fileManager != null && (firstComma == -1 || firstComma > 3)) // biggest opcode is 3 digits (this doesn't account for white space, but meh for now)
                             {
                                 ExcelScript excelScript = new ExcelScript(fileManager);
                                 scriptByteCode = excelScript.Compile(strValue);
                             }
                             else
                             {
-                                string[] splitValue = strValue.Split(',');
-                                int count = splitValue.Length;
-                                scriptByteCode = new int[count];
-                                for (int i = 0; i < count; i++)
-                                {
-                                    scriptByteCode[i] = int.Parse(splitValue[i]);
-                                }
+                                scriptByteCode = strValue.ToArray<int>(',');
                             }
 
                             objectDelegator[fieldInfo.Name, rowInstance] = newIntegerBufferOffset;
@@ -1463,34 +1460,36 @@ namespace Hellgate
                             String scriptString = FileTools.ArrayToStringGeneric(buffer, ",");
                             if (fileManager != null)
                             {
-                                try
+                                if (offset == 9325 /*From DataTable export*/ || offset == 9649 /*from Object export*/ && StringId == "SKILLS") // todo: not sure what's with this script...
                                 {
-                                    //if (offset == 162141)
-                                    //{
-                                    //    int bp = 0;
-                                    //}
+                                    /* Compiled Bytes:
+                                     * 26,30,700,6,26,1,399,358,669,616562688,711,26,62,3,17,669,641728512,26,8,711,26,62,3,17,358,669,322961408,26,5,700,6,26,1,399,358,388,0
+                                     * 
+                                     * Ending Stack (FIFO):
+                                     * SetStat669('sfx_attack_pct', 'all', 30 * ($sklvl - 1))
+                                     * SetStat669('sfx_duration_pct', 'all', get_skill_level(@unit, 'Shield_Mastery'))
+                                     * SetStat669('damage_percent_skill', 8 * get_skill_level(@unit, 'Shield_Mastery'))
+                                     * SetStat669('damage_percent_skill', 8 * get_skill_level(@unit, 'Shield_Mastery')) + 5 * ($sklvl - 1)
+                                     * 
+                                     * The last SetStat has strange overhang - decompiling wrong?
+                                     * Or is it "supposed" to be there?
+                                     * i.e. It's actually decompiling correctly, but because I've assumed such scripts to be wrong (as the end +5... segment is useless) we get the Stack exception
+                                     */
 
-                                    //String debugScriptString = scriptString;
-                                    ExcelScript excelScript = new ExcelScript(fileManager);
-                                    scriptString = "\"" + excelScript.Decompile(_scriptBuffer, offset, scriptString, StringId, row, col, fieldDelegate.Name) + "\"";
-
-                                    //ExcelScript recompiledScript = new ExcelScript();
-                                    //int[] recompiledBytes = recompiledScript.Compile(scriptString, debugScriptString, StringId, row, col, fieldInfo.Name);
-
-                                    //if (!buffer.SequenceEqual(recompiledBytes))
-                                    //{
-                                    //    String recompiledBytesString = FileTools.ArrayToStringGeneric(recompiledBytes, ",");
-                                    //    ExcelScript reDecompiledScript = new ExcelScript();
-                                    //    String scriptString2 = excelScript.Decompile(recompiledBytes.ToByteArray(), 0, debugScriptString, StringId, row, col, fieldInfo.Name);
-                                    //    int bp = 0;
-                                    //}
-
-                                    //scriptString = "\"" + scriptString + "\"";
-                                }
-                                catch (Exception e)
-                                {
-                                    Debug.WriteLine(e.ToString());
                                     scriptString = "ScriptError(" + scriptString + ")";
+                                }
+                                else
+                                {
+                                    try
+                                    {
+                                        ExcelScript excelScript = new ExcelScript(fileManager);
+                                        scriptString = "\"" + excelScript.Decompile(_scriptBuffer, offset, scriptString, StringId, row, col, fieldDelegate.Name) + "\"";
+                                    }
+                                    catch (Exception e)
+                                    {
+                                        Debug.WriteLine(e.ToString());
+                                        scriptString = "ScriptError(" + scriptString + ")";
+                                    }
                                 }
                             }
 
