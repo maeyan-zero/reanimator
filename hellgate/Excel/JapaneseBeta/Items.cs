@@ -1199,6 +1199,7 @@ namespace Hellgate.Excel.JapaneseBeta
             Male = 0,
             Female = 1
         }
+
         public enum WeaponBoneIndex
         {
             Null = -1,

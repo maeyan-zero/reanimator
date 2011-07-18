@@ -43,6 +43,21 @@ namespace Reanimator.Controls
             InitializeComponent();
         }
 
+        private String _dataMember;
+        public void DisconnectFromDataSet()
+        {
+            _dataMember = _tableData_DataGridView.DataMember;
+
+            _tableData_DataGridView.DataMember = null;
+            _tableData_DataGridView.DataSource = null;
+        }
+
+        public void ReconnectToDataSet()
+        {
+            _tableData_DataGridView.DataSource = _fileManager.XlsDataSet;
+            _tableData_DataGridView.DataMember = _dataMember;
+        }
+
         /// <summary>
         /// The operations called from this method can take a long time to run, launch new thread.
         /// </summary>
@@ -485,7 +500,8 @@ namespace Reanimator.Controls
         {
             if (_tableData_DataGridView.CurrentRow == null) return;
             if (_tableData_DataGridView.CurrentRow.IsNewRow) return;
-            if (_tableData_DataGridView.Columns[0].Name != "Index") return; // seems to happen sometimes when lots of tables are open...
+            //if (_tableData_DataGridView.Columns[0].Name != "Index") return; // seems to happen sometimes when lots of tables are open...
+            if (_tableData_DataGridView.CurrentRow.Cells[0].Value == null) return; // occurs when the grid view is disconnected from the data set
 
             _selectedIndexChange = true;
             _rows_LayoutPanel.SuspendLayout();
@@ -592,7 +608,7 @@ namespace Reanimator.Controls
             DataGridViewRow currentRow = _tableData_DataGridView.CurrentRow;
             if (currentRow == null) return;
             //Debug.Assert(currentRow != null);
-
+            return;
             DataRow dr = _dataTable.Rows[currentRow.Index];
             dr[comboBox.Name] = comboBox.SelectedIndex;
         }
