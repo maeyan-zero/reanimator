@@ -1460,7 +1460,7 @@ namespace Hellgate
                             String scriptString = FileTools.ArrayToStringGeneric(buffer, ",");
                             if (fileManager != null)
                             {
-                                if (offset == 9325 /*From DataTable export*/ || offset == 9649 /*from Object export*/ && StringId == "SKILLS") // todo: not sure what's with this script...
+                                if (offset == 9325 /*from DataTable export*/ || offset == 9649 /*from Object export*/ && StringId == "SKILLS") // todo: not sure what's with this script...
                                 {
                                     /* Compiled Bytes:
                                      * 26,30,700,6,26,1,399,358,669,616562688,711,26,62,3,17,669,641728512,26,8,711,26,62,3,17,358,669,322961408,26,5,700,6,26,1,399,358,388,0

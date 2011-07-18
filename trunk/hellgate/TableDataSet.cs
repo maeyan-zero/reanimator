@@ -457,7 +457,7 @@ namespace Hellgate
                         String relationName = String.Format("{0}_{1}_{2}", excelFile.StringId, dcChild.ColumnName, ExcelFile.ColumnTypeKeys.IsTableIndex);
                         DataRelation relation = new DataRelation(relationName, dcParent, dcChild, false);
 
-                        //if (relationName == "SKILLS_uiThrobsOnState_IsTableIndex")
+                        //if (relationName == "PLAYERS_paperdollSkill_IsTableIndex")
                         //{
                         //    int bp = 0;
                         //}

@@ -1,5 +1,5 @@
 ﻿using System;
-using System.Data;
+using System.Collections.Generic;
 using System.Linq;
 using System.Windows.Forms;
 using Hellgate;
@@ -9,6 +9,7 @@ namespace Reanimator.Forms
 {
     public partial class TableEditorForm : Form, IMdiChildBase
     {
+        private readonly List<DatafileEditor> _datafileEditors = new List<DatafileEditor>();
         private readonly FileManager _fileManager;
         private TablesLoaded _tablesLoaded;
 
@@ -63,6 +64,15 @@ namespace Reanimator.Forms
             DatafileEditor editor = new DatafileEditor(dataFile, _fileManager) { Dock = DockStyle.Fill };
             TabPage tabPage = new TabPage(id) { Parent = _tabControl, Name = id };
 
+            // must disconnect the DataGridView forms controls from the DataSet to modify it (the DataSet) in a non-UI thread; see: (essentially the problem we were having)
+            // http://connect.microsoft.com/VisualStudio/feedback/details/117148/datagridview-throws-system-invalidoperationexception-when-used-with-a-ibindinglist-that-raises-listchanged-on-a-background-thread
+            // while we are disconnecting every grid view, we only actually need to do it if it's going to be modified due to relations
+            // however this doesn't appear to lag them or the process in any significant manner, so this will do
+            foreach (DatafileEditor datafileEditor in _datafileEditors)
+            {
+                datafileEditor.DisconnectFromDataSet();
+            }
+
             ProgressForm progress = new ProgressForm(editor.InitThreadedComponents, null);
             progress.SetStyle(ProgressBarStyle.Marquee);
             progress.SetLoadingText("Generating DataTable...");
@@ -75,6 +85,13 @@ namespace Reanimator.Forms
             editor.AddedToTabPage = true;
             tabPage.ResumeLayout();
             _tabControl.ResumeLayout();
+
+            foreach (DatafileEditor datafileEditor in _datafileEditors)
+            {
+                datafileEditor.ReconnectToDataSet();
+            }
+
+            _datafileEditors.Add(editor);
         }
 
         /// <summary>
