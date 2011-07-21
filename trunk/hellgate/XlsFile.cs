@@ -90,7 +90,7 @@ namespace Hellgate
 
         private class XlsTable
         {
-            public String ClientId;                 // the id used internally (e.g. "EXCEL_TABLE_DEFINITION" for "EXCELTABLES")
+            public String DefinitionId;             // the id used internally (e.g. "EXCEL_TABLE_DEFINITION" for "EXCELTABLES")
             public int RowSize;                     // number of bytes per row
             public List<XlsElement> Elements = new List<XlsElement>();
             public int ElementCount { get { return Elements.Count; } }
@@ -217,10 +217,10 @@ namespace Hellgate
                     {
                         case "XLS_Key": // XLS_TableDefinition *__usercall XLS_Key<eax>(char *szStringId<eax>, int rowSize)
                             Debug.Assert(args.Length == 2);
-                            xlsTable.ClientId = _GetArg<string>(args, 0);
+                            xlsTable.DefinitionId = _GetArg<string>(args, 0);
                             xlsTable.RowSize = _GetArg<int>(args, 1);
 
-                            Debug.Assert(!String.IsNullOrEmpty(xlsTable.ClientId));
+                            Debug.Assert(!String.IsNullOrEmpty(xlsTable.DefinitionId));
                             Debug.Assert(xlsTable.RowSize > 0);
 
                             while (!source[++i].Contains("{")) { } // skip until we're in the table definition if-statement
@@ -230,14 +230,14 @@ namespace Hellgate
                         case "XLS_String": // 1 // void __cdecl XLS_String(XLS_TableDefinition *pTableDefinition, char *szName, int offset, int charCount, int index)
                             Debug.Assert(args.Length == 5);
                             xlsElement = new XlsElement
-                                             {
-                                                 Name = _GetArg<string>(args, 1),
-                                                 Offset = _GetArg<int>(args, 2),
-                                                 Type = XlsType.String,
-                                                 Count = _GetArg<int>(args, 3),
-                                                 Size = 1,
-                                                 Default = null,
-                                             };
+                            {
+                                Name = _GetArg<string>(args, 1),
+                                Offset = _GetArg<int>(args, 2),
+                                Type = XlsType.String,
+                                Count = _GetArg<int>(args, 3),
+                                Size = 1,
+                                Default = null,
+                            };
 
                             // applicable only to String and StringOffset/StringOffsetDefault
                             // XLS_ElementDefinition *__usercall XLS_Def_SetDefinitionDefault_String<eax>(XLS_ElementDefinition *pElement<eax>, int index, int indexUnknown)
@@ -247,14 +247,14 @@ namespace Hellgate
                         case "XLS_StringOffset": // 2 // void __usercall XLS_StringOffset(XLS_TableDefinition *pTable, char *szName, int offset<esi>, int unknownBool)
                             Debug.Assert(args.Length == 4);
                             xlsElement = new XlsElement
-                                             {
-                                                 Name = _GetArg<string>(args, 1),
-                                                 Offset = _GetArg<int>(args, 2),
-                                                 Type = XlsType.StringOffset,
-                                                 Count = 1,
-                                                 Size = 4,
-                                                 Default = null
-                                             };
+                            {
+                                Name = _GetArg<string>(args, 1),
+                                Offset = _GetArg<int>(args, 2),
+                                Type = XlsType.StringOffset,
+                                Count = 1,
+                                Size = 4,
+                                Default = null
+                            };
 
                             // applicable only to String and StringOffset/StringOffsetDefault
                             // XLS_ElementDefinition *__usercall XLS_Def_SetDefinitionDefault_String<eax>(XLS_ElementDefinition *pElement<eax>, int unknown1, int indexUnknown)
@@ -264,14 +264,14 @@ namespace Hellgate
                         case "XLS_StringOffsetDefault": // 2 // void __cdecl XLS_StringOffsetDefault(XLS_TableDefinition *pTable, char *szName, int offset, int defaultSomething)
                             Debug.Assert(args.Length == 4);
                             xlsElement = new XlsElement
-                                             {
-                                                 Name = _GetArg<string>(args, 1),
-                                                 Offset = _GetArg<int>(args, 2),
-                                                 Type = XlsType.StringOffset,
-                                                 Count = 1,
-                                                 Size = 4,
-                                                 Default = null
-                                             };
+                            {
+                                Name = _GetArg<string>(args, 1),
+                                Offset = _GetArg<int>(args, 2),
+                                Type = XlsType.StringOffset,
+                                Count = 1,
+                                Size = 4,
+                                Default = null
+                            };
 
                             // applicable only to String and StringOffset/StringOffsetDefault
                             // XLS_ElementDefinition *__usercall XLS_Def_SetDefinitionDefault_String<eax>(XLS_ElementDefinition *pElement<eax>, int index, int indexUnknown)
@@ -281,162 +281,175 @@ namespace Hellgate
                         case "XLS_GroupStyle": // 3 // void __cdecl XLS_GroupStyle(XLS_TableDefinition *pTable, char *szName, int offset)
                             Debug.Assert(args.Length == 3);
                             xlsElement = new XlsElement
-                                             {
-                                                 Name = _GetArg<string>(args, 1),
-                                                 Offset = _GetArg<int>(args, 2),
-                                                 Type = XlsType.GroupStyle,
-                                                 Count = 1,
-                                                 Size = 4,
-                                                 Default = -1,
-                                             };
+                            {
+                                Name = _GetArg<string>(args, 1),
+                                Offset = _GetArg<int>(args, 2),
+                                Type = XlsType.GroupStyle,
+                                Count = 1,
+                                Size = 4,
+                                Default = -1,
+                            };
+                            break;
+
+                        case "XLS_Style": // 3 // void __cdecl XLS_Style(XLS_TableDefinition *pTable) [used in TestCenter client]
+                            Debug.Assert(args.Length == 1);
+                            xlsElement = new XlsElement
+                            {
+                                Name = "Style",
+                                Offset = 136,
+                                Type = XlsType.GroupStyle,
+                                Count = 1,
+                                Size = 4,
+                                Default = -1,
+                            };
                             break;
 
                         case "XLS_Flag": // 4 // void __usercall XLS_Flag(XLS_TableDefinition *pTable, char *szName, int offset, unsigned int bitIndex<edi>, char defaultValue)
                             Debug.Assert(args.Length == 5);
                             xlsElement = new XlsElement
-                                             {
-                                                 Name = _GetArg<string>(args, 1),
-                                                 Offset = _GetArg<int>(args, 2),
-                                                 Size = (int)(_GetArg<uint>(args, 3) >> 3) + 1,
-                                                 Type = XlsType.Flag,
-                                                 Count = 1,
-                                                 Default = _GetArg<bool>(args, 4),
-                                                 Index = (int)_GetArg<uint>(args, 3)
-                                             };
+                            {
+                                Name = _GetArg<string>(args, 1),
+                                Offset = _GetArg<int>(args, 2),
+                                Size = (int)(_GetArg<uint>(args, 3) >> 3) + 1,
+                                Type = XlsType.Flag,
+                                Count = 1,
+                                Default = _GetArg<bool>(args, 4),
+                                Index = (int)_GetArg<uint>(args, 3)
+                            };
                             break;
 
                         case "XLS_Byte_06": // 6 // void __cdecl XLS_Byte_06(XLS_TableDefinition *pTable, char *szName, int offset) [calls XLS_Byte]
                             Debug.Assert(args.Length == 3);
                             xlsElement = new XlsElement
-                                             {
-                                                 Name = _GetArg<string>(args, 1),
-                                                 Type = XlsType.Byte06,
-                                                 Offset = _GetArg<int>(args, 2),
-                                                 Count = 1,
-                                                 Size = 1,
-                                                 Default = (byte)0
-                                             };
+                            {
+                                Name = _GetArg<string>(args, 1),
+                                Type = XlsType.Byte06,
+                                Offset = _GetArg<int>(args, 2),
+                                Count = 1,
+                                Size = 1,
+                                Default = (byte)0
+                            };
                             break;
 
                         case "XLS_Int32": // 9 // void __cdecl XLS_Int32(XLS_TableDefinition *pTableDefinition, char *szName, int offset, int defaultValue) [calls XLS_Int32Array]
                             Debug.Assert(args.Length == 4);
                             xlsElement = new XlsElement
-                                             {
-                                                 Name = _GetArg<string>(args, 1),
-                                                 Type = XlsType.Int32,
-                                                 Offset = _GetArg<int>(args, 2),
-                                                 Count = 1,
-                                                 Size = 4,
-                                                 Default = _GetArg<int>(args, 3)
-                                             };
+                            {
+                                Name = _GetArg<string>(args, 1),
+                                Type = XlsType.Int32,
+                                Offset = _GetArg<int>(args, 2),
+                                Count = 1,
+                                Size = 4,
+                                Default = _GetArg<int>(args, 3)
+                            };
                             break;
 
                         case "XLS_Bool": // 11 // void __cdecl XLS_Bool(XLS_TableDefinition *pTableDefinition, char *szName, int offset, int defaultValue) [calls XLS_Int32Array]
                             Debug.Assert(args.Length == 4);
                             xlsElement = new XlsElement
-                                             {
-                                                 Name = _GetArg<string>(args, 1),
-                                                 Type = XlsType.Bool,
-                                                 Offset = _GetArg<int>(args, 2),
-                                                 Count = 1,
-                                                 Size = 4,
-                                                 Default = _GetArg<bool>(args, 3)
-                                             };
+                            {
+                                Name = _GetArg<string>(args, 1),
+                                Type = XlsType.Bool,
+                                Offset = _GetArg<int>(args, 2),
+                                Count = 1,
+                                Size = 4,
+                                Default = _GetArg<bool>(args, 3)
+                            };
                             break;
 
                         case "XLS_Float1": // 12 // void __cdecl XLS_Float1(XLS_TableDefinition *pTableDefinition, char *szName, int offset, float defaultValue)
                             Debug.Assert(args.Length == 4);
                             xlsElement = new XlsElement
-                                             {
-                                                 Name = _GetArg<string>(args, 1),
-                                                 Offset = _GetArg<int>(args, 2),
-                                                 Type = XlsType.Float,
-                                                 Count = 1,
-                                                 Size = 4,
-                                                 Default = _GetArg<float>(args, 3)
-                                             };
+                            {
+                                Name = _GetArg<string>(args, 1),
+                                Offset = _GetArg<int>(args, 2),
+                                Type = XlsType.Float,
+                                Count = 1,
+                                Size = 4,
+                                Default = _GetArg<float>(args, 3)
+                            };
                             break;
 
                         case "XLS_Float2": // 12 // void __cdecl XLS_Float2(XLS_TableDefinition *pTable, char *szName, int offset)
                             Debug.Assert(args.Length == 3);
                             xlsElement = new XlsElement
-                                             {
-                                                 Name = _GetArg<string>(args, 1),
-                                                 Offset = _GetArg<int>(args, 2),
-                                                 Type = XlsType.Float,
-                                                 Count = 1,
-                                                 Size = 4,
-                                                 Default = 0.0f,
+                            {
+                                Name = _GetArg<string>(args, 1),
+                                Offset = _GetArg<int>(args, 2),
+                                Type = XlsType.Float,
+                                Count = 1,
+                                Size = 4,
+                                Default = 0.0f,
 
-                                                 Index = 0.0f,
-                                                 IndexUnknown = 100.0f
-                                             };
+                                Index = 0.0f,
+                                IndexUnknown = 100.0f
+                            };
                             break;
 
                         case "XLS_Byte_0D": // 13 // void __cdecl XLS_Byte_0D(XLS_TableDefinition *pTable, char *szName, int offset) [calls XLS_Byte]
                             Debug.Assert(args.Length == 3);
                             xlsElement = new XlsElement
-                                             {
-                                                 Name = _GetArg<string>(args, 1),
-                                                 Offset = _GetArg<int>(args, 2),
-                                                 Type = XlsType.Byte0D,
-                                                 Count = 1,
-                                                 Size = 1,
-                                                 Default = (byte)128
-                                             };
+                            {
+                                Name = _GetArg<string>(args, 1),
+                                Offset = _GetArg<int>(args, 2),
+                                Type = XlsType.Byte0D,
+                                Count = 1,
+                                Size = 1,
+                                Default = (byte)128
+                            };
                             break;
 
                         case "XLS_CodeInt32": // 14 // void __cdecl XLS_CodeInt32(XLS_TableDefinition *pTable, char *szName, int offset)
                             Debug.Assert(args.Length == 3);
                             xlsElement = new XlsElement
-                                             {
-                                                 Name = _GetArg<string>(args, 1),
-                                                 Offset = _GetArg<int>(args, 2),
-                                                 Type = XlsType.CodeInt32,
-                                                 Count = 1,
-                                                 Size = 4,
-                                                 Default = 0
-                                             };
+                            {
+                                Name = _GetArg<string>(args, 1),
+                                Offset = _GetArg<int>(args, 2),
+                                Type = XlsType.CodeInt32,
+                                Count = 1,
+                                Size = 4,
+                                Default = 0
+                            };
                             break;
 
                         case "XLS_CodeInt16": // 16 // void __cdecl XLS_CodeInt16(XLS_TableDefinition *pTableDefinition, char *szName, int offset)
                             Debug.Assert(args.Length == 3);
                             xlsElement = new XlsElement
-                                             {
-                                                 Name = _GetArg<string>(args, 1),
-                                                 Offset = _GetArg<int>(args, 2),
-                                                 Type = XlsType.CodeInt16,
-                                                 Count = 1,
-                                                 Size = 2,
-                                                 Default = (Int16)0
-                                             };
+                            {
+                                Name = _GetArg<string>(args, 1),
+                                Offset = _GetArg<int>(args, 2),
+                                Type = XlsType.CodeInt16,
+                                Count = 1,
+                                Size = 2,
+                                Default = (Int16)0
+                            };
                             break;
 
                         case "XLS_CodeInt8": // 17 // void __cdecl XLS_CodeInt8(XLS_TableDefinition *pTable)
                             Debug.Assert(args.Length == 1);
                             xlsElement = new XlsElement
-                                             {
-                                                 Count = 1,
-                                                 Size = 1,
-                                                 Name = "code",
-                                                 Type = XlsType.CodeInt8,
-                                                 Offset = 64, // XLS_CodeInt8 is only use once in table ITEM_LOOK_GROUP_DATA
-                                                 Default = (byte)0
-                                             };
+                            {
+                                Count = 1,
+                                Size = 1,
+                                Name = "code",
+                                Type = XlsType.CodeInt8,
+                                Offset = 64, // XLS_CodeInt8 is only use once in table ITEM_LOOK_GROUP_DATA
+                                Default = (byte)0
+                            };
                             break;
 
                         case "XLS_ExcelIndex": // 20 // void __usercall XLS_ExcelIndex(XLS_TableDefinition *pTableDefinition<edi>, char *szName, int offset, int tableIndex) [calls XLS_ExcelIndexArray]
                             Debug.Assert(args.Length == 4); // XLS_ExcelIndexArray(pTableDefinition, 20, szName, offset, 1, tableIndex, 0);
                             xlsElement = new XlsElement
-                                             {
-                                                 Name = _GetArg<string>(args, 1),
-                                                 Type = XlsType.ExcelIndex,
-                                                 Offset = _GetArg<int>(args, 2),
-                                                 Count = 1,
-                                                 Size = 4,
-                                                 Default = null,
-                                                 Flags = XlsFlags.ExcelIndex,
-                                             };
+                            {
+                                Name = _GetArg<string>(args, 1),
+                                Type = XlsType.ExcelIndex,
+                                Offset = _GetArg<int>(args, 2),
+                                Count = 1,
+                                Size = 4,
+                                Default = null,
+                                Flags = XlsFlags.ExcelIndex,
+                            };
 
                             // applicable only to ExcelIndex and ExcelIndexArray, AiInit, Qualities, and FolderCode
                             // void __usercall XLS_Def_ExcelSomething(XLS_ElementDefinition *pElement<eax>, unsigned int unknown1<edx>, unsigned int tableIndex<esi>, int excelDefaultQ)                            // void __usercall XLS_Def_ExcelSomething(XLS_ElementDefinition *pElement<eax>, unsigned int unknown1<edx>, unsigned int tableIndex<esi>, int excelDefaultQ)
@@ -446,22 +459,22 @@ namespace Hellgate
                         case "XLS_FolderCode": // 21 // void __usercall XLS_FolderCode(XLS_TableDefinition *pTable<edi>, int offset)
                             Debug.Assert(args.Length == 2);
                             xlsElement = new XlsElement
-                                             {
-                                                 Offset = _GetArg<int>(args, 1),
-                                                 Name = "FolderCode",
-                                                 Type = XlsType.FolderCode,
-                                                 Count = 1,
-                                                 Size = 4,
-                                                 Default = null,
-                                                 Flags = XlsFlags.ExcelIndex
-                                             };
+                            {
+                                Offset = _GetArg<int>(args, 1),
+                                Name = "FolderCode",
+                                Type = XlsType.FolderCode,
+                                Count = 1,
+                                Size = 4,
+                                Default = null,
+                                Flags = XlsFlags.ExcelIndex
+                            };
 
                             // LEVEL_FILE_PATHS
                             int tableIndex = -1;
                             switch (clientVersion)
                             {
                                 case FileManager.ClientVersions.SinglePlayer: tableIndex = 0x4E; break;
-                                case FileManager.ClientVersions.TestCenter: tableIndex = -1; break; // todo
+                                case FileManager.ClientVersions.TestCenter:   tableIndex = 0x4F; break;
                                 case FileManager.ClientVersions.Resurrection: tableIndex = 0x52; break;
                             }
 
@@ -473,35 +486,35 @@ namespace Hellgate
                         case "XLS_Int32Default": // 25 // void __cdecl XLS_Int32Default(XLS_TableDefinition *pTableDefinition, char *szName, int offset) [calls XLS_Int32Array]
                             Debug.Assert(args.Length == 3);
                             xlsElement = new XlsElement
-                                             {
-                                                 Name = _GetArg<string>(args, 1),
-                                                 Offset = _GetArg<int>(args, 2),
-                                                 Type = XlsType.Int32Default,
-                                                 Count = 1,
-                                                 Size = 4,
-                                                 Default = -1
-                                             };
+                            {
+                                Name = _GetArg<string>(args, 1),
+                                Offset = _GetArg<int>(args, 2),
+                                Type = XlsType.Int32Default,
+                                Count = 1,
+                                Size = 4,
+                                Default = -1
+                            };
                             break;
 
                         case "XLS_AiInit": // 26 // void __usercall XLS_AiInit(XLS_TableDefinition *pTable<edi>, char *szName, int excelDefaultQ)
                             Debug.Assert(args.Length == 3);
                             xlsElement = new XlsElement
-                                             {
-                                                 Offset = 0,
-                                                 Size = 0,
-                                                 Name = _GetArg<string>(args, 1),
-                                                 Type = XlsType.AiInit,
-                                                 Count = 1,
-                                                 Default = null,
-                                                 Flags = XlsFlags.ExcelIndex
-                                             };
+                            {
+                                Offset = 0,
+                                Size = 0,
+                                Name = _GetArg<string>(args, 1),
+                                Type = XlsType.AiInit,
+                                Count = 1,
+                                Default = null,
+                                Flags = XlsFlags.ExcelIndex
+                            };
 
                             // AI_INIT
                             int aiInitIndex = -1;
                             switch (clientVersion)
                             {
                                 case FileManager.ClientVersions.SinglePlayer: aiInitIndex = 0x46; break;
-                                case FileManager.ClientVersions.TestCenter: aiInitIndex = -1; break; // todo
+                                case FileManager.ClientVersions.TestCenter:   aiInitIndex = 0x47; break;
                                 case FileManager.ClientVersions.Resurrection: aiInitIndex = 0x48; break;
                             }
 
@@ -513,15 +526,15 @@ namespace Hellgate
                         case "XLS_Enum": // 29 // void __usercall XLS_Enum(XLS_TableDefinition *pTable, char *szName, int offset, int enumCount, void *enums<eax>) [calls XLS_EnumArray]
                             Debug.Assert(args.Length == 5);
                             xlsElement = new XlsElement
-                                             {
-                                                 Name = _GetArg<string>(args, 1),
-                                                 Type = XlsType.Enum,
-                                                 Offset = _GetArg<int>(args, 2),
-                                                 Count = 1,
-                                                 Size = 4,
-                                                 Flags = XlsFlags.Enum,
-                                                 Default = null // might have to set this to a proper default (the INDEX of the enum array. i.e. enums[0]... I think...)
-                                             };
+                            {
+                                Name = _GetArg<string>(args, 1),
+                                Type = XlsType.Enum,
+                                Offset = _GetArg<int>(args, 2),
+                                Count = 1,
+                                Size = 4,
+                                Flags = XlsFlags.Enum,
+                                Default = null // might have to set this to a proper default (the INDEX of the enum array. i.e. enums[0]... I think...)
+                            };
 
                             Dictionary<String, int> xlsEnum = _XlsRipEnums(args[4], _GetArg<int>(args, 3));
                             Debug.Assert(xlsEnum.Count > 0);
@@ -536,15 +549,15 @@ namespace Hellgate
                         case "XLS_EnumArray": // 29 (Enum) or 30 (EnumArray) // void __usercall XLS_EnumArray(XLS_TableDefinition *pTableDefinition, void *enums<eax>, int typeId, char *szName, int offset, int elementCount, int enumCount)
                             Debug.Assert(args.Length == 7);
                             xlsElement = new XlsElement
-                                             {
-                                                 Name = _GetArg<string>(args, 3),
-                                                 Type = _GetArg<XlsType>(args, 2),
-                                                 Offset = _GetArg<int>(args, 4),
-                                                 Count = _GetArg<int>(args, 5),
-                                                 Size = 4,
-                                                 Flags = XlsFlags.Enum,
-                                                 Default = null // might have to set this to a proper default (the INDEX of the enum array. i.e. enums[0]... I think...)
-                                             };
+                            {
+                                Name = _GetArg<string>(args, 3),
+                                Type = _GetArg<XlsType>(args, 2),
+                                Offset = _GetArg<int>(args, 4),
+                                Count = _GetArg<int>(args, 5),
+                                Size = 4,
+                                Flags = XlsFlags.Enum,
+                                Default = null // might have to set this to a proper default (the INDEX of the enum array. i.e. enums[0]... I think...)
+                            };
 
                             Dictionary<String, int> xlsEnumArray = _XlsRipEnums(args[1], _GetArg<int>(args, 6));
                             Debug.Assert(xlsEnumArray.Count > 0);
@@ -559,54 +572,54 @@ namespace Hellgate
                         case "XLS_Int32Array": // 35 // void __cdecl XLS_Int32Array(XLS_TableDefinition *pTableDefinition, int typeId, char *szName, int offset, int elementCount, int defaultValue)
                             Debug.Assert(args.Length == 6);
                             xlsElement = new XlsElement
-                                             {
-                                                 Name = _GetArg<string>(args, 2),
-                                                 Type = _GetArg<XlsType>(args, 1),
-                                                 Offset = _GetArg<int>(args, 3),
-                                                 Count = _GetArg<int>(args, 4),
-                                                 Size = 4,
-                                                 Default = _GetArg<int>(args, 5),
-                                             };
+                            {
+                                Name = _GetArg<string>(args, 2),
+                                Type = _GetArg<XlsType>(args, 1),
+                                Offset = _GetArg<int>(args, 3),
+                                Count = _GetArg<int>(args, 4),
+                                Size = 4,
+                                Default = _GetArg<int>(args, 5),
+                            };
                             break;
 
                         case "XLS_Int32Array2": // 35 // void __cdecl XLS_Int32Array2(XLS_TableDefinition *pTable, char *szName, int offset, int elementCount, int defaultValue) [calls XLS_Int32Array]
                             Debug.Assert(args.Length == 5);
                             xlsElement = new XlsElement
-                                             {
-                                                 Name = _GetArg<string>(args, 1),
-                                                 Type = XlsType.Int32Array,
-                                                 Offset = _GetArg<int>(args, 2),
-                                                 Count = _GetArg<int>(args, 3),
-                                                 Size = 4,
-                                                 Default = _GetArg<int>(args, 4),
-                                             };
+                            {
+                                Name = _GetArg<string>(args, 1),
+                                Type = XlsType.Int32Array,
+                                Offset = _GetArg<int>(args, 2),
+                                Count = _GetArg<int>(args, 3),
+                                Size = 4,
+                                Default = _GetArg<int>(args, 4),
+                            };
                             break;
 
                         case "XLS_UseFixedDRLGSeed": // 36 // void __cdecl XLS_UseFixedDRLGSeed(XLS_TableDefinition *pTable)
                             Debug.Assert(args.Length == 1);
                             xlsElement = new XlsElement
-                                             {
-                                                 Name = "Use Fixed DRLG Seed",
-                                                 Type = XlsType.UseFixedDRLGSeed, // found only in DRLG_DEFINITION
-                                                 Offset = 320,
-                                                 Count = 20,
-                                                 Size = 4,
-                                                 Default = -1,
-                                             };
+                            {
+                                Name = "Use Fixed DRLG Seed",
+                                Type = XlsType.UseFixedDRLGSeed, // found only in DRLG_DEFINITION
+                                Offset = 320,
+                                Count = 20,
+                                Size = 4,
+                                Default = -1,
+                            };
                             break;
 
                         case "XLS_ExcelIndexArray": // 40 // void __usercall XLS_ExcelIndexArray(XLS_TableDefinition *pTable<edi>, int typeId, char *szName, int offset, int count, int tableIndex, int unknown1)
                             Debug.Assert(args.Length == 7);
                             xlsElement = new XlsElement
-                                             {
-                                                 Name = _GetArg<string>(args, 2),
-                                                 Type = _GetArg<XlsType>(args, 1),
-                                                 Offset = _GetArg<int>(args, 3),
-                                                 Count = _GetArg<int>(args, 4),
-                                                 Size = 4,
-                                                 Default = null,
-                                                 Flags = XlsFlags.ExcelIndex
-                                             };
+                            {
+                                Name = _GetArg<string>(args, 2),
+                                Type = _GetArg<XlsType>(args, 1),
+                                Offset = _GetArg<int>(args, 3),
+                                Count = _GetArg<int>(args, 4),
+                                Size = 4,
+                                Default = null,
+                                Flags = XlsFlags.ExcelIndex
+                            };
 
                             // applicable only to ExcelIndex and ExcelIndexArray, AiInit, Qualities, and FolderCode
                             // void __usercall XLS_Def_ExcelSomething(XLS_ElementDefinition *pElement<eax>, unsigned int unknown1<edx>, unsigned int tableIndex<esi>, int excelDefaultQ)
@@ -618,21 +631,21 @@ namespace Hellgate
 
                             // only found in UNIT_DATA
                             xlsElement = new XlsElement
-                                             {
-                                                 Name = "qualities",
-                                                 Type = XlsType.Qualities,
-                                                 Count = 64,
-                                                 Size = 8,
-                                                 Default = null,
-                                                 Flags = XlsFlags.ExcelIndex
-                                             };
+                            {
+                                Name = "qualities",
+                                Type = XlsType.Qualities,
+                                Count = 64,
+                                Size = 8,
+                                Default = null,
+                                Flags = XlsFlags.ExcelIndex
+                            };
 
                             // ITEM_QUALITY
                             int qualitiesIndex = -1;
                             switch (clientVersion)
                             {
                                 case FileManager.ClientVersions.SinglePlayer: qualitiesIndex = 0x43; xlsElement.Offset = 2576; break;
-                                case FileManager.ClientVersions.TestCenter: qualitiesIndex = -1; xlsElement.Offset = -1; break; // todo
+                                case FileManager.ClientVersions.TestCenter:   qualitiesIndex = 0x44; xlsElement.Offset = 2708; break;
                                 case FileManager.ClientVersions.Resurrection: qualitiesIndex = 0x45; xlsElement.Offset = 2260; break;
                             }
 
@@ -645,14 +658,14 @@ namespace Hellgate
                         case "XLS_StringIndex": // 46 // void __usercall XLS_StringIndex(XLS_TableDefinition *pTableDefinition<edi>, char *szName, int offset, int indexType(?))
                             Debug.Assert(args.Length == 4);
                             xlsElement = new XlsElement
-                                             {
-                                                 Name = _GetArg<string>(args, 1),
-                                                 Offset = _GetArg<int>(args, 2),
-                                                 Type = XlsType.StringIndex,
-                                                 Count = 1,
-                                                 Size = 4,
-                                                 Default = null
-                                             };
+                            {
+                                Name = _GetArg<string>(args, 1),
+                                Offset = _GetArg<int>(args, 2),
+                                Type = XlsType.StringIndex,
+                                Count = 1,
+                                Size = 4,
+                                Default = null
+                            };
 
                             int indexType = _GetArg<int>(args, 3); // not entirely sure what this is - looks like some sort of type though
                             if (indexType == 2) xlsElement.Flags = XlsFlags.StringIndex2;
@@ -664,15 +677,15 @@ namespace Hellgate
                         case "XLS_TugboatUnknown": // 47 // void __usercall XLS_TugboatUnknown(XLS_TableDefinition *pTable<esi>, char *szName, int offset, int elementCount<edi>)
                             Debug.Assert(args.Length == 4);
                             xlsElement = new XlsElement
-                                             {
-                                                 Name = _GetArg<string>(args, 1),
-                                                 Offset = _GetArg<int>(args, 2),
-                                                 Type = XlsType.TugboatUnknown, // I think it's just another type of string index - doesn't matter though, only found in unused table (QUEST_TASK_DEFINITION_TUGBOAT)
-                                                 Count = _GetArg<int>(args, 3),
-                                                 Size = 4,
-                                                 Default = null,
-                                                 Flags = XlsFlags.StringIndex3
-                                             };
+                            {
+                                Name = _GetArg<string>(args, 1),
+                                Offset = _GetArg<int>(args, 2),
+                                Type = XlsType.TugboatUnknown, // I think it's just another type of string index - doesn't matter though, only found in unused table (QUEST_TASK_DEFINITION_TUGBOAT)
+                                Count = _GetArg<int>(args, 3),
+                                Size = 4,
+                                Default = null,
+                                Flags = XlsFlags.StringIndex3
+                            };
 
                             xlsTable.HasStringIndex = true;
                             break;
@@ -680,43 +693,43 @@ namespace Hellgate
                         case "XLS_File": // 48 // void __cdecl XLS_File(XLS_TableDefinition *pTable)
                             Debug.Assert(args.Length == 1);
                             xlsElement = new XlsElement
-                                             {
-                                                 Offset = 0,
-                                                 Name = "file",
-                                                 Type = XlsType.File,
-                                                 Count = 1,
-                                                 Size = 8,
-                                                 ExcelDefaultQ = 0,
-                                                 Index = @"data\palettes\", // this type is used only once for PALETTE_DATA
-                                                 Default = null
-                                             };
+                            {
+                                Offset = 0,
+                                Name = "file",
+                                Type = XlsType.File,
+                                Count = 1,
+                                Size = 8,
+                                ExcelDefaultQ = 0,
+                                Index = @"data\palettes\", // this type is used only once for PALETTE_DATA
+                                Default = null
+                            };
                             break;
 
                         case "XLS_Script": // 50 // void __cdecl XLS_Script(XLS_TableDefinition *pTable, char *szName, int offset)
                             Debug.Assert(args.Length == 3);
                             xlsElement = new XlsElement
-                                             {
-                                                 Name = _GetArg<string>(args, 1),
-                                                 Offset = _GetArg<int>(args, 2),
-                                                 Type = XlsType.Script,
-                                                 Count = 1,
-                                                 Size = 4,
-                                                 Default = 0
-                                             };
+                            {
+                                Name = _GetArg<string>(args, 1),
+                                Offset = _GetArg<int>(args, 2),
+                                Type = XlsType.Script,
+                                Count = 1,
+                                Size = 4,
+                                Default = 0
+                            };
                             xlsTable.HasScripts = true;
                             break;
 
                         case "XLS_MaxSlots": // 51 // void __usercall XLS_MaxSlots(XLS_TableDefinition *pTable<edi>)
                             Debug.Assert(args.Length == 1);
                             xlsElement = new XlsElement
-                                             {
-                                                 Offset = 0,
-                                                 Size = 0,
-                                                 Name = "max slots",
-                                                 Type = XlsType.MaxSlots,
-                                                 Count = 1,
-                                                 Default = 0
-                                             };
+                            {
+                                Offset = 0,
+                                Size = 0,
+                                Name = "max slots",
+                                Type = XlsType.MaxSlots,
+                                Count = 1,
+                                Default = 0
+                            };
 
                             xlsTable.HasUnknown = true;
                             break;
@@ -724,14 +737,14 @@ namespace Hellgate
                         case "XLS_Unknown1": // 52 // void __usercall XLS_Unknown1(XLS_TableDefinition *pTable<edi>, char *szName, int index, int defaultValue)
                             Debug.Assert(args.Length == 4);
                             xlsElement = new XlsElement
-                                             {
-                                                 Offset = 0,
-                                                 Size = 0,
-                                                 Name = _GetArg<string>(args, 1),
-                                                 Type = XlsType.Unknown1,
-                                                 Count = 1,
-                                                 Default = _GetArg<int>(args, 3)
-                                             };
+                            {
+                                Offset = 0,
+                                Size = 0,
+                                Name = _GetArg<string>(args, 1),
+                                Type = XlsType.Unknown1,
+                                Count = 1,
+                                Default = _GetArg<int>(args, 3)
+                            };
 
                             _XlsSetDefAimHeightStuff(xlsElement, _GetArg<int>(args, 2), 0);
                             xlsTable.HasUnknown = true;
@@ -740,20 +753,20 @@ namespace Hellgate
                         case "XLS_AimHeight": // 53 // void __usercall XLS_AimHeight(XLS_TableDefinition *pTable<edi>)
                             Debug.Assert(args.Length == 1);
                             xlsElement = new XlsElement
-                                             {
-                                                 Offset = 0,
-                                                 Size = 0,
-                                                 Name = "aim_height",
-                                                 Type = XlsType.AimHeight,
-                                                 Count = 1,
-                                                 Default = 0.0f
-                                             };
+                            {
+                                Offset = 0,
+                                Size = 0,
+                                Name = "aim_height",
+                                Type = XlsType.AimHeight,
+                                Count = 1,
+                                Default = 0.0f
+                            };
 
                             int aimHeightIndex = -1;
                             switch (clientVersion)
                             {
                                 case FileManager.ClientVersions.SinglePlayer: aimHeightIndex = 266; break;
-                                case FileManager.ClientVersions.TestCenter: aimHeightIndex = -1; break; // todo
+                                case FileManager.ClientVersions.TestCenter:   aimHeightIndex = 281; break;
                                 case FileManager.ClientVersions.Resurrection: aimHeightIndex = 284; break;
                             }
 
@@ -764,41 +777,41 @@ namespace Hellgate
                         case "XLS_UnitTypeArray": // 54 // void __cdecl XLS_UnitTypeArray(XLS_TableDefinition *pTableDefinition, char *szName, int offset, int elementCount, char *defaultValue)
                             Debug.Assert(args.Length == 5);
                             xlsElement = new XlsElement
-                                             {
-                                                 Name = _GetArg<string>(args, 1),
-                                                 Offset = _GetArg<int>(args, 2),
-                                                 Count = _GetArg<int>(args, 3),
-                                                 Type = XlsType.UnitType,
-                                                 Size = 4,
-                                                 Default = _GetArg<string>(args, 4)
-                                             };
+                            {
+                                Name = _GetArg<string>(args, 1),
+                                Offset = _GetArg<int>(args, 2),
+                                Count = _GetArg<int>(args, 3),
+                                Type = XlsType.UnitType,
+                                Size = 4,
+                                Default = _GetArg<string>(args, 4)
+                            };
                             break;
 
                         case "XLS_MultipleRelations": // 55 // void __cdecl XLS_MultipleRelations(XLS_TableDefinition *pTable, char *szName, int offset, int size, void *pFunc)
                             Debug.Assert(args.Length == 5);
                             xlsElement = new XlsElement
-                                             {
-                                                 Name = _GetArg<string>(args, 1),
-                                                 Offset = _GetArg<int>(args, 2),
-                                                 Type = XlsType.MultipleRelations,
-                                                 Size = _GetArg<int>(args, 3),
-                                                 ExcelDefaultQ = 0,
-                                                 //Index = _GetArg<String>(args, 4),
-                                                 Default = null
-                                             };
+                            {
+                                Name = _GetArg<string>(args, 1),
+                                Offset = _GetArg<int>(args, 2),
+                                Type = XlsType.MultipleRelations,
+                                Size = _GetArg<int>(args, 3),
+                                ExcelDefaultQ = 0,
+                                //Index = _GetArg<String>(args, 4),
+                                Default = null
+                            };
                             break;
 
                         case "XLS_BaseRow": // 56 // void __usercall XLS_BaseRow(XLS_TableDefinition *pTable<esi>, int offset)
                             Debug.Assert(args.Length == 2);
                             xlsElement = new XlsElement
-                                             {
-                                                 Offset = _GetArg<int>(args, 1),
-                                                 Size = 4,
-                                                 Flags = XlsFlags.BaseRow, // 4
-                                                 Name = "base row",
-                                                 Type = XlsType.BaseRow, // found in LEVEL_DRLG_CHOICE and UNIT_DATA
-                                                 Default = null
-                                             };
+                            {
+                                Offset = _GetArg<int>(args, 1),
+                                Size = 4,
+                                Flags = XlsFlags.BaseRow, // 4
+                                Name = "base row",
+                                Type = XlsType.BaseRow, // found in LEVEL_DRLG_CHOICE and UNIT_DATA
+                                Default = null
+                            };
 
                             xlsTable.HasBaseRow = true;
                             break;
@@ -922,32 +935,30 @@ namespace Hellgate
 
                 String line = source[i];
                 int eBrake = 0;
-                while (line.Count(c => c == '(') != line.Count(c => c == ')') && eBrake++ < 10)
+                while (line.Count(c => c == '(') != line.Count(c => c == ')') && eBrake++ < 10 && i < lineCount)
                 {
                     line += source[++i];
                 }
-                //int leftBracketCount = line.Count(c => c == '(');
-                //int rightBracketCount = line.Count(c => c == ')');
-                //Debug.Assert(leftBracketCount == rightBracketCount);
+                Debug.Assert(line.Count(c => c == '(') == line.Count(c => c == ')')); // make sure we didn't brake due to excess line counts
 
                 Match match = argsRegex.Match(line);
                 String func = match.Groups[1].Value;
                 String[] args = match.Groups[2].Value.Split(new[] { ", " }, StringSplitOptions.None);
 
-                // int __usercall XLS_DefineTable<eax>(char *szClientId<eax>, DWORD *excelTables<edi>, unsigned int tableIndex, char *szFileName, int a5, int a6)
+                // int __usercall XLS_DefineTable<eax>(char *szDefinitionId<eax>, DWORD *excelTables<edi>, unsigned int tableIndex, char *szFileName, int a5, int a6)
                 Debug.Assert(func == "XLS_DefineTable");
                 Debug.Assert(args.Length == 6);
 
-                String clientId = _GetArg<string>(args, 0);
+                String definitionId = _GetArg<string>(args, 0);
                 uint tableIndex = _GetArg<uint>(args, 2);
                 String fileName = _GetArg<string>(args, 3);
                 int unknown1 = _GetArg<int>(args, 4);
                 int unknown2 = _GetArg<int>(args, 5);
 
                 Debug.Assert(tableIndex < 0x200);
-                Debug.WriteLine("Table[{0}]: {1} ({2}.txt.cooked), u1 = {3}, u2 = {4}", tableIndex, clientId, fileName, unknown1, unknown2);
+                Debug.WriteLine("Table[{0}]: {1} ({2}.txt.cooked), u1 = {3}, u2 = {4}", tableIndex, definitionId, fileName, unknown1, unknown2);
 
-                XlsTable xlsTable = tables.FirstOrDefault(t => t.ClientId == clientId);
+                XlsTable xlsTable = tables.FirstOrDefault(t => t.DefinitionId == definitionId);
                 if (xlsTable == null)
                 {
                     Debug.WriteLine("Unknown table id!");
@@ -961,14 +972,25 @@ namespace Hellgate
             }
 
             Debug.WriteLine("\nLoading excel files...");
+            Dictionary<String, uint> excelHashes = new Dictionary<String, uint>();
             FileManager fileManager = new FileManager(hellgatePath, clientVersion);
             fileManager.BeginAllDatReadAccess();
-            fileManager.LoadTableFiles();
+            foreach (PackFileEntry fileEntry in fileManager.FileEntries.Values)
+            {
+                if (!fileEntry.Name.EndsWith(".txt.cooked") || !fileEntry.Directory.Contains("excel")) continue;
+
+                byte[] excelBytes = fileManager.GetFileBytes(fileEntry, true);
+                Debug.Assert(excelBytes != null);
+
+                uint hash = StreamTools.ReadUInt32(excelBytes, 4);
+
+                excelHashes.Add(fileEntry.Name.Replace(".txt.cooked", ""), hash);
+            }
             fileManager.EndAllDatAccess();
 
             // tableHash + scriptsHash = finalTableHash
             const uint scriptsHashSinglePlayer = 0xF3EEE2FE;
-            const uint scriptsHashTestCenter = 0x00000000; // todo
+            const uint scriptsHashTestCenter = 0x2CEFF7B7;
             const uint scriptsHashResurrection = 0x9A292E9B;
 
             uint scriptsHash = scriptsHashSinglePlayer;
@@ -983,20 +1005,22 @@ namespace Hellgate
             {
                 _GenerateTableHash(xlsTable, scriptsHash);
 
-                ExcelFile excelFile = fileManager.GetExcelTableFromIndex(xlsTable.TableIndex);
-                if (excelFile == null)
+                uint hash;
+                excelHashes.TryGetValue(xlsTable.FileName, out hash);
+
+                if (hash == 0)
                 {
-                    Debug.WriteLine("Table[{0}]: {1} table not found. Hash = 0x{2:X8}", xlsTable.TableIndex, xlsTable.ClientId, xlsTable.TableHash);
+                    Debug.WriteLine("Table[{0}]: {1} table not found. Hash = 0x{2:X8}", xlsTable.TableIndex, xlsTable.DefinitionId, xlsTable.TableHash);
                     tablesNotFound++;
                 }
-                else if (excelFile._excelFileHeader.StructureID == xlsTable.TableHash)
+                else if (hash == xlsTable.TableHash)
                 {
-                    Debug.WriteLine("Table[{0}]: {1} == {2} -> [0x{3:X8} == 0x{4:X8}]", xlsTable.TableIndex, xlsTable.ClientId, excelFile.StringId, xlsTable.TableHash, excelFile._excelFileHeader.StructureID);
+                    Debug.WriteLine("Table[{0}]: {1} -> [0x{2:X8} == 0x{3:X8}]", xlsTable.TableIndex, xlsTable.DefinitionId, xlsTable.TableHash, hash);
                     tablesMatched++;
                 }
                 else
                 {
-                    Debug.WriteLine("Table[{0}]: {1} == {2} -> [0x{3:X8} != 0x{4:X8}]", xlsTable.TableIndex, xlsTable.ClientId, excelFile.StringId, xlsTable.TableHash, excelFile._excelFileHeader.StructureID);
+                    Debug.WriteLine("Table[{0}]: {1} -> [0x{2:X8} != 0x{3:X8}]", xlsTable.TableIndex, xlsTable.DefinitionId, xlsTable.TableHash, hash);
                     Debug.WriteLine("Warning: Table hashes do not match.\n");
                     tablesNotMatched++;
                 }
@@ -1007,7 +1031,7 @@ namespace Hellgate
 
         private static byte[] _exeBytes;
         private static readonly Regex StringRegex = new Regex("\"(.*)\"");
-        private static readonly Regex AddressRegex = new Regex(@"(?:off|dword|byte)_(\w*)");
+        private static readonly Regex AddressRegex = new Regex(@"(?:off|dword|byte|word)_(\w*)");
 
         private static unsafe T _GetArg<T>(String[] args, int index)
         {
@@ -1022,7 +1046,7 @@ namespace Hellgate
                 {
                     if (arg.Contains("null_value")) val = String.Empty;
                     else if (arg.Length < 4 && arg.Contains("0")) val = null;
-                    else if (arg.Contains("off_") || arg.Contains("dword_") || arg.Contains("byte_")) // decompiler "errors" (usually 1-3 char length strings, so the decompiler mistakes them for a pointer
+                    else if (arg.Contains("off_") || arg.Contains("word_") || arg.Contains("byte_")) // decompiler "errors" (usually 1-3 char length strings, so the decompiler mistakes them for a pointer
                     {
                         val = _GetAsciiStringFromClient(arg);
                     }
@@ -1061,16 +1085,15 @@ namespace Hellgate
             }
             else if (t == typeof(float))
             {
-                if (arg.Contains("dword_9D584C")) // decompiler "error"
+                if (arg.Contains("off_") || arg.Contains("word_") || arg.Contains("byte_"))
                 {
-                    val = -1.0f;
+                    val = _GetFloatFromClient(arg);
                 }
                 else if (arg.Contains("-5.104235503814077e38"))
-                    unsafe
-                    {
-                        uint hexVal = 0xFFC00000; // ~= -5.1042355e38
-                        val = *(float*)&hexVal;
-                    }
+                {
+                    uint hexVal = 0xFFC00000; // ~= -5.1042355e38
+                    val = *(float*)&hexVal;
+                }
                 else
                 {
                     val = Single.Parse(arg);
@@ -1085,6 +1108,17 @@ namespace Hellgate
         }
 
         private const int ExeBase = 0x400000;
+        private static float _GetFloatFromClient(String offStr)
+        {
+            String offsetStr = AddressRegex.Match(offStr).Groups[1].Value;
+            Debug.Assert(!String.IsNullOrEmpty(offsetStr));
+            Debug.Assert(_exeBytes != null);
+
+            int offset = Int32.Parse(offsetStr, NumberStyles.HexNumber) - ExeBase; // hellgate.exe uses 0x400000
+            Debug.Assert(offset >= 0 && offset < _exeBytes.Length);
+
+            return StreamTools.ReadFloat(_exeBytes, offset);
+        }
 
         private static String _GetAsciiStringFromClient(String offStr)
         {
@@ -1213,7 +1247,7 @@ namespace Hellgate
         private static void _GenerateTableHash(XlsTable xlsTable, UInt32 scriptsHash)
         {
             bool outputPerElement = false;
-            if (xlsTable.ClientId == "UNIT_DATA")
+            if (xlsTable.DefinitionId == "STATE_DATadsfA")
             {
                 outputPerElement = true;
             }
@@ -1224,7 +1258,7 @@ namespace Hellgate
             foreach (XlsElement xlsElement in xlsTable.Elements)
             {
                 bool outputHashSteps = false;
-                if (outputPerElement && xlsElement.Name == "UI icon back")
+                if (outputPerElement && xlsElement.Name == "UI icon badfck")
                 {
                     outputHashSteps = true;
                 }
@@ -1416,7 +1450,7 @@ XLS_GenereateElementHash+98   00C call    CryptBytesHash
         private static UInt32 _GenerateDefaultSegmentHash(XlsElement xlsElement, UInt32 hash)
         {
             // damn C# is a pain in the ass sometimes
-            // is it some much to ask for a pinned structure no matter what's in it - I don't want to access the object refernces damn it
+            // is it so much to ask for a pinned structure no matter what's in it - I don't want to access the object references damn it
             /*
 XLS_GenereateElementHash+FC   008 push    eax                             ; baseHash
 XLS_GenereateElementHash+FD   00C push    10h                             ; 16 bytes (4x Int32)

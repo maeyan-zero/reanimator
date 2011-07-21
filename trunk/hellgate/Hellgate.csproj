@@ -462,6 +462,7 @@
     <Compile Include="UnitObjectStats.cs" />
     <Compile Include="UnitObjectUtil.cs" />
     <Compile Include="XLS.cs" />
+    <Compile Include="XlsFile.cs" />
     <Compile Include="XmlCookedAttribute.cs" />
     <Compile Include="XmlCookedDefinition.cs" />
     <Compile Include="XmlCookedElement.cs" />
