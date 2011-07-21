@@ -166,6 +166,17 @@ namespace Hellgate
         }
 
         /// <summary>
+        /// Converts an array of bytes to a UInt32 from a given offset.<br />
+        /// </summary>
+        /// <param name="buffer">The byte array containing the UInt32.</param>
+        /// <param name="offset">The initial offset within the byte array.</param>
+        /// <returns>The UInt32 value.</returns>
+        public static UInt32 ReadUInt32(byte[] buffer, int offset)
+        {
+            return BitConverter.ToUInt32(buffer, offset);
+        }
+
+        /// <summary>
         /// Converts an array of bytes to a Float from a given offset.<br />
         /// <i>offset</i> is incremented by the size of a Float.
         /// </summary>
@@ -180,6 +191,22 @@ namespace Hellgate
                 fValue = *(((float*)b));
             }
             offset += 4;
+            return fValue;
+        }
+
+        /// <summary>
+        /// Converts an array of bytes to a Float from a given offset.<br />
+        /// </summary>
+        /// <param name="byteArray">The byte array containing the Float.</param>
+        /// <param name="offset">The initial offset within byteArray.</param>
+        /// <returns>The converted Float value.</returns>
+        public static unsafe float ReadFloat(byte[] byteArray, int offset)
+        {
+            float fValue;
+            fixed (byte* b = &byteArray[offset])
+            {
+                fValue = *(((float*) b));
+            }
             return fValue;
         }
 
