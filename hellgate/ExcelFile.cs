@@ -40,7 +40,7 @@ namespace Hellgate
         public readonly Dictionary<Object, int> IndexFromRow = new Dictionary<Object, int>();
 
 
-        private ExcelHeader _excelFileHeader = new ExcelHeader
+        public ExcelHeader _excelFileHeader = new ExcelHeader
         {
             Unknown321 = 0x01,
             Unknown322 = 0x09,
