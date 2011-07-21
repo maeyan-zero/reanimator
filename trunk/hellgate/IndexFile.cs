@@ -1,8 +1,5 @@
 ﻿using System;
 using System.Collections.Generic;
-using System.Collections.Specialized;
-using System.Diagnostics;
-using System.IO;
 using System.Linq;
 using System.Runtime.InteropServices;
 using System.ComponentModel;
@@ -26,15 +23,191 @@ namespace Hellgate
             public byte[] hashKeys;
         }
 
-        abstract class Token
+        private abstract class Token
         {
             public const UInt32 Head = 0x6867696E;      // 'nigh'
             public const UInt32 Sect = 0x68677073;      // 'spgh'
             public const UInt32 Info = 0x6867696F;      // 'oigh'
+            public const UInt32 PatchSect = 0x44656948; // 'HieD'   
+        }
+
+        #region Patch Definitions
+        [StructLayout(LayoutKind.Sequential, Pack = 1)]
+        private struct PatchFileHeader
+        {
+            public Int32 PatchType;                 // 1 = SP, 2 = MP, 4 = Both
+
+            // these names are based on the "traditional" (Microsoft) file versioning system - no idea if name is correct, but usage seems similar
+            public Int32 PatchMajorVersion;         // e.g. "1" in patch 1.18074.70.4256
+            public Int32 PatchMinorVersion;         // e.g. "18074"
+            public Int32 PatchBuildVersion;         // e.g. "70"
+            public Int32 PatchPrivateVersion;       // e.g. "4256"
+
+            public Int32 RequiredMajorVersion;      // e.g. "1" in patch 1.10.180.3416
+            public Int32 RequiredMinorVersion;      // e.g. "10"
+            public Int32 RequiredBuildVersion;      // e.g. "180"
+            public Int32 RequiredPrivateVersion;    // e.g. "3416"
+
+            public Int32 Unknown1;                  // only seen as 1
+            public Int32 Unknown2;                  // only seen as 0
+            public Int32 Unknown3;                  // only seen as 0
+            public Int32 Unknown4;                  // only seen as 0
+            public Int32 Unknown5;                  // only seen as 2
+
+            public UInt32 EndToken;                 // must be 0x44656948 // 'HieD'
         }
 
         [StructLayout(LayoutKind.Sequential, Pack = 1)]
-        struct FileHeader
+        private struct PatchSearch
+        {
+            public bool IsPresent;                  // appears to be 1 for value present, 0 for end/none
+            public Int32 CharacterCount;            // count of UNICODE characters (i.e. byte length = Count*2)
+            public String FileSearch;               // some sort of wild-card search string
+        }
+
+        [StructLayout(LayoutKind.Sequential, Pack = 1)]
+        private struct PatchEntryStruct
+        {
+            public Int32 CharacterCount;    // count of UNICODE characters (i.e. byte length = Count*2)
+            public String FileName;         // file name
+
+            public bool UsedInX86;          // is the file used in x86 env.
+            public bool UsedInX64;          // is the file used in x64 env.
+            public Int16 Localization;      // appears to be some sort of localization code
+
+            public Int64 FileSize;          // byte count of file
+            public Int64 DatOffset;         // offset in dat file
+            public Int32 Hash;              // a guess
+            public Int32 HasMoreEntries;    // not entirely sure, but appears to be 0 for more entries, -1 for end of entries
+        }
+
+        private class PatchFileEntry : PackFileEntry
+        {
+            private PatchEntryStruct _patchEntryStruct;
+
+            public PatchFileEntry(PatchEntryStruct patchEntryStruct)
+            {
+                _patchEntryStruct = patchEntryStruct;
+            }
+
+            private String _directory;
+            public override String Directory
+            {
+                get
+                {
+                    if (String.IsNullOrEmpty(_directory))
+                    {
+                        _directory = System.IO.Path.GetDirectoryName(_patchEntryStruct.FileName);
+                    }
+
+                    return _directory;
+                }
+                set { _directory = value; }
+            }
+
+            private uint _directoryHash;
+            public override UInt32 DirectoryHash
+            {
+                get
+                {
+                    if (_directoryHash == 0)
+                    {
+                        _directoryHash = Crypt.GetStringHash(Directory);
+                    }
+
+                    return _directoryHash;
+                }
+                set { _directoryHash = value; }
+            }
+
+            public override Int64 FileTime
+            {
+                get { return 0; }
+                set { return; }
+            }
+
+            public override bool IsPatchedOut
+            {
+                get { return Directory.Contains(PatchPrefix); }
+                set
+                {
+                    if (value == IsPatchedOut) return;
+
+                    Directory = (value) ? System.IO.Path.Combine(PatchPrefix, Directory) : Directory.Replace(PatchPrefix, "");
+                }
+            }
+
+            private String _name;
+            public override String Name
+            {
+                get
+                {
+                    if (String.IsNullOrEmpty(_name))
+                    {
+                        _name = System.IO.Path.GetFileName(_patchEntryStruct.FileName);
+                    }
+
+                    return _name;
+                }
+                set { _name = value; }
+            }
+
+            private uint _nameHash;
+            public override UInt32 NameHash
+            {
+                get
+                {
+                    if (_nameHash == 0)
+                    {
+                        _nameHash = Crypt.GetStringHash(Name);
+                    }
+
+                    return _nameHash;
+                }
+                set { _nameHash = value; }
+            }
+
+            public override Int64 Offset
+            {
+                get { return _patchEntryStruct.DatOffset; }
+                set { _patchEntryStruct.DatOffset = value; }
+            }
+
+            private String _path;
+            public override String Path
+            {
+                get
+                {
+                    if (!String.IsNullOrEmpty(_path)) return _path;
+
+                    return _path = System.IO.Path.Combine(Directory, Name);
+                }
+
+                set
+                {
+                    _path = value;
+                    Name = System.IO.Path.GetFileName(value);
+                    Directory = System.IO.Path.GetDirectoryName(value);
+                }
+            }
+
+            public override Int32 SizeCompressed
+            {
+                get { return 0; }
+                set { return; }
+            }
+
+            public override Int32 SizeUncompressed
+            {
+                get { return (Int32)_patchEntryStruct.FileSize; }
+                set { _patchEntryStruct.FileSize = value; }
+            }
+
+        }
+        #endregion
+
+        [StructLayout(LayoutKind.Sequential, Pack = 1)]
+        private struct FileHeader
         {
             public UInt32 FileToken;
             public UInt32 FileVersion;
@@ -42,7 +215,7 @@ namespace Hellgate
         }
 
         [StructLayout(LayoutKind.Sequential, Pack = 1)]
-        struct StringsHeader
+        private struct StringsHeader
         {
             public UInt32 StringsToken;
             public Int32 StringsCount;
@@ -50,7 +223,7 @@ namespace Hellgate
         }
 
         [StructLayout(LayoutKind.Sequential, Pack = 1)]
-        struct StringDetailsStruct                      // this is a structure definition only - not used
+        private struct StringDetailsStruct                      // this is a structure definition only - not used
         {
             private readonly short StringLength;        // the length of the string, not including \0 i.e. String.Length
             private readonly UInt32 StringHash;         // string hash generated from Crypt.GetStringHash
@@ -251,17 +424,96 @@ namespace Hellgate
         {
             if (buffer == null || buffer.Length == 0) throw new ArgumentNullException("buffer", "buffer cannot be empty!");
 
-            // Check for encryption
-            int offset = 0;
+            // is it a patch index
             UInt32 fileHeadToken = BitConverter.ToUInt32(buffer, 0);
+            if (fileHeadToken > 0 && fileHeadToken <= 4) // 1 = SP, 2 = MP, 4 = Both
+            {
+                _ParsePatchType(buffer);
+                return;
+            }
+
+            // is it encrypted
             if (fileHeadToken != Token.Head)
             {
                 Crypt.Decrypt(buffer);
             }
+            _ParseDataType(buffer);
+        }
 
-            // Read the file header, check for errors
+        private void _ParsePatchType(byte[] buffer)
+        {
+            int offset = 0;
+
+            /* This reading/parsing stores all date merely to make it clear of the file structure. 
+             * Given we're not going to be using this much at all, this will do for now until we know
+             * what all the unknown fields are.
+             */
+
+            // header
+            PatchFileHeader fileHeader = FileTools.ByteArrayToStructure<PatchFileHeader>(buffer, ref offset);
+            if (fileHeader.EndToken != Token.PatchSect) throw new Exceptions.UnexpectedTokenException("Expected PatchSect token but got 0x" + fileHeader.EndToken.ToString("X8"));
+
+            // file searches?
+            List<PatchSearch> searchSegments = new List<PatchSearch>();
+            while (true)
+            {
+                bool isPresent = (StreamTools.ReadInt32(buffer, ref offset) != 0);
+                if (!isPresent) break;
+
+                int characterCount = StreamTools.ReadInt32(buffer, ref offset);
+
+                PatchSearch searchSegment = new PatchSearch
+                {
+                    IsPresent = true,
+                    CharacterCount = characterCount,
+                    FileSearch = StreamTools.ReadStringUnicode(buffer, ref offset, characterCount, false)
+                };
+
+                searchSegments.Add(searchSegment);
+            }
+
+            // files
+            List<PatchEntryStruct> entries = new List<PatchEntryStruct>();
+            while (true)
+            {
+                int characterCount = StreamTools.ReadInt32(buffer, ref offset);
+
+                PatchEntryStruct entrySegment = new PatchEntryStruct
+                {
+                    CharacterCount = characterCount,
+                    FileName = StreamTools.ReadStringUnicode(buffer, ref offset, characterCount, false),
+                    UsedInX86 = (StreamTools.ReadInt32(buffer, ref offset) != 0),
+                    UsedInX64 = (StreamTools.ReadInt32(buffer, ref offset) != 0),
+                    Localization = StreamTools.ReadInt16(buffer, ref offset),
+                    FileSize = StreamTools.ReadInt64(buffer, ref offset),
+                    DatOffset = StreamTools.ReadInt64(buffer, ref offset),
+                    Hash = StreamTools.ReadInt32(buffer, ref offset),
+                    HasMoreEntries = StreamTools.ReadInt32(buffer, ref offset),
+                };
+
+                entries.Add(entrySegment);
+
+                if (entrySegment.HasMoreEntries == -1) break;
+            }
+
+            // add files to file list (could be done in above loop, but as mentioned earlier, this parsing method is almost enitrely out of random interest
+            foreach (PatchEntryStruct entry in entries)
+            {
+                PackFileEntry fileEntry = new PatchFileEntry(entry) { Pack = this };
+
+                Files.Add(fileEntry);
+            }
+
+            HasIntegrity = (offset == buffer.Length);
+        }
+
+        private void _ParseDataType(byte[] buffer)
+        {
+            int offset = 0;
+
+            // header
             FileHeader fileHeader = FileTools.ByteArrayToStructure<FileHeader>(buffer, ref offset);
-            if (fileHeader.FileToken != Token.Head) throw new Exceptions.UnexpectedTokenException("Expected head token but got " + fileHeader.FileToken.ToString("X"));
+            if (fileHeader.FileToken != Token.Head) throw new Exceptions.UnexpectedTokenException("Expected Head token but got 0x" + fileHeader.FileToken.ToString("X8"));
             if (fileHeader.FileVersion != RequiredVersion) throw new Exceptions.NotSupportedFileVersionException(RequiredVersion, fileHeader.FileVersion);
 
             // Read the strings section

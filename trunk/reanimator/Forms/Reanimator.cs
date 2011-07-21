@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.Diagnostics;
 using System.Drawing;
 using System.Linq;
+using System.Text;
 using System.Windows.Forms;
 using System.IO;
 using Hellgate;
@@ -43,7 +44,9 @@ namespace Reanimator.Forms
             //TestScripts.ExtractFunctionList();
             //TestScripts.TestAllExcelScripts();
             //TestScripts.TestExcelCooking();
-            //ExcelFile.GenerateExcelTables(File.ReadAllLines(@"C:\hellgate.c"));
+            //XlsFile.GenerateExcelTables(File.ReadAllLines(@"C:\hellgate_sp_unpacked2.c", Encoding.UTF8), File.ReadAllBytes(@"D:\Games\Hellgate London\SP_x86\UnPacked2.exe"), @"D:\Games\Hellgate London", FileManager.ClientVersions.SinglePlayer);
+            //XlsFile.GenerateExcelTables(File.ReadAllLines(@"C:\hellgate_mp_dx9_x86_tc.unpacked.c"), File.ReadAllBytes(@"D:\Games\Hellgate London\MP_x86\hellgate_mp_dx9_x86.unpacked.exe"), @"D:\Games\Hellgate London", FileManager.ClientVersions.TestCenter);
+            //XlsFile.GenerateExcelTables(File.ReadAllLines(@"C:\hellgate_res.c"), File.ReadAllBytes(@"D:\Games\Hellgate\MP_x86\hellgate.exe"), @"D:\Games\Hellgate", FileManager.ClientVersions.Resurrection);
             if (true) return;
             //Config.HglDir = @"D:\Projects\Hellgate London\Flagshipped\ServerTest\bin\Debug";
             ////Config.HglDir = @"D:\Games\Hellgate";

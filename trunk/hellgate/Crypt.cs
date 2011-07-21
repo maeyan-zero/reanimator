@@ -41,9 +41,26 @@ namespace Hellgate
         private const UInt32 StringKey1 = 0x80000000;
         private const Int32 StringKey2 = 0x4C11DB7;
 
+        public unsafe static UInt32 GetBytesHash(byte* pBytes, int count, UInt32 baseHash)
+        {
+            if (pBytes == null || count == 0) return baseHash;
+            if (_needStringHash) _GenerateStringHash();
+
+            UInt32 stringHash = baseHash;
+            for (int i = 0; i < count; i++)
+            {
+                UInt32 hashIndex = stringHash >> 0x18;
+                UInt32 hashSalt = stringHash << 0x08;
+                hashIndex ^= pBytes[i];
+                stringHash = StringHash[hashIndex] ^ hashSalt;
+            }
+
+            return stringHash;
+        }
+
         public static UInt32 GetStringHash(byte[] bytes, UInt32 baseHash)
         {
-            if (bytes == null || bytes.Length == 0) return 0;
+            if (bytes == null || bytes.Length == 0) return baseHash;
             if (_needStringHash) _GenerateStringHash();
 
             UInt32 stringHash = baseHash;
@@ -58,9 +75,9 @@ namespace Hellgate
             return stringHash;
         }
 
-        public static UInt32 GetStringHash(String str)
+        public static UInt32 GetStringHash(String str, UInt32 bashHash = 0)
         {
-            if (String.IsNullOrEmpty(str)) return 0;
+            if (String.IsNullOrEmpty(str)) return bashHash;
             if (_needStringHash) _GenerateStringHash();
 
             #region hash asm
@@ -79,7 +96,7 @@ namespace Hellgate
              */
             #endregion
 
-            UInt32 stringHash = 0;
+            UInt32 stringHash = bashHash;
             int strLen = str.Length;
             for (int i = 0; i < strLen; i++)
             {

@@ -210,5 +210,22 @@ namespace Hellgate
             if (includeZero) offset++;
             return str;
         }
+
+        /// <summary>
+        /// Reads a Unicode string from a byte array.
+        /// </summary>
+        /// <param name="buffer">The byte array containing the Unicode String.</param>
+        /// <param name="offset">The initial offset within the byte array.</param>
+        /// <param name="charCount">The number of <b>UNICODE</b> characters (NOT bytes), NOT including zero character.</param>
+        /// <param name="includeZero">Set to true to increment the offset to include the zero.</param>
+        /// <returns>The Unicode bytes as a String</returns>
+        public static String ReadStringUnicode(byte[] buffer, ref int offset, int charCount, bool includeZero)
+        {
+            int byteCount = charCount * 2;
+            String str = Encoding.Unicode.GetString(buffer, offset, byteCount);
+            offset += byteCount;
+            if (includeZero) offset += 2;
+            return str;
+        }
     }
 }
