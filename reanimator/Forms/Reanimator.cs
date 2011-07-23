@@ -44,9 +44,7 @@ namespace Reanimator.Forms
             //TestScripts.ExtractFunctionList();
             //TestScripts.TestAllExcelScripts();
             //TestScripts.TestExcelCooking();
-            //XlsFile.GenerateExcelTables(File.ReadAllLines(@"C:\hellgate_sp_unpacked2.c", Encoding.UTF8), File.ReadAllBytes(@"D:\Games\Hellgate London\SP_x86\UnPacked2.exe"), @"D:\Games\Hellgate London", FileManager.ClientVersions.SinglePlayer);
-            //XlsFile.GenerateExcelTables(File.ReadAllLines(@"C:\hellgate_mp_dx9_x86_tc.unpacked.c"), File.ReadAllBytes(@"D:\Games\Hellgate London\MP_x86\hellgate_mp_dx9_x86.unpacked.exe"), @"D:\Games\Hellgate London", FileManager.ClientVersions.TestCenter);
-            //XlsFile.GenerateExcelTables(File.ReadAllLines(@"C:\hellgate_res.c"), File.ReadAllBytes(@"D:\Games\Hellgate\MP_x86\hellgate.exe"), @"D:\Games\Hellgate", FileManager.ClientVersions.Resurrection);
+            //XlsFile.GenerateExcelTables();
             if (true) return;
             //Config.HglDir = @"D:\Projects\Hellgate London\Flagshipped\ServerTest\bin\Debug";
             ////Config.HglDir = @"D:\Games\Hellgate";
@@ -911,13 +909,25 @@ namespace Reanimator.Forms
         private void excelTableEditorToolStripMenuItem_Click(object sender, EventArgs e)
         {
             if (_excelTableForm == null || _excelTableForm.IsDisposed)
-                _excelTableForm = new TableEditorForm(_fileManager) { MdiParent = this, Text = "Table Editor [" + _fileManager.ClientVersion + "]" };
+            {
+                _excelTableForm = new TableEditorForm(_fileManager)
+                {
+                    MdiParent = this,
+                    Text = "Table Editor [" + _fileManager.ClientVersion + "]"
+                };
+            }
 
             _excelTableForm.Show();
             _excelTableForm.Focus();
 
             if (Config.LoadTCv4DataFiles && (_excelTableFormTCv4 == null || _excelTableFormTCv4.IsDisposed))
-                _excelTableFormTCv4 = new TableEditorForm(_fileManagerTCv4) { MdiParent = this, Text = "Table Editor [" + _fileManagerTCv4.ClientVersion + "]" };
+            {
+                _excelTableFormTCv4 = new TableEditorForm(_fileManagerTCv4)
+                {
+                    MdiParent = this,
+                    Text = "Table Editor [" + _fileManagerTCv4.ClientVersion + "]"
+                };
+            }
 
             if (Config.LoadTCv4DataFiles)
             {
