@@ -416,9 +416,10 @@ namespace Reanimator.Controls
             }
 
             // Prompt the user where to save
+            String initialDir = Directory.Exists(Config.LastDirectory) ? Config.LastDirectory : Config.HglDir;
             SaveFileDialog saveFileDialog = new SaveFileDialog
             {
-                InitialDirectory = Config.LastDirectory,
+                InitialDirectory = initialDir,
                 FileName = _dataFile.FileName,
                 Filter = "Text Files (.txt)|*.txt|All Types (*.*)|*.*"
             };
@@ -447,8 +448,9 @@ namespace Reanimator.Controls
             Debug.Assert(comboBox != null);
 
             //Debug.WriteLine("_ComboBoxFormat: " + comboBox.Name);
+            int val = (convertEventArgs.Value is uint) ? (int)(uint)convertEventArgs.Value : (int)convertEventArgs.Value;
 
-            convertEventArgs.Value = (Int32)convertEventArgs.Value + (Int32)comboBox.Tag;
+            convertEventArgs.Value = val + (Int32)comboBox.Tag;
         }
 
         /// <summary>

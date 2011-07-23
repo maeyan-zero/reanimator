@@ -315,16 +315,17 @@ namespace Hellgate
             {"WARDROBE_LAYER", new DataFileAttributes {IsTCv4 = true, FileName = "WARDROBE", RowType = typeof(WardrobeTCv4)}},
 
             // todo: no definitions - most can probably be taken from the Resurrection versions if needed
-            //{"ACHIEVEMENTSLOTS", new DataFileAttributes {IsTCv4 = true, IsEmpty = true}},
-            //{"DONATION_REWARDS", new DataFileAttributes {IsTCv4 = true, IsEmpty = true}},
-            //{"LOADING_SCREEN", new DataFileAttributes {IsTCv4 = true, IsEmpty = true}},
-            //{"PLAYERRANKS", new DataFileAttributes {IsTCv4 = true, IsEmpty = true}},
-            //{"SOUNDMIXSTATESETS", new DataFileAttributes {IsTCv4 = true, IsEmpty = true}},
-            //{"VERSIONINGAFFIXES", new DataFileAttributes {IsTCv4 = true, IsEmpty = true}},
-            //{"VERSIONINGUNITS", new DataFileAttributes {IsTCv4 = true, IsEmpty = true}},
-            //{"CMD_MENUS", new DataFileAttributes {IsTCv4 = true, IsEmpty = true}},
-            //{"EMOTES", new DataFileAttributes {IsTCv4 = true, IsEmpty = true}},
-            //{"RECIPE_PROPERTIES", new DataFileAttributes {IsTCv4 = true, IsEmpty = true}}
+            // note: these must be here to access the TC content until we have definitions for them
+            {"ACHIEVEMENTSLOTS", new DataFileAttributes {IsTCv4 = true, IsEmpty = true}},
+            {"DONATION_REWARDS", new DataFileAttributes {IsTCv4 = true, IsEmpty = true}},
+            {"LOADING_SCREEN", new DataFileAttributes {IsTCv4 = true, IsEmpty = true}},
+            {"PLAYERRANKS", new DataFileAttributes {IsTCv4 = true, IsEmpty = true}},
+            {"SOUNDMIXSTATESETS", new DataFileAttributes {IsTCv4 = true, IsEmpty = true}},
+            {"VERSIONINGAFFIXES", new DataFileAttributes {IsTCv4 = true, IsEmpty = true}},
+            {"VERSIONINGUNITS", new DataFileAttributes {IsTCv4 = true, IsEmpty = true}},
+            {"CMD_MENUS", new DataFileAttributes {IsTCv4 = true, IsEmpty = true}},
+            {"EMOTES", new DataFileAttributes {IsTCv4 = true, IsEmpty = true}},
+            {"RECIPE_PROPERTIES", new DataFileAttributes {IsTCv4 = true, IsEmpty = true}}
         };
 
         public static readonly Dictionary<String, DataFileAttributes> DataFileMapResurrection = new Dictionary<String, DataFileAttributes>

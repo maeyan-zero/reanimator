@@ -853,6 +853,16 @@ namespace Hellgate
         }
 
         /// <summary>
+        /// Returns the first PackFileEntry found from an exact filename match.
+        /// </summary>
+        /// <param name="fileName">The filename to search for.</param>
+        /// <returns>The first PackFileEntry found, or null of none.</returns>
+        public PackFileEntry GetFirstFileEntryFromName(String fileName)
+        {
+            return FileEntries.Values.FirstOrDefault(fileEntry => fileEntry.Name == fileName);
+        }
+
+        /// <summary>
         /// Gets file byte data from most principle location; considering filetimes and backup status.
         /// The user must manually call EndAllDatAccess to close access to any opened .dat files during the process.
         /// </summary>
