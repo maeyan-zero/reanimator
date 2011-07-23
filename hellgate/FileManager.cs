@@ -148,12 +148,19 @@ namespace Hellgate
                 if (!File.Exists(datFullPath)) continue;
 
                 // read in and parse index
-                Debug.WriteLine("Loading pack file: " + idxPath);
+                Debug.Write(String.Format("Loading pack file: {0}... ", Path.GetFileName(idxPath)));
                 PackFile packFile = (PackFile)hellgateFile;
                 try
                 {
                     byte[] fileBytes = File.ReadAllBytes(idxPath);
                     hellgateFile.ParseFileBytes(fileBytes);
+
+#if DEBUG
+                    IndexFile indexFile = hellgateFile as IndexFile;
+                    if (indexFile != null) Debug.WriteLine("{0} files loaded.", indexFile.Files.Count);
+                    HellgatePackFile hgPackFile = hellgateFile as HellgatePackFile;
+                    if (hgPackFile != null) Debug.WriteLine("{0} files loaded.", hgPackFile.Files.Count);
+#endif
                 }
                 catch (Exception ex)
                 {
@@ -311,6 +318,7 @@ namespace Hellgate
                 }
             }
 
+            Debug.WriteLine("Loaded {0} {1} data files.", DataFiles.Count, ClientVersion);
             return true;
         }
 
