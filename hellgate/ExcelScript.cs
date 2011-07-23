@@ -589,6 +589,16 @@ namespace Hellgate
                             }
                             else // must be client/excep function
                             {
+                                // is it a script error?
+                                if (nameStr == "ScriptError") // then we have a int/byte array, already compiled
+                                {
+                                    int closingParanthesis = _script.IndexOf(')');
+                                    String scriptIntArrayStr = _script.Substring(++_offset, (closingParanthesis - _offset));
+                                    int[] scriptIntArray = scriptIntArrayStr.ToArray<int>(',');
+                                    _offset = closingParanthesis;
+                                    return scriptIntArray;
+                                }
+
                                 // check client functions
                                 Function[] functions = _GetFunctions(nameStr);
                                 if (functions.Length == 0) throw new Exceptions.ScriptUnknownFunctionException(nameStr);

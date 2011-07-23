@@ -2,6 +2,7 @@
 using System.Collections;
 using System.Collections.Generic;
 using System.Collections.Specialized;
+using System.Data;
 using System.Diagnostics;
 using System.IO;
 using System.Linq;
@@ -17,6 +18,72 @@ namespace Reanimator
 {
     public static class TestScripts
     {
+        public static void TestDataTableExportAndImport()
+        {
+            FileManager fileManager = new FileManager(Config.HglDir);
+            fileManager.BeginAllDatReadAccess();
+            fileManager.LoadTableFiles();
+            fileManager.EndAllDatAccess();
+
+            List<String> sequenceEqual = new List<String>();
+            List<String> sequenceFail = new List<String>();
+            foreach (KeyValuePair<String, DataFile> keyValuePair in fileManager.DataFiles)
+            {
+                String stringId = keyValuePair.Key;
+                DataFile dataFile = keyValuePair.Value;
+                if (dataFile.IsStringsFile) continue;
+
+                if (stringId == "PROPERTIES" || stringId == "SKILLS") continue; // doesn't really matter - we'll fix it in the next version
+
+                DataTable dataTable = fileManager.GetDataTable(stringId);
+
+                // Parse the DataTable object
+                DataFile parseDataTable = new ExcelFile(dataFile.FilePath, fileManager.ClientVersion);
+                if (parseDataTable.ParseDataTable(dataTable, fileManager) != true)
+                {
+                    Debug.WriteLine("Error: ParseDataTable failed for StringId = " + stringId);
+                    continue;
+                }
+
+                // Export it to a CSV stream
+                byte[] buffer = parseDataTable.ExportCSV(fileManager);
+                if (buffer == null)
+                {
+                    Debug.WriteLine("Error: ExportCSV failed for StringId = " + stringId);
+                    continue;
+                }
+
+                // Import CSV
+                DataFile parseCSV = new ExcelFile(dataFile.FilePath, fileManager.ClientVersion);
+                parseCSV.ParseCSV(buffer, fileManager);
+
+                // Export original and imported as cooked and do byte compare
+                byte[] dataFileExported = dataFile.ToByteArray();
+                byte[] dataTableExported = parseCSV.ToByteArray();
+                
+
+                if (dataFileExported.SequenceEqual(dataTableExported))
+                {
+                    Debug.WriteLine("Byte sequence equal for StringId = " + dataFile.StringId);
+                    sequenceEqual.Add(dataFile.StringId);
+                }
+                else
+                {
+                    Debug.WriteLine("Error: Sequences are not equal for StringId = " + dataFile.StringId);
+                    sequenceFail.Add(dataFile.StringId);
+
+                    Debug.Assert(dataFileExported.Length == dataTableExported.Length);
+                }
+            }
+
+            Debug.WriteLine("Totals: {0} sequence matches, {1} fails.", sequenceEqual.Count, sequenceFail.Count);
+            Debug.Write("Failed Tables: PROPERTIES, SKILLS, ");
+            foreach (String stringIdFailed in sequenceFail)
+            {
+                Debug.Write(stringIdFailed + ", ");
+            }
+        }
+
         public static void TestAllExcelScripts()
         {
             ExcelScript.GlobalDebug(true);

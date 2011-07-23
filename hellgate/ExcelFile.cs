@@ -477,6 +477,12 @@ namespace Hellgate
 
                         if (excelAttribute.IsBitmask)
                         {
+                            if (fieldDelegate.FieldType == typeof(UInt32))
+                            {
+                                objectDelegator[fieldDelegate.Name, rowInstance] = UInt32.Parse(value);
+                                continue;
+                            }
+
                             Object enumVal;
                             try
                             {
@@ -504,30 +510,52 @@ namespace Hellgate
                                 enumVal = enumString == "" ? 0 : Enum.Parse(fieldDelegate.FieldType, enumString);
                             }
 
-                            objectDelegator[fieldDelegate.Name, rowInstance] = (uint)enumVal;
+                            objectDelegator[fieldDelegate.Name, rowInstance] = enumVal;
                             continue;
                         }
                     }
 
                     try
                     {
-                        Object objValue = null;
+                        Object objValue;
                         if (isArray)
                         {
-                            Debug.Assert(fieldDelegate.FieldType == typeof (Int32[]));
+                            if (fieldDelegate.FieldType == typeof(Int32[]))
+                            {
+                                objValue = FileTools.StringToArray<Int32>(value, ",");
+                            }
+                            else
+                            {
+                                Type elementType = fieldDelegate.FieldType.GetElementType();
+                                if (elementType.BaseType == typeof(Enum))
+                                {
+                                    String[] enumStrs = value.Split(new[] { ',' }, StringSplitOptions.None);
+                                    Array enumsArray = Array.CreateInstance(elementType, enumStrs.Length);
+                                    int i = 0;
+                                    foreach (String enumStr in enumStrs)
+                                    {
+                                        enumsArray.SetValue(Enum.Parse(elementType, enumStr), i++);
+                                    }
+                                    objValue = enumsArray;
+                                }
+                                else
+                                {
+                                    throw new NotImplementedException("if (fieldInfo.FieldType.BaseType == typeof(Array)) :: Type = " + elementType.BaseType);
+                                }
+                            }
 
-                            objValue = FileTools.StringToArray<Int32>(value, ",");
+                            objectDelegator[fieldDelegate.Name, rowInstance] = objValue;
                         }
                         else if (isEnum)
                         {
                             object enumVal = Enum.Parse(fieldDelegate.FieldType, value);
-                            objectDelegator[fieldDelegate.Name, rowInstance] = (uint)enumVal;
+                            objectDelegator[fieldDelegate.Name, rowInstance] = enumVal;
                         }
                         else
                         {
                             objValue = FileTools.StringToObject(value, fieldDelegate.FieldType);
                             objectDelegator[fieldDelegate.Name, rowInstance] = objValue;
-                        }   
+                        }
                     }
                     catch (Exception e)
                     {
@@ -664,11 +692,11 @@ namespace Hellgate
                     int rowCode;
                     if (field.FieldType == typeof(Int16))
                     {
-                        rowCode = (Int16) field.GetValue(Rows[i]);
+                        rowCode = (Int16)field.GetValue(Rows[i]);
                     }
                     else if (field.FieldType == typeof(Int32))
                     {
-                        rowCode = (Int32) field.GetValue(Rows[i]);
+                        rowCode = (Int32)field.GetValue(Rows[i]);
                     }
                     else
                     {
@@ -732,7 +760,7 @@ namespace Hellgate
                     StatsBuffer = new byte[Count][];
                     for (int i = 0; i < Count; i++)
                     {
-                        offset += sizeof (int); // Skip the indice
+                        offset += sizeof(int); // Skip the indice
 
                         int size = FileTools.ByteArrayToInt32(buffer, ref offset);
                         StatsBuffer[i] = new byte[size];
@@ -743,7 +771,7 @@ namespace Hellgate
                 }
                 else
                 {
-                    offset += (Count*sizeof (int)); // do not allocate this array
+                    offset += (Count * sizeof(int)); // do not allocate this array
                 }
 
                 // secondary strings
@@ -905,13 +933,13 @@ namespace Hellgate
                             if (isArray)
                             {
                                 int arraySize = 1;
-                                MarshalAsAttribute arrayMarshal = (MarshalAsAttribute) fieldInfo.Info.GetCustomAttributes(typeof (MarshalAsAttribute), false).First();
+                                MarshalAsAttribute arrayMarshal = (MarshalAsAttribute)fieldInfo.Info.GetCustomAttributes(typeof(MarshalAsAttribute), false).First();
                                 arraySize = arrayMarshal.SizeConst;
                                 Debug.Assert(arraySize > 0);
 
                                 String strValue = value.ToString();
 
-                                String[] indexStrs = strValue.Split(new[] {','});
+                                String[] indexStrs = strValue.Split(new[] { ',' });
                                 Int32[] rowIndexValues = new int[arraySize];
                                 for (int i = 0; i < arraySize; i++) rowIndexValues[i] = -1;
 
@@ -1051,7 +1079,7 @@ namespace Hellgate
                                 Type elementType = fieldInfo.FieldType.GetElementType();
                                 if (elementType.BaseType == typeof(Enum))
                                 {
-                                    String[] enumStrs = ((String) value).Split(new[] {','}, StringSplitOptions.None);
+                                    String[] enumStrs = ((String)value).Split(new[] { ',' }, StringSplitOptions.None);
                                     Array enumsArray = Array.CreateInstance(elementType, enumStrs.Length);
                                     int i = 0;
                                     foreach (String enumStr in enumStrs)
