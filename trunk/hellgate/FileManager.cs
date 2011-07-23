@@ -147,8 +147,8 @@ namespace Hellgate
                 // if there is no accompanying .dat at all, then ignore .idx
                 if (!File.Exists(datFullPath)) continue;
 
-
                 // read in and parse index
+                Debug.WriteLine("Loading pack file: " + idxPath);
                 PackFile packFile = (PackFile)hellgateFile;
                 try
                 {
