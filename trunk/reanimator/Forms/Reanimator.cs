@@ -44,6 +44,8 @@ namespace Reanimator.Forms
             //TestScripts.ExtractFunctionList();
             //TestScripts.TestAllExcelScripts();
             //TestScripts.TestExcelCooking();
+            //TestScripts.TestDataTableExportAndImport();
+            //ExcelScript.GlobalDebug(true);
             //XlsFile.GenerateExcelTables();
             if (true) return;
             //Config.HglDir = @"D:\Projects\Hellgate London\Flagshipped\ServerTest\bin\Debug";

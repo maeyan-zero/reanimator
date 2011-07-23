@@ -132,7 +132,7 @@ namespace Hellgate.Excel
         public Int32 percentChance6;
         [ExcelOutput(IsScript = true)]
         public Int32 characterClass6;//intptr
-        [ExcelOutput(IsTableIndex = true, TableStringId = "MUSICGONDITIONS")]
+        [ExcelOutput(IsTableIndex = true, TableStringId = "MUSICCONDITIONS")]
         public Int32 useConditionCode6;//idx
         [ExcelOutput(IsTableIndex = true, TableStringId = "MUSICGROOVELEVELS")]
         public Int32 groove6;//idx
