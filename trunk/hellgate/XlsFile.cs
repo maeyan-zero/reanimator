@@ -2,10 +2,12 @@
 using System.Collections.Generic;
 using System.Diagnostics;
 using System.Globalization;
+using System.IO;
 using System.Linq;
 using System.Runtime.InteropServices;
 using System.Text;
 using System.Text.RegularExpressions;
+using Hellgate.Excel.SinglePlayer;
 
 namespace Hellgate
 {
@@ -36,6 +38,7 @@ namespace Hellgate
             EnumArray = 30,
             Int32Array = 35,
             UseFixedDRLGSeed = 36,
+            FloatArray = 37,
             ExcelIndexArray = 40,
             Qualities = 45,
             StringIndex = 46,
@@ -62,40 +65,72 @@ namespace Hellgate
             StringIndex3 = (1 << 7),    // 128          // seen in XLS_StringIndex, when last arg == 3
             HasNone = (1 << 8),         // 256          // flagged when the enum type has a "none" vale
 
-            UnknownFlag = (1 << 10),    // 1024         // seen in SOUND_GROUP and WARDROBE_APPEARANCE_GROUP; unknown usage (something relating to null/empty/ignore field? (random guess))
+            //UnknownFlag = (1 << 10),    // 1024         // seen in SOUND_GROUP and WARDROBE_APPEARANCE_GROUP; unknown usage (something relating to null/empty/ignore field? (random guess))
         }
 
+        /* As defined in Client
         [StructLayout(LayoutKind.Sequential, Pack = 1)]
-        private class XlsElement
+        private class XlsColumn
         {
-            public String Name;             // element name
-            public XlsType Type;            // element type
-            public int Offset;              // row offset
-            public int Count;               // number of elements
-            public int Size;                // byte size of element
-            public int ElementIndex;        // the order that the element was defined during initial definition stages
-            public XlsFlags Flags;          // type flags
-            public int Field1C;
-            public Object Default;          // default value
-            public int Field24;
-            public int Field28;
-            public int Field2C;
-            public Object Index;            // excel index or flag index depending on XlsType
-            public Object IndexUnknown;     // this has something to do with index stuff... Used in strings and excel index types and more
-            public int ExcelDefaultQ;       // I think this is the default excel index...
-            public int Field3C;
-            public int Field40;
-            public int Field44;
+            public String Name;             // 00 name
+            public XlsType Type;            // 04 type
+            public int Offset;              // 08 row offset
+            public int Count;               // 0C number of elements
+            public int Size;                // 10 byte size of element
+            public int ElementIndex;        // 14 the order that the element was defined during initial definition stages
+            public XlsFlags Flags;          // 18 type flags
+            public int Field1C;             // 1C
+            public Object Default;          // 20 default value
+            public int Field24;             // 24
+            public int Field28;             // 28
+            public int Field2C;             // 2C
+            public Object Index;            // 30 excel index or flag index depending on XlsType
+            public Object IndexUnknown;     // 34 this has something to do with index stuff... Used in strings and excel index types and more
+            public int ExcelDefaultQ;       // 38 I think this is the default excel index...
+            public int Field3C;             // 3C
+            public int Field40;             // 40
+            public int Field44;             // 44
+        }
+         */
+
+        [StructLayout(LayoutKind.Sequential, Pack = 1)]
+        private class XlsColumn
+        {
+            public String Name;             // 00 name
+            public XlsType Type;            // 04 type
+            public int Offset;              // 08 row offset
+            public int Count;               // 0C number of elements
+            public int Size;                // 10 byte size of element
+            public int ElementIndex;        // 14 the order that the element was defined during initial definition stages
+            public XlsFlags Flags;          // 18 type flags
+
+            public Object Default;          // 20 default value
+
+            public int UnknownIndex;        // 30 unknown index used for types 51 (Unknown1) and 52 (AimHeight)
+
+            public uint FlagIndex;          // 30 flag from start byte offset (i.e. can be > 31)
+
+            public bool StringBool;         // 30 unknown usage - appears to be a bool (only seen as 0 and 1), used for strings types 1 (String), 2 (StringOffset)
+            public int String64Offset;      // 34 offset for x64 client usage, usage for strings types as above
+
+            public float FloatMin;          // 30 these are used for type 12 (Float), but more specifically, for XLS_Percent [0.0f, 100.0f], otherwise always zero
+            public float FloatMax;          // 34
+
+            public int ExcelIndex;          // 30 the excel table index, must be less than 0x200; used for types 20 (ExcelIndex), 21 (FolderCode), 26 (AiInit), 40 (ExcelIndexArray), 45 (Qualities)
+            public int ExcelFlags;          // 34 unknown excel flags (pretty sure they're flags), must be < 4, and only seen as 0, 1, 3; used for types as above
+            public int ExcelUnknown;        // 38 unknown (index-like?) values, used only for type 26 (AiInit)
+
+            public String FilePath;         // 30 used for type 48 (File)
         }
 
         private class XlsTable
         {
             public String DefinitionId;             // the id used internally (e.g. "EXCEL_TABLE_DEFINITION" for "EXCELTABLES")
             public int RowSize;                     // number of bytes per row
-            public List<XlsElement> Elements = new List<XlsElement>();
-            public int ElementCount { get { return Elements.Count; } }
-            public XlsElement StringIndexElement;
-            public XlsElement RelationalElement;
+            public List<XlsColumn> Columns = new List<XlsColumn>();
+            public int ColumnCount { get { return Columns.Count; } }
+            public XlsColumn StringIndexColumn;
+            public XlsColumn RelationalColumn;
             // 00000018 tableDefUnknownStruct XLS_TableDefUnknownStruct 4 dup(?)
             // 00000098 field_98        dd ?
             // 0000009C field_9C        dd ?
@@ -124,18 +159,338 @@ namespace Hellgate
             public int Unknown2;
         }
 
-        public static void GenerateExcelTables(String[] source, byte[] exeBytes, String hellgatePath, FileManager.ClientVersions clientVersion)
+        private static byte[] _exeBytes;
+        private static readonly Regex AddressRegex = new Regex(@"(?:off|dword|byte|word)_(\w*)");
+        private static readonly Regex ArgsRegex = new Regex(@"(?:\(.*\))*(\w*)\((?:\(\w* \*\))*(.*)\)");
+        private static readonly Regex StringRegex = new Regex("\"(.*)\"");
+        private static readonly Regex PointerRegex = new Regex(@"->(\w*) = (?:\(.*\))?(\w*)");
+        private const int ExeBase = 0x400000;
+
+        public static void GenerateExcelTables()
+        {
+            // load and generate tables //
+            const String singlePlayerSource = @"C:\hellgate_sp_unpacked2.c";
+            const String singlePlayerExe = @"D:\Games\Hellgate London\SP_x86\UnPacked2.exe";
+            const String singlePlayerInstall = @"D:\Games\Hellgate London";
+            FileManager singlePlayerFiles = new FileManager(singlePlayerInstall);
+
+            const String testCenterSource = @"C:\hellgate_mp_dx9_x86_tc.unpacked.c";
+            const String testCenterExe = @"D:\Games\Hellgate London\MP_x86\hellgate_mp_dx9_x86.unpacked.exe";
+            const String testCenterInstall = singlePlayerInstall;
+            FileManager testCenterFiles = new FileManager(testCenterInstall, FileManager.ClientVersions.TestCenter);
+
+            const String resurrectionSource = @"C:\hellgate_res.c";
+            const String resurrectionExe = @"D:\Games\Hellgate\MP_x86\hellgate.exe";
+            const String resurrectionInstall = @"D:\Games\Hellgate";
+            FileManager resurrectionFiles = new FileManager(resurrectionInstall, FileManager.ClientVersions.Resurrection);
+
+            const bool outputLinesParsed = false;
+            List<XlsTable> singlePlayerTables = _GenerateExcelTables(File.ReadAllLines(singlePlayerSource), File.ReadAllBytes(singlePlayerExe), singlePlayerFiles, outputLinesParsed);
+            List<XlsTable> testCenterTables = _GenerateExcelTables(File.ReadAllLines(testCenterSource), File.ReadAllBytes(testCenterExe), testCenterFiles, outputLinesParsed);
+            List<XlsTable> resurrectionTables = _GenerateExcelTables(File.ReadAllLines(resurrectionSource), File.ReadAllBytes(resurrectionExe), resurrectionFiles, outputLinesParsed);
+            Debug.WriteLine("Table Counts: SinglePlayer = {0}, TestCenter = {1}, Resurrection = {2}", singlePlayerTables.Count, testCenterTables.Count, resurrectionTables.Count);
+
+
+            // output table class definitions //
+            const String classOutputDir = @"D:\Projects\Hellgate London\Reanimator\trunk\hellgate\Xls";
+            Directory.CreateDirectory(classOutputDir);
+
+            List<XlsTable> usedTables = new List<XlsTable>();
+            usedTables = _OutputTableClassDefintions(singlePlayerFiles, classOutputDir, singlePlayerTables, usedTables);
+            usedTables = _OutputTableClassDefintions(testCenterFiles, classOutputDir, testCenterTables, usedTables);
+            usedTables = _OutputTableClassDefintions(resurrectionFiles, classOutputDir, resurrectionTables, usedTables);
+
+        }
+
+        private static List<XlsTable> _OutputTableClassDefintions(FileManager fileManager, String outputDir, List<XlsTable> xlsTables, List<XlsTable> xlsDefined)
+        {
+            fileManager.BeginAllDatReadAccess();
+            fileManager.LoadTableFiles(true);
+            fileManager.EndAllDatAccess();
+
+            ExcelFile excelTables = fileManager.GetExcelTableFromCode(Xls.TableCodes.EXCELTABLES);
+            Debug.Assert(excelTables != null);
+
+            outputDir = Path.Combine(outputDir, fileManager.ClientVersion.ToString());
+            Directory.CreateDirectory(outputDir);
+
+            TextInfo textInfo = Common.EnglishUSCulture.TextInfo;
+
+            foreach (XlsTable xlsTable in xlsTables)
+            {
+                // do we have a file for it
+                String fileName = xlsTable.FileName + ".txt.cooked";
+                PackFileEntry packFile = fileManager.GetFirstFileEntryFromName(fileName);
+                if (packFile == null)
+                {
+                    Debug.WriteLine("Warning: Table file not found {0}", fileName);
+                    continue;
+                }
+
+                // get the string id
+                ExcelTablesRow excelRow = (ExcelTablesRow)excelTables.Rows[xlsTable.TableIndex];
+                String stringId = excelRow.name;
+                String className = textInfo.ToTitleCase(stringId.ToLower());
+                className = Regex.Replace(className, @"[^A-Za-z0-9]", "");
+                String filePath = Path.Combine(outputDir, className + ".cs");
+
+                if (stringId == "SOUNDS")
+                {
+                    int bp = 0;
+                }
+
+                Dictionary<String, XlsColumn> varNames = new Dictionary<String, XlsColumn>();
+                int currOffset = 0;
+                StringBuilder vars = new StringBuilder();
+                StringBuilder enums = new StringBuilder();
+                List<XlsColumn> orderedColumns = xlsTable.Columns.OrderBy(xlsElement => xlsElement.Offset).ToList();
+                int columnCount = orderedColumns.Count;
+                for (int i = 0; i < columnCount; i++)
+                {
+                    XlsColumn xlsColumn = orderedColumns[i];
+
+                    // unknowns
+                    if (xlsColumn.Type == XlsType.AiInit || // 26
+                        xlsColumn.Type == XlsType.Unknown1 || // 52
+                        xlsColumn.Type == XlsType.AimHeight || // 53
+                        xlsColumn.Type == XlsType.MaxSlots) continue; // 51
+
+                    int colOffset = (xlsColumn.Type == XlsType.StringOffset) ? xlsColumn.String64Offset : xlsColumn.Offset; // StringOffset types are (can be) sizeof(Int64 Ptr) for x64 client usage
+                    int gap = colOffset - currOffset;
+                    Debug.Assert(gap >= 0);
+                    while (gap > 0) // we've got gaps
+                    {
+                        String gapType;
+                        int varSize;
+                        switch (gap)
+                        {
+                            case 1:
+                                gapType = "byte";
+                                varSize = 1;
+                                break;
+
+                            case 2:
+                                gapType = "short";
+                                varSize = 2;
+                                break;
+
+                            default:
+                                gapType = "Int32";
+                                varSize = 4;
+                                break;
+                        }
+
+                        String gapName = String.Format("_undefined{0:X2}", currOffset);
+                        vars.Append(String.Format("        private {0} {1};\n", gapType, gapName));
+                        currOffset += varSize;
+                        gap -= varSize;
+                    }
+
+                    String varName = textInfo.ToTitleCase(xlsColumn.Name.ToLower());
+                    varName = Regex.Replace(varName, @"[^A-Za-z0-9]", "");
+
+                    //if (String.IsNullOrEmpty(varName)) varName = "noname" + currOffset;
+
+                    Debug.Assert(!varNames.ContainsKey(varName));
+
+                    int columnByteCount = (xlsColumn.Size * xlsColumn.Count);
+                    String varType;
+                    switch (xlsColumn.Type)
+                    {
+                        case XlsType.String: // 1
+                        case XlsType.File: // 48
+                            varType = "String";
+                            break;
+
+                        case XlsType.StringOffset: // 2
+                            varType = "Int64";
+                            columnByteCount = 8;
+                            break;
+
+                        case XlsType.GroupStyle: // 3
+                        case XlsType.Int32: // 9
+                        case XlsType.Bool: // 11
+                        case XlsType.CodeInt32: // 17
+                        case XlsType.ExcelIndex: // 20
+                        case XlsType.FolderCode: // 21
+                        case XlsType.Int32Default: // 25
+                        case XlsType.Qualities: // 45
+                        case XlsType.StringIndex: // 46
+                        case XlsType.Script: // 50
+                        case XlsType.UnitType: // 54
+                            varType = "Int32";
+                            break;
+
+                        case XlsType.Flag: // 4
+                            // need to get all flags at this offset range, and get highest flag value to determine how many Int32's we need
+                            int highestFlagIndex = 0;
+                            List<XlsColumn> xlsFlags = new List<XlsColumn>();
+                            for (int j = i; j < columnCount && orderedColumns[j].Offset == currOffset; j++)
+                            {
+                                xlsFlags.Add(orderedColumns[j]);
+                                if ((Int32)orderedColumns[j].FlagIndex < highestFlagIndex) highestFlagIndex = (Int32)orderedColumns[j].FlagIndex;
+                            }
+
+                            // the Flags attribute can at most be 32 bits, so we need to split the flags into Int32 segments
+                            // the bytes-used in the client is also done in Int32 chunks, so needed when determined end offset as well
+                            const String enumDefinition = @"
+
+    [Flags]
+    public enum {0}
+    {{
+{1}    }}";
+                            int flagCount = xlsFlags.Count;
+                            int int32Count = (highestFlagIndex >> 5) + 1;
+                            int flagsCompleted = 0;
+                            xlsFlags = xlsFlags.OrderBy(column => column.FlagIndex).ToList();
+                            int lastInt32Index = 0;
+                            int lastFlagIndex = -1;
+                            String flagName = String.Empty;
+                            StringBuilder enumValues = new StringBuilder();
+                            for (int f = 0; f < flagCount; f++)
+                            {
+                                int flagIndex = (int)xlsFlags[f].FlagIndex;
+                                int flagInt32Index = flagIndex % 32;
+                                int int32Index = (flagIndex >> 5);
+                                bool haveFlagsRemaining = (f != flagCount - 1);
+                                varName = textInfo.ToTitleCase(xlsFlags[f].Name.ToLower());
+                                varName = Regex.Replace(varName, @"[^A-Za-z0-9]", "");
+                                if (varName == String.Empty)
+                                {
+                                    varName = String.Format("Unnamed{0:X2}", flagIndex);
+                                }
+
+
+                                // fill in any gaps
+                                String enumValue;
+                                while (lastFlagIndex != flagIndex - 1)
+                                {
+                                    enumValue = String.Format("        Undefined{0:X2} = (1 << {0}) // {1}\n", ++lastFlagIndex, (1 << lastFlagIndex));
+                                    enumValues.Append(enumValue);
+                                }
+
+                                // add enum value
+                                enumValue = String.Format("        {0} = (1 << {1}) // {2}\n", varName, flagInt32Index, (1 << flagInt32Index));
+                                enumValues.Append(enumValue);
+                                lastFlagIndex++;
+
+                                // we're at the last flag, or a new flag Int32 chunk, so output old enum, and start new enum
+                                if (int32Index != lastInt32Index || !haveFlagsRemaining)
+                                {
+                                    int flagsCount = 0;
+                                    while (varNames.ContainsKey(flagName = "Flags" + flagsCount++)) { }
+
+                                    if (lastInt32Index >= 0)
+                                    {
+                                        String enumDeclaration = String.Format(enumDefinition, flagName, enumValues);
+                                        enums.Append(enumDeclaration);
+                                        enumValues.Clear();
+                                    }
+
+                                    varNames.Add(flagName, xlsColumn);
+                                    vars.Append(String.Format("        public {0} {1};\n", flagName, flagName));
+
+                                    lastInt32Index = int32Index;
+                                }
+
+
+                            }
+
+                            currOffset += int32Count * 4;
+                            i += flagCount;
+                            continue;
+
+                        case XlsType.Byte06: // 6
+                        case XlsType.Byte0D: // 13
+                        case XlsType.CodeInt8: // 17
+                            varType = "byte";
+                            break;
+
+                        case XlsType.Float: // 12
+                            varType = "float";
+                            break;
+
+                        case XlsType.CodeInt16: // 16
+                            varType = "Int16";
+                            break;
+
+                        case XlsType.Enum: // 29
+                            varType = varName;
+                            break;
+
+                        case XlsType.EnumArray: // 30
+                            varType = varName + "[]";
+                            break;
+
+                        case XlsType.Int32Array: // 35
+                        case XlsType.ExcelIndexArray: // 40
+                            varType = "Int32[]";
+                            break;
+
+                        case XlsType.MultipleRelations: // 55
+                            columnByteCount = xlsColumn.Size;
+
+                            if (stringId == "SOUNDS") varType = "FileName";
+                            else if (stringId == "MUSICCONDITIONS") varType = "Evaluate";
+                            else if (stringId == "TREASURE") varType = "Item";
+                            else if (stringId == "SPAWN_CLASS") varType = "Pick";
+                            else
+                            {
+                                throw new NotImplementedException(xlsColumn.Type + " type not implemented!");
+                            }
+                            break;
+
+                        case XlsType.BaseRow: // 56
+                            columnByteCount = 4;
+                            varType = "Int32";
+                            break;
+
+                        default:
+                            throw new NotImplementedException(xlsColumn.Type + " type not implemented!");
+                    }
+
+                    if (varName == String.Empty) varName = String.Format("Unnamed{0:X2}", xlsColumn.Offset);
+
+                    varNames.Add(varName, xlsColumn);
+                    vars.Append(String.Format("        public {0} {1};\n", varType, varName));
+
+                    Debug.Assert(columnByteCount > 0);
+
+                    currOffset += columnByteCount;
+                }
+
+                const String baseFile =
+@"using System;
+using System.Runtime.InteropServices;
+using ExcelOutput = Hellgate.ExcelFile.OutputAttribute;
+using RowHeader = Hellgate.ExcelFile.RowHeader;
+
+namespace Hellgate.Xls.{0}
+{{
+    [StructLayout(LayoutKind.Sequential, Pack = 1)]
+    public class {1} // {4} (0x{4:X}) bytes
+    {{
+        private RowHeader header;
+{2}    }}{3}
+}}";
+                xlsDefined.Add(xlsTable);
+                String classFile = String.Format(baseFile, fileManager.ClientVersion, className, vars, enums, xlsTable.RowSize);
+                File.WriteAllText(filePath, classFile);
+            }
+
+            return xlsDefined;
+        }
+
+        private static List<XlsTable> _GenerateExcelTables(String[] source, byte[] exeBytes, FileManager fileManager, bool outputLinesParsed)
         {
             _exeBytes = exeBytes;
             Dictionary<String, String> functionNames = new Dictionary<String, String>
-                                                           {
-                                                               {"sub_6B8751", "XLS_ExcelScript"},
-                                                               {"sub_6B8768", "XLS_AssignStringIndex"},
-                                                               {"sub_6B878B", "XLS_RelationalElement"}
-                                                           };
+            {
+                {"sub_6B8751", "XLS_ExcelScript"},
+                {"sub_6B8768", "XLS_AssignStringIndex"},
+                {"sub_6B878B", "XLS_RelationalElement"}
+            };
 
-            Regex argsRegex = new Regex(@"(?:\(.*\))*(\w*)\((?:\(\w* \*\))*(.*)\)");
-            Regex pointerRegex = new Regex(@"->(\w*) = (?:\(.*\))?(\w*)");
             List<XlsTable> tables = new List<XlsTable>();
 
             int lineCount = source.Length;
@@ -144,20 +499,20 @@ namespace Hellgate
                 if (!source[i].Contains("XLS_Key") || source[i].StartsWith("//")) continue;
                 if (source[i].Contains("XLS_Key<")) continue; // the function definition
                 if (source[i].Contains("XLS_KeyUnknownMemMove")) continue; // just another function
-                Debug.Write("\n");
+                if (outputLinesParsed) Debug.Write("\n");
 
                 XlsTable xlsTable = new XlsTable();
                 bool inTableDefinition = true;
                 i--;
                 while (inTableDefinition && i++ < lineCount)
                 {
-                    Match match = argsRegex.Match(source[i]);
+                    Match match = ArgsRegex.Match(source[i]);
                     String func = match.Groups[1].Value;
                     String[] args = match.Groups[2].Value.Split(new[] { ", " }, StringSplitOptions.None);
 
                     if (String.IsNullOrEmpty(func))
                     {
-                        Match pMatch = pointerRegex.Match(source[i]); // mostly a curiosity thing
+                        Match pMatch = PointerRegex.Match(source[i]); // mostly a curiosity thing
                         String varName = pMatch.Groups[1].Value;
                         String funcName = pMatch.Groups[2].Value;
 
@@ -196,14 +551,14 @@ namespace Hellgate
                                 break;
 
                             default:
-                                throw new NotImplementedException(varName + " not implemented.");
+                                throw new Exceptions.UnexpectedErrorException(varName + " not implemented in switch (varName).");
                         }
 
-                        Debug.WriteLine("xlsTable.{0} = {1}", varName, funcName);
+                        if (outputLinesParsed) Debug.WriteLine("xlsTable.{0} = {1}", varName, funcName);
                         continue;
                     }
 
-                    Debug.WriteLine(match);
+                    if (outputLinesParsed) Debug.WriteLine(match);
                     Debug.Assert(!String.IsNullOrEmpty(func));
 
                     String replaceName;
@@ -212,7 +567,7 @@ namespace Hellgate
                         func = replaceName;
                     }
 
-                    XlsElement xlsElement = null;
+                    XlsColumn xlsElement = null;
                     switch (func)
                     {
                         case "XLS_Key": // XLS_TableDefinition *__usercall XLS_Key<eax>(char *szStringId<eax>, int rowSize)
@@ -227,9 +582,9 @@ namespace Hellgate
 
                             break;
 
-                        case "XLS_String": // 1 // void __cdecl XLS_String(XLS_TableDefinition *pTableDefinition, char *szName, int offset, int charCount, int index)
+                        case "XLS_String": // 1 // void __cdecl XLS_String(XLS_TableDefinition *pTableDefinition, char *szName, int offset, int charCount, int stringBool)
                             Debug.Assert(args.Length == 5);
-                            xlsElement = new XlsElement
+                            xlsElement = new XlsColumn
                             {
                                 Name = _GetArg<string>(args, 1),
                                 Offset = _GetArg<int>(args, 2),
@@ -239,14 +594,14 @@ namespace Hellgate
                                 Default = null,
                             };
 
-                            // applicable only to String and StringOffset/StringOffsetDefault
-                            // XLS_ElementDefinition *__usercall XLS_Def_SetDefinitionDefault_String<eax>(XLS_ElementDefinition *pElement<eax>, int index, int indexUnknown)
-                            _XlsSetDefStringStuff(xlsElement, _GetArg<int>(args, 4), -1); // XLS_Def_SetDefinitionDefault_String(&element, index, -1);
+                            // applicable only to types 1 (String) and 2 (StringOffset/StringOffsetDefault)
+                            // XLS_ElementDefinition *__usercall XLS_Def_SetDefinitionDefault_String<eax>(XLS_ElementDefinition *pElement<eax>, int bUnknown, int x64Offset)
+                            _XlsSetDefStringStuff(xlsElement, _GetArg<int>(args, 4), -1); // XLS_Def_SetDefinitionDefault_String(&element, stringBool, -1);
                             break;
 
-                        case "XLS_StringOffset": // 2 // void __usercall XLS_StringOffset(XLS_TableDefinition *pTable, char *szName, int offset<esi>, int unknownBool)
+                        case "XLS_StringOffset": // 2 // void __usercall XLS_StringOffset(XLS_TableDefinition *pTable, char *szName, int offset<esi>, int stringBool)
                             Debug.Assert(args.Length == 4);
-                            xlsElement = new XlsElement
+                            xlsElement = new XlsColumn
                             {
                                 Name = _GetArg<string>(args, 1),
                                 Offset = _GetArg<int>(args, 2),
@@ -256,14 +611,14 @@ namespace Hellgate
                                 Default = null
                             };
 
-                            // applicable only to String and StringOffset/StringOffsetDefault
-                            // XLS_ElementDefinition *__usercall XLS_Def_SetDefinitionDefault_String<eax>(XLS_ElementDefinition *pElement<eax>, int unknown1, int indexUnknown)
+                            // applicable only to types 1 (String) and 2 (StringOffset/StringOffsetDefault)
+                            // XLS_ElementDefinition *__usercall XLS_Def_SetDefinitionDefault_String<eax>(XLS_ElementDefinition *pElement<eax>, int bUnknown, int x64Offset)
                             _XlsSetDefStringStuff(xlsElement, _GetArg<int>(args, 3), _GetArg<int>(args, 2)); // XLS_Def_SetDefinitionDefault_String(&element, unknownBool, offset);
                             break;
 
-                        case "XLS_StringOffsetDefault": // 2 // void __cdecl XLS_StringOffsetDefault(XLS_TableDefinition *pTable, char *szName, int offset, int defaultSomething)
+                        case "XLS_StringOffsetDefault": // 2 // void __cdecl XLS_StringOffsetDefault(XLS_TableDefinition *pTable, char *szName, int x86Offset, int x64Offset)
                             Debug.Assert(args.Length == 4);
-                            xlsElement = new XlsElement
+                            xlsElement = new XlsColumn
                             {
                                 Name = _GetArg<string>(args, 1),
                                 Offset = _GetArg<int>(args, 2),
@@ -273,14 +628,14 @@ namespace Hellgate
                                 Default = null
                             };
 
-                            // applicable only to String and StringOffset/StringOffsetDefault
-                            // XLS_ElementDefinition *__usercall XLS_Def_SetDefinitionDefault_String<eax>(XLS_ElementDefinition *pElement<eax>, int index, int indexUnknown)
-                            _XlsSetDefStringStuff(xlsElement, 0, _GetArg<int>(args, 3)); // XLS_Def_SetDefinitionDefault_String(&element, 0, defaultSomething);
+                            // applicable only to types 1 (String) and 2 (StringOffset/StringOffsetDefault)
+                            // XLS_ElementDefinition *__usercall XLS_Def_SetDefinitionDefault_String<eax>(XLS_ElementDefinition *pElement<eax>, int bUnknown, int x64Offset)
+                            _XlsSetDefStringStuff(xlsElement, 0, _GetArg<int>(args, 3)); // XLS_Def_SetDefinitionDefault_String(&element, 0, x64Offset);
                             break;
 
                         case "XLS_GroupStyle": // 3 // void __cdecl XLS_GroupStyle(XLS_TableDefinition *pTable, char *szName, int offset)
                             Debug.Assert(args.Length == 3);
-                            xlsElement = new XlsElement
+                            xlsElement = new XlsColumn
                             {
                                 Name = _GetArg<string>(args, 1),
                                 Offset = _GetArg<int>(args, 2),
@@ -293,7 +648,7 @@ namespace Hellgate
 
                         case "XLS_Style": // 3 // void __cdecl XLS_Style(XLS_TableDefinition *pTable) [used in TestCenter client]
                             Debug.Assert(args.Length == 1);
-                            xlsElement = new XlsElement
+                            xlsElement = new XlsColumn
                             {
                                 Name = "Style",
                                 Offset = 136,
@@ -306,21 +661,21 @@ namespace Hellgate
 
                         case "XLS_Flag": // 4 // void __usercall XLS_Flag(XLS_TableDefinition *pTable, char *szName, int offset, unsigned int bitIndex<edi>, char defaultValue)
                             Debug.Assert(args.Length == 5);
-                            xlsElement = new XlsElement
+                            xlsElement = new XlsColumn
                             {
                                 Name = _GetArg<string>(args, 1),
                                 Offset = _GetArg<int>(args, 2),
-                                Size = (int)(_GetArg<uint>(args, 3) >> 3) + 1,
+                                Size = (_GetArg<int>(args, 3) >> 3) + 1,
                                 Type = XlsType.Flag,
                                 Count = 1,
                                 Default = _GetArg<bool>(args, 4),
-                                Index = (int)_GetArg<uint>(args, 3)
+                                FlagIndex = _GetArg<uint>(args, 3)
                             };
                             break;
 
                         case "XLS_Byte_06": // 6 // void __cdecl XLS_Byte_06(XLS_TableDefinition *pTable, char *szName, int offset) [calls XLS_Byte]
                             Debug.Assert(args.Length == 3);
-                            xlsElement = new XlsElement
+                            xlsElement = new XlsColumn
                             {
                                 Name = _GetArg<string>(args, 1),
                                 Type = XlsType.Byte06,
@@ -333,7 +688,7 @@ namespace Hellgate
 
                         case "XLS_Int32": // 9 // void __cdecl XLS_Int32(XLS_TableDefinition *pTableDefinition, char *szName, int offset, int defaultValue) [calls XLS_Int32Array]
                             Debug.Assert(args.Length == 4);
-                            xlsElement = new XlsElement
+                            xlsElement = new XlsColumn
                             {
                                 Name = _GetArg<string>(args, 1),
                                 Type = XlsType.Int32,
@@ -346,7 +701,7 @@ namespace Hellgate
 
                         case "XLS_Bool": // 11 // void __cdecl XLS_Bool(XLS_TableDefinition *pTableDefinition, char *szName, int offset, int defaultValue) [calls XLS_Int32Array]
                             Debug.Assert(args.Length == 4);
-                            xlsElement = new XlsElement
+                            xlsElement = new XlsColumn
                             {
                                 Name = _GetArg<string>(args, 1),
                                 Type = XlsType.Bool,
@@ -357,9 +712,9 @@ namespace Hellgate
                             };
                             break;
 
-                        case "XLS_Float1": // 12 // void __cdecl XLS_Float1(XLS_TableDefinition *pTableDefinition, char *szName, int offset, float defaultValue)
+                        case "XLS_Float": // 12 // void __cdecl XLS_Float(XLS_TableDefinition *pTableDefinition, char *szName, int offset, float defaultValue)
                             Debug.Assert(args.Length == 4);
-                            xlsElement = new XlsElement
+                            xlsElement = new XlsColumn
                             {
                                 Name = _GetArg<string>(args, 1),
                                 Offset = _GetArg<int>(args, 2),
@@ -370,9 +725,9 @@ namespace Hellgate
                             };
                             break;
 
-                        case "XLS_Float2": // 12 // void __cdecl XLS_Float2(XLS_TableDefinition *pTable, char *szName, int offset)
+                        case "XLS_Percent": // 12 // void __cdecl XLS_Percent(XLS_TableDefinition *pTable, char *szName, int offset)
                             Debug.Assert(args.Length == 3);
-                            xlsElement = new XlsElement
+                            xlsElement = new XlsColumn
                             {
                                 Name = _GetArg<string>(args, 1),
                                 Offset = _GetArg<int>(args, 2),
@@ -381,14 +736,14 @@ namespace Hellgate
                                 Size = 4,
                                 Default = 0.0f,
 
-                                Index = 0.0f,
-                                IndexUnknown = 100.0f
+                                FloatMin = 0.0f,    // this is essentially the "min"
+                                FloatMax = 100.0f   // and the "max" (together the range; 0-100% etc)
                             };
                             break;
 
                         case "XLS_Byte_0D": // 13 // void __cdecl XLS_Byte_0D(XLS_TableDefinition *pTable, char *szName, int offset) [calls XLS_Byte]
                             Debug.Assert(args.Length == 3);
-                            xlsElement = new XlsElement
+                            xlsElement = new XlsColumn
                             {
                                 Name = _GetArg<string>(args, 1),
                                 Offset = _GetArg<int>(args, 2),
@@ -401,7 +756,7 @@ namespace Hellgate
 
                         case "XLS_CodeInt32": // 14 // void __cdecl XLS_CodeInt32(XLS_TableDefinition *pTable, char *szName, int offset)
                             Debug.Assert(args.Length == 3);
-                            xlsElement = new XlsElement
+                            xlsElement = new XlsColumn
                             {
                                 Name = _GetArg<string>(args, 1),
                                 Offset = _GetArg<int>(args, 2),
@@ -414,7 +769,7 @@ namespace Hellgate
 
                         case "XLS_CodeInt16": // 16 // void __cdecl XLS_CodeInt16(XLS_TableDefinition *pTableDefinition, char *szName, int offset)
                             Debug.Assert(args.Length == 3);
-                            xlsElement = new XlsElement
+                            xlsElement = new XlsColumn
                             {
                                 Name = _GetArg<string>(args, 1),
                                 Offset = _GetArg<int>(args, 2),
@@ -427,7 +782,7 @@ namespace Hellgate
 
                         case "XLS_CodeInt8": // 17 // void __cdecl XLS_CodeInt8(XLS_TableDefinition *pTable)
                             Debug.Assert(args.Length == 1);
-                            xlsElement = new XlsElement
+                            xlsElement = new XlsColumn
                             {
                                 Count = 1,
                                 Size = 1,
@@ -440,7 +795,7 @@ namespace Hellgate
 
                         case "XLS_ExcelIndex": // 20 // void __usercall XLS_ExcelIndex(XLS_TableDefinition *pTableDefinition<edi>, char *szName, int offset, int tableIndex) [calls XLS_ExcelIndexArray]
                             Debug.Assert(args.Length == 4); // XLS_ExcelIndexArray(pTableDefinition, 20, szName, offset, 1, tableIndex, 0);
-                            xlsElement = new XlsElement
+                            xlsElement = new XlsColumn
                             {
                                 Name = _GetArg<string>(args, 1),
                                 Type = XlsType.ExcelIndex,
@@ -458,7 +813,7 @@ namespace Hellgate
 
                         case "XLS_FolderCode": // 21 // void __usercall XLS_FolderCode(XLS_TableDefinition *pTable<edi>, int offset)
                             Debug.Assert(args.Length == 2);
-                            xlsElement = new XlsElement
+                            xlsElement = new XlsColumn
                             {
                                 Offset = _GetArg<int>(args, 1),
                                 Name = "FolderCode",
@@ -471,10 +826,10 @@ namespace Hellgate
 
                             // LEVEL_FILE_PATHS
                             int tableIndex = -1;
-                            switch (clientVersion)
+                            switch (fileManager.ClientVersion)
                             {
                                 case FileManager.ClientVersions.SinglePlayer: tableIndex = 0x4E; break;
-                                case FileManager.ClientVersions.TestCenter:   tableIndex = 0x4F; break;
+                                case FileManager.ClientVersions.TestCenter: tableIndex = 0x4F; break;
                                 case FileManager.ClientVersions.Resurrection: tableIndex = 0x52; break;
                             }
 
@@ -485,7 +840,7 @@ namespace Hellgate
 
                         case "XLS_Int32Default": // 25 // void __cdecl XLS_Int32Default(XLS_TableDefinition *pTableDefinition, char *szName, int offset) [calls XLS_Int32Array]
                             Debug.Assert(args.Length == 3);
-                            xlsElement = new XlsElement
+                            xlsElement = new XlsColumn
                             {
                                 Name = _GetArg<string>(args, 1),
                                 Offset = _GetArg<int>(args, 2),
@@ -498,7 +853,7 @@ namespace Hellgate
 
                         case "XLS_AiInit": // 26 // void __usercall XLS_AiInit(XLS_TableDefinition *pTable<edi>, char *szName, int excelDefaultQ)
                             Debug.Assert(args.Length == 3);
-                            xlsElement = new XlsElement
+                            xlsElement = new XlsColumn
                             {
                                 Offset = 0,
                                 Size = 0,
@@ -511,10 +866,10 @@ namespace Hellgate
 
                             // AI_INIT
                             int aiInitIndex = -1;
-                            switch (clientVersion)
+                            switch (fileManager.ClientVersion)
                             {
                                 case FileManager.ClientVersions.SinglePlayer: aiInitIndex = 0x46; break;
-                                case FileManager.ClientVersions.TestCenter:   aiInitIndex = 0x47; break;
+                                case FileManager.ClientVersions.TestCenter: aiInitIndex = 0x47; break;
                                 case FileManager.ClientVersions.Resurrection: aiInitIndex = 0x48; break;
                             }
 
@@ -525,7 +880,7 @@ namespace Hellgate
 
                         case "XLS_Enum": // 29 // void __usercall XLS_Enum(XLS_TableDefinition *pTable, char *szName, int offset, int enumCount, void *enums<eax>) [calls XLS_EnumArray]
                             Debug.Assert(args.Length == 5);
-                            xlsElement = new XlsElement
+                            xlsElement = new XlsColumn
                             {
                                 Name = _GetArg<string>(args, 1),
                                 Type = XlsType.Enum,
@@ -543,12 +898,16 @@ namespace Hellgate
                                 xlsElement.Flags |= XlsFlags.HasNone;
                             }
 
-                            _XlsSetEnumStuff(xlsElement, xlsEnum, _GetArg<int>(args, 3));
+                            // void __usercall XLS_Def_EnumStuff(int pEnums<eax>, XLS_ElementDefinition *pElement, int enumCount)
+                            //_XlsSetEnumStuff(xlsElement, xlsEnum, _GetArg<int>(args, 3));
+
+                            xlsElement.Default = xlsEnum;
+                            // xlsElement.Field38 = _GetArg<int>(args, 3); // enumCount
                             break;
 
                         case "XLS_EnumArray": // 29 (Enum) or 30 (EnumArray) // void __usercall XLS_EnumArray(XLS_TableDefinition *pTableDefinition, void *enums<eax>, int typeId, char *szName, int offset, int elementCount, int enumCount)
                             Debug.Assert(args.Length == 7);
-                            xlsElement = new XlsElement
+                            xlsElement = new XlsColumn
                             {
                                 Name = _GetArg<string>(args, 3),
                                 Type = _GetArg<XlsType>(args, 2),
@@ -566,12 +925,16 @@ namespace Hellgate
                                 xlsElement.Flags |= XlsFlags.HasNone;
                             }
 
-                            _XlsSetEnumStuff(xlsElement, xlsEnumArray, _GetArg<int>(args, 6));
+                            // void __usercall XLS_Def_EnumStuff(int pEnums<eax>, XLS_ElementDefinition *pElement, int enumCount)
+                            //_XlsSetEnumStuff(xlsElement, xlsEnumArray, _GetArg<int>(args, 6));
+
+                            xlsElement.Default = xlsEnumArray;
+                            // xlsElement.Field38 = _GetArg<int>(args, 6); // enumCount
                             break;
 
-                        case "XLS_Int32Array": // 35 // void __cdecl XLS_Int32Array(XLS_TableDefinition *pTableDefinition, int typeId, char *szName, int offset, int elementCount, int defaultValue)
+                        case "XLS_Array": // 35 or 37 // void __cdecl XLS_Int32Array(XLS_TableDefinition *pTableDefinition, int typeId, char *szName, int offset, int elementCount, int defaultValue)
                             Debug.Assert(args.Length == 6);
-                            xlsElement = new XlsElement
+                            xlsElement = new XlsColumn
                             {
                                 Name = _GetArg<string>(args, 2),
                                 Type = _GetArg<XlsType>(args, 1),
@@ -580,11 +943,25 @@ namespace Hellgate
                                 Size = 4,
                                 Default = _GetArg<int>(args, 5),
                             };
+
+                            switch (xlsElement.Type)
+                            {
+                                case XlsType.Int32Array:
+                                    xlsElement.Default = _GetArg<int>(args, 5);
+                                    break;
+
+                                case XlsType.FloatArray:
+                                    xlsElement.Default = _GetArg<float>(args, 5);
+                                    break;
+
+                                default:
+                                    throw new Exceptions.UnexpectedErrorException(xlsElement.Type + " not implemented in XLS_Array.");
+                            }
                             break;
 
-                        case "XLS_Int32Array2": // 35 // void __cdecl XLS_Int32Array2(XLS_TableDefinition *pTable, char *szName, int offset, int elementCount, int defaultValue) [calls XLS_Int32Array]
+                        case "XLS_Int32Array": // 35 // void __cdecl XLS_Int32Array2(XLS_TableDefinition *pTable, char *szName, int offset, int elementCount, int defaultValue) [calls XLS_Int32Array]
                             Debug.Assert(args.Length == 5);
-                            xlsElement = new XlsElement
+                            xlsElement = new XlsColumn
                             {
                                 Name = _GetArg<string>(args, 1),
                                 Type = XlsType.Int32Array,
@@ -597,7 +974,7 @@ namespace Hellgate
 
                         case "XLS_UseFixedDRLGSeed": // 36 // void __cdecl XLS_UseFixedDRLGSeed(XLS_TableDefinition *pTable)
                             Debug.Assert(args.Length == 1);
-                            xlsElement = new XlsElement
+                            xlsElement = new XlsColumn
                             {
                                 Name = "Use Fixed DRLG Seed",
                                 Type = XlsType.UseFixedDRLGSeed, // found only in DRLG_DEFINITION
@@ -610,7 +987,7 @@ namespace Hellgate
 
                         case "XLS_ExcelIndexArray": // 40 // void __usercall XLS_ExcelIndexArray(XLS_TableDefinition *pTable<edi>, int typeId, char *szName, int offset, int count, int tableIndex, int unknown1)
                             Debug.Assert(args.Length == 7);
-                            xlsElement = new XlsElement
+                            xlsElement = new XlsColumn
                             {
                                 Name = _GetArg<string>(args, 2),
                                 Type = _GetArg<XlsType>(args, 1),
@@ -621,6 +998,12 @@ namespace Hellgate
                                 Flags = XlsFlags.ExcelIndex
                             };
 
+                            //Debug.Assert(_GetArg<int>(args, 6) == 0);
+                            //if (_GetArg<int>(args, 6) != 0)
+                            //{
+                            //    int bp = 0;
+                            //}
+
                             // applicable only to ExcelIndex and ExcelIndexArray, AiInit, Qualities, and FolderCode
                             // void __usercall XLS_Def_ExcelSomething(XLS_ElementDefinition *pElement<eax>, unsigned int unknown1<edx>, unsigned int tableIndex<esi>, int excelDefaultQ)
                             _XlsSetDefExcelStuff(xlsElement, _GetArg<int>(args, 6), _GetArg<int>(args, 5), -1); // XLS_Def_ExcelSomething(&element, unknown1, tableIndex, -1);
@@ -630,7 +1013,7 @@ namespace Hellgate
                             Debug.Assert(args.Length == 1);
 
                             // only found in UNIT_DATA
-                            xlsElement = new XlsElement
+                            xlsElement = new XlsColumn
                             {
                                 Name = "qualities",
                                 Type = XlsType.Qualities,
@@ -642,10 +1025,10 @@ namespace Hellgate
 
                             // ITEM_QUALITY
                             int qualitiesIndex = -1;
-                            switch (clientVersion)
+                            switch (fileManager.ClientVersion)
                             {
                                 case FileManager.ClientVersions.SinglePlayer: qualitiesIndex = 0x43; xlsElement.Offset = 2576; break;
-                                case FileManager.ClientVersions.TestCenter:   qualitiesIndex = 0x44; xlsElement.Offset = 2708; break;
+                                case FileManager.ClientVersions.TestCenter: qualitiesIndex = 0x44; xlsElement.Offset = 2708; break;
                                 case FileManager.ClientVersions.Resurrection: qualitiesIndex = 0x45; xlsElement.Offset = 2260; break;
                             }
 
@@ -657,7 +1040,7 @@ namespace Hellgate
 
                         case "XLS_StringIndex": // 46 // void __usercall XLS_StringIndex(XLS_TableDefinition *pTableDefinition<edi>, char *szName, int offset, int indexType(?))
                             Debug.Assert(args.Length == 4);
-                            xlsElement = new XlsElement
+                            xlsElement = new XlsColumn
                             {
                                 Name = _GetArg<string>(args, 1),
                                 Offset = _GetArg<int>(args, 2),
@@ -676,7 +1059,7 @@ namespace Hellgate
 
                         case "XLS_TugboatUnknown": // 47 // void __usercall XLS_TugboatUnknown(XLS_TableDefinition *pTable<esi>, char *szName, int offset, int elementCount<edi>)
                             Debug.Assert(args.Length == 4);
-                            xlsElement = new XlsElement
+                            xlsElement = new XlsColumn
                             {
                                 Name = _GetArg<string>(args, 1),
                                 Offset = _GetArg<int>(args, 2),
@@ -692,22 +1075,22 @@ namespace Hellgate
 
                         case "XLS_File": // 48 // void __cdecl XLS_File(XLS_TableDefinition *pTable)
                             Debug.Assert(args.Length == 1);
-                            xlsElement = new XlsElement
+                            xlsElement = new XlsColumn
                             {
                                 Offset = 0,
                                 Name = "file",
                                 Type = XlsType.File,
                                 Count = 1,
                                 Size = 8,
-                                ExcelDefaultQ = 0,
-                                Index = @"data\palettes\", // this type is used only once for PALETTE_DATA
+                                // Field38 = 0,
+                                FilePath = @"data\palettes\", // this type is used only once for PALETTE_DATA
                                 Default = null
                             };
                             break;
 
                         case "XLS_Script": // 50 // void __cdecl XLS_Script(XLS_TableDefinition *pTable, char *szName, int offset)
                             Debug.Assert(args.Length == 3);
-                            xlsElement = new XlsElement
+                            xlsElement = new XlsColumn
                             {
                                 Name = _GetArg<string>(args, 1),
                                 Offset = _GetArg<int>(args, 2),
@@ -721,7 +1104,7 @@ namespace Hellgate
 
                         case "XLS_MaxSlots": // 51 // void __usercall XLS_MaxSlots(XLS_TableDefinition *pTable<edi>)
                             Debug.Assert(args.Length == 1);
-                            xlsElement = new XlsElement
+                            xlsElement = new XlsColumn
                             {
                                 Offset = 0,
                                 Size = 0,
@@ -736,23 +1119,26 @@ namespace Hellgate
 
                         case "XLS_Unknown1": // 52 // void __usercall XLS_Unknown1(XLS_TableDefinition *pTable<edi>, char *szName, int index, int defaultValue)
                             Debug.Assert(args.Length == 4);
-                            xlsElement = new XlsElement
+                            xlsElement = new XlsColumn
                             {
                                 Offset = 0,
                                 Size = 0,
                                 Name = _GetArg<string>(args, 1),
                                 Type = XlsType.Unknown1,
                                 Count = 1,
-                                Default = _GetArg<int>(args, 3)
+                                Default = _GetArg<int>(args, 3),
+
+                                // _XlsSetDefAimHeightStuff(xlsElement, _GetArg<int>(args, 2), 0);
+                                UnknownIndex = _GetArg<int>(args, 2), // Field30
+                                // xlsElement.Field34 = 0;
                             };
 
-                            _XlsSetDefAimHeightStuff(xlsElement, _GetArg<int>(args, 2), 0);
                             xlsTable.HasUnknown = true;
                             break;
 
                         case "XLS_AimHeight": // 53 // void __usercall XLS_AimHeight(XLS_TableDefinition *pTable<edi>)
                             Debug.Assert(args.Length == 1);
-                            xlsElement = new XlsElement
+                            xlsElement = new XlsColumn
                             {
                                 Offset = 0,
                                 Size = 0,
@@ -763,20 +1149,23 @@ namespace Hellgate
                             };
 
                             int aimHeightIndex = -1;
-                            switch (clientVersion)
+                            switch (fileManager.ClientVersion)
                             {
                                 case FileManager.ClientVersions.SinglePlayer: aimHeightIndex = 266; break;
-                                case FileManager.ClientVersions.TestCenter:   aimHeightIndex = 281; break;
+                                case FileManager.ClientVersions.TestCenter: aimHeightIndex = 281; break;
                                 case FileManager.ClientVersions.Resurrection: aimHeightIndex = 284; break;
                             }
 
-                            _XlsSetDefAimHeightStuff(xlsElement, aimHeightIndex, 0);
+                            // _XlsSetDefAimHeightStuff(xlsElement, aimHeightIndex, 0);
+                            xlsElement.UnknownIndex = aimHeightIndex; // Field30
+                            // xlsElement.Field34 = 0;
+
                             xlsTable.HasUnknown = true;
                             break;
 
                         case "XLS_UnitTypeArray": // 54 // void __cdecl XLS_UnitTypeArray(XLS_TableDefinition *pTableDefinition, char *szName, int offset, int elementCount, char *defaultValue)
                             Debug.Assert(args.Length == 5);
-                            xlsElement = new XlsElement
+                            xlsElement = new XlsColumn
                             {
                                 Name = _GetArg<string>(args, 1),
                                 Offset = _GetArg<int>(args, 2),
@@ -789,21 +1178,21 @@ namespace Hellgate
 
                         case "XLS_MultipleRelations": // 55 // void __cdecl XLS_MultipleRelations(XLS_TableDefinition *pTable, char *szName, int offset, int size, void *pFunc)
                             Debug.Assert(args.Length == 5);
-                            xlsElement = new XlsElement
+                            xlsElement = new XlsColumn
                             {
                                 Name = _GetArg<string>(args, 1),
                                 Offset = _GetArg<int>(args, 2),
                                 Type = XlsType.MultipleRelations,
                                 Size = _GetArg<int>(args, 3),
-                                ExcelDefaultQ = 0,
-                                //Index = _GetArg<String>(args, 4),
+                                // Field38 = 0,
+                                // Index = _GetArg<String>(args, 4),
                                 Default = null
                             };
                             break;
 
                         case "XLS_BaseRow": // 56 // void __usercall XLS_BaseRow(XLS_TableDefinition *pTable<esi>, int offset)
                             Debug.Assert(args.Length == 2);
-                            xlsElement = new XlsElement
+                            xlsElement = new XlsColumn
                             {
                                 Offset = _GetArg<int>(args, 1),
                                 Size = 4,
@@ -821,7 +1210,7 @@ namespace Hellgate
 
                         case "XLS_FlagLastElement": // void __usercall XLS_FlagLastElement(XLS_TableDefinition *pTable<edx>, int flag)
                             Debug.Assert(args.Length == 2);
-                            xlsTable.Elements[xlsTable.ElementCount - 1].Flags |= (XlsFlags)_GetArg<int>(args, 1);
+                            xlsTable.Columns[xlsTable.ColumnCount - 1].Flags |= (XlsFlags)_GetArg<int>(args, 1);
                             break;
 
                         case "XLS_AssignStringIndex": // void __usercall XLS_AssignStringIndex(XLS_TableDefinition *pTable<esi>, char *element<eax>)
@@ -836,7 +1225,7 @@ namespace Hellgate
                             Up        p    XLS_UNIT_DATA+3659        call    XLS_AssignStringIndex
                              */
                             Debug.Assert(args.Length == 2);
-                            xlsTable.StringIndexElement = xlsTable.Elements.FirstOrDefault(element => element.Name == _GetArg<string>(args, 1));
+                            xlsTable.StringIndexColumn = xlsTable.Columns.FirstOrDefault(element => element.Name == _GetArg<string>(args, 1));
                             break;
 
                         case "XLS_ExcelScript": // void __usercall XLS_ExcelScript(XLS_TableDefinition *pTable<eax>, int unknown (count? size?))
@@ -865,7 +1254,7 @@ namespace Hellgate
                             Up        p    XLS_STATE_DATA+42E    call    XLS_RelationalElement; Call Procedure
                              */
                             Debug.Assert(args.Length == 1);
-                            xlsTable.RelationalElement = xlsTable.Elements.FirstOrDefault(element => element.Name == "isa");
+                            xlsTable.RelationalColumn = xlsTable.Columns.FirstOrDefault(element => element.Name == "isa");
                             break;
 
                         case "XLS_SortColumns": // void __usercall XLS_SortColumns(XLS_TableDefinition *pTable, char *szColumn<edx>, int order, int unknown1, char *szByColumn1, char* szByColumn2)
@@ -876,10 +1265,10 @@ namespace Hellgate
                             String byColumn1 = _GetArg<string>(args, 4);
                             String byColumn2 = _GetArg<string>(args, 5);
 
-                            XlsElement sortElement;
-                            if (columnName != null && (sortElement = xlsTable.Elements.FirstOrDefault(element => String.Compare(element.Name, columnName, true) == 0)) != null) sortElement.Flags |= XlsFlags.Sort;
-                            if (byColumn1 != null && (sortElement = xlsTable.Elements.FirstOrDefault(element => String.Compare(element.Name, byColumn1, true) == 0)) != null) sortElement.Flags |= XlsFlags.Sort;
-                            if (byColumn2 != null && (sortElement = xlsTable.Elements.FirstOrDefault(element => String.Compare(element.Name, byColumn2, true) == 0)) != null) sortElement.Flags |= XlsFlags.Sort;
+                            XlsColumn sortElement;
+                            if (columnName != null && (sortElement = xlsTable.Columns.FirstOrDefault(element => String.Compare(element.Name, columnName, true) == 0)) != null) sortElement.Flags |= XlsFlags.Sort;
+                            if (byColumn1 != null && (sortElement = xlsTable.Columns.FirstOrDefault(element => String.Compare(element.Name, byColumn1, true) == 0)) != null) sortElement.Flags |= XlsFlags.Sort;
+                            if (byColumn2 != null && (sortElement = xlsTable.Columns.FirstOrDefault(element => String.Compare(element.Name, byColumn2, true) == 0)) != null) sortElement.Flags |= XlsFlags.Sort;
                             break;
 
                         case "XLS_GenerateStructureId": // Appears at the end of a definition...
@@ -887,7 +1276,7 @@ namespace Hellgate
                             break;
 
                         default:
-                            throw new NotImplementedException(func + " not implemented.");
+                            throw new Exceptions.UnexpectedErrorException(func + " not implemented in _GenerateExcelTables.");
                     }
 
                     if (xlsElement == null) continue;
@@ -918,8 +1307,8 @@ namespace Hellgate
                         Debug.Assert(xlsElement.Default != null);
                     }
 
-                    xlsElement.ElementIndex = xlsTable.Elements.Count;
-                    xlsTable.Elements.Add(xlsElement);
+                    xlsElement.ElementIndex = xlsTable.Columns.Count;
+                    xlsTable.Columns.Add(xlsElement);
                 }
 
                 tables.Add(xlsTable);
@@ -927,7 +1316,18 @@ namespace Hellgate
 
 
             // get table details
-            Debug.Write("\n");
+            _GetTableDetails(source, tables, outputLinesParsed);
+
+            // test hashes
+            _TestHashes(fileManager, tables, outputLinesParsed);
+
+            return tables;
+        }
+
+        private static void _GetTableDetails(String[] source, List<XlsTable> tables, bool outputLinesParsed)
+        {
+            if (outputLinesParsed) Debug.Write("\n");
+            int lineCount = source.Length;
             for (int i = 0; i < lineCount; i++)
             {
                 if (!source[i].Contains("XLS_DefineTable") || source[i].StartsWith("//") || source[i].Contains("XLS_DefineTables")) continue;
@@ -941,7 +1341,7 @@ namespace Hellgate
                 }
                 Debug.Assert(line.Count(c => c == '(') == line.Count(c => c == ')')); // make sure we didn't brake due to excess line counts
 
-                Match match = argsRegex.Match(line);
+                Match match = ArgsRegex.Match(line);
                 String func = match.Groups[1].Value;
                 String[] args = match.Groups[2].Value.Split(new[] { ", " }, StringSplitOptions.None);
 
@@ -956,7 +1356,7 @@ namespace Hellgate
                 int unknown2 = _GetArg<int>(args, 5);
 
                 Debug.Assert(tableIndex < 0x200);
-                Debug.WriteLine("Table[{0}]: {1} ({2}.txt.cooked), u1 = {3}, u2 = {4}", tableIndex, definitionId, fileName, unknown1, unknown2);
+                if (outputLinesParsed) Debug.WriteLine("Table[{0}]: {1} ({2}.txt.cooked), u1 = {3}, u2 = {4}", tableIndex, definitionId, fileName, unknown1, unknown2);
 
                 XlsTable xlsTable = tables.FirstOrDefault(t => t.DefinitionId == definitionId);
                 if (xlsTable == null)
@@ -970,10 +1370,12 @@ namespace Hellgate
                 xlsTable.Unknown1 = unknown1;
                 xlsTable.Unknown2 = unknown2;
             }
+        }
 
-            Debug.WriteLine("\nLoading excel files...");
+        private static void _TestHashes(FileManager fileManager, List<XlsTable> tables, bool outputLinesParsed)
+        {
+            if (outputLinesParsed) Debug.WriteLine("\nLoading excel files...");
             Dictionary<String, uint> excelHashes = new Dictionary<String, uint>();
-            FileManager fileManager = new FileManager(hellgatePath, clientVersion);
             fileManager.BeginAllDatReadAccess();
             foreach (PackFileEntry fileEntry in fileManager.FileEntries.Values)
             {
@@ -997,7 +1399,7 @@ namespace Hellgate
             if (fileManager.IsVersionResurrection) scriptsHash = scriptsHashResurrection;
             if (fileManager.IsVersionTestCenter) scriptsHash = scriptsHashTestCenter;
 
-            Debug.WriteLine("\nChecking table hash generation...");
+            if (outputLinesParsed) Debug.WriteLine("\nChecking table hash generation...");
             int tablesNotFound = 0;
             int tablesMatched = 0;
             int tablesNotMatched = 0;
@@ -1010,28 +1412,25 @@ namespace Hellgate
 
                 if (hash == 0)
                 {
-                    Debug.WriteLine("Table[{0}]: {1} table not found. Hash = 0x{2:X8}", xlsTable.TableIndex, xlsTable.DefinitionId, xlsTable.TableHash);
+                    if (outputLinesParsed) Debug.WriteLine("Table[{0}]: {1} table not found. Hash = 0x{2:X8}", xlsTable.TableIndex, xlsTable.DefinitionId, xlsTable.TableHash);
                     tablesNotFound++;
                 }
                 else if (hash == xlsTable.TableHash)
                 {
-                    Debug.WriteLine("Table[{0}]: {1} -> [0x{2:X8} == 0x{3:X8}]", xlsTable.TableIndex, xlsTable.DefinitionId, xlsTable.TableHash, hash);
+                    if (outputLinesParsed) Debug.WriteLine("Table[{0}]: {1} -> [0x{2:X8} == 0x{3:X8}]", xlsTable.TableIndex, xlsTable.DefinitionId, xlsTable.TableHash, hash);
                     tablesMatched++;
                 }
                 else
                 {
-                    Debug.WriteLine("Table[{0}]: {1} -> [0x{2:X8} != 0x{3:X8}]", xlsTable.TableIndex, xlsTable.DefinitionId, xlsTable.TableHash, hash);
-                    Debug.WriteLine("Warning: Table hashes do not match.\n");
+                    if (outputLinesParsed) Debug.WriteLine("Table[{0}]: {1} -> [0x{2:X8} != 0x{3:X8}]", xlsTable.TableIndex, xlsTable.DefinitionId, xlsTable.TableHash, hash);
+                    if (outputLinesParsed) Debug.WriteLine("Warning: Table hashes do not match.\n");
                     tablesNotMatched++;
                 }
             }
 
-            Debug.WriteLine("{0} tables: {1} not found, {2} hash check matches, {3} hash check fails.", tables.Count, tablesNotFound, tablesMatched, tablesNotMatched);
+            Debug.WriteLine("{0} {1} tables: {2} not found, {3} hash check matches, {4} hash check fails.", tables.Count, fileManager.ClientVersion, tablesNotFound, tablesMatched, tablesNotMatched);
+            Debug.Assert(tablesNotMatched == 0);
         }
-
-        private static byte[] _exeBytes;
-        private static readonly Regex StringRegex = new Regex("\"(.*)\"");
-        private static readonly Regex AddressRegex = new Regex(@"(?:off|dword|byte|word)_(\w*)");
 
         private static unsafe T _GetArg<T>(String[] args, int index)
         {
@@ -1046,11 +1445,11 @@ namespace Hellgate
                 {
                     if (arg.Contains("null_value")) val = String.Empty;
                     else if (arg.Length < 4 && arg.Contains("0")) val = null;
-                    else if (arg.Contains("off_") || arg.Contains("word_") || arg.Contains("byte_")) // decompiler "errors" (usually 1-3 char length strings, so the decompiler mistakes them for a pointer
+                    else if (arg.IndexOf('_') >= 0) // decompiler "errors" (usually 1-3 char length strings, so the decompiler mistakes them for a pointer
                     {
                         val = _GetAsciiStringFromClient(arg);
                     }
-                    else if (!String.IsNullOrEmpty(arg)) throw new NotImplementedException("arg is not empty, but no value parsed!");
+                    else if (!String.IsNullOrEmpty(arg)) throw new Exceptions.UnexpectedErrorException("arg is not empty in _GetArg, but no value parsed!");
                 }
             }
             else if (t == typeof(bool))
@@ -1063,25 +1462,37 @@ namespace Hellgate
             }
             else if (t == typeof(uint))
             {
-                if (arg.Contains("0x")) // is it hex?
+                NumberStyles numberStyle = NumberStyles.Integer;
+                if (arg.IndexOf("0x") >= 0)
                 {
-                    val = UInt32.Parse(arg.Replace("u", "").Replace("0x", ""), NumberStyles.HexNumber);
+                    arg = arg.Replace("0x", String.Empty);
+                    numberStyle = NumberStyles.HexNumber;
                 }
-                else
+
+                int uIndex;
+                if ((uIndex = arg.IndexOf('u')) >= 0)
                 {
-                    val = UInt32.Parse(arg.Replace("u", "")); // uints have a "u" at the end sometimes
+                    arg = arg.Remove(uIndex, 1);
                 }
+
+                val = UInt32.Parse(arg, numberStyle);
             }
             else if (t == typeof(int))
             {
-                if (arg.Contains("0x")) // is it hex?
+                NumberStyles numberStyle = NumberStyles.Integer;
+                if (arg.IndexOf("0x") >= 0)
                 {
-                    val = Int32.Parse(arg.Replace("u", "").Replace("0x", ""), NumberStyles.HexNumber);
+                    arg = arg.Replace("0x", String.Empty);
+                    numberStyle = NumberStyles.HexNumber;
                 }
-                else
+
+                int uIndex;
+                if ((uIndex = arg.IndexOf('u')) >= 0)
                 {
-                    val = Int32.Parse(arg);
+                    arg = arg.Remove(uIndex, 1);
                 }
+
+                val = Int32.Parse(arg, numberStyle);
             }
             else if (t == typeof(float))
             {
@@ -1107,7 +1518,6 @@ namespace Hellgate
             return (T)val;
         }
 
-        private const int ExeBase = 0x400000;
         private static float _GetFloatFromClient(String offStr)
         {
             String offsetStr = AddressRegex.Match(offStr).Groups[1].Value;
@@ -1176,73 +1586,120 @@ namespace Hellgate
             return enumValues;
         }
 
-        private static void _XlsSetDefStringStuff(XlsElement xlsElement, int index, int indexUnknown)
+        private static void _XlsSetDefStringStuff(XlsColumn xlsColumn, int stringBool, int offset64)
         {
-            if ((uint)(xlsElement.Type - 1) > 1) return; // if String or StringOffset/StringOffsetDefault
+            Debug.Assert(xlsColumn.Type == XlsType.String || xlsColumn.Type == XlsType.StringOffset);
+            Debug.Assert(xlsColumn.StringBool == false);
+            Debug.Assert(xlsColumn.String64Offset == 0);
+            Debug.Assert(stringBool == 0 || stringBool == 1);
 
-            if (xlsElement.Index != null) return; // if already set, then return
-
-            xlsElement.Index = index;
-            xlsElement.IndexUnknown = indexUnknown;
+            xlsColumn.StringBool = (stringBool != 0); // field30
+            xlsColumn.String64Offset = offset64; // field34; is the x64 offset
         }
 
-        private static void _XlsSetDefAimHeightStuff(XlsElement xlsElement, int index, int indexUnknown)
+        //private static void _XlsSetDefStringStuff(XlsColumn xlsElement, int index, int indexUnknown)
+        //{
+        //    if ((uint)(xlsElement.Type - 1) > 1) return; // if String or StringOffset/StringOffsetDefault
+
+        //    if (xlsElement.Index != null) return; // if already set, then return
+
+        //    xlsElement.Index = index;
+        //    xlsElement.IndexUnknown = indexUnknown; // is the x64 offset
+        //}
+
+        //private static void _XlsSetDefAimHeightStuff(XlsColumn xlsElement, int index, int indexUnknown)
+        //{
+        //    if ((uint)(xlsElement.Type - 52) > 1) return; // if Unknown1 or AimHeight
+
+        //    if (xlsElement.Index != null) return; // if already set, then return
+
+        //    xlsElement.Index = index;
+        //    xlsElement.IndexUnknown = indexUnknown;
+        //}
+
+        private static void _XlsSetDefExcelStuff(XlsColumn xlsElement, int unknownFlag, int tableIndex, int excelUnknown)
         {
-            if ((uint)(xlsElement.Type - 52) > 1) return; // if Unknown1 or AimHeight
+            Debug.Assert(tableIndex < 0x200);
+            Debug.Assert(unknownFlag < 4);
+            Debug.Assert(xlsElement.ExcelIndex == 0);
+            Debug.Assert(xlsElement.ExcelFlags == 0);
+            Debug.Assert(xlsElement.ExcelUnknown == 0);
 
-            if (xlsElement.Index != null) return; // if already set, then return
+            xlsElement.ExcelIndex = tableIndex;
+            xlsElement.ExcelFlags = unknownFlag;
 
-            xlsElement.Index = index;
-            xlsElement.IndexUnknown = indexUnknown;
-        }
-
-        private static void _XlsSetDefExcelStuff(XlsElement xlsElement, int unknown1, int tableIndex, int excelDefault)
-        {
-            if ((int)xlsElement.Type < 18) return;
-
-            if ((int)xlsElement.Type <= 24)
+            if (xlsElement.Type == XlsType.AiInit)
             {
-                if (xlsElement.Index == null && xlsElement.IndexUnknown == null && tableIndex < 0x200 && unknown1 < 4)
-                {
-                    xlsElement.Index = tableIndex;
-                    xlsElement.IndexUnknown = unknown1;
-                }
-
-                return;
+                xlsElement.ExcelUnknown = excelUnknown;
             }
 
-            if ((int)xlsElement.Type != 26)
-            {
-                if ((int)xlsElement.Type <= 37 || (int)xlsElement.Type > 45) return;
+            //switch (xlsElement.Type)
+            //{
+            //    case XlsType.ExcelIndex: // 20
+            //    case XlsType.FolderCode: // 21
+            //    case XlsType.ExcelIndexArray: // 40
+            //    case XlsType.Qualities: // 45
+            //        xlsElement.Index = tableIndex;
+            //        xlsElement.IndexUnknown = unknownFlag;
+            //        return;
 
-                if (xlsElement.Index == null && xlsElement.IndexUnknown == null && tableIndex < 0x200 && unknown1 < 4)
-                {
-                    xlsElement.Index = tableIndex;
-                    xlsElement.IndexUnknown = unknown1;
-                }
+            //    case XlsType.AiInit: // 26
+            //        xlsElement.Index = tableIndex;
+            //        xlsElement.IndexUnknown = unknownFlag;
+            //        xlsElement.ExcelDefaultQ = excelDefault;
+            //        return;
 
-                return;
-            }
+            //    default:
+            //        throw new Exceptions.UnexpectedErrorException(xlsElement.Type + " excel type usage not expected/implemented.");
+            //}
 
-            if (xlsElement.Index == null && xlsElement.IndexUnknown == null && xlsElement.ExcelDefaultQ == 0 && tableIndex < 0x200 && unknown1 < 4)
-            {
-                xlsElement.Index = tableIndex;
-                xlsElement.IndexUnknown = unknown1;
-                xlsElement.ExcelDefaultQ = excelDefault;
-            }
+
+            //if ((int)xlsElement.Type < 18) return; // 1-17
+
+            //if ((int)xlsElement.Type <= 24) // 19-24 // 19, 20 (ExcelIndex), 21 (FolderCode), 22, 23, 24
+            //{
+            //    if (xlsElement.Index == null && xlsElement.IndexUnknown == null && tableIndex < 0x200 && unknownFlag < 4)
+            //    {
+            //        xlsElement.Index = tableIndex;
+            //        xlsElement.IndexUnknown = unknownFlag;
+            //    }
+
+            //    return;
+            //}
+
+            //if ((int)xlsElement.Type != 26) // (!= AiInit)
+            //{ // 25, 27-56
+            //    if ((int)xlsElement.Type <= 37 || (int)xlsElement.Type > 45) return;
+
+            //    if (xlsElement.Index == null && xlsElement.IndexUnknown == null && tableIndex < 0x200 && unknownFlag < 4)
+            //    {
+            //        xlsElement.Index = tableIndex;
+            //        xlsElement.IndexUnknown = unknownFlag;
+            //    }
+
+            //    return;
+            //}
+
+            //// 26 (AiInit)
+            //if (xlsElement.Index == null && xlsElement.IndexUnknown == null && xlsElement.ExcelDefaultQ == 0 && tableIndex < 0x200 && unknownFlag < 4)
+            //{
+            //    xlsElement.Index = tableIndex;
+            //    xlsElement.IndexUnknown = unknownFlag;
+            //    xlsElement.ExcelDefaultQ = excelDefault;
+            //}
         }
 
-        private static void _XlsSetEnumStuff(XlsElement xlsElement, Dictionary<String, int> enums, int enumCount)
-        {
-            if ((uint)(xlsElement.Type - 27) > 3) return;  // Enum, EnumArray and 28, 27 (not defined)
+        //private static void _XlsSetEnumStuff(XlsColumn xlsElement, Dictionary<String, int> enums, int enumCount)
+        //{
+        //    if ((uint)(xlsElement.Type - 27) > 3) return;  // Enum, EnumArray and 28, 27 (not defined)
 
-            if (xlsElement.Index != null) return; // if already set, then return
+        //    if (xlsElement.Index != null) return; // if already set, then return
 
-            xlsElement.ExcelDefaultQ = enumCount;
-            xlsElement.Index = enums;
+        //    xlsElement.ExcelDefaultQ = enumCount;
+        //    xlsElement.Index = enums;
 
-            // checks the/for default in here as well, but no point as all it appears to do is flag the element with XlsFlags.Enum - which it already has
-        }
+        //    // checks the/for default in here as well, but no point as all it appears to do is flag the element with XlsFlags.Enum - which it already has
+        //}
 
         private static void _GenerateTableHash(XlsTable xlsTable, UInt32 scriptsHash)
         {
@@ -1254,8 +1711,8 @@ namespace Hellgate
 
             xlsTable.TableHash = (uint)xlsTable.RowSize + 32;
 
-            xlsTable.Elements = xlsTable.Elements.OrderBy(element => element.Name).ToList();
-            foreach (XlsElement xlsElement in xlsTable.Elements)
+            xlsTable.Columns = xlsTable.Columns.OrderBy(element => element.Name).ToList();
+            foreach (XlsColumn xlsElement in xlsTable.Columns)
             {
                 bool outputHashSteps = false;
                 if (outputPerElement && xlsElement.Name == "UI icon badfck")
@@ -1263,7 +1720,7 @@ namespace Hellgate
                     outputHashSteps = true;
                 }
 
-                uint hash = _GenerateElementHash(xlsElement, outputHashSteps);
+                uint hash = _GenerateColumnHash(xlsElement, outputHashSteps);
                 if (outputPerElement)
                 {
                     Debug.WriteLine("Element[{0,-3}]: {1,-45} @ {2,4} hash = 0x{3:X8}\t\tTableHash: 0x{4:X8} -> 0x{5:X8}",
@@ -1283,171 +1740,260 @@ namespace Hellgate
             }
         }
 
-        private static uint _GenerateElementHash(XlsElement xlsElement, bool outputHashSteps = false)
+        private static uint _GenerateColumnHash(XlsColumn xlsColumn, bool outputHashSteps = false)
         {
-            Int32 type = (int)xlsElement.Type;
+            UInt32 hash = _GenerateStringHash(xlsColumn.Name, 0);
+            if (outputHashSteps) Debug.WriteLine("Name: 0x{0:X8} [{1}]", hash, xlsColumn.Name);
 
-            UInt32 hash = 0;
-            const char rsinglequote = (char)65533;
-            if (xlsElement.Name.IndexOf(rsinglequote) == -1) // if not found
+            hash = Crypt.GetBytesHash(BitConverter.GetBytes((Int32)xlsColumn.Type), hash); // 4 bytes
+            if (outputHashSteps) Debug.WriteLine("Type: 0x{0:X8} [{1} ({2})]", hash, (int)xlsColumn.Type, xlsColumn.Type);
+
+
+            if (xlsColumn.Type != XlsType.StringOffset) // 2
             {
-                hash = Crypt.GetStringHash(xlsElement.Name, hash);
+                hash = Crypt.GetBytesHash(BitConverter.GetBytes(xlsColumn.Offset), hash);
+                if (outputHashSteps) Debug.WriteLine("Offset: 0x{0:X8} [{1}]", hash, xlsColumn.Offset);
+
+                hash = Crypt.GetBytesHash(BitConverter.GetBytes(xlsColumn.Size), hash);
+                if (outputHashSteps) Debug.WriteLine("Size: 0x{0:X8} [{1}]", hash, xlsColumn.Size);
+            }
+
+
+            hash = Crypt.GetBytesHash(BitConverter.GetBytes(xlsColumn.Count), hash);
+            if (outputHashSteps) Debug.WriteLine("Count: 0x{0:X8} [{1}]", hash, xlsColumn.Count);
+
+            hash = Crypt.GetBytesHash(BitConverter.GetBytes((Int32)xlsColumn.Flags), hash);
+            if (outputHashSteps) Debug.WriteLine("Flags: 0x{0:X8} [{1}]", hash, xlsColumn.Flags);
+
+
+            switch (xlsColumn.Type)
+            {
+                case XlsType.String: // 1
+                case XlsType.StringOffset: // 2
+                case XlsType.ExcelIndex: // 20
+                case XlsType.FolderCode: // 21
+                case XlsType.AiInit: // 26
+                case XlsType.ExcelIndexArray: // 40
+                case XlsType.StringIndex: // 46
+                case XlsType.TugboatUnknown: // 47
+                case XlsType.UnitType: // 54
+                    if (xlsColumn.Default != null)
+                    {
+                        hash = _GenerateStringHash((String)xlsColumn.Default, hash);
+                        if (outputHashSteps) Debug.WriteLine("Default: 0x{0:X8} [{1}]", hash, xlsColumn.Default);
+                    }
+                    return _GenerateIndexSegmentHash(xlsColumn, hash);
+
+
+                case XlsType.GroupStyle: // 3
+                    return _GenerateDefaultSegmentHash(xlsColumn, hash);
+
+
+                case XlsType.Flag: // 4
+                case XlsType.Byte06: // 6
+                case XlsType.Int32: // 9
+                case XlsType.Bool: // 11
+                case XlsType.Float: // 12
+                case XlsType.Byte0D: // 13
+                case XlsType.CodeInt32: // 15
+                case XlsType.CodeInt16: // 16
+                case XlsType.CodeInt8: // 17
+                case XlsType.Int32Default: // 25
+                case XlsType.Int32Array: // 35
+                case XlsType.UseFixedDRLGSeed: // 36
+                case XlsType.FloatArray: // 37
+                case XlsType.Qualities: // 45
+                    hash = _GenerateDefaultSegmentHash(xlsColumn, hash);
+                    return _GenerateIndexSegmentHash(xlsColumn, hash);
+
+
+                case XlsType.Enum: // 29
+                case XlsType.EnumArray: // 30
+                    //if (xlsColumn.Default != null && xlsColumn.Default is String) // enums can't have a default assigned anyways
+                    //{
+                    //    hash = _GenerateStringHash((String)xlsColumn.Default, hash);
+                    //    if (outputHashSteps) Debug.WriteLine("Default: 0x{0:X8} [{1}]", hash, xlsColumn.Default);
+                    //}
+
+                    Debug.Assert(xlsColumn.Default != null);
+                    Dictionary<String, int> enums = (Dictionary<String, int>)xlsColumn.Default;
+
+                    hash = Crypt.GetBytesHash(BitConverter.GetBytes(enums.Count), hash);
+                    foreach (KeyValuePair<String, int> enumVal in enums.OrderBy(kvp => kvp.Key, StringComparer.Ordinal))
+                    {
+                        hash = Crypt.GetStringHash(enumVal.Key, hash);
+                        hash = Crypt.GetBytesHash(BitConverter.GetBytes(enumVal.Value - 1), hash);
+                    }
+                    return hash;
+
+
+                case XlsType.Script: // 50
+                case XlsType.MaxSlots: // 51
+                case XlsType.Unknown1: // 52
+                case XlsType.AimHeight: // 53
+                case XlsType.BaseRow: // 56
+                    hash = _GenerateDefaultSegmentHash(xlsColumn, hash);
+                    return _GenerateIndexSegmentHash(xlsColumn, hash);
+
+
+                case XlsType.File: // 48
+                    hash = Crypt.GetStringHash(xlsColumn.FilePath, hash);
+                    if (outputHashSteps) Debug.WriteLine("Index: 0x{0:X8} [{1}]", hash, xlsColumn.FilePath);
+                    return hash;
+
+
+                case XlsType.MultipleRelations: // 55
+                    return hash;
+
+
+                default:
+                    throw new Exceptions.UnexpectedErrorException(xlsColumn.Type + " excel type usage not expected/implemented.");
+            }
+
+            //if (type <= 30) // 1-30
+            //{
+            //    //if (type >= 27) // 27, 28, 29 (Enum), 30 (EnumArray)
+            //    //{
+            //    //    if (xlsColumn.Default != null)
+            //    //    {
+            //    //        hash = Crypt.GeBytesHash(BitConverter.GetBytes((int)xlsColumn.Default), hash);
+            //    //        if (outputHashSteps) Debug.WriteLine("Default: 0x{0:X8} [{1}]", hash, xlsColumn.Default);
+            //    //    }
+            //    //}
+            //    //else // 1-26
+            //    //{
+            //    //                    if (type == 1 || type == 2) // 1 (String), 2 (StringOffset)
+            //    //                    {
+            //    //                        if (xlsColumn.Default != null)
+            //    //                        {
+            //    //                            hash = Crypt.GetStringHash((String)xlsColumn.Default, hash);
+            //    //                            if (outputHashSteps) Debug.WriteLine("Default: 0x{0:X8} [{1}]", hash, xlsColumn.Default);
+            //    //                        }
+
+            //    //                        /*
+            //    //XLS_GenereateElementHash+91   008 push    eax                             ; baseHash
+            //    //XLS_GenereateElementHash+92   00C push    18h                             ; 24 bytes (6x Int32)
+            //    //XLS_GenereateElementHash+94   010 pop     edx
+            //    //XLS_GenereateElementHash+95   00C lea     ecx, [esi+30h]                  ; index
+            //    //XLS_GenereateElementHash+98   00C call    CryptBytesHash                  
+            //    //                         */
+            //    //                        return _GenerateIndexSegmentHash(xlsColumn, hash);
+            //    //                    }
+
+            //    //if (type != 3) // GroupStyle
+            //    //{ // 4-26
+            //    //    //if (type > 17 && (type <= 24 || type == 26)) // 18, 19, 20 (ExcelIndex), 21 (FolderCode), 22, 23, 24, 26 (AiInit)
+            //    //    //{
+            //    //    //    if (xlsColumn.Default != null)
+            //    //    //    {
+            //    //    //        hash = Crypt.GetStringHash((String)xlsColumn.Default, hash);
+            //    //    //        if (outputHashSteps) Debug.WriteLine("Default: 0x{0:X8} [{1}]", hash, xlsColumn.Default);
+            //    //    //    }
+
+            //    //    //    return _GenerateIndexSegmentHash(xlsColumn, hash);
+            //    //    //}
+
+            //    //    // 4 (Flag), 5, 6 (Byte06), 7, 8, 9 (Int32), 10, 11 (Bool), 12 (Float), 13 (Byte0D), 14 (CodeInt32), 15, 16 (CodeInt16), 17 (CodeInt8), 25 (Int32Default)
+            //    //    hash = _GenerateDefaultSegmentHash(xlsColumn, hash);
+            //    //    return _GenerateIndexSegmentHash(xlsColumn, hash);
+            //    //}
+
+            //    // 3 (GroupStyle)
+            //    //return _GenerateDefaultSegmentHash(xlsColumn, hash);
+            //    //}
+
+            //    // 27, 28, 29 (Enum), 30 (EnumArray)
+            //    //Object index = xlsColumn.Index;
+            //    //if (index == null) return hash;
+
+            //    //Dictionary<String, int> enums = (Dictionary<String, int>)xlsColumn.Index;
+            //    //hash = Crypt.GeBytesHash(BitConverter.GetBytes(enums.Count), hash);
+
+            //    //foreach (KeyValuePair<String, int> enumVal in enums.OrderBy(kvp => kvp.Key, StringComparer.Ordinal))
+            //    //{
+            //    //    hash = Crypt.GetStringHash(enumVal.Key, hash);
+            //    //    hash = Crypt.GeBytesHash(BitConverter.GetBytes(enumVal.Value - 1), hash);
+            //    //}
+
+            //    //return hash;
+            //}
+
+            //if (type > 49) // 50+
+            //{
+            //    //int isNotUnitType = type - 54;
+            //    //if (isNotUnitType == 0) // 54 (UnitType)
+            //    //{
+            //    //    if (xlsColumn.Default != null)
+            //    //    {
+            //    //        hash = Crypt.GetStringHash((String)xlsColumn.Default, hash);
+            //    //        if (outputHashSteps) Debug.WriteLine("Default: 0x{0:X8} [{1}]", hash, xlsColumn.Default);
+            //    //    }
+
+            //    //    return _GenerateIndexSegmentHash(xlsColumn, hash);
+            //    //}
+
+            //    //if (isNotUnitType == 1) return hash; // 55 (MultipleRelations)
+
+            //    // 50 (Script), 51 (MaxSlots), 52 (Unknown1), 53 (AimHeight), 56 (BaseRow)
+            //    //hash = _GenerateDefaultSegmentHash(xlsColumn, hash);
+            //    //return _GenerateIndexSegmentHash(xlsColumn, hash);
+            //}
+
+            //if (type < 48) // 31-47
+            //{
+            //    //if (type >= 38 && (type <= 44 || type > 45 && type <= 47)) // 38, 39, 40 (ExcelIndexArray), 41, 42, 43, 44, 46 (StringIndex), 47 (TugboatUnknown)
+            //    //{
+            //    //    if (xlsColumn.Default != null)
+            //    //    {
+            //    //        hash = Crypt.GetStringHash((String)xlsColumn.Default, hash);
+            //    //        if (outputHashSteps) Debug.WriteLine("Default: 0x{0:X8} [{1}]", hash, xlsColumn.Default);
+            //    //    }
+
+            //    //    return _GenerateIndexSegmentHash(xlsColumn, hash);
+            //    //}
+
+            //    // 31, 32, 33, 34, 35 (Int32Array), 36 (UseFixedDRLGSeed), 37 (FloatArray), 45 (Qualities)
+            //    //hash = _GenerateDefaultSegmentHash(xlsColumn, hash);
+            //    //return _GenerateIndexSegmentHash(xlsColumn, hash);
+            //}
+
+            //return hash;
+
+            // 48 (File), 49
+            //if (xlsColumn.FilePath != null)
+            //{
+            //    hash = Crypt.GetStringHash(xlsColumn.FilePath, hash);
+            //    if (outputHashSteps) Debug.WriteLine("Index: 0x{0:X8} [{1}]", hash, xlsColumn.Index);
+            //}
+
+            //return hash;
+        }
+
+        private static UInt32 _GenerateStringHash(String str, UInt32 hash)
+        {
+            const char rsinglequote = (char)65533;
+            if (str.IndexOf(rsinglequote) == -1) // if not found
+            {
+                hash = Crypt.GetStringHash(str, hash);
             }
             else // the initial export converts the 0x92 (’) value to the Ascii Æ, which String read in then converts it to 65533 (0xFFFD) '�' char
             {    // even if you force/replace before hand all Æ to the proper 0x92 (’) value, it still gets converted to the Unicode value (0x2019) - even if you cast str[i] as a char, and you get 8217 (0x2019)
-                foreach (char c in xlsElement.Name)
+                foreach (char c in str)
                 {
+                    byte[] bytes = new[] { (byte)c };
                     if (c == rsinglequote)
                     {
-                        hash = Crypt.GetStringHash(new[] { (byte)0x92 }, hash);
+                        bytes = new[] { (byte)0x92 };
                     }
-                    else
-                    {
-                        hash = Crypt.GetStringHash(new[] { (byte)c }, hash);
-                    }
+
+                    hash = Crypt.GetBytesHash(bytes, hash);
                 }
-            }
-            if (outputHashSteps) Debug.WriteLine("Name: 0x{0:X8} [{1}]", hash, xlsElement.Name);
-
-            hash = Crypt.GetStringHash(BitConverter.GetBytes(type), hash); // 4 bytes
-            if (outputHashSteps) Debug.WriteLine("Type: 0x{0:X8} [{1}]", hash, type);
-
-
-            if (type != 2)
-            {
-                hash = Crypt.GetStringHash(BitConverter.GetBytes(xlsElement.Offset), hash);
-                if (outputHashSteps) Debug.WriteLine("Offset: 0x{0:X8} [{1}]", hash, xlsElement.Offset);
-
-                hash = Crypt.GetStringHash(BitConverter.GetBytes(xlsElement.Size), hash);
-                if (outputHashSteps) Debug.WriteLine("Size: 0x{0:X8} [{1}]", hash, xlsElement.Size);
-            }
-
-
-            hash = Crypt.GetStringHash(BitConverter.GetBytes(xlsElement.Count), hash);
-            if (outputHashSteps) Debug.WriteLine("Count: 0x{0:X8} [{1}]", hash, xlsElement.Count);
-
-            hash = Crypt.GetStringHash(BitConverter.GetBytes((Int32)xlsElement.Flags), hash);
-            if (outputHashSteps) Debug.WriteLine("Flags: 0x{0:X8} [{1}]", hash, xlsElement.Flags);
-
-
-            if (type <= 30) // 1-30
-            {
-                if (type >= 27) // 27, 28, 29 (Enum), 30 (EnumArray)
-                {
-                    if (xlsElement.Default != null)
-                    {
-                        hash = Crypt.GetStringHash(BitConverter.GetBytes((int)xlsElement.Default), hash);
-                        if (outputHashSteps) Debug.WriteLine("Default: 0x{0:X8} [{1}]", hash, xlsElement.Default);
-                    }
-                }
-                else // 1-26
-                {
-                    if (type == 1 || type == 2) // 1 (String), 2 (StringOffset)
-                    {
-                        if (xlsElement.Default != null)
-                        {
-                            hash = Crypt.GetStringHash((String)xlsElement.Default, hash);
-                            if (outputHashSteps) Debug.WriteLine("Default: 0x{0:X8} [{1}]", hash, xlsElement.Default);
-                        }
-
-                        /*
-XLS_GenereateElementHash+91   008 push    eax                             ; baseHash
-XLS_GenereateElementHash+92   00C push    18h                             ; 24 bytes (6x Int32)
-XLS_GenereateElementHash+94   010 pop     edx
-XLS_GenereateElementHash+95   00C lea     ecx, [esi+30h]                  ; index
-XLS_GenereateElementHash+98   00C call    CryptBytesHash                  
-                         */
-                        return _GenerateIndexSegmentHash(xlsElement, hash);
-                    }
-
-                    if (type != 3) // GroupStyle
-                    { // 3-26
-                        if (type > 17 && (type <= 24 || type == 26)) // 18, 19, 20 (ExcelIndex), 21 (FolderCode), 22, 23, 24, 26 (AiInit)
-                        {
-                            if (xlsElement.Default != null)
-                            {
-                                hash = Crypt.GetStringHash((String)xlsElement.Default, hash);
-                                if (outputHashSteps) Debug.WriteLine("Default: 0x{0:X8} [{1}]", hash, xlsElement.Default);
-                            }
-
-                            return _GenerateIndexSegmentHash(xlsElement, hash);
-                        }
-
-                        // 3 (GroupStyle), 4 (Flag), 5, 6 (Byte06), 7, 8, 9 (Int32), 10, 11 (Bool), 12 (Float), 13 (Byte0D), 14 (CodeInt32), 15, 16 (CodeInt16), 17 (CodeInt8)
-                        hash = _GenerateDefaultSegmentHash(xlsElement, hash);
-                        return _GenerateIndexSegmentHash(xlsElement, hash);
-                    }
-
-                    // 3 (GroupStyle)
-                    return _GenerateDefaultSegmentHash(xlsElement, hash);
-                }
-
-                // 27, 28, 29 (Enum), 30 (EnumArray)
-                Object index = xlsElement.Index;
-                if (index == null) return hash;
-
-                Dictionary<String, int> enums = (Dictionary<String, int>)xlsElement.Index;
-                hash = Crypt.GetStringHash(BitConverter.GetBytes(enums.Count), hash);
-
-                foreach (KeyValuePair<String, int> enumVal in enums.OrderBy(kvp => kvp.Key, StringComparer.Ordinal))
-                {
-                    hash = Crypt.GetStringHash(enumVal.Key, hash);
-                    hash = Crypt.GetStringHash(BitConverter.GetBytes(enumVal.Value - 1), hash);
-                }
-
-                return hash;
-            }
-
-            if (type > 49) // 50+
-            {
-                int isNotUnitType = type - 54;
-                if (isNotUnitType == 0) // 54 (UnitType)
-                {
-                    if (xlsElement.Default != null)
-                    {
-                        hash = Crypt.GetStringHash((String)xlsElement.Default, hash);
-                        if (outputHashSteps) Debug.WriteLine("Default: 0x{0:X8} [{1}]", hash, xlsElement.Default);
-                    }
-
-                    return _GenerateIndexSegmentHash(xlsElement, hash);
-                }
-
-                if (isNotUnitType == 1) return hash; // 55 (MultipleRelations)
-
-                // 50 (Script), 51 (MaxSlots), 52 (Unknown1), 53 (AimHeight), 56 (BaseRow)
-                hash = _GenerateDefaultSegmentHash(xlsElement, hash);
-                return _GenerateIndexSegmentHash(xlsElement, hash);
-            }
-
-            if (type < 48) // 31-47
-            {
-                if (type >= 38 && (type <= 44 || type > 45 && type <= 47)) // 38, 39, 40 (ExcelIndexArray), 41, 42, 43, 44, 46 (StringIndex), 47 (TugboatUnknown)
-                {
-                    if (xlsElement.Default != null)
-                    {
-                        hash = Crypt.GetStringHash((String)xlsElement.Default, hash);
-                        if (outputHashSteps) Debug.WriteLine("Default: 0x{0:X8} [{1}]", hash, xlsElement.Default);
-                    }
-
-                    return _GenerateIndexSegmentHash(xlsElement, hash);
-                }
-
-                // 31, 32, 33, 34, 35 (Int32Array), 36 (UseFixedDRLGSeed), 37, 45 (Qualities)
-                hash = _GenerateDefaultSegmentHash(xlsElement, hash);
-                return _GenerateIndexSegmentHash(xlsElement, hash);
-            }
-
-            // 48 (File), 49
-            if (xlsElement.Index != null)
-            {
-                hash = Crypt.GetStringHash((String)xlsElement.Index, hash);
-                if (outputHashSteps) Debug.WriteLine("Index: 0x{0:X8} [{1}]", hash, xlsElement.Index);
             }
 
             return hash;
         }
 
-        private static UInt32 _GenerateDefaultSegmentHash(XlsElement xlsElement, UInt32 hash)
+        private static UInt32 _GenerateDefaultSegmentHash(XlsColumn xlsElement, UInt32 hash)
         {
             // damn C# is a pain in the ass sometimes
             // is it so much to ask for a pinned structure no matter what's in it - I don't want to access the object references damn it
@@ -1459,20 +2005,54 @@ XLS_GenereateElementHash+102  010 pop     edx
              */
 
             byte[] defaultBytes;
-            if (xlsElement.Default == null) defaultBytes = new byte[4];
-            else if (xlsElement.Type == XlsType.Bool || xlsElement.Type == XlsType.Flag) defaultBytes = new byte[] { (byte)((bool)xlsElement.Default ? 1 : 0), 0, 0, 0 };
-            else if (xlsElement.Type == XlsType.Float || xlsElement.Type == XlsType.AimHeight) defaultBytes = BitConverter.GetBytes((float)xlsElement.Default);
-            else if (xlsElement.Size == 2) defaultBytes = BitConverter.GetBytes((int)(short)xlsElement.Default);
-            else if (xlsElement.Size == 1) defaultBytes = BitConverter.GetBytes((int)(byte)xlsElement.Default);
-            else defaultBytes = BitConverter.GetBytes((int)xlsElement.Default);
+            byte[] zeroBytes = new byte[12]; // 3x Int32 for Field24, Field28 and Field2C which are always zero during hashing
 
-            hash = Crypt.GetStringHash(defaultBytes, hash);
-            hash = Crypt.GetStringHash(BitConverter.GetBytes(xlsElement.Field24), hash);
-            hash = Crypt.GetStringHash(BitConverter.GetBytes(xlsElement.Field28), hash);
-            return Crypt.GetStringHash(BitConverter.GetBytes(xlsElement.Field2C), hash);
+            if (xlsElement.Default == null)
+            {
+                defaultBytes = new byte[4];
+            }
+            else
+            {
+                switch (xlsElement.Type)
+                {
+                    case XlsType.Flag: // 4
+                    case XlsType.Bool: // 11
+                        defaultBytes = new byte[] { (byte)((bool)xlsElement.Default ? 1 : 0), 0, 0, 0 };
+                        break;
+
+                    case XlsType.Byte06: // 6
+                    case XlsType.Byte0D: // 13
+                    case XlsType.CodeInt8: // 17
+                        defaultBytes = BitConverter.GetBytes((int)(byte)xlsElement.Default);
+                        break;
+
+                    case XlsType.Float: // 12
+                    case XlsType.FloatArray: // 37
+                    case XlsType.AimHeight: // 53
+                        defaultBytes = BitConverter.GetBytes((float)xlsElement.Default);
+                        break;
+
+                    case XlsType.CodeInt16: // 16
+                        defaultBytes = BitConverter.GetBytes((int)(short)xlsElement.Default);
+                        break;
+
+                    default:
+                        defaultBytes = BitConverter.GetBytes((int)xlsElement.Default);
+                        break;
+                }
+            }
+
+            hash = Crypt.GetBytesHash(defaultBytes, hash);
+            return Crypt.GetBytesHash(zeroBytes, hash); // Field24, Field28 and Field2C
         }
 
-        private static UInt32 _GenerateIndexSegmentHash(XlsElement xlsElement, UInt32 hash)
+        /// <summary>
+        /// This function hashes the last 6xInt32 values in the XlsColumn structure (on the client)
+        /// </summary>
+        /// <param name="xlsColumn">The column to hash.</param>
+        /// <param name="hash">The current/base hash.</param>
+        /// <returns>The hashed segment onto the current/base hash.</returns>
+        private static UInt32 _GenerateIndexSegmentHash(XlsColumn xlsColumn, UInt32 hash)
         {
             /*
 XLS_GenereateElementHash+10B  00C push    eax                             ; baseHash
@@ -1482,33 +2062,83 @@ XLS_GenereateElementHash+10F  010 mov     ecx, edi                        ; inde
 XLS_GenereateElementHash+111  010 call    CryptBytesHash                  ; Call 
              */
 
-            byte[] indexBytes = null;
-            byte[] indexUnknownBytes;
-            if (xlsElement.Type == XlsType.Float && xlsElement.IndexUnknown != null)
+            byte[] field30Bytes;
+            byte[] field34Bytes;
+            byte[] field38Bytes;
+            byte[] fields3Cto44 = new byte[12]; // 3x Int32 for Field3C, Field40 and Field44 which are always zero during hashing
+
+            switch (xlsColumn.Type)
             {
-                indexBytes = BitConverter.GetBytes((float)xlsElement.Index);
-                indexUnknownBytes = BitConverter.GetBytes((float)xlsElement.IndexUnknown);
-            }
-            else if (xlsElement.IndexUnknown == null)
-            {
-                indexUnknownBytes = new byte[4];
-            }
-            else
-            {
-                indexUnknownBytes = BitConverter.GetBytes((int)xlsElement.IndexUnknown);
+                case XlsType.String: // 1
+                case XlsType.StringOffset: // 2
+                    field30Bytes = new byte[] { (byte)(xlsColumn.StringBool ? 1 : 0), 0, 0, 0 };
+                    field34Bytes = BitConverter.GetBytes(xlsColumn.String64Offset);
+                    field38Bytes = new byte[4];
+                    break;
+
+                case XlsType.Flag: // 4
+                    field30Bytes = BitConverter.GetBytes(xlsColumn.FlagIndex);
+                    field34Bytes = new byte[4];
+                    field38Bytes = new byte[4];
+                    break;
+
+                case XlsType.Float: // 12
+                    field30Bytes = BitConverter.GetBytes(xlsColumn.FloatMin);
+                    field34Bytes = BitConverter.GetBytes(xlsColumn.FloatMax);
+                    field38Bytes = new byte[4];
+                    break;
+
+                case XlsType.ExcelIndex: // 20
+                case XlsType.FolderCode: // 21
+                case XlsType.AiInit: // 26
+                case XlsType.ExcelIndexArray: // 40
+                case XlsType.Qualities: // 45
+                    field30Bytes = BitConverter.GetBytes(xlsColumn.ExcelIndex);
+                    field34Bytes = BitConverter.GetBytes(xlsColumn.ExcelFlags);
+                    field38Bytes = BitConverter.GetBytes(xlsColumn.ExcelUnknown);
+                    break;
+
+                case XlsType.Unknown1:
+                case XlsType.AimHeight:
+                    field30Bytes = BitConverter.GetBytes(xlsColumn.UnknownIndex);
+                    field34Bytes = new byte[4];
+                    field38Bytes = new byte[4];
+                    break;
+
+                default:
+                    return Crypt.GetBytesHash(new byte[24], hash);
             }
 
-            if (indexBytes == null)
-            {
-                indexBytes = BitConverter.GetBytes(xlsElement.Index == null ? 0 : (int)xlsElement.Index);
-            }
+            //if (field30Bytes == null)
+            //{
+            //    //if (xlsColumn.Type == XlsType.Float && xlsColumn.IndexUnknown != null)
+            //    //{
+            //    //    indexBytes = BitConverter.GetBytes((float) xlsColumn.Index);
+            //    //    indexUnknownBytes = BitConverter.GetBytes((float) xlsColumn.IndexUnknown);
+            //    //}
+            //    //else if (xlsColumn.IndexUnknown == null)
+            //    //{
+            //    //    field34Bytes = new byte[4];
+            //    //}
+            //    //else
+            //    //{
+            //    //    field34Bytes = BitConverter.GetBytes((int) xlsColumn.IndexUnknown);
+            //    //}
 
-            hash = Crypt.GetStringHash(indexBytes, hash);
-            hash = Crypt.GetStringHash(indexUnknownBytes, hash);
-            hash = Crypt.GetStringHash(BitConverter.GetBytes(xlsElement.ExcelDefaultQ), hash);
-            hash = Crypt.GetStringHash(BitConverter.GetBytes(xlsElement.Field3C), hash);
-            hash = Crypt.GetStringHash(BitConverter.GetBytes(xlsElement.Field40), hash);
-            return Crypt.GetStringHash(BitConverter.GetBytes(xlsElement.Field44), hash);
+            //    //if (field30Bytes == null)
+            //    //{
+            //    //    field30Bytes = BitConverter.GetBytes(xlsColumn.Index == null ? 0 : (int) xlsColumn.Index);
+            //    //}
+
+            //    field30Bytes = BitConverter.GetBytes(xlsColumn.Index == null ? 0 : (int)xlsColumn.Index);
+            //    field34Bytes = new byte[4];
+            //    field38Bytes = new byte[4];
+            //}
+
+            hash = Crypt.GetBytesHash(field30Bytes, hash); // Field30
+            hash = Crypt.GetBytesHash(field34Bytes, hash); // Field34
+            hash = Crypt.GetBytesHash(field38Bytes, hash); // Field38
+            return Crypt.GetBytesHash(fields3Cto44, hash); // Field3C, Field40, Field44
         }
 
         #endregion
