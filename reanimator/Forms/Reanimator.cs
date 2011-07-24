@@ -64,7 +64,7 @@ namespace Reanimator.Forms
             //byte[] charBytes = FileTools.HexFileToByteArray(File.ReadAllText("C:\\stats.txt"));
             //UnitObject character = new UnitObject(true);
             //character.ParseUnitObject(charBytes, 0, charBytes.Length);
-            
+
             //if (true) return;
 
             //byte[] charBytes = {

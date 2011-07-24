@@ -58,7 +58,7 @@ namespace Hellgate
             return stringHash;
         }
 
-        public static UInt32 GetStringHash(byte[] bytes, UInt32 baseHash)
+        public static UInt32 GetBytesHash(byte[] bytes, UInt32 baseHash)
         {
             if (bytes == null || bytes.Length == 0) return baseHash;
             if (_needStringHash) _GenerateStringHash();

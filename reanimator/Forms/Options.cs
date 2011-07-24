@@ -71,6 +71,9 @@ namespace Reanimator.Forms
 
         private void _GameClientPath_Button_Click(object sender, EventArgs e)
         {
+            String initialDir = Config.HglDir + "\\SP_x64";
+            if (!Directory.Exists(initialDir)) initialDir = Config.HglDir;
+
             OpenFileDialog openFileDialog = new OpenFileDialog
             {
                 Filter = "EXE Files (*.exe)|*.exe|All Files (*.*)|*.*",

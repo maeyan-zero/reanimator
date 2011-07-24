@@ -82,6 +82,8 @@ namespace Hellgate
             }
             Attributes = dataFileAttributes;
 
+            if (Attributes == null) return;
+
             // create field delegators
             if (Attributes.RowType != null)
             {
@@ -117,7 +119,7 @@ namespace Hellgate
         /// <param name="clientVersion">The versions of excel files to try to load from.</param>
         public ExcelFile(byte[] buffer, String filePath, FileManager.ClientVersions clientVersion = FileManager.ClientVersions.SinglePlayer) : this(filePath, clientVersion)
         {
-            if (Attributes.IsEmpty) return;
+            if (Attributes == null || Attributes.IsEmpty) return;
 
             // parse data
             int peek = FileTools.ByteArrayToInt32(buffer, 0);
