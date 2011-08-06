@@ -1,0 +1,88 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<Project ToolsVersion="4.0" DefaultTargets="Build" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
+  <PropertyGroup>
+    <Configuration Condition=" '$(Configuration)' == '' ">Debug</Configuration>
+    <Platform Condition=" '$(Platform)' == '' ">x86</Platform>
+    <ProductVersion>8.0.30703</ProductVersion>
+    <SchemaVersion>2.0</SchemaVersion>
+    <ProjectGuid>{D4A1109D-ED72-448E-AA23-40B9FD8E2387}</ProjectGuid>
+    <OutputType>Exe</OutputType>
+    <AppDesignerFolder>Properties</AppDesignerFolder>
+    <RootNamespace>MediaWiki</RootNamespace>
+    <AssemblyName>Test</AssemblyName>
+    <TargetFrameworkVersion>v4.0</TargetFrameworkVersion>
+    <TargetFrameworkProfile>Client</TargetFrameworkProfile>
+    <FileAlignment>512</FileAlignment>
+  </PropertyGroup>
+  <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Debug|x86' ">
+    <PlatformTarget>x86</PlatformTarget>
+    <DebugSymbols>true</DebugSymbols>
+    <DebugType>full</DebugType>
+    <Optimize>false</Optimize>
+    <OutputPath>..\bin\Wiki\x86\Debug\</OutputPath>
+    <DefineConstants>DEBUG;TRACE</DefineConstants>
+    <ErrorReport>prompt</ErrorReport>
+    <WarningLevel>4</WarningLevel>
+  </PropertyGroup>
+  <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Release|x86' ">
+    <PlatformTarget>x86</PlatformTarget>
+    <DebugType>pdbonly</DebugType>
+    <Optimize>true</Optimize>
+    <OutputPath>..\bin\Wiki\x86\Release\</OutputPath>
+    <DefineConstants>TRACE</DefineConstants>
+    <ErrorReport>prompt</ErrorReport>
+    <WarningLevel>4</WarningLevel>
+  </PropertyGroup>
+  <ItemGroup>
+    <Reference Include="System" />
+    <Reference Include="System.Core" />
+    <Reference Include="System.Xml.Linq" />
+    <Reference Include="System.Data.DataSetExtensions" />
+    <Reference Include="Microsoft.CSharp" />
+    <Reference Include="System.Data" />
+    <Reference Include="System.Xml" />
+  </ItemGroup>
+  <ItemGroup>
+    <Compile Include="Articles\Achievements.cs" />
+    <Compile Include="Articles\Affixes.cs" />
+    <Compile Include="Articles\Cube.cs" />
+    <Compile Include="Articles\Items.cs" />
+    <Compile Include="Articles\Monsters.cs" />
+    <Compile Include="Articles\Treasure.cs" />
+    <Compile Include="Parser\Class\Context.cs" />
+    <Compile Include="Parser\Class\Game.cs" />
+    <Compile Include="Parser\Class\Unit.cs" />
+    <Compile Include="Parser\Evaluator.cs" />
+    <Compile Include="Parser\Function\IFunction.cs" />
+    <Compile Include="Parser\Operator\And.cs" />
+    <Compile Include="Parser\Operator\Divide.cs" />
+    <Compile Include="Parser\Operator\EqualTo.cs" />
+    <Compile Include="Parser\Operator\GreaterThan.cs" />
+    <Compile Include="Parser\Operator\IOperator.cs" />
+    <Compile Include="Parser\Operator\LessThan.cs" />
+    <Compile Include="Parser\Operator\Minus.cs" />
+    <Compile Include="Parser\Operator\Multiply.cs" />
+    <Compile Include="Parser\Operator\Or.cs" />
+    <Compile Include="Parser\Operator\Plus.cs" />
+    <Compile Include="Parser\Token.cs" />
+    <Compile Include="Parser\Variable\IVariable.cs" />
+    <Compile Include="Program.cs" />
+    <Compile Include="Properties\AssemblyInfo.cs" />
+    <Compile Include="Articles\WikiScript.cs" />
+  </ItemGroup>
+  <ItemGroup>
+    <ProjectReference Include="..\hellgate\Hellgate.csproj">
+      <Project>{B6CC99E9-8371-43C3-A20B-D8AA4B7DACCC}</Project>
+      <Name>Hellgate</Name>
+    </ProjectReference>
+  </ItemGroup>
+  <ItemGroup />
+  <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
+  <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 
+       Other similar extension points exist, see Microsoft.Common.targets.
+  <Target Name="BeforeBuild">
+  </Target>
+  <Target Name="AfterBuild">
+  </Target>
+  -->
+</Project>
