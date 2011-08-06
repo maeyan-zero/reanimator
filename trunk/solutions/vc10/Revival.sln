@@ -11,6 +11,8 @@ Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Common", "..\..\common\Comm
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Launcher", "..\..\launcher\Launcher.csproj", "{D4722813-8F53-409B-B750-B493C4C456C5}"
 EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Wiki", "..\..\wiki\Wiki.csproj", "{D4A1109D-ED72-448E-AA23-40B9FD8E2387}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -100,6 +102,18 @@ Global
 		{D4722813-8F53-409B-B750-B493C4C456C5}.Release|x64.Build.0 = Release|x64
 		{D4722813-8F53-409B-B750-B493C4C456C5}.Release|x86.ActiveCfg = Release|x86
 		{D4722813-8F53-409B-B750-B493C4C456C5}.Release|x86.Build.0 = Release|x86
+		{D4A1109D-ED72-448E-AA23-40B9FD8E2387}.Debug|Any CPU.ActiveCfg = Debug|x86
+		{D4A1109D-ED72-448E-AA23-40B9FD8E2387}.Debug|Mixed Platforms.ActiveCfg = Debug|x86
+		{D4A1109D-ED72-448E-AA23-40B9FD8E2387}.Debug|Mixed Platforms.Build.0 = Debug|x86
+		{D4A1109D-ED72-448E-AA23-40B9FD8E2387}.Debug|x64.ActiveCfg = Debug|x86
+		{D4A1109D-ED72-448E-AA23-40B9FD8E2387}.Debug|x86.ActiveCfg = Debug|x86
+		{D4A1109D-ED72-448E-AA23-40B9FD8E2387}.Debug|x86.Build.0 = Debug|x86
+		{D4A1109D-ED72-448E-AA23-40B9FD8E2387}.Release|Any CPU.ActiveCfg = Release|x86
+		{D4A1109D-ED72-448E-AA23-40B9FD8E2387}.Release|Mixed Platforms.ActiveCfg = Release|x86
+		{D4A1109D-ED72-448E-AA23-40B9FD8E2387}.Release|Mixed Platforms.Build.0 = Release|x86
+		{D4A1109D-ED72-448E-AA23-40B9FD8E2387}.Release|x64.ActiveCfg = Release|x86
+		{D4A1109D-ED72-448E-AA23-40B9FD8E2387}.Release|x86.ActiveCfg = Release|x86
+		{D4A1109D-ED72-448E-AA23-40B9FD8E2387}.Release|x86.Build.0 = Release|x86
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
