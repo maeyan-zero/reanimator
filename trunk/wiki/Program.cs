@@ -2,8 +2,11 @@
 using System.Data;
 using System.Diagnostics;
 using System.IO;
+using System.Linq;
 using Hellgate;
 using MediaWiki.Articles;
+using MediaWiki.Parser;
+using MediaWiki.Parser.Class;
 
 namespace MediaWiki
 {
@@ -16,13 +19,50 @@ namespace MediaWiki
             manager.LoadTableFiles();
             manager.EndAllDatAccess();
 
-            var monsters = new Monsters(manager);
-            var sqlTable = monsters.ExportTable();
-            File.WriteAllLines("monsters.sql", new[] { sqlTable });
+            //PrintClassPlanner(manager);
+            //return;
+            //var achievements = new Achievements(manager);
+            //Debug.Write(achievements.ExportArticle());
+            //return;
+            //var affixes = manager.GetDataTable("AFFIXES");
+            //Evaluator evaluator = new Evaluator();
+            //evaluator.Manager = manager;
+            //foreach (DataRow affix in affixes.Rows)
+            //{
+            //    Unit unit = new Unit();
+            //    string property1 = affix["property1"] as string;
+            //    if (property1 == null || property1.Equals(String.Empty)) continue;
+            //    unit.SetStat("level", 30);
+            //    evaluator.Unit = unit;
+
+            //    if ((int) affix["Index"] == 134)
+            //    {
+            //        int breakpoint = 0;
+            //        breakpoint++;
+            //    }
+            //    var result = evaluator.Evaluate(property1);
+            //    Debug.WriteLine(affix["Index"] + ": " + result[0]);
+            //}
+
+            //var itemUpgrades = new ItemUpgrades(manager);
+            //var sqlSchema = itemUpgrades.ExportSchema();
+            //var sqlTable = itemUpgrades.ExportTable();
+            //File.WriteAllLines("itemUpgrades.sql", new[] { sqlSchema, sqlTable });
+
+            var items = new Items(manager);
+            var sqlTable = items.ExportTable();
+
+            //var monsters = new Monsters(manager);
+            //sqlSchema = monsters.ExportSchema();
+            //sqlTable = monsters.ExportTable();
+            //File.WriteAllLines("monsters.sql", new[] { sqlSchema, sqlTable });
 
             var treasure = new Treasure(manager);
-            sqlTable = treasure.ExportTable();
-            File.WriteAllLines("treasure.sql", new[] { sqlTable });
+            //sqlSchema = treasure.ExportSchema();
+            //sqlTable = treasure.ExportTable();
+            Debug.Write(Treasure.GetTreasureTable(641));
+            
+            //File.WriteAllLines("treasure.sql", new[] { sqlSchema, sqlTable });
 
             return;
         }
@@ -41,7 +81,7 @@ namespace MediaWiki
             StringWriter writer = new StringWriter();
             foreach (DataRow row in table.Rows)
             {
-                if ((int)row["skillGroup1"] != bm) continue;
+                if ((int)row["skillGroup1"] != guard) continue;
 
                 writer.WriteLine("id = " + row["Index"] + ";");
                 writer.WriteLine("display = \"" + row["displayName_string"] + "\";");

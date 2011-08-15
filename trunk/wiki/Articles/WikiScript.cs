@@ -8,6 +8,7 @@ namespace MediaWiki.Articles
     public abstract class WikiScript
     {
         protected static FileManager Manager;
+        protected static String Prefix = "";
 
         protected WikiScript(FileManager manager)
         {

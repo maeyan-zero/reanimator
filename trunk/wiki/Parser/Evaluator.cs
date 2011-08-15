@@ -2,38 +2,20 @@
 using System.Collections.Generic;
 using System.Diagnostics;
 using System.Linq;
-using MediaWiki.Parser.Function;
-using MediaWiki.Parser.Variable;
-using MediaWiki.Parser.Operator;
+using Hellgate;
+using MediaWiki.Parser.Class;
 
 namespace MediaWiki.Parser
 {
-    internal class Evaluator
+    public class Evaluator
     {
-        private readonly Dictionary<String, object> _references =
-            new Dictionary<String, object>();
-        private readonly Dictionary<String, IFunction<object>> _functions =
-            new Dictionary<String, IFunction<object>>();
-        private readonly Dictionary<String, IVariable> _variables =
-            new Dictionary<String, IVariable>();
-        private readonly Dictionary<String, IOperator<object, object>> _operators =
-            new Dictionary<String, IOperator<object, object>>();
-        private readonly Dictionary<String, Dictionary<String, IFunction<object>>> _functionPointers =
-            new Dictionary<String, Dictionary<String, IFunction<object>>>();
-        private readonly Dictionary<Int32, List<Statement>> _cache =
-            new Dictionary<Int32, List<Statement>>();
+        public Unit Unit { get; set; }
+        public Game Game { get; set; }
+        public Context Context { get; set; }
+        public FileManager Manager { get; set; }
+        public StatsList StatsList { get; set; }
 
-        Evaluator()
-        {
-            _operators.Add("+", (IOperator<object, object>) new Plus());
-            _operators.Add("-", (IOperator<object, object>) new Minus());
-            _operators.Add("*", (IOperator<object, object>) new Multiply());
-            _operators.Add("/", (IOperator<object, object>) new Divide());
-            _operators.Add(">", (IOperator<object, object>) new GreaterThan());
-            _operators.Add("<", (IOperator<object, object>) new LessThan());
-            _operators.Add("&&", (IOperator<object, object>) new And());
-            _operators.Add("==", (IOperator<object, object>) new EqualTo());
-        }
+        private readonly Dictionary<Int32, List<Statement>> _cache = new Dictionary<Int32, List<Statement>>();
 
         public List<object> Evaluate(String expression)
         {
@@ -62,18 +44,18 @@ namespace MediaWiki.Parser
         /// <param name="tokens"></param>
         private void ResolveVariables(IList<Token> tokens)
         {
-            for (var i = 0; i < tokens.Count; i++)
-            {
-                if (tokens[i].Mark != Token.Variable) continue;
+            //for (var i = 0; i < tokens.Count; i++)
+            //{
+            //    if (tokens[i].Mark != Token.Variable) continue;
 
-                var token = tokens[i];
-                if (_variables.ContainsKey(token.Symbol.ToString())) continue;
+            //    var token = tokens[i];
+            //    if (_variables.ContainsKey(token.Symbol.ToString())) continue;
 
-                var val = _variables[token.ToString()].GetValue();
-                token = new Token(val, Token.Number);
-                tokens.RemoveAt(i);
-                tokens.Insert(i, token);
-            }
+            //    var val = _variables[token.ToString()].GetValue();
+            //    token = new Token(val, Token.Number);
+            //    tokens.RemoveAt(i);
+            //    tokens.Insert(i, token);
+            //}
         }
 
         /// <summary>
@@ -274,7 +256,15 @@ namespace MediaWiki.Parser
                                     tokens.Add(new Token(val, mark));
                                     buffer.Clear();
                                     if (cur == Token.OpenSmooth) tokens.Add(new Token(expression[i], cur));
-                                    mark = NEW;
+                                    if (cur == Token.Function)
+                                    {
+                                        mark = Token.Function;
+                                        buffer.Add(expression[i]);
+                                    }
+                                    else
+                                    {
+                                        mark = NEW;
+                                    }
                                 }
                                 break;
                         }
@@ -503,7 +493,7 @@ namespace MediaWiki.Parser
         /// </summary>
         /// <param name="tokens"></param>
         /// <returns></returns>
-        private object ExecuteTokens(List<Token> tokens)
+        private object ExecuteTokens(IList<Token> tokens)
         {
             ResolveVariables(tokens);
 
@@ -535,13 +525,42 @@ namespace MediaWiki.Parser
                 var range = new Range(open, closed);
                 var opos = GetPosOperator(tokens, range);
 
+                // Merge arguements
+                if (opos == -2)
+                {
+                    for (int i = range.Start; i <= range.End; i++)
+                    {
+                        if (tokens[i].Mark != Token.Operator) continue;
+                        if (tokens[i - 1].Mark != Token.Range)
+                        {
+                            var val2 = tokens[i].ToString();
+                            var val3 = tokens[i + 1].ToString();
+                            tokens.RemoveAt(i);
+                            tokens.RemoveAt(i);
+                            var formula = val2 + val3;
+                            tokens.Insert(i, new Token(formula, Token.Formula));
+                        }
+                        else
+                        {
+                            var val1 = tokens[i - 1].ToString();
+                            var val2 = tokens[i].ToString();
+                            var val3 = tokens[i + 1].ToString();
+                            tokens.RemoveAt(i - 1);
+                            tokens.RemoveAt(i - 1);
+                            tokens.RemoveAt(i - 1);
+                            var formula = val1 + " " + val2 + " " + val3;
+                            tokens.Insert(i - 1, new Token(formula, Token.Formula));
+                        }
+
+                        break;
+                    }
+                    continue;
+                }
+
                 // If one does, perform operand method
-                if (opos >= 1)
+                if (opos > -1)
                 {
                     var op = tokens[opos].ToString();
-
-                    if (_operators.ContainsKey(op) == false)
-                        throw new Exception("Unimplemented Operator: " + op);
 
                     // Check that negation is applied
                     if (op.Equals("-") && tokens[opos - 1].Mark != Token.Number)
@@ -556,10 +575,9 @@ namespace MediaWiki.Parser
                     }
 
                     // its a 2 parameter method
-                    var val1 = (Double) tokens[opos - 1].Symbol;
-                    var val2 = (Double) tokens[opos + 1].Symbol;
-                    var opresult = _operators[op].Evaluate(val1, val2);
-                    var ptoken = new Token(opresult, Token.Number);
+                    var val1 = tokens[opos - 1].Symbol;
+                    var val2 = tokens[opos + 1].Symbol;
+                    var ptoken = ApplyOperator(op, val1, val2);
                     opos--; // move cursor back to the first val
                     tokens.RemoveAt(opos);
                     tokens.RemoveAt(opos);
@@ -587,27 +605,12 @@ namespace MediaWiki.Parser
                     var args = new Object[noargs];
                     for (var i = 0; i < noargs; i++)
                     {
-                        var t = tokens[curs];
-                        if (t.Mark == Token.Reference)
-                        {
-                            if (_references.ContainsKey(tokens[curs].ToString()) == false)
-                                throw new Exception("Reference not Found: " + t.ToString());
-
-                            args[i] = _references[tokens[curs].ToString()];
-                        }
-                        else
-                        {
-                            args[i] = tokens[curs].Symbol;
-                        }
+                        args[i] = tokens[curs].Symbol;
 
                         curs += 2; // skip current arg and comma
                     }
 
-                    if (!_functionPointers.ContainsKey(var) || !_functionPointers[var].ContainsKey(afunc))
-                        throw new Exception("Function Pointer not found: " + var + "->" + afunc);
-
-                    var fresult = _functionPointers[var][afunc].Execute(args);
-                    var ftoken = new Token(fresult, Token.Number);
+                    var ftoken = ApplyPointerMethod(var, afunc, args);
 
                     var argrem = (noargs > 1) ? ((noargs * 2) - 1) : noargs;
                     var last = accessorPos + 1 + 1 + argrem + 1; // accessor + func + open + args + close
@@ -630,7 +633,7 @@ namespace MediaWiki.Parser
                     var t = tokens[fcurs];
                     if (t.Mark == Token.Reference)
                     {
-                        dargs[i] = _references[tokens[fcurs].ToString()];
+                        dargs[i] = GetReference(tokens[fcurs].ToString());
                     }
                     else
                     {
@@ -651,10 +654,7 @@ namespace MediaWiki.Parser
                 // Make function call
                 var func = (String) tokens[open - 1].Symbol;
 
-                if (!_functions.ContainsKey(func)) throw new Exception("Function not found: " + func);
-
-                object furesult = _functions[func].Execute(dargs);
-                var token = new Token(furesult, Token.Number);
+                var token = ApplyFunction(func, dargs);
 
                 // Remove function, replace with result
                 var pos = open - 1;
@@ -667,6 +667,229 @@ namespace MediaWiki.Parser
 
             var result = tokens[0].Symbol;
             return result;
+        }
+
+        private object GetReference(string reference)
+        {
+            switch (reference)
+            {
+                case "game4":
+                    return Game;
+                case "unit":
+                    return Unit;
+                case "statslist":
+                    return StatsList;
+                default:
+                    throw new Exception("Unknown reference: " + reference);
+            }
+        }
+
+        private static Token ApplyOperator(string symbol, params object[] param)
+        {
+            var isDouble = (param[0].ToString().Contains(".") || param[1].ToString().Contains("."));
+            var val1 = (isDouble) ? Double.Parse(param[0].ToString()) : Int32.Parse(param[0].ToString());
+            var val2 = (isDouble) ? Double.Parse(param[1].ToString()) : Int32.Parse(param[1].ToString());
+            object result;
+
+            switch (symbol)
+            {
+                case "+":
+                    result = val1 + val2;
+                    break;
+                case "-":
+                    result = val1 - val2;
+                    break;
+                case "*":
+                    result = val1 * val2;
+                    break;
+                case "/":
+                    result = val1 / val2;
+                    break;
+                case ">":
+                    result = val1 > val2;
+                    break;
+                case "<":
+                    result = val1 < val2;
+                    break;
+                case "==":
+                    result = Equals(val1, val2);
+                    break;
+                default:
+                    throw new Exception("Invalid operator: " + symbol);
+            }
+
+            return new Token(result, Token.Number);
+        }
+
+        private Token ApplyPointerMethod(string var, string method, params object[] param)
+        {
+            switch (var)
+            {
+                case "unit":
+                    switch (method)
+                    {
+                        case "GetStat666":
+                            object result;
+                            switch (param.Length)
+                            {
+                                case 1:
+                                    result = Unit.GetStat(param[0].ToString());
+                                    return new Token(result, Token.Number);
+                                case 2:
+                                    result = Unit.GetStat(param[0].ToString(), param[1].ToString());
+                                    return new Token(result, Token.Number);
+                                default:
+                                    throw new Exception("Illegal number of parameters for Unit->GetStat666");
+                            }
+                        default:
+                            throw new Exception("Unknown method for unit: " + method);
+                    }
+                default:
+                    throw new Exception("unknown pointer: " + var);
+            }
+        }
+
+        private Token ApplyFunction(string func, params object[] param)
+        {
+            object result;
+            switch (func)
+            {
+                case "thorns_dmg_toxic_monster":
+                case "thorns_dmg_elec_monster":
+                case "thorns_dmg_spec_monster":
+                case "thorns_dmg_fire_monster":
+                case "thorns_dmg_phys_monster":
+                    if (param.Length != 1)
+                        throw new Exception("Illegal number of parameters for thorns_dmg_phys_monster function.");
+                    Unit.SetStat("thorns_dmg_phys_monster", param[0]);
+                    return new Token(param[0], Token.Number);
+                case "monster_level_sfx_attack":
+                    if (param.Length != 1)
+                        throw new Exception("Illegal number of parameters for monster_level_sfx_attack function.");
+                    Unit.SetStat("monster_level_sfx_attack", param[0]);
+                    return new Token(param[0], Token.Number);
+                case "monster_level_shields":
+                    if (param.Length != 1)
+                        throw new Exception("Illegal number of parameters for monster_level_shields function.");
+                    Unit.SetStat("set_shield_bonus", param[0]);
+                    return new Token(param[0], Token.Number);
+                case "pickskill":
+                    if (param.Length != 3)
+                        throw new Exception("Illegal number of parameters for pickskill function.");
+                    //Unit.SetStat("thorns_dmg_toxic_item", param[0]);
+                    return new Token("RANDOM SKILL", Token.Number);
+                case "pickskillbyunittype":
+                    if (param.Length != 4)
+                        throw new Exception("Illegal number of parameters for pickskillbyunittype function.");
+                    //Unit.SetStat("thorns_dmg_toxic_item", param[0]);
+                    return new Token("RANDOM " + param[2] + " SKILL", Token.Number);
+                case "pickskillbyskillgroup":
+                    if (param.Length != 4)
+                        throw new Exception("Illegal number of parameters for pickskillbyskillgroup function.");
+                    //Unit.SetStat("thorns_dmg_toxic_item", param[0]);
+                    return new Token("RANDOM " + param[2] + " SKILL", Token.Number);
+                case "thorns_dmg_toxic_item":
+                    if (param.Length != 1)
+                        throw new Exception("Illegal number of parameters for thorns_dmg_toxic_item function.");
+                    Unit.SetStat("thorns_dmg_toxic_item", param[0]);
+                    return new Token(param[0], Token.Number);
+                case "thorns_dmg_spec_item":
+                    if (param.Length != 1)
+                        throw new Exception("Illegal number of parameters for thorns_dmg_spec_item function.");
+                    Unit.SetStat("thorns_dmg_spec_item", param[0]);
+                    return new Token(param[0], Token.Number);
+                case "thorns_dmg_elec_item":
+                    if (param.Length != 1)
+                        throw new Exception("Illegal number of parameters for thorns_dmg_elec_item function.");
+                    Unit.SetStat("thorns_dmg_elec_item", param[0]);
+                    return new Token(param[0], Token.Number);
+                case "thorns_dmg_fire_item":
+                    if (param.Length != 1)
+                        throw new Exception("Illegal number of parameters for thorns_dmg_fire_item function.");
+                    Unit.SetStat("thorns_dmg_fire_item", param[0]);
+                    return new Token(param[0], Token.Number);
+                case "thorns_dmg_phys_item":
+                    if (param.Length != 1)
+                        throw new Exception("Illegal number of parameters for thorns_dmg_phys_item function.");
+                    Unit.SetStat("thorns_dmg_phys_item", param[0]);
+                    return new Token(param[0], Token.Number);
+                case "set_shield_bonus":
+                    if (param.Length != 2)
+                        throw new Exception("Illegal number of parameters for set_shield_bonus function.");
+                    Unit.SetStat("set_shield_bonus", param[0]);
+                    return new Token(param[0], Token.Number);
+                case "set_armor_bonus":
+                    if (param.Length != 2)
+                        throw new Exception("Illegal number of parameters for set_armor_bonus function.");
+                    Unit.SetStat("set_armor_bonus", param[0]);
+                    return new Token(param[0], Token.Number);
+                case "item_level_sfx_defense":
+                    if (param.Length != 1)
+                        throw new Exception("Illegal number of parameters for item_level_sfx_defense function.");
+                    var itemLevels = Manager.GetDataTable("ITEM_LEVELS");
+                    var level = (int) param[0];
+                    var sfxDefence = (int) itemLevels.Rows[level]["sfxDefenceAbility"];
+                    return new Token(sfxDefence, Token.Number);
+                case "pow_regen_per_min":
+                    if (param.Length != 1)
+                        throw new Exception("Illegal number of parameters for pow_regen_per_min function.");
+                    Unit.SetStat("pow_regen_per_min", param[0]);
+                    return new Token(param[0], Token.Number);
+                case "hp_regen_per_min":
+                    if (param.Length != 1)
+                        throw new Exception("Illegal number of parameters for hp_regen_per_min function.");
+                    Unit.SetStat("hp_regen_per_min", param[0]);
+                    return new Token(param[0], Token.Number);
+                case "all_stats_bonus":
+                    if (param.Length != 1)
+                        throw new Exception("Illegal number of parameters for all_stats_bonus function.");
+                    var bonus = param[0];
+                    Unit.SetStat("strength_bonus", bonus);
+                    Unit.SetStat("accuracy_bonus", bonus);
+                    Unit.SetStat("willpower_bonus", bonus);
+                    Unit.SetStat("stamina_bonus", bonus);
+                    return new Token(bonus, Token.Number);
+                case "item_level_sfx_attack":
+                    if (param.Length != 1)
+                        throw new Exception("Illegal number of parameters for item_level_sfx_attack function.");
+                    itemLevels = Manager.GetDataTable("ITEM_LEVELS");
+                    level = (int) param[0];
+                    var sfxAttack = (int) itemLevels.Rows[level]["sfxAttackAbility"];
+                    return new Token(sfxAttack, Token.Number);
+                case "rand":
+                    if (param.Length != 3)
+                        throw new Exception("Illegal number of parameters for rand function.");
+                    return new Token("(" + param[1] + "~" + param[2] + ")", Token.Range);
+                case "GetStat666":
+                    switch (param.Length)
+                    {
+                        case 1:
+                            result = Unit.GetStat(param[0].ToString());
+                            if (result != null) return new Token(result, Token.Number);
+                            if (param[0].ToString().Equals("level")) return new Token("item_level", Token.Range);
+                            throw new Exception("Unhandled null GetStat stat: " + param[0]);
+                        case 2:
+                            result = Unit.GetStat(param[0].ToString(), param[1].ToString());
+                            return new Token(result, Token.Number);
+                        default:
+                            throw new Exception("Illegal number of parameters for GetStat666");
+                    }
+                case "SetStat669":
+                case "SetStat673":
+                    switch (param.Length)
+                    {
+                        case 2:
+                            result = Unit.SetStat(param[0].ToString(), param[1]);
+                            return new Token(result, Token.Number);
+                        case 3:
+                            result = Unit.SetStat(param[0].ToString(), param[1].ToString(), param[2]);
+                            return new Token(result, Token.Number);
+                        default:
+                            throw new Exception("Illegal number of parameters for GetStat666");
+                    }
+                default:
+                    throw new Exception("Unknown function: " + func);
+            }
         }
 
         /// <summary>
@@ -748,20 +971,49 @@ namespace MediaWiki.Parser
             return list.Aggregate("", (current, t) => current + t);
         }
 
-        private int GetPosOperator(IList<Token> tokens, Range r)
+        private static int GetPosOperator(IList<Token> tokens, Range r)
         {
-            var priority = -1;
+            var priority = 15;
             var opPosition = -1;
 
             for (var i = r.Start; i < r.End; i++)
             {
                 if (tokens[i].Mark != Token.Operator) continue;
-
-                if (_operators[tokens[i].ToString()].Priority <= priority) continue;
+                if (tokens[i - 1].Mark != Token.Number || tokens[i + 1].Mark != Token.Number)
+                {
+                    if (opPosition == -1) opPosition = -2;
+                    continue;
+                }
+                switch (tokens[i].ToString())
+                {
+                    case "*":
+                    case "/":
+                    case "%":
+                        if (3 >= priority) continue;
+                        priority = 3;
+                        break;
+                    case "+":
+                    case "-":
+                        if (4 >= priority) continue;
+                        priority = 4;
+                        break;
+                    case ">":
+                    case "<":
+                    case ">=":
+                    case "<=":
+                        if (6 >= priority) continue;
+                        priority = 6;
+                        break;
+                    case "==":
+                    case "!=":
+                        if (7 >= priority) continue;
+                        priority = 7;
+                        break;
+                    default:
+                        throw new Exception("Unhandled priority for operator " + tokens[i]);
+                }
 
                 opPosition = i;
-                priority = _operators[tokens[i].ToString()].Priority;
-
                 continue;
             }
 

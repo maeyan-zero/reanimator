@@ -5,7 +5,7 @@ using System.Text;
 
 namespace MediaWiki.Parser.Class
 {
-    class Game
+    public class Game
     {
     }
 }

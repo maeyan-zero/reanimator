@@ -21,7 +21,7 @@ namespace MediaWiki.Articles
         public override string ExportSchema()
         {
             var builder = new StringBuilder();
-            builder.AppendLine("CREATE TABLE monsters (");
+            builder.AppendLine("CREATE TABLE " + Prefix + "monsters (");
             builder.Append("\t");
             builder.AppendLine("id INT NOT NULL,");
             builder.Append("\t");
@@ -38,6 +38,30 @@ namespace MediaWiki.Articles
             builder.AppendLine("hp_max INT,");
             builder.Append("\t");
             builder.AppendLine("experience INT,");
+            builder.Append("\t");
+            builder.AppendLine("armor INT,");
+            builder.Append("\t");
+            builder.AppendLine("shields INT,");
+            builder.Append("\t");
+            builder.AppendLine("phys_atk INT,");
+            builder.Append("\t");
+            builder.AppendLine("phys_def INT,");
+            builder.Append("\t");
+            builder.AppendLine("fire_atk INT,");
+            builder.Append("\t");
+            builder.AppendLine("fire_def INT,");
+            builder.Append("\t");
+            builder.AppendLine("elec_atk INT,");
+            builder.Append("\t");
+            builder.AppendLine("elec_def INT,");
+            builder.Append("\t");
+            builder.AppendLine("spec_atk INT,");
+            builder.Append("\t");
+            builder.AppendLine("spec_def INT,");
+            builder.Append("\t");
+            builder.AppendLine("pois_atk INT,");
+            builder.Append("\t");
+            builder.AppendLine("pois_def INT,");
             builder.Append("\t");
             builder.AppendLine("treasure INT,");
             builder.Append("\t");
@@ -56,7 +80,7 @@ namespace MediaWiki.Articles
         {
             var monsters = Manager.GetDataTable("MONSTERS");
             var builder = new StringBuilder();
-            builder.AppendLine("INSERT INTO monsters");
+            builder.AppendLine("INSERT INTO " + Prefix + "monsters");
             builder.AppendLine("VALUES");
             foreach (DataRow row in monsters.Rows)
             {
@@ -66,7 +90,7 @@ namespace MediaWiki.Articles
                 builder.Append(",");
                 builder.Append(GetSqlEncapsulatedString(((int)row["code"]).ToString("X")));
                 builder.Append(",");
-                builder.Append(GetSqlEncapsulatedString(row["String_string"] as string));
+                builder.Append(GetSqlEncapsulatedString(row["String_string"] as string ?? string.Empty));
                 builder.Append(",");
                 var baseMonster = ((int) row["baseRow"] != -1 ? monsters.Rows[(int) row["baseRow"]]["String_string"] as string : "") ?? string.Empty;
                 baseMonster = GetWikiArticleLink(baseMonster);
@@ -83,6 +107,30 @@ namespace MediaWiki.Articles
                 builder.Append(row["hpMax"]);
                 builder.Append(",");
                 builder.Append(row["experience"]);
+                builder.Append(",");
+                builder.Append(row["armor"]);
+                builder.Append(",");
+                builder.Append(row["shields"]);
+                builder.Append(",");
+                builder.Append(row["sfxPhysicalAbilityPct"]);
+                builder.Append(",");
+                builder.Append(row["sfxPhysicalDefensePct"]);
+                builder.Append(",");
+                builder.Append(row["sfxFireAbilityPct"]);
+                builder.Append(",");
+                builder.Append(row["sfxFireDefensePct"]);
+                builder.Append(",");
+                builder.Append(row["sfxElectricAbilityPct"]);
+                builder.Append(",");
+                builder.Append(row["sfxElectricDefensePct"]);
+                builder.Append(",");
+                builder.Append(row["sfxSpectralAbilityPct"]);
+                builder.Append(",");
+                builder.Append(row["sfxSpectralDefensePct"]);
+                builder.Append(",");
+                builder.Append(row["sfxToxicAbilityPct"]);
+                builder.Append(",");
+                builder.Append(row["sfxToxicDefensePct"]);
                 builder.Append(",");
                 builder.Append(row["treasure"]);
                 builder.Append(",");
