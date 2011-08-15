@@ -23,6 +23,8 @@ namespace MediaWiki.Parser
         public const char TernaryFalse = ':';
         public const char If = 'I';
         public const char Else = 'E';
+        public const char Range = 'R';
+        public const char Formula = 'f';
 
         public object Symbol { get; private set; }
         public char Mark { get; private set; }

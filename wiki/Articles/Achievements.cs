@@ -37,9 +37,11 @@ namespace MediaWiki.Articles
                     var s = (int) row["rewardSkill"];
                     var skill = skills.Rows[s]["effectString_string"].ToString();
                     var var = skills.Rows[s]["skillVar1"].ToString();
+                    var icon = skills.Rows[s]["largeIcon"].ToString();
+                    icon = "[[File:" + icon + ".png|40px]] ";
                     var = var.Replace(";", "");
                     skill = skill.Replace("[string2]", var);
-                    builder.AppendLine("|" + skill);
+                    builder.AppendLine("|" + icon + skill);
                 }
                 else
                 {

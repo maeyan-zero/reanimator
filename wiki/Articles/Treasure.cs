@@ -19,12 +19,13 @@ namespace MediaWiki.Articles
         public override string ExportSchema()
         {
             var builder = new StringBuilder();
-            builder.AppendLine("CREATE TABLE treasure (");
+            builder.AppendLine("CREATE TABLE " + Prefix + "treasure (");
             builder.Append("\t");
             builder.AppendLine("id INT NOT NULL,");
             builder.Append("\t");
-            builder.AppendLine("table TEXT,");
-            builder.AppendLine("PRIMARY KEY (id),");
+            builder.AppendLine("loot TEXT,");
+            builder.Append("\t");
+            builder.AppendLine("PRIMARY KEY (id)");
             builder.AppendLine(");");
             return builder.ToString();
         }
@@ -33,7 +34,7 @@ namespace MediaWiki.Articles
         {
             var monsters = Manager.GetDataTable("TREASURE");
             var builder = new StringBuilder();
-            builder.AppendLine("INSERT INTO monsters");
+            builder.AppendLine("INSERT INTO " + Prefix + "treasure");
             builder.AppendLine("VALUES");
             foreach (DataRow row in monsters.Rows)
             {
@@ -52,7 +53,7 @@ namespace MediaWiki.Articles
         /// Prints the drop table of the given entity. The drop table is formatted for use with the TreeView extension.
         /// </summary>
         /// <param name="entity"></param>
-        protected static string GetTreasureTable(int entity)
+        public static string GetTreasureTable(int entity)
         {
             if (entity == -1) return String.Empty;
 

@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Text;
 using Hellgate;
 
 namespace MediaWiki.Articles
@@ -21,7 +22,11 @@ namespace MediaWiki.Articles
 
         public override string ExportTable()
         {
-            throw new NotImplementedException();
+            var builder = new StringBuilder();
+            var items = Manager.GetDataTable("ITEMS");
+            var affixes = Manager.GetDataTable("AFFIXES");
+
+            return builder.ToString();
         }
     }
 }

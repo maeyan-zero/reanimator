@@ -47,28 +47,19 @@
     <Compile Include="Articles\Affixes.cs" />
     <Compile Include="Articles\Cube.cs" />
     <Compile Include="Articles\Items.cs" />
+    <Compile Include="Articles\ItemUpgrades.cs" />
     <Compile Include="Articles\Monsters.cs" />
     <Compile Include="Articles\Treasure.cs" />
     <Compile Include="Parser\Class\Context.cs" />
     <Compile Include="Parser\Class\Game.cs" />
+    <Compile Include="Parser\Class\StatsList.cs" />
     <Compile Include="Parser\Class\Unit.cs" />
     <Compile Include="Parser\Evaluator.cs" />
-    <Compile Include="Parser\Function\IFunction.cs" />
-    <Compile Include="Parser\Operator\And.cs" />
-    <Compile Include="Parser\Operator\Divide.cs" />
-    <Compile Include="Parser\Operator\EqualTo.cs" />
-    <Compile Include="Parser\Operator\GreaterThan.cs" />
-    <Compile Include="Parser\Operator\IOperator.cs" />
-    <Compile Include="Parser\Operator\LessThan.cs" />
-    <Compile Include="Parser\Operator\Minus.cs" />
-    <Compile Include="Parser\Operator\Multiply.cs" />
-    <Compile Include="Parser\Operator\Or.cs" />
-    <Compile Include="Parser\Operator\Plus.cs" />
     <Compile Include="Parser\Token.cs" />
-    <Compile Include="Parser\Variable\IVariable.cs" />
     <Compile Include="Program.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="Articles\WikiScript.cs" />
+    <Compile Include="Util\ItemDisplay.cs" />
   </ItemGroup>
   <ItemGroup>
     <ProjectReference Include="..\hellgate\Hellgate.csproj">
