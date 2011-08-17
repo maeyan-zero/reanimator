@@ -9,15 +9,66 @@ namespace MediaWiki.Articles
 {
     class ItemUpgrades : WikiScript
     {
-        public ItemUpgrades(FileManager manager) : base(manager)
+        public ItemUpgrades(FileManager manager) : base(manager,"item_upgrades")
         {
         }
 
         public override string ExportArticle()
         {
-            throw new NotImplementedException();
+            WikiTable table = new WikiTable(false, string.Empty, string.Empty,
+                "Upgrades",
+                "Success Rate",
+                "Nanoshards",
+                "Damage*",
+                "Shields",
+                "Armor",
+                "Feed Cost**"
+                );
+
+            DataTable itemUpgrade = Manager.GetDataTable("ITEMUPGRADE");
+            foreach (DataRow row in itemUpgrade.Rows)
+            {
+                table.AddRow(
+                    row["Index"].ToString(),
+                    "+" + row["damageMult"].ToString() + "%",
+                    "+" + row["shields"].ToString(),
+                    "+" + row["armor"].ToString(),
+                    "+" + row["feed"].ToString()
+                    );
+            }
+
+            return table.GetTableSyntax();
         }
 
+        public override string ExportTableInsertScript()
+        {
+            TableScript = new SQLTableScript("id", string.Empty,
+                "id INT NOT NULL",
+                "damage_mult INT NOT NULL",
+                "shields INT NOT NULL",
+                "armor INT NOT NULL",
+                "feed INT NOT NULL",
+                "required_nanoshards INT NOT NULL",
+                "success_rate INT NOT NULL"
+                );
+
+            DataTable itemUpgrade = Manager.GetDataTable("ITEMUPGRADE");
+            foreach (DataRow row in itemUpgrade.Rows)
+            {
+                TableScript.AddRow(
+                    row["Index"].ToString(),
+                    row["damageMult"].ToString(),
+                    row["shields"].ToString(),
+                    row["armor"].ToString(),
+                    row["feed"].ToString(),
+                    row["requiredNanoshardsa"].ToString(),
+                    row["successRate"].ToString()
+                    );
+            }
+
+            return TableScript.GetFullScript();
+        }
+        [Obsolete("This class is now using ExportTableInsertScript instead")]
         public override string ExportSchema()
         {
             var schema = "CREATE TABLE " + Prefix + "item_upgrades (\n" +
@@ -32,7 +83,7 @@ namespace MediaWiki.Articles
                          ");";
             return schema;
         }
-
+        [Obsolete("This class is now using ExportTableInsertScript instead")]
         public override string ExportTable()
         {
             DataTable itemUpgrade = Manager.GetDataTable("ITEMUPGRADE");

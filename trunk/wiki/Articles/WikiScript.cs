@@ -75,7 +75,7 @@ namespace MediaWiki.Articles
             builder.Append(name);
 
             if (pxWidth > 0)
-                builder.Append("|" + pxWidth);
+                builder.Append("|" + pxWidth + "px");
             if (isThumb)
                 builder.Append("|thumb");
             if (!String.IsNullOrWhiteSpace(caption))
@@ -122,7 +122,12 @@ namespace MediaWiki.Articles
             private StringBuilder tableBuilder = new StringBuilder();
             private StringBuilder insertBuilder = new StringBuilder();
 
-            public SQLTableScript(string primaryColumn, params string[] columns)
+            /// <summary>
+            /// Creates an instance of the SQLTableScript class
+            /// </summary>
+            /// <param name="primaryColumn">The primary key column</param>
+            /// <param name="columns">The name, datatype, and other attributes of each column to be created</param>
+            public SQLTableScript(string primaryColumn, string indexColumn, params string[] columns)
             {
                 columnCount = columns.Length;
 
@@ -134,7 +139,9 @@ namespace MediaWiki.Articles
                     tableBuilder.AppendLine(",");
                 }
                 if (!String.IsNullOrWhiteSpace(primaryColumn))
-                    tableBuilder.AppendLine("\tPRIMARY KEY(" + primaryColumn + ")");
+                    tableBuilder.AppendLine("\tPRIMARY KEY (" + primaryColumn + ")");
+                if (!String.IsNullOrWhiteSpace(indexColumn))
+                    tableBuilder.AppendLine("\tINDEX (" + indexColumn + ")");
 
                 tableBuilder.AppendLine(");");
             }
@@ -153,9 +160,14 @@ namespace MediaWiki.Articles
                     insertBuilder.AppendLine(",");
 
                 insertBuilder.Append("(");
+
                 for (int i = 0; i < values.Length; i++)
                 {
-                    insertBuilder.Append(values[i]);
+                    if (String.IsNullOrWhiteSpace(values[i]) || values[i] == "\"\"")
+                        insertBuilder.Append("''");
+                    else
+                        insertBuilder.Append(values[i]);
+
                     if (i < values.Length - 1)
                         insertBuilder.Append(", ");
                 }
@@ -181,6 +193,63 @@ namespace MediaWiki.Articles
             public string GetFullScript()
             {
                 return GetTableSchema() + GetInsertScript();
+            }
+        }
+
+        protected class WikiTable
+        {
+            int columnCount = 0;
+            private StringBuilder headerBuilder = new StringBuilder();
+            private StringBuilder rowBuilder = new StringBuilder();
+
+            /// <summary>
+            /// Creates an instance of the WikiTable class
+            /// </summary>
+            /// <param name="isSortable">Whether the columns in the table are sortable</param>
+            /// <param name="tableAttributes">Any table attributes, such as cell spacing or padding</param>
+            /// <param name="style">Any CSS style attributes to apply to the table</param>
+            /// <param name="columns">A list of columns to create in the table, including any style syntax or other attributes</param>
+            public WikiTable(bool isSortable, string tableAttributes, string style, params string[] columns)
+            {
+                headerBuilder.Append("{| class=\"wikitable");
+                if (isSortable)
+                    headerBuilder.Append(" sortable");
+                headerBuilder.Append("\"");
+
+                if (!String.IsNullOrWhiteSpace(tableAttributes))
+                    headerBuilder.Append(" " + tableAttributes);
+                if (!String.IsNullOrWhiteSpace(style))
+                    headerBuilder.Append(" style=\"" + style + "\"");
+                headerBuilder.AppendLine();
+
+                columnCount = columns.Length;
+                foreach (string column in columns)
+                {
+                    headerBuilder.AppendLine("!" + column);
+                }
+            }
+
+            public void AddRow(params string[] values)
+            {
+                if (values.Length != columnCount)
+                    throw new ArgumentException("Wrong number of row values");
+
+                rowBuilder.AppendLine("|-");
+                foreach (string value in values)
+                {
+                    rowBuilder.AppendLine("| " + value);
+                }
+            }
+
+            public string GetTableSyntax()
+            {
+                if (rowBuilder.Length > 0)
+                    rowBuilder.AppendLine("|}");
+
+                string table = headerBuilder.ToString() + rowBuilder.ToString();
+                rowBuilder.Clear();
+
+                return table;
             }
         }
     }
