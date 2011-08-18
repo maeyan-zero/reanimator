@@ -10,7 +10,8 @@ namespace MediaWiki.Parser
     public class Evaluator
     {
         public Unit Unit { get; set; }
-        public Game Game { get; set; }
+        public Game3 Game3 { get; set; }
+        public Game4 Game4 { get; set; }
         public Context Context { get; set; }
         public FileManager Manager { get; set; }
         public StatsList StatsList { get; set; }
@@ -260,6 +261,10 @@ namespace MediaWiki.Parser
                                     {
                                         mark = Token.Function;
                                         buffer.Add(expression[i]);
+                                    }
+                                    else if (cur == Token.Variable)
+                                    {
+                                        mark = Token.Variable;
                                     }
                                     else
                                     {
@@ -526,51 +531,101 @@ namespace MediaWiki.Parser
                 var opos = GetPosOperator(tokens, range);
 
                 // Merge arguements
-                if (opos == -2)
-                {
-                    for (int i = range.Start; i <= range.End; i++)
-                    {
-                        if (tokens[i].Mark != Token.Operator) continue;
-                        if (tokens[i - 1].Mark != Token.Range)
-                        {
-                            var val2 = tokens[i].ToString();
-                            var val3 = tokens[i + 1].ToString();
-                            tokens.RemoveAt(i);
-                            tokens.RemoveAt(i);
-                            var formula = val2 + val3;
-                            tokens.Insert(i, new Token(formula, Token.Formula));
-                        }
-                        else
-                        {
-                            var val1 = tokens[i - 1].ToString();
-                            var val2 = tokens[i].ToString();
-                            var val3 = tokens[i + 1].ToString();
-                            tokens.RemoveAt(i - 1);
-                            tokens.RemoveAt(i - 1);
-                            tokens.RemoveAt(i - 1);
-                            var formula = val1 + " " + val2 + " " + val3;
-                            tokens.Insert(i - 1, new Token(formula, Token.Formula));
-                        }
+                //if (opos == -2)
+                //{
+                //    for (int i = range.Start; i <= range.End; i++)
+                //    {
+                //        if (tokens[i].Mark != Token.Operator) continue;
 
-                        break;
-                    }
-                    continue;
-                }
+                //        if (tokens[i - 1].Mark != Token.Range)
+                //        {
+                //            var val2 = tokens[i].ToString();
+                //            var val3 = tokens[i + 1].ToString();
+                //            tokens.RemoveAt(i);
+                //            tokens.RemoveAt(i);
+                //            var formula = val2 + val3;
+                //            tokens.Insert(i, new Token(formula, Token.Formula));
+                //        }
+                //        else
+                //        {
+                //            var val1 = tokens[i - 1].ToString();
+                //            var val2 = tokens[i].ToString();
+                //            var val3 = tokens[i + 1].ToString();
+                //            tokens.RemoveAt(i - 1);
+                //            tokens.RemoveAt(i - 1);
+                //            tokens.RemoveAt(i - 1);
+                //            var formula = val1 + " " + val2 + " " + val3;
+                //            tokens.Insert(i - 1, new Token(formula, Token.Formula));
+                //        }
+
+                //        break;
+                //    }
+                //    continue;
+                //}
 
                 // If one does, perform operand method
+                Token token;
                 if (opos > -1)
                 {
                     var op = tokens[opos].ToString();
 
                     // Check that negation is applied
-                    if (op.Equals("-") && tokens[opos - 1].Mark != Token.Number)
+                    if (op.Equals("-") && (opos == 0 || tokens[opos - 1].Mark != Token.Number))
                     {
+                        if (tokens[opos + 1].Mark == Token.Range)
+                        {
+                            range = (Range) tokens[opos + 1].Symbol;
+                            range = new Range(-range.Start, -range.End);
+                            tokens.RemoveAt(opos);
+                            tokens.RemoveAt(opos);
+                            tokens.Insert(opos, new Token(range, Token.Range));
+                            RemoveParentheses(tokens, opos);
+                            continue;
+                        }
+
                         var num = (Double) tokens[opos + 1].Symbol;
-                        num = num - (num*2); // inverse
+                        num = -num; // inverse
                         tokens.RemoveAt(opos);
                         tokens.RemoveAt(opos);
                         tokens.Insert(opos, new Token(num, Token.Number));
                         RemoveParentheses(tokens, opos);
+                        continue;
+                    }
+
+                    // Check for logical not
+                    if (op.Equals("!"))
+                    {
+                        if (tokens[opos + 1].Mark == Token.Boolean)
+                        {
+                            var num = (bool)tokens[opos + 1].Symbol;
+                            num = !num;
+                            token = new Token(num, Token.Boolean);
+                        }
+                        else
+                        {
+                            var num = Double.Parse(tokens[opos + 1].Symbol.ToString());
+                            num = num + -(num * 2);
+                            token = new Token(num, Token.Number);
+                        }
+                        
+                        tokens.RemoveAt(opos);
+                        tokens.RemoveAt(opos);
+                        tokens.Insert(opos, token);
+                        RemoveParentheses(tokens, opos);
+                        continue;
+                    }
+
+                    // if both sides are not numbers, then concat into a formulae
+                    if ((tokens[opos - 1].Mark != Token.Boolean && tokens[opos - 1].Mark != Token.Number) || (tokens[opos + 1].Mark != Token.Number && tokens[opos + 1].Mark != Token.Boolean))
+                    {
+                        var f1 = tokens[opos - 1].ToString();
+                        var f2 = tokens[opos].ToString();
+                        var f3 = tokens[opos + 1].ToString();
+                        tokens.RemoveAt(opos - 1);
+                        tokens.RemoveAt(opos - 1);
+                        tokens.RemoveAt(opos - 1);
+                        var formula = f1 + " " + f2 + " " + f3;
+                        tokens.Insert(opos - 1, new Token(formula, Token.Formula));
                         continue;
                     }
 
@@ -654,7 +709,7 @@ namespace MediaWiki.Parser
                 // Make function call
                 var func = (String) tokens[open - 1].Symbol;
 
-                var token = ApplyFunction(func, dargs);
+                token = ApplyFunction(func, dargs);
 
                 // Remove function, replace with result
                 var pos = open - 1;
@@ -673,8 +728,12 @@ namespace MediaWiki.Parser
         {
             switch (reference)
             {
+                case "context":
+                    return Context;
+                case "game3":
+                    return Game3;
                 case "game4":
-                    return Game;
+                    return Game4;
                 case "unit":
                     return Unit;
                 case "statslist":
@@ -686,39 +745,79 @@ namespace MediaWiki.Parser
 
         private static Token ApplyOperator(string symbol, params object[] param)
         {
+            // convert params to bool if need be
+            if (param[0] is bool && !(param[1] is bool) || !(param[0] is bool) && param[1] is bool)
+            {
+                if (!(param[0] is bool))
+                {
+                    param[0] = Double.Parse(param[0].ToString()) > 0;
+                }
+                else
+                {
+                    param[1] = Double.Parse(param[1].ToString()) > 0;
+                }
+            }
+            bool isBoolean = (param[0] is bool && param[1] is bool);
+
+            object result;
+
+            if (isBoolean)
+            {
+                var boo1 = (bool)param[0];
+                var boo2 = (bool)param[1];
+
+                switch (symbol)
+                {
+                    case "&&":
+                        result = boo1 && boo2;
+                        return new Token(result, Token.Boolean);
+                    case "||":
+                        result = boo1 || boo2;
+                        return new Token(result, Token.Boolean);
+                    default:
+                        throw new Exception("Invalid operator: " + symbol);
+                }
+            }
+
             var isDouble = (param[0].ToString().Contains(".") || param[1].ToString().Contains("."));
             var val1 = (isDouble) ? Double.Parse(param[0].ToString()) : Int32.Parse(param[0].ToString());
             var val2 = (isDouble) ? Double.Parse(param[1].ToString()) : Int32.Parse(param[1].ToString());
-            object result;
 
             switch (symbol)
             {
                 case "+":
                     result = val1 + val2;
-                    break;
+                    return new Token(result, Token.Number);
                 case "-":
                     result = val1 - val2;
-                    break;
+                    return new Token(result, Token.Number);
                 case "*":
                     result = val1 * val2;
-                    break;
+                    return new Token(result, Token.Number);
                 case "/":
                     result = val1 / val2;
-                    break;
+                    return new Token(result, Token.Number);
                 case ">":
                     result = val1 > val2;
-                    break;
+                    return new Token(result, Token.Boolean);
                 case "<":
                     result = val1 < val2;
-                    break;
+                    return new Token(result, Token.Boolean);
                 case "==":
                     result = Equals(val1, val2);
-                    break;
+                    return new Token(result, Token.Boolean);
+                case "!=":
+                    result = !Equals(val1, val2);
+                    return new Token(result, Token.Boolean);
+                case "&&":
+                    result = val1 > 0 && val2 > 0;
+                    return new Token(result, Token.Boolean);
+                case "||":
+                    result = val1 > 0 || val2 > 0;
+                    return new Token(result, Token.Boolean);
                 default:
                     throw new Exception("Invalid operator: " + symbol);
             }
-
-            return new Token(result, Token.Number);
         }
 
         private Token ApplyPointerMethod(string var, string method, params object[] param)
@@ -754,6 +853,41 @@ namespace MediaWiki.Parser
             object result;
             switch (func)
             {
+                case "total":
+                    var total = Unit.GetStatCount(param[1].ToString());
+                    return new Token(total, Token.Number);
+
+                case "isa":
+                    var isa = (param[0].ToString() == param[1].ToString());
+                    return new Token(isa, Token.Boolean);
+
+                case "meetsitemreqs":
+                    // we arn't going this far, just return true.
+                    return new Token(true, Token.Boolean);
+
+                case "use_state_duration":
+                    // we arn't going this far, just return 0.
+                    return new Token(0, Token.Number);
+
+                case "getStatsOnStateSet":
+                    // we arn't going this far, just return false.
+                    return new Token(false, Token.Boolean);
+
+                case "has_use_skill":
+                    //todo
+                    return new Token(false, Token.Boolean);
+
+                case "getItemStateDuration":
+                    return new Token(0, Token.Number);
+
+                case "pct":
+                    double result1;
+                    double result2;
+                    if (!Double.TryParse(param[0].ToString(), out result1) || !Double.TryParse(param[1].ToString(), out result2))
+                        return new Token(param[0], Token.Formula);
+
+                    return new Token(result1 / result2, Token.Number);
+
                 case "thorns_dmg_toxic_monster":
                 case "thorns_dmg_elec_monster":
                 case "thorns_dmg_spec_monster":
@@ -763,66 +897,79 @@ namespace MediaWiki.Parser
                         throw new Exception("Illegal number of parameters for thorns_dmg_phys_monster function.");
                     Unit.SetStat("thorns_dmg_phys_monster", param[0]);
                     return new Token(param[0], Token.Number);
+
                 case "monster_level_sfx_attack":
                     if (param.Length != 1)
                         throw new Exception("Illegal number of parameters for monster_level_sfx_attack function.");
                     Unit.SetStat("monster_level_sfx_attack", param[0]);
                     return new Token(param[0], Token.Number);
+
                 case "monster_level_shields":
                     if (param.Length != 1)
                         throw new Exception("Illegal number of parameters for monster_level_shields function.");
                     Unit.SetStat("set_shield_bonus", param[0]);
                     return new Token(param[0], Token.Number);
+
                 case "pickskill":
                     if (param.Length != 3)
                         throw new Exception("Illegal number of parameters for pickskill function.");
                     //Unit.SetStat("thorns_dmg_toxic_item", param[0]);
                     return new Token("RANDOM SKILL", Token.Number);
+
                 case "pickskillbyunittype":
                     if (param.Length != 4)
                         throw new Exception("Illegal number of parameters for pickskillbyunittype function.");
                     //Unit.SetStat("thorns_dmg_toxic_item", param[0]);
                     return new Token("RANDOM " + param[2] + " SKILL", Token.Number);
+
                 case "pickskillbyskillgroup":
                     if (param.Length != 4)
                         throw new Exception("Illegal number of parameters for pickskillbyskillgroup function.");
                     //Unit.SetStat("thorns_dmg_toxic_item", param[0]);
                     return new Token("RANDOM " + param[2] + " SKILL", Token.Number);
+
                 case "thorns_dmg_toxic_item":
                     if (param.Length != 1)
                         throw new Exception("Illegal number of parameters for thorns_dmg_toxic_item function.");
                     Unit.SetStat("thorns_dmg_toxic_item", param[0]);
                     return new Token(param[0], Token.Number);
+
                 case "thorns_dmg_spec_item":
                     if (param.Length != 1)
                         throw new Exception("Illegal number of parameters for thorns_dmg_spec_item function.");
                     Unit.SetStat("thorns_dmg_spec_item", param[0]);
                     return new Token(param[0], Token.Number);
+
                 case "thorns_dmg_elec_item":
                     if (param.Length != 1)
                         throw new Exception("Illegal number of parameters for thorns_dmg_elec_item function.");
                     Unit.SetStat("thorns_dmg_elec_item", param[0]);
                     return new Token(param[0], Token.Number);
+
                 case "thorns_dmg_fire_item":
                     if (param.Length != 1)
                         throw new Exception("Illegal number of parameters for thorns_dmg_fire_item function.");
                     Unit.SetStat("thorns_dmg_fire_item", param[0]);
                     return new Token(param[0], Token.Number);
+
                 case "thorns_dmg_phys_item":
                     if (param.Length != 1)
                         throw new Exception("Illegal number of parameters for thorns_dmg_phys_item function.");
                     Unit.SetStat("thorns_dmg_phys_item", param[0]);
                     return new Token(param[0], Token.Number);
+
                 case "set_shield_bonus":
                     if (param.Length != 2)
                         throw new Exception("Illegal number of parameters for set_shield_bonus function.");
                     Unit.SetStat("set_shield_bonus", param[0]);
                     return new Token(param[0], Token.Number);
+
                 case "set_armor_bonus":
                     if (param.Length != 2)
                         throw new Exception("Illegal number of parameters for set_armor_bonus function.");
                     Unit.SetStat("set_armor_bonus", param[0]);
                     return new Token(param[0], Token.Number);
+
                 case "item_level_sfx_defense":
                     if (param.Length != 1)
                         throw new Exception("Illegal number of parameters for item_level_sfx_defense function.");
@@ -830,16 +977,19 @@ namespace MediaWiki.Parser
                     var level = (int) param[0];
                     var sfxDefence = (int) itemLevels.Rows[level]["sfxDefenceAbility"];
                     return new Token(sfxDefence, Token.Number);
+
                 case "pow_regen_per_min":
                     if (param.Length != 1)
                         throw new Exception("Illegal number of parameters for pow_regen_per_min function.");
                     Unit.SetStat("pow_regen_per_min", param[0]);
                     return new Token(param[0], Token.Number);
+
                 case "hp_regen_per_min":
                     if (param.Length != 1)
                         throw new Exception("Illegal number of parameters for hp_regen_per_min function.");
                     Unit.SetStat("hp_regen_per_min", param[0]);
                     return new Token(param[0], Token.Number);
+
                 case "all_stats_bonus":
                     if (param.Length != 1)
                         throw new Exception("Illegal number of parameters for all_stats_bonus function.");
@@ -849,31 +999,41 @@ namespace MediaWiki.Parser
                     Unit.SetStat("willpower_bonus", bonus);
                     Unit.SetStat("stamina_bonus", bonus);
                     return new Token(bonus, Token.Number);
+
                 case "item_level_sfx_attack":
                     if (param.Length != 1)
                         throw new Exception("Illegal number of parameters for item_level_sfx_attack function.");
+
+                    level = (int)param[0];
+
+                    // item level 0 means no level was specified, return a formulae part
+                    if (level == 0) return new Token("item_level_sfx_attack", Token.Formula);
+
+                    // otherwise we can retrieve it.
                     itemLevels = Manager.GetDataTable("ITEM_LEVELS");
-                    level = (int) param[0];
                     var sfxAttack = (int) itemLevels.Rows[level]["sfxAttackAbility"];
                     return new Token(sfxAttack, Token.Number);
+
                 case "rand":
-                    if (param.Length != 3)
-                        throw new Exception("Illegal number of parameters for rand function.");
-                    return new Token("(" + param[1] + "~" + param[2] + ")", Token.Range);
+                    return new Token(new Range(Int32.Parse(param[1].ToString()), Int32.Parse(param[2].ToString())), Token.Range);
+                
                 case "GetStat666":
+                case "GetStat667":
+                case "GetStat680":
                     switch (param.Length)
                     {
                         case 1:
                             result = Unit.GetStat(param[0].ToString());
-                            if (result != null) return new Token(result, Token.Number);
-                            if (param[0].ToString().Equals("level")) return new Token("item_level", Token.Range);
-                            throw new Exception("Unhandled null GetStat stat: " + param[0]);
+                            if (result is Range)
+                                return new Token(result, Token.Range);
+                            return new Token(result, Token.Number);
                         case 2:
                             result = Unit.GetStat(param[0].ToString(), param[1].ToString());
                             return new Token(result, Token.Number);
                         default:
                             throw new Exception("Illegal number of parameters for GetStat666");
                     }
+
                 case "SetStat669":
                 case "SetStat673":
                     switch (param.Length)
@@ -887,6 +1047,7 @@ namespace MediaWiki.Parser
                         default:
                             throw new Exception("Illegal number of parameters for GetStat666");
                     }
+
                 default:
                     throw new Exception("Unknown function: " + func);
             }
@@ -979,11 +1140,11 @@ namespace MediaWiki.Parser
             for (var i = r.Start; i < r.End; i++)
             {
                 if (tokens[i].Mark != Token.Operator) continue;
-                if (tokens[i - 1].Mark != Token.Number || tokens[i + 1].Mark != Token.Number)
-                {
-                    if (opPosition == -1) opPosition = -2;
-                    continue;
-                }
+                //if (tokens[i - 1].Mark != Token.Number || tokens[i + 1].Mark != Token.Number)
+                //{
+                //    if (opPosition == -1) opPosition = -2;
+                //    continue;
+                //}
                 switch (tokens[i].ToString())
                 {
                     case "*":
@@ -994,6 +1155,7 @@ namespace MediaWiki.Parser
                         break;
                     case "+":
                     case "-":
+                    case "!":
                         if (4 >= priority) continue;
                         priority = 4;
                         break;
@@ -1008,6 +1170,14 @@ namespace MediaWiki.Parser
                     case "!=":
                         if (7 >= priority) continue;
                         priority = 7;
+                        break;
+                    case "&&":
+                        if (13 >= priority) continue;
+                        priority = 13;
+                        break;
+                    case "||":
+                        if (14 >= priority) continue;
+                        priority = 14;
                         break;
                     default:
                         throw new Exception("Unhandled priority for operator " + tokens[i]);
@@ -1066,6 +1236,11 @@ namespace MediaWiki.Parser
             {
                 Start = start;
                 End = end;
+            }
+
+            public override string ToString()
+            {
+                return Start + "~" + End;
             }
         }
 

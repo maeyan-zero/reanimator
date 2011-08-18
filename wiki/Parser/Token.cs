@@ -25,6 +25,7 @@ namespace MediaWiki.Parser
         public const char Else = 'E';
         public const char Range = 'R';
         public const char Formula = 'f';
+        public const char Boolean = 'b';
 
         public object Symbol { get; private set; }
         public char Mark { get; private set; }
@@ -49,6 +50,8 @@ namespace MediaWiki.Parser
                 case '>':
                 case '&':
                 case '=':
+                case '!':
+                case '|':
                     return Operator;
                 case '$':
                     return Variable;

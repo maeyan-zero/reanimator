@@ -28,13 +28,34 @@ namespace MediaWiki.Parser.Class
 
 	    public object GetStat(string label)
 	    {
-	        return !Stats.ContainsKey(label) ? null : Stats[label];
+	        return !Stats.ContainsKey(label) ? 0 : Stats[label];
 	    }
 
         public object GetStat(string label1, string label2)
         {
-		    if (!Stats.ContainsKey(label1)) return null;
-            return !((Dictionary<object, object>) Stats[label1]).ContainsKey(label2) ? null : ((Dictionary<object, object>) Stats[label1])[label2];
+		    if (!Stats.ContainsKey(label1)) return 0;
+            return !((Dictionary<string, object>) Stats[label1]).ContainsKey(label2) ? 0 : ((Dictionary<string, object>) Stats[label1])[label2];
+        }
+
+        public int GetStatCount(string label)
+        {
+            return !Stats.ContainsKey(label) ? 0 : ((Dictionary<string, object>) Stats[label]).Count;
+        }
+
+        public string GetStatParam(string label)
+        {
+            if (!Stats.ContainsKey(label)) return string.Empty;
+            string[] keys = new string[1];
+            ((Dictionary<string, object>)Stats[label]).Keys.CopyTo(keys, 0);
+            return keys[0];
+        }
+
+        public object GetStatValue(string label)
+        {
+            if (!Stats.ContainsKey(label)) return string.Empty;
+            string[] keys = new string[1];
+            ((Dictionary<string, object>)Stats[label]).Keys.CopyTo(keys, 0);
+            return ((Dictionary<string, object>)Stats[label])[keys[0]];
         }
     }
 }
