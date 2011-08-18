@@ -51,7 +51,9 @@
     <Compile Include="Articles\Monsters.cs" />
     <Compile Include="Articles\Treasure.cs" />
     <Compile Include="Parser\Class\Context.cs" />
-    <Compile Include="Parser\Class\Game.cs" />
+    <Compile Include="Parser\Class\Game3.cs" />
+    <Compile Include="Parser\Class\Game4.cs" />
+    <Compile Include="Parser\Class\Item.cs" />
     <Compile Include="Parser\Class\StatsList.cs" />
     <Compile Include="Parser\Class\Unit.cs" />
     <Compile Include="Parser\Evaluator.cs" />

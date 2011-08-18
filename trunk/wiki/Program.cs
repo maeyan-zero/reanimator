@@ -1,8 +1,6 @@
 ﻿using System;
 using System.Data;
-using System.Diagnostics;
 using System.IO;
-using System.Linq;
 using Hellgate;
 using MediaWiki.Articles;
 using MediaWiki.Parser;
@@ -19,50 +17,32 @@ namespace MediaWiki
             manager.LoadTableFiles();
             manager.EndAllDatAccess();
 
-            //PrintClassPlanner(manager);
-            //return;
-            //var achievements = new Achievements(manager);
-            //Debug.Write(achievements.ExportArticle());
-            //return;
-            //var affixes = manager.GetDataTable("AFFIXES");
+            //string testcase = "GetStat666('accuracy_bonus') > 0 && (GetStat666('accuracy_bonus') == GetStat666('strength_bonus') && GetStat666('strength_bonus') == GetStat666('stamina_bonus') && GetStat666('stamina_bonus') == GetStat666('willpower_bonus'));";
             //Evaluator evaluator = new Evaluator();
-            //evaluator.Manager = manager;
-            //foreach (DataRow affix in affixes.Rows)
-            //{
-            //    Unit unit = new Unit();
-            //    string property1 = affix["property1"] as string;
-            //    if (property1 == null || property1.Equals(String.Empty)) continue;
-            //    unit.SetStat("level", 30);
-            //    evaluator.Unit = unit;
-
-            //    if ((int) affix["Index"] == 134)
-            //    {
-            //        int breakpoint = 0;
-            //        breakpoint++;
-            //    }
-            //    var result = evaluator.Evaluate(property1);
-            //    Debug.WriteLine(affix["Index"] + ": " + result[0]);
-            //}
-
-            //var itemUpgrades = new ItemUpgrades(manager);
-            //var sqlSchema = itemUpgrades.ExportSchema();
-            //var sqlTable = itemUpgrades.ExportTable();
-            //File.WriteAllLines("itemUpgrades.sql", new[] { sqlSchema, sqlTable });
-
-            var items = new Items(manager);
-            var sqlTable = items.ExportTable();
-
-            //var monsters = new Monsters(manager);
-            //sqlSchema = monsters.ExportSchema();
-            //sqlTable = monsters.ExportTable();
-            //File.WriteAllLines("monsters.sql", new[] { sqlSchema, sqlTable });
-
-            var treasure = new Treasure(manager);
-            //sqlSchema = treasure.ExportSchema();
-            //sqlTable = treasure.ExportTable();
-            Debug.Write(Treasure.GetTreasureTable(641));
+            //evaluator.Unit = new Item();
+            //evaluator.Game3 = new Game3();
+            //var result = evaluator.Evaluate(testcase);
             
-            //File.WriteAllLines("treasure.sql", new[] { sqlSchema, sqlTable });
+            args = new[] {"AFFIXES"};
+
+            foreach (string arg in args)
+            {
+                string sqlStatement;
+                switch (arg)
+                {
+                    case "AFFIXES":
+                        var affixes = new Affixes(manager);
+                        sqlStatement = affixes.ExportTableInsertScript();
+                        break;
+                    case "MONSTERS":
+                        var monsters = new Monsters(manager);
+                        sqlStatement = monsters.ExportTableInsertScript();
+                        break;
+                    default:
+                        throw new Exception("Unknown WikiScript: " + arg);
+                }
+                File.WriteAllText(arg.ToLower() + ".sql", sqlStatement);
+            }
 
             return;
         }
