@@ -39,23 +39,6 @@ namespace MediaWiki.Articles
             throw new NotImplementedException();
         }
 
-        public string ExportSQL()
-        {
-            return ExportSchema() + "\n" + ExportTable();
-        }
-
-        /// <summary>
-        /// Exports a database schema for storing our hellgate data.
-        /// </summary>
-        /// <returns></returns>
-        public abstract string ExportSchema();
-
-        /// <summary>
-        /// Exports a sql script to insert all of the data into the generated schema.
-        /// </summary>
-        /// <returns></returns>
-        public abstract string ExportTable();
-
         /// <summary>
         /// Formats a string as a wikimedia link.
         /// </summary>

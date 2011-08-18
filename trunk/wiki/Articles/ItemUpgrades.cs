@@ -26,18 +26,21 @@ namespace MediaWiki.Articles
                 );
 
             DataTable itemUpgrade = Manager.GetDataTable("ITEMUPGRADE");
+            string style = "style=\"text-align:center\"| ";
             foreach (DataRow row in itemUpgrade.Rows)
             {
                 table.AddRow(
-                    row["Index"].ToString(),
-                    "+" + row["damageMult"].ToString() + "%",
-                    "+" + row["shields"].ToString(),
-                    "+" + row["armor"].ToString(),
-                    "+" + row["feed"].ToString()
+                    style + row["Index"].ToString(),
+                    style + "+" + row["damageMult"].ToString() + "%",
+                    style + "+" + row["shields"].ToString(),
+                    style + "+" + row["armor"].ToString(),
+                    style + "+" + row["feed"].ToString()
                     );
             }
 
-            return table.GetTableSyntax();
+            return table.GetTableSyntax() + "\n\n" +
+                @"<nowiki>* This number isn't a direct increase, but is used in a calculation that also takes item level and rarity into account</nowiki><br />
+                  <nowiki>** The increased cost is split between each feed on the item</nowiki>";
         }
 
         public override string ExportTableInsertScript()
@@ -67,44 +70,6 @@ namespace MediaWiki.Articles
             }
 
             return TableScript.GetFullScript();
-        }
-        [Obsolete("This class is now using ExportTableInsertScript instead")]
-        public override string ExportSchema()
-        {
-            var schema = "CREATE TABLE " + Prefix + "item_upgrades (\n" +
-                         "\tid INT NOT NULL,\n" +
-                         "\tdamage_mult INT NOT NULL,\n" +
-                         "\tshields INT NOT NULL,\n" +
-                         "\tarmor INT NOT NULL,\n" +
-                         "\tfeed INT NOT NULL,\n" +
-                         "\trequired_nanoshards INT NOT NULL,\n" +
-                         "\tsuccess_rate INT NOT NULL,\n" +
-                         "\tPRIMARY KEY(id)\n" +
-                         ");";
-            return schema;
-        }
-        [Obsolete("This class is now using ExportTableInsertScript instead")]
-        public override string ExportTable()
-        {
-            DataTable itemUpgrade = Manager.GetDataTable("ITEMUPGRADE");
-            var builder = new StringBuilder();
-            builder.AppendLine("INSERT INTO " + Prefix + "item_upgrades");
-            builder.AppendLine("VALUES");
-            foreach (DataRow row in itemUpgrade.Rows)
-            {
-                builder.Append("(");
-                builder.Append(row["Index"] + ", ");
-                builder.Append(row["damageMult"] + ", ");
-                builder.Append(row["shields"] + ", ");
-                builder.Append(row["armor"] + ", ");
-                builder.Append(row["feed"] + ", ");
-                builder.Append(row["requiredNanoshardsa"] + ", ");
-                builder.Append("\"" + row["successRate"] + "%\"");
-                builder.AppendLine("),");
-            }
-            builder.Remove(builder.Length - 3, 3);
-            builder.AppendLine(";");
-            return builder.ToString();
         }
     }
 }
