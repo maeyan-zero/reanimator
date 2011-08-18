@@ -21,13 +21,11 @@ namespace MediaWiki.Articles
             throw new NotImplementedException();
         }
 
-        public override string ExportSchema()
+        public override string ExportTableInsertScript()
         {
-            throw new NotImplementedException();
-        }
+            //schema goes here
 
-        public override string ExportTable()
-        {
+            //insert info
             var builder = new StringBuilder();
             var items = Manager.GetDataTable("ITEMS");
             var affixTable = Manager.GetDataTable("AFFIXES");
@@ -36,13 +34,13 @@ namespace MediaWiki.Articles
             evaluator.Unit = unit;
             ItemDisplay.Manager = Manager;
             int animater = 1261;
-            string affixes = (string) items.Rows[animater]["affix"];
+            string affixes = (string)items.Rows[animater]["affix"];
             string[] split = affixes.Split(',');
             foreach (var t in split)
             {
                 var affix = int.Parse(t);
                 if (affix == -1) break;
-                var script = (string) affixTable.Rows[affix]["property1"];
+                var script = (string)affixTable.Rows[affix]["property1"];
                 if (String.IsNullOrEmpty(script)) continue;
                 evaluator.Evaluate(script);
             }

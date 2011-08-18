@@ -7,7 +7,8 @@ namespace MediaWiki.Articles
 {
     public class Treasure : WikiScript
     {
-        public Treasure(FileManager manager) : base(manager)
+        public Treasure(FileManager manager)
+            : base(manager, "treasure")
         {
         }
 
@@ -16,39 +17,27 @@ namespace MediaWiki.Articles
             throw new NotImplementedException();
         }
 
-        public override string ExportSchema()
+        public override string ExportTableInsertScript()
         {
-            var builder = new StringBuilder();
-            builder.AppendLine("CREATE TABLE " + Prefix + "treasure (");
-            builder.Append("\t");
-            builder.AppendLine("id INT NOT NULL,");
-            builder.Append("\t");
-            builder.AppendLine("loot TEXT,");
-            builder.Append("\t");
-            builder.AppendLine("PRIMARY KEY (id)");
-            builder.AppendLine(");");
-            return builder.ToString();
-        }
+            TableScript = new SQLTableScript("id", string.Empty,
+                "id INT NOT NULL",
+                "loot TEXT"
+                );
 
-        public override string ExportTable()
-        {
-            var monsters = Manager.GetDataTable("TREASURE");
-            var builder = new StringBuilder();
-            builder.AppendLine("INSERT INTO " + Prefix + "treasure");
-            builder.AppendLine("VALUES");
-            foreach (DataRow row in monsters.Rows)
+            var treasure = Manager.GetDataTable("TREASURE");
+
+            foreach (DataRow row in treasure.Rows)
             {
-                builder.Append("\t");
-                builder.Append("(");
-                builder.Append(row["Index"] + ",");
-                builder.Append(GetSqlEncapsulatedString(GetTreasureTable((int) row["Index"])));
-                builder.AppendLine("),");
+                TableScript.AddRow(
+                    row["Index"].ToString(),
+                    GetSqlEncapsulatedString(GetTreasureTable((int)row["Index"]))
+                    );
             }
-            builder.Remove(builder.Length - 3, 3);
-            builder.AppendLine(";");
-            return builder.ToString();
+
+            return TableScript.GetFullScript();
         }
 
+        //TODO: somehow make this play nice with the DB wiki extension so it displays properly
         /// <summary>
         /// Prints the drop table of the given entity. The drop table is formatted for use with the TreeView extension.
         /// </summary>

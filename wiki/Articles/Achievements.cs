@@ -94,7 +94,7 @@ namespace MediaWiki.Articles
 
                     var icon = skills.Rows[s]["largeIcon"].ToString();
 
-                    skillFile =  "\""+icon + ".png\"";
+                    skillFile =  "\"[[File: "+icon + ".png|40px]]\"";
                     skillText = "\"" + skill + "\"";
                 }
                 else
@@ -110,73 +110,6 @@ namespace MediaWiki.Articles
             }
 
             return TableScript.GetFullScript();
-        }
-
-        [Obsolete("This class is now using ExportTableInsertScript instead")]
-        public override string ExportSchema()
-        {
-            var schema = "DROP TABLE IF EXISTS " + FullTableName + ";\n" +
-            "CREATE TABLE " + FullTableName + @" (
-             id INT NOT NULL,
-             name TEXT NOT NULL,
-             description TEXT NOT NULL,
-             skill_file TEXT,
-             skill_text TEXT,
-             title TEXT,
-             PRIMARY KEY(id)
-             );";
-            return schema;
-        }
-        [Obsolete("This class is now using ExportTableInsertScript instead")]
-        public override string ExportTable()
-        {
-            var achievements = Manager.GetDataTable("ACHIEVEMENTS");
-            var skills = Manager.GetDataTable("SKILLS");
-
-            var builder = new StringBuilder();
-            builder.AppendLine("INSERT INTO " + FullTableName);
-            builder.AppendLine("VALUES");
-
-            foreach (DataRow row in achievements.Rows)
-            {
-                builder.Append("(");
-                builder.Append(row["code"] + ", ");
-                builder.Append("\""+row["nameString_string"] + "\", ");
-
-                var descrip = row["descripFormatString_string"].ToString();
-                descrip = descrip.Replace("[completenum]", String.Format("{0:#,0}", row["completeNumber"]));
-                descrip = descrip.Replace("[param1]", String.Format("{0:#,0}", (int)row["param1"] / 20));
-                builder.Append("\"" + descrip + "\", ");
-
-                if ((int)row["rewardSkill"] != -1)
-                {
-                    var s = (int)row["rewardSkill"];
-                    var skill = skills.Rows[s]["effectString_string"].ToString();
-                    var var = skills.Rows[s]["skillVar1"].ToString();
-                    var = var.Replace(";", "");
-                    skill = skill.Replace("[string2]", var);
-
-                    var icon = skills.Rows[s]["largeIcon"].ToString();
-                    icon += ".png";
-
-                    builder.Append("\"" + icon + "\", ");
-                    builder.Append("\"" + skill + "\", ");
-                }
-                else
-                {
-                    builder.Append("'', ");
-                    builder.Append("'', ");
-                }
-
-                var title = row["rewardTitle_string"].ToString();
-                title = title.Replace("[PLAYERNAME]", "").Trim();
-
-                builder.Append("\"" + title + "\"");
-                builder.AppendLine("),");
-            }
-            builder.Remove(builder.Length - 3, 3);
-            builder.AppendLine(";");
-            return builder.ToString();
         }
     }
 }

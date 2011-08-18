@@ -14,13 +14,7 @@ namespace MediaWiki.Articles
         {
             throw new NotImplementedException();
         }
-
-        public override string ExportSchema()
-        {
-            throw new NotImplementedException();
-        }
-
-        public override string ExportTable()
+        public override string ExportTableInsertScript()
         {
             var builder = new StringBuilder();
             var items = Manager.GetDataTable("ITEMS");
