@@ -8,9 +8,9 @@ namespace MediaWiki.Articles
     public abstract class WikiScript
     {
         protected static FileManager Manager;
-        
-        protected static String Prefix = "";
-        protected static string TableName = string.Empty;
+
+        private static String Prefix = "";
+        private static string TableName = string.Empty;
         protected static SQLTableScript TableScript = null;
         protected static string FullTableName
         {
@@ -34,10 +34,7 @@ namespace MediaWiki.Articles
         /// Exports a SQL script containing the table schema (including recreating the table) and row inserting
         /// </summary>
         /// <returns></returns>
-        public virtual string ExportTableInsertScript()
-        {
-            throw new NotImplementedException();
-        }
+        public abstract string ExportTableInsertScript();
 
         /// <summary>
         /// Formats a string as a wikimedia link.
@@ -50,7 +47,7 @@ namespace MediaWiki.Articles
             return "[[" + name + "]]";
         }
 
-        protected static string GetImage(string name, int pxWidth, bool isThumb = false, string caption = "")
+        protected static string GetImage(string name, int pxWidth = 0, bool isThumb = false, string caption = "")
         {
             if (String.IsNullOrWhiteSpace(name)) return string.Empty;
             System.Text.StringBuilder builder = new System.Text.StringBuilder();
@@ -122,10 +119,13 @@ namespace MediaWiki.Articles
                     tableBuilder.AppendLine(",");
                 }
                 if (!String.IsNullOrWhiteSpace(primaryColumn))
-                    tableBuilder.AppendLine("\tPRIMARY KEY (" + primaryColumn + ")");
+                    tableBuilder.Append("\tPRIMARY KEY (" + primaryColumn + ")");
                 if (!String.IsNullOrWhiteSpace(indexColumn))
-                    tableBuilder.AppendLine("\tINDEX (" + indexColumn + ")");
-
+                {
+                    tableBuilder.AppendLine(",");
+                    tableBuilder.Append("\tINDEX (" + indexColumn + ")");
+                }
+                tableBuilder.AppendLine();
                 tableBuilder.AppendLine(");");
             }
 
