@@ -1,6 +1,8 @@
 ﻿using System;
+using System.Collections.Generic;
 using System.Data;
 using System.Diagnostics;
+using System.Linq;
 using System.Text;
 using Hellgate;
 using MediaWiki.Parser;
@@ -31,6 +33,7 @@ namespace MediaWiki.Articles
 
             Evaluator evaluator = new Evaluator();
             ItemDisplay.Manager = Manager;
+            evaluator.Manager = Manager;
 
             foreach (DataRow row in affixes.Rows)
             {
@@ -45,9 +48,9 @@ namespace MediaWiki.Articles
                 id = row["Index"].ToString();
                 code = GetSqlEncapsulatedString(((int)row["code"]).ToString("X"));
                 magicName = GetSqlEncapsulatedString(row["magicNameString_string"].ToString());
-                displayString = GetSqlEncapsulatedString(displayStrings.Length == 0 ? String.Empty : displayStrings[0]);
+                displayString = GetSqlEncapsulatedString(FormatAffixList(displayStrings));
 
-                Debug.WriteLine(displayString);
+                Debug.WriteLine(id + ", " + row["affix"] + ", " + displayString);
 
                 table.AddRow(id, code, magicName, displayString);
             }
@@ -55,6 +58,11 @@ namespace MediaWiki.Articles
             return table.GetFullScript();
         }
 
+        private string FormatAffixList(string[] affixes)
+        {
+            string list = affixes.Aggregate(string.Empty, (current, affix) => current + affix + ", ");
+            return list;
+        }
 
         public override string ExportArticle()
         {

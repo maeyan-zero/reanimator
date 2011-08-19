@@ -616,7 +616,7 @@ namespace MediaWiki.Parser
                     }
 
                     // if both sides are not numbers, then concat into a formulae
-                    if ((tokens[opos - 1].Mark != Token.Boolean && tokens[opos - 1].Mark != Token.Number) || (tokens[opos + 1].Mark != Token.Number && tokens[opos + 1].Mark != Token.Boolean))
+                    if (((tokens[opos - 1].Mark == Token.Formula) || (tokens[opos + 1].Mark == Token.Formula) || (tokens[opos - 1].Mark == Token.Range) || (tokens[opos + 1].Mark == Token.Range)) && !IsLogicalOperator(tokens[opos].Symbol))
                     {
                         var f1 = tokens[opos - 1].ToString();
                         var f2 = tokens[opos].ToString();
@@ -625,6 +625,8 @@ namespace MediaWiki.Parser
                         tokens.RemoveAt(opos - 1);
                         tokens.RemoveAt(opos - 1);
                         var formula = f1 + " " + f2 + " " + f3;
+                        if (f1 == "0") formula = f3;
+                        if (f3 == "0") formula = f1;
                         tokens.Insert(opos - 1, new Token(formula, Token.Formula));
                         continue;
                     }
@@ -748,19 +750,18 @@ namespace MediaWiki.Parser
             // convert params to bool if need be
             if (param[0] is bool && !(param[1] is bool) || !(param[0] is bool) && param[1] is bool)
             {
-                if (!(param[0] is bool))
-                {
-                    param[0] = Double.Parse(param[0].ToString()) > 0;
-                }
-                else
-                {
-                    param[1] = Double.Parse(param[1].ToString()) > 0;
-                }
+                if (!(param[0] is bool)) param[0] = param[0].ToString() != "0";
+                else param[1] = Double.Parse(param[1].ToString()) > 0;
             }
+            else if ((param[0] is string || param[1] is string || param[0] is Range || param[1] is Range))
+            {
+                if (param[0] is string || param[0] is Range) param[0] = 1;
+                if (param[1] is string || param[1] is Range) param[1] = 1;
+            }
+
             bool isBoolean = (param[0] is bool && param[1] is bool);
 
             object result;
-
             if (isBoolean)
             {
                 var boo1 = (bool)param[0];
@@ -828,12 +829,13 @@ namespace MediaWiki.Parser
                     switch (method)
                     {
                         case "GetStat666":
+                        case "GetStat667":
                             object result;
                             switch (param.Length)
                             {
                                 case 1:
                                     result = Unit.GetStat(param[0].ToString());
-                                    return new Token(result, Token.Number);
+                                    return StatToToken(param[0].ToString(), result);
                                 case 2:
                                     result = Unit.GetStat(param[0].ToString(), param[1].ToString());
                                     return new Token(result, Token.Number);
@@ -853,6 +855,13 @@ namespace MediaWiki.Parser
             object result;
             switch (func)
             {
+                case "dmg_fire":
+                case "dmg_spec":
+                    return new Token(0, Token.Number); // todo
+
+                case "basetotal":
+                    return new Token(0, Token.Number); // todo
+
                 case "total":
                     var total = Unit.GetStatCount(param[1].ToString());
                     return new Token(total, Token.Number);
@@ -871,7 +880,7 @@ namespace MediaWiki.Parser
 
                 case "getStatsOnStateSet":
                     // we arn't going this far, just return false.
-                    return new Token(false, Token.Boolean);
+                    return new Token(0, Token.Number);
 
                 case "has_use_skill":
                     //todo
@@ -931,48 +940,60 @@ namespace MediaWiki.Parser
                 case "thorns_dmg_toxic_item":
                     if (param.Length != 1)
                         throw new Exception("Illegal number of parameters for thorns_dmg_toxic_item function.");
-                    Unit.SetStat("thorns_dmg_toxic_item", param[0]);
+
+                    Unit.SetStat("damage_thorns_min", "toxic", param[0]);
                     return new Token(param[0], Token.Number);
 
                 case "thorns_dmg_spec_item":
                     if (param.Length != 1)
                         throw new Exception("Illegal number of parameters for thorns_dmg_spec_item function.");
-                    Unit.SetStat("thorns_dmg_spec_item", param[0]);
+
+                    Unit.SetStat("damage_thorns_min", "physical", param[0]);
                     return new Token(param[0], Token.Number);
 
                 case "thorns_dmg_elec_item":
                     if (param.Length != 1)
                         throw new Exception("Illegal number of parameters for thorns_dmg_elec_item function.");
-                    Unit.SetStat("thorns_dmg_elec_item", param[0]);
+
+                    Unit.SetStat("damage_thorns_min", "electricity", param[0]);
                     return new Token(param[0], Token.Number);
 
                 case "thorns_dmg_fire_item":
                     if (param.Length != 1)
                         throw new Exception("Illegal number of parameters for thorns_dmg_fire_item function.");
-                    Unit.SetStat("thorns_dmg_fire_item", param[0]);
+
+                    Unit.SetStat("damage_thorns_min", "fire", param[0]);
                     return new Token(param[0], Token.Number);
 
                 case "thorns_dmg_phys_item":
                     if (param.Length != 1)
                         throw new Exception("Illegal number of parameters for thorns_dmg_phys_item function.");
-                    Unit.SetStat("thorns_dmg_phys_item", param[0]);
+
+                    Unit.SetStat("damage_thorns_min", "physical", param[0]);
                     return new Token(param[0], Token.Number);
 
                 case "set_shield_bonus":
                     if (param.Length != 2)
                         throw new Exception("Illegal number of parameters for set_shield_bonus function.");
-                    Unit.SetStat("set_shield_bonus", param[0]);
-                    return new Token(param[0], Token.Number);
+
+                    Unit.SetStat("shields_bonus", param[0]);
+                    if ((param[0] is int)) return new Token(param[0], Token.Number);
+                    return new Token(param[0], Token.Formula);
 
                 case "set_armor_bonus":
                     if (param.Length != 2)
                         throw new Exception("Illegal number of parameters for set_armor_bonus function.");
-                    Unit.SetStat("set_armor_bonus", param[0]);
-                    return new Token(param[0], Token.Number);
+
+                    Unit.SetStat("armor_bonus", "all", param[0]);
+                    if ((param[0] is int)) return new Token(param[0], Token.Number);
+                    return new Token(param[0], Token.Formula);
 
                 case "item_level_sfx_defense":
                     if (param.Length != 1)
                         throw new Exception("Illegal number of parameters for item_level_sfx_defense function.");
+
+                    if (!(param[0] is int)) return new Token("sfx_defense", Token.Formula);
+
                     var itemLevels = Manager.GetDataTable("ITEM_LEVELS");
                     var level = (int) param[0];
                     var sfxDefence = (int) itemLevels.Rows[level]["sfxDefenceAbility"];
@@ -981,13 +1002,13 @@ namespace MediaWiki.Parser
                 case "pow_regen_per_min":
                     if (param.Length != 1)
                         throw new Exception("Illegal number of parameters for pow_regen_per_min function.");
-                    Unit.SetStat("pow_regen_per_min", param[0]);
+                    Unit.SetStat("power_regen", param[0]);
                     return new Token(param[0], Token.Number);
 
                 case "hp_regen_per_min":
                     if (param.Length != 1)
                         throw new Exception("Illegal number of parameters for hp_regen_per_min function.");
-                    Unit.SetStat("hp_regen_per_min", param[0]);
+                    Unit.SetStat("hp_regen", param[0]);
                     return new Token(param[0], Token.Number);
 
                 case "all_stats_bonus":
@@ -1004,10 +1025,12 @@ namespace MediaWiki.Parser
                     if (param.Length != 1)
                         throw new Exception("Illegal number of parameters for item_level_sfx_attack function.");
 
+                    if (!(param[0] is int)) return new Token("sfx_attack", Token.Formula);
+
                     level = (int)param[0];
 
                     // item level 0 means no level was specified, return a formulae part
-                    if (level == 0) return new Token("item_level_sfx_attack", Token.Formula);
+                    if (level == 0) return new Token("sfx_attack", Token.Formula);
 
                     // otherwise we can retrieve it.
                     itemLevels = Manager.GetDataTable("ITEM_LEVELS");
@@ -1024,12 +1047,10 @@ namespace MediaWiki.Parser
                     {
                         case 1:
                             result = Unit.GetStat(param[0].ToString());
-                            if (result is Range)
-                                return new Token(result, Token.Range);
-                            return new Token(result, Token.Number);
+                            return StatToToken(param[0].ToString(), result);
                         case 2:
                             result = Unit.GetStat(param[0].ToString(), param[1].ToString());
-                            return new Token(result, Token.Number);
+                            return StatToToken(param[0].ToString(), result);
                         default:
                             throw new Exception("Illegal number of parameters for GetStat666");
                     }
@@ -1040,10 +1061,10 @@ namespace MediaWiki.Parser
                     {
                         case 2:
                             result = Unit.SetStat(param[0].ToString(), param[1]);
-                            return new Token(result, Token.Number);
+                            return StatToToken(param[0].ToString(), result);
                         case 3:
                             result = Unit.SetStat(param[0].ToString(), param[1].ToString(), param[2]);
-                            return new Token(result, Token.Number);
+                            return StatToToken(param[0].ToString(), result);
                         default:
                             throw new Exception("Illegal number of parameters for GetStat666");
                     }
@@ -1270,6 +1291,40 @@ namespace MediaWiki.Parser
                 TruePath = truePath;
                 FalsePath = falsePath;
             }
+        }
+
+        private Token StatToToken(string param, object stat)
+        {
+            if (stat.ToString() == "0" && param == "level") return new Token("item_level", Token.Formula); // hack
+            if (stat is Range) return new Token(stat, Token.Range);
+            int num;
+            if (Int32.TryParse(stat.ToString(), out num)) return new Token(stat, Token.Range);
+            return new Token(stat, Token.Formula);
+        }
+
+        private static bool IsLogicalOperator(object op)
+        {
+            string sop = op.ToString();
+            switch (sop)
+            {
+                case "<":
+                case ">":
+                case "!=":
+                case "==":
+                case "<=":
+                case ">=":
+                case "&&":
+                case "||":
+                    return true;
+                default:
+                    return false;
+            }
+        }
+
+        private bool IsInteger(object input)
+        {
+            int num;
+            return Int32.TryParse(input.ToString(), out num);
         }
     }
 }

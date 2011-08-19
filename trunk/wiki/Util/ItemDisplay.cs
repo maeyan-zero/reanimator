@@ -26,7 +26,7 @@ namespace MediaWiki.Util
 
             foreach (DataRow row in itemDisplay.Rows)
             {
-                if ((int)row["toolTipArea"] != 0) continue;
+                if (((int)row["toolTipArea"]) != 0 && ((int)row["toolTipArea"]) != 20) continue;
 
                 var rule1 = (Display.Rule)row["rule1"];
                 var rule2 = (Display.Rule)row["rule2"];
@@ -89,12 +89,22 @@ namespace MediaWiki.Util
                             break;
 
                         result = ResultAsString(Evaluator.Evaluate(script));
+                        if (ctrl == Display.Ctrl.ScriptPlusminus) result = "+" + result; // todo lazy
                         format = format.Replace("[string" + i + "]", result.ToString());
                         break;
                     case Display.Ctrl.ParamString:
                         control = (string) row["ctrlStat_string"];
                         result = Evaluator.Unit.GetStatParam(control);
-                        result = GetGroupString((string) result);
+                        switch (control)
+                        {
+                            case "power_cost_pct_skillgroup":
+                            case "cooldown_pct_skillgroup":
+                                result = GetGroupString((string) result);
+                                break;
+                            case "skill_level":
+                                result = GetSkillString((string) result);
+                                break;
+                        }
                         format = format.Replace("[string" + i + "]", result.ToString());
                         break;
                     case Display.Ctrl.StatValue:
@@ -113,6 +123,19 @@ namespace MediaWiki.Util
             }
 
             return format;
+        }
+
+        private static string GetSkillString(string result)
+        {
+            DataTable skills = Manager.GetDataTable("SKILLS");
+            foreach (DataRow row in skills.Rows)
+            {
+                if ((string)row["skill"] == result)
+                {
+                    return ((int)row["displayName"] != -1) ? (string)row["displayName_string"] : string.Empty;
+                }
+            }
+            return string.Empty;
         }
 
         private static string ResultAsString(IList<object> evaluated)
