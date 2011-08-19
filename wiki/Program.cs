@@ -17,7 +17,7 @@ namespace MediaWiki
             manager.LoadTableFiles();
             manager.EndAllDatAccess();
 
-            args = new[] { "LEVELSCALING" };
+            args = new[] { "ITEMS" };
 
             string sqlStatement;
             WikiScript script;
@@ -36,6 +36,9 @@ namespace MediaWiki
                         break;
                     case "LEVELSCALING":
                         script = new LevelScaling(manager);
+                        break;
+                    case "ITEMS":
+                        script = new Items(manager);
                         break;
                     default:
                         throw new Exception("Unknown WikiScript: " + arg);
