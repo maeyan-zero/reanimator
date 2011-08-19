@@ -45,7 +45,7 @@ namespace MediaWiki.Parser.Class
         public string GetStatParam(string label)
         {
             if (!Stats.ContainsKey(label)) return string.Empty;
-            string[] keys = new string[1];
+            string[] keys = new string[6];
             ((Dictionary<string, object>)Stats[label]).Keys.CopyTo(keys, 0);
             return keys[0];
         }
@@ -53,7 +53,7 @@ namespace MediaWiki.Parser.Class
         public object GetStatValue(string label)
         {
             if (!Stats.ContainsKey(label)) return string.Empty;
-            string[] keys = new string[1];
+            string[] keys = new string[6];
             ((Dictionary<string, object>)Stats[label]).Keys.CopyTo(keys, 0);
             return ((Dictionary<string, object>)Stats[label])[keys[0]];
         }
