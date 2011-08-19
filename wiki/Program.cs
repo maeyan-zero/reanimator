@@ -22,25 +22,33 @@ namespace MediaWiki
             //evaluator.Unit = new Item();
             //evaluator.Game3 = new Game3();
             //var result = evaluator.Evaluate(testcase);
-            
-            args = new[] {"AFFIXES"};
 
+            args = new[] { "LEVELSCALING" };
+
+            string sqlStatement;
+            WikiScript script;
             foreach (string arg in args)
-            {
-                string sqlStatement;
+            {                
                 switch (arg)
                 {
                     case "AFFIXES":
-                        var affixes = new Affixes(manager);
-                        sqlStatement = affixes.ExportTableInsertScript();
+                        script = new Affixes(manager);
                         break;
                     case "MONSTERS":
-                        var monsters = new Monsters(manager);
-                        sqlStatement = monsters.ExportTableInsertScript();
+                        script = new Monsters(manager);
+                        break;
+                    case "PVPRANKS":
+                        script = new PVPRanks(manager);
+                        break;
+                    case "LEVELSCALING":
+                        script = new LevelScaling(manager);
                         break;
                     default:
                         throw new Exception("Unknown WikiScript: " + arg);
                 }
+
+                sqlStatement = script.ExportTableInsertScript();
+
                 File.WriteAllText(arg.ToLower() + ".sql", sqlStatement);
             }
 
