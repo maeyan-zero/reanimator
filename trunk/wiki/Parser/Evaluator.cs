@@ -616,7 +616,7 @@ namespace MediaWiki.Parser
                     }
 
                     // if both sides are not numbers, then concat into a formulae
-                    if (((tokens[opos - 1].Mark == Token.Formula) || (tokens[opos + 1].Mark == Token.Formula) || (tokens[opos - 1].Mark == Token.Range) || (tokens[opos + 1].Mark == Token.Range)) && !IsLogicalOperator(tokens[opos].Symbol))
+                    if (((tokens[opos - 1].Mark == Token.Formula) || (tokens[opos + 1].Mark == Token.Formula)) && !IsLogicalOperator(tokens[opos].Symbol))
                     {
                         var f1 = tokens[opos - 1].ToString();
                         var f2 = tokens[opos].ToString();
@@ -720,7 +720,7 @@ namespace MediaWiki.Parser
 
                 continue;
             }
-            while (tokens.Count != 1); // Should be able to deduce each expression to 1 result
+            while (!tokens.All(t => (t.Mark == Token.Number || t.Mark == Token.Range || t.Mark == Token.Formula || t.Mark == Token.Boolean))); // Should be able to deduce each expression to 1 result
 
             var result = tokens[0].Symbol;
             return result;
@@ -753,10 +753,15 @@ namespace MediaWiki.Parser
                 if (!(param[0] is bool)) param[0] = param[0].ToString() != "0";
                 else param[1] = Double.Parse(param[1].ToString()) > 0;
             }
-            else if ((param[0] is string || param[1] is string || param[0] is Range || param[1] is Range))
+            else if ((param[0] is string || param[1] is string))
             {
-                if (param[0] is string || param[0] is Range) param[0] = 1;
-                if (param[1] is string || param[1] is Range) param[1] = 1;
+                if (param[0] is string) param[0] = 1;
+                if (param[1] is string) param[1] = 1;
+            }
+            else if ((param[0] is Range || param[1] is Range) && IsLogicalOperator(symbol))
+            {
+                if (param[0] is Range) param[0] = 1;
+                if (param[1] is Range) param[1] = 1;
             }
 
             bool isBoolean = (param[0] is bool && param[1] is bool);
@@ -777,6 +782,30 @@ namespace MediaWiki.Parser
                         return new Token(result, Token.Boolean);
                     default:
                         throw new Exception("Invalid operator: " + symbol);
+                }
+            }
+
+            if (param[0] is Range || param[1] is Range)
+            {
+                Range range = (param[0] is Range) ? (Range)param[0] : (Range)param[1];
+                Double value = (param[0] is Range) ? Double.Parse(param[1].ToString()) : Double.Parse(param[0].ToString());
+
+                switch (symbol)
+                {
+                    case "+":
+                        result = new Range(Convert.ToInt32(range.Start + value), Convert.ToInt32(range.End + value));
+                        return new Token(result, Token.Range);
+                    case "-":
+                        result = new Range(Convert.ToInt32(range.Start - value), Convert.ToInt32(range.End - value));
+                        return new Token(result, Token.Range);
+                    case "*":
+                        result = new Range(Convert.ToInt32(range.Start * value), Convert.ToInt32(range.End * value));
+                        return new Token(result, Token.Range);
+                    case "/":
+                        result = new Range(Convert.ToInt32(range.Start / value), Convert.ToInt32(range.End / value));
+                        return new Token(result, Token.Range);
+                    default:
+                        throw new Exception("Invalid range operator: " + symbol);
                 }
             }
 
@@ -857,6 +886,28 @@ namespace MediaWiki.Parser
             {
                 case "dmg_fire":
                 case "dmg_spec":
+                case "dmg_phys":
+                case "dmg_toxic":
+                case "dmg_elec":
+                case "field_fire":
+                case "field_spec":
+                case "field_phys":
+                case "field_toxic":
+                case "field_elec":
+                case "rad_fire":
+                case "rad_spec":
+                case "rad_phys":
+                case "rad_toxic":
+                case "rad_elec":
+                case "dot_fire":
+                case "dot_spec":
+                case "dot_phys":
+                case "dot_toxic":
+                case "dot_elec":
+                case "ai_change_stop":
+                case "ai_change_convert":
+                case "ai_change_convert_field":
+                case "rad_toxic_hive":
                     return new Token(0, Token.Number); // todo
 
                 case "basetotal":
@@ -1295,10 +1346,10 @@ namespace MediaWiki.Parser
 
         private Token StatToToken(string param, object stat)
         {
-            if (stat.ToString() == "0" && param == "level") return new Token("item_level", Token.Formula); // hack
+            if (stat.ToString() == "0" && param == "level") return new Token("ilevel", Token.Formula); // hack
             if (stat is Range) return new Token(stat, Token.Range);
             int num;
-            if (Int32.TryParse(stat.ToString(), out num)) return new Token(stat, Token.Range);
+            if (Int32.TryParse(stat.ToString(), out num)) return new Token(stat, Token.Number);
             return new Token(stat, Token.Formula);
         }
 

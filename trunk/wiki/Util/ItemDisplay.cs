@@ -1,7 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Data;
-using System.Linq;
 using Hellgate;
 using Hellgate.Excel;
 using MediaWiki.Parser;
@@ -20,13 +19,14 @@ namespace MediaWiki.Util
 
             var strings = new List<string>();
             var itemDisplay = Manager.GetDataTable("ITEMDISPLAY");
-            Evaluator = new Evaluator {Unit = unit, Context = new Context()};
+            Evaluator = new Evaluator {Unit = unit, Context = new Context(), Manager = Manager};
 
             DataRow last = null;
 
             foreach (DataRow row in itemDisplay.Rows)
             {
-                if (((int)row["toolTipArea"]) != 0 && ((int)row["toolTipArea"]) != 20) continue;
+                if (((int)row["toolTipArea"]) != 0) continue;
+                //&& ((int)row["toolTipArea"]) != 20
 
                 var rule1 = (Display.Rule)row["rule1"];
                 var rule2 = (Display.Rule)row["rule2"];
@@ -155,8 +155,8 @@ namespace MediaWiki.Util
             var result = evaluated[0];
             if (result is Evaluator.Range)
             {
-                double val1 = ((Evaluator.Range) result).Start;
-                double val2 = ((Evaluator.Range) result).End;
+                double val1 = (double)((Evaluator.Range)result).Start;
+                double val2 = (double)((Evaluator.Range)result).End;
                 return val1/10 + "~" + val2/10;
             }
 
@@ -168,22 +168,53 @@ namespace MediaWiki.Util
             DataTable skillGroups = Manager.GetDataTable("SKILLGROUPS");
             foreach (DataRow row in skillGroups.Rows)
             {
-                if ((string) row["name"] == stringid)
+                if ((string) row["name"] != stringid) continue;
+                DataTable strings = Manager.GetDataTable("Strings_Strings");
+                foreach (DataRow srow in strings.Rows)
                 {
-                    DataTable strings = Manager.GetDataTable("Strings_Strings");
-                    foreach (DataRow srow in strings.Rows)
-                    {
-                        if ((int) srow["ReferenceId"] == (int) row["displayString"])
-                        {
-                            string group = (string) srow["String"];
-                            group = group.Replace("{c:light_gray}", "");
-                            group = group.Replace("{\\c}", "");
-                            return group;
-                        }
-                    }
+                    if ((int) srow["ReferenceId"] != (int) row["displayString"]) continue;
+                    string group = (string) srow["String"];
+                    group = group.Replace("{c:light_gray}", "");
+                    group = group.Replace("{\\c}", "");
+                    return group;
                 }
             }
             return String.Empty;
+        }
+
+        internal static string[] GetModSlots(Unit unit)
+        {
+            var strings = new List<string>();
+            var itemSlots = unit.GetStat("item_slots");
+            if (itemSlots is int) return strings.ToArray();
+
+            foreach (var slot in (Dictionary<string, object>) itemSlots)
+            {
+                switch (slot.Key)
+                {
+                    case "fuel":
+                        strings.Add("Fuel: " + slot.Value);
+                        break;
+                    case "relic":
+                        strings.Add("Relic: " + slot.Value);
+                        break;
+                    case "tech":
+                        strings.Add("Techs: " + slot.Value);
+                        break;
+                    case "battery":
+                        strings.Add("Battery: " + slot.Value);
+                        break;
+                    case "ammo":
+                        strings.Add("Ammo: " + slot.Value);
+                        break;
+                    case "rockets":
+                        strings.Add("rockets" + slot.Value);
+                        break;
+                    default:
+                        throw new Exception("Unknown mod slot: " + slot.Key);
+                }
+            }
+            return strings.ToArray();
         }
     }
 }
