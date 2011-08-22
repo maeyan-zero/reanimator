@@ -81,7 +81,7 @@ namespace MediaWiki.Articles
 
                 desc = row["descripFormatString_string"].ToString();
                 desc = desc.Replace("[completenum]", String.Format("{0:#,0}", row["completeNumber"]));
-                desc = desc.Replace("[param1]", String.Format("{0:#,0}", (int)row["param1"] / 20));
+                desc = desc.Replace("[param1]", String.Format("{0:#,0}", (int)row["param1"]));// / 20));
                 desc = "\"" + desc + "\"";
 
                 if ((int)row["rewardSkill"] != -1)
@@ -94,7 +94,7 @@ namespace MediaWiki.Articles
 
                     var icon = skills.Rows[s]["largeIcon"].ToString();
 
-                    skillFile = GetImage(icon + ".png", 40);
+                    skillFile = GetSqlEncapsulatedString(GetImage(icon + ".png", 40));
                     skillText = "\"" + skill + "\"";
                 }
                 else
