@@ -530,39 +530,6 @@ namespace MediaWiki.Parser
                 var range = new Range(open, closed);
                 var opos = GetPosOperator(tokens, range);
 
-                // Merge arguements
-                //if (opos == -2)
-                //{
-                //    for (int i = range.Start; i <= range.End; i++)
-                //    {
-                //        if (tokens[i].Mark != Token.Operator) continue;
-
-                //        if (tokens[i - 1].Mark != Token.Range)
-                //        {
-                //            var val2 = tokens[i].ToString();
-                //            var val3 = tokens[i + 1].ToString();
-                //            tokens.RemoveAt(i);
-                //            tokens.RemoveAt(i);
-                //            var formula = val2 + val3;
-                //            tokens.Insert(i, new Token(formula, Token.Formula));
-                //        }
-                //        else
-                //        {
-                //            var val1 = tokens[i - 1].ToString();
-                //            var val2 = tokens[i].ToString();
-                //            var val3 = tokens[i + 1].ToString();
-                //            tokens.RemoveAt(i - 1);
-                //            tokens.RemoveAt(i - 1);
-                //            tokens.RemoveAt(i - 1);
-                //            var formula = val1 + " " + val2 + " " + val3;
-                //            tokens.Insert(i - 1, new Token(formula, Token.Formula));
-                //        }
-
-                //        break;
-                //    }
-                //    continue;
-                //}
-
                 // If one does, perform operand method
                 Token token;
                 if (opos > -1)
@@ -772,7 +739,7 @@ namespace MediaWiki.Parser
                 var boo1 = (bool)param[0];
                 var boo2 = (bool)param[1];
 
-                switch (symbol)
+               switch (symbol)
                 {
                     case "&&":
                         result = boo1 && boo2;
@@ -780,6 +747,9 @@ namespace MediaWiki.Parser
                     case "||":
                         result = boo1 || boo2;
                         return new Token(result, Token.Boolean);
+                    case ">":
+                    case "<":
+                        return new Token(boo1, Token.Boolean);
                     default:
                         throw new Exception("Invalid operator: " + symbol);
                 }
@@ -793,16 +763,16 @@ namespace MediaWiki.Parser
                 switch (symbol)
                 {
                     case "+":
-                        result = new Range(Convert.ToInt32(range.Start + value), Convert.ToInt32(range.End + value));
+                        result = range + value;
                         return new Token(result, Token.Range);
                     case "-":
-                        result = new Range(Convert.ToInt32(range.Start - value), Convert.ToInt32(range.End - value));
+                        result = range - value;
                         return new Token(result, Token.Range);
                     case "*":
-                        result = new Range(Convert.ToInt32(range.Start * value), Convert.ToInt32(range.End * value));
+                        result = range * value;
                         return new Token(result, Token.Range);
                     case "/":
-                        result = new Range(Convert.ToInt32(range.Start / value), Convert.ToInt32(range.End / value));
+                        result = range / value;
                         return new Token(result, Token.Range);
                     default:
                         throw new Exception("Invalid range operator: " + symbol);
@@ -884,6 +854,56 @@ namespace MediaWiki.Parser
             object result;
             switch (func)
             {
+                case "meetsclassreqs":
+                    return new Token(true, Token.Boolean);
+                case "hasdomname":
+                case "is_bindable":
+                case "nodrop":
+                case "notrade":
+                case "is_operatable":
+                case "is_usable":
+                    return new Token(false, Token.Boolean);
+
+                case "feed_stamina_pct":
+                case "affix_feed_stamina_pct":
+                    var ilevel = (int) Unit.GetStat("level");
+                    if (ilevel == 0) return new Token("ilevel * " + param[0] + "%", Token.Formula);
+                    var ilevels = Manager.GetDataTable("ITEM_LEVELS");
+                    var feed = (int) ilevels.Rows[ilevel]["feed"];
+                    var ifeed = Math.Ceiling(feed * (((double)param[0]) / 100));
+                    Unit.SetStat("stamina_feed", ifeed);
+                    return new Token(feed, Token.Number);
+
+                case "feed_willpower_pct":
+                case "affix_feed_willpower_pct":
+                    ilevel = (int)Unit.GetStat("level");
+                    if (ilevel == 0) return new Token("ilevel * " + param[0] + "%", Token.Formula);
+                    ilevels = Manager.GetDataTable("ITEM_LEVELS");
+                    feed = (int)ilevels.Rows[ilevel]["feed"];
+                    ifeed = Math.Ceiling(feed * (((double)param[0]) / 100));
+                    Unit.SetStat("willpower_feed", ifeed);
+                    return new Token(feed, Token.Number);
+
+                case "feed_strength_pct":
+                case "affix_feed_strength_pct":
+                    ilevel = (int)Unit.GetStat("level");
+                    if (ilevel == 0) return new Token("ilevel * " + param[0] + "%", Token.Formula);
+                    ilevels = Manager.GetDataTable("ITEM_LEVELS");
+                    feed = (int)ilevels.Rows[ilevel]["feed"];
+                    ifeed = Math.Ceiling(feed * (((double)param[0]) / 100));
+                    Unit.SetStat("strength_feed", ifeed);
+                    return new Token(feed, Token.Number);
+
+                case "feed_accuracy_pct":
+                case "affix_feed_accuracy_pct":
+                    ilevel = (int)Unit.GetStat("level");
+                    if (ilevel == 0) return new Token("ilevel * " + param[0] + "%", Token.Formula);
+                    ilevels = Manager.GetDataTable("ITEM_LEVELS");
+                    feed = (int)ilevels.Rows[ilevel]["feed"];
+                    ifeed = Math.Ceiling(feed * (((double)param[0]) / 100));
+                    Unit.SetStat("accuracy_feed", ifeed);
+                    return new Token(feed, Token.Number);
+
                 case "dmg_fire":
                 case "dmg_spec":
                 case "dmg_phys":
@@ -907,11 +927,13 @@ namespace MediaWiki.Parser
                 case "ai_change_stop":
                 case "ai_change_convert":
                 case "ai_change_convert_field":
+                case "ai_change_fear":
                 case "rad_toxic_hive":
                     return new Token(0, Token.Number); // todo
 
                 case "basetotal":
-                    return new Token(0, Token.Number); // todo
+                    result = Unit.GetStat(param[1].ToString());
+                    return new Token(result, result is Range ? Token.Range : Token.Number);
 
                 case "total":
                     var total = Unit.GetStatCount(param[1].ToString());
@@ -937,6 +959,8 @@ namespace MediaWiki.Parser
                     //todo
                     return new Token(false, Token.Boolean);
 
+                case "buyprice":
+                case "sellprice":
                 case "getItemStateDuration":
                     return new Token(0, Token.Number);
 
@@ -1053,13 +1077,39 @@ namespace MediaWiki.Parser
                 case "pow_regen_per_min":
                     if (param.Length != 1)
                         throw new Exception("Illegal number of parameters for pow_regen_per_min function.");
-                    Unit.SetStat("power_regen", param[0]);
+
+                    if (param[0] is Range)
+                    {
+                        Unit.SetStat("power_regen", (Range) param[0] * 4.26);
+                        return new Token(param[0], Token.Range);
+                    }
+
+                    if (param[0] is String)
+                    {
+                        Unit.SetStat("power_regen", param[0]);
+                        return new Token(param[0], Token.Formula);
+                    }
+
+                    Unit.SetStat("power_regen", (double)param[0] * 4.26);
                     return new Token(param[0], Token.Number);
 
                 case "hp_regen_per_min":
                     if (param.Length != 1)
                         throw new Exception("Illegal number of parameters for hp_regen_per_min function.");
-                    Unit.SetStat("hp_regen", param[0]);
+
+                    if (param[0] is Range)
+                    {
+                        Unit.SetStat("hp_regen", (Range) param[0] * 4.26);
+                        return new Token(param[0], Token.Range);
+                    }
+
+                    if (param[0] is String)
+                    {
+                        Unit.SetStat("hp_regen", param[0]);
+                        return new Token(param[0], Token.Formula);
+                    }
+
+                    Unit.SetStat("hp_regen", (double) param[0] * 4.26);
                     return new Token(param[0], Token.Number);
 
                 case "all_stats_bonus":
@@ -1313,6 +1363,66 @@ namespace MediaWiki.Parser
             public override string ToString()
             {
                 return Start + "~" + End;
+            }
+
+            public static Range operator +(Range c1, int c2)
+            {
+                return new Range(c1.Start + c2, c1.End + c2);
+            }
+
+            public static Range operator -(Range c1, int c2)
+            {
+                return new Range(c1.Start - c2, c1.End - c2);
+            }
+
+            public static Range operator *(Range c1, int c2)
+            {
+                return new Range(c1.Start * c2, c1.End * c2);
+            }
+
+            public static Range operator /(Range c1, int c2)
+            {
+                return new Range(c1.Start / c2, c1.End / c2);
+            }
+
+            public static Range operator +(Range c1, double c2)
+            {
+                return new Range(Convert.ToInt32(c1.Start + c2), Convert.ToInt32(c1.End + c2));
+            }
+
+            public static Range operator -(Range c1, double c2)
+            {
+                return new Range(Convert.ToInt32(c1.Start - c2), Convert.ToInt32(c1.End - c2));
+            }
+
+            public static Range operator *(Range c1, double c2)
+            {
+                return new Range(Convert.ToInt32(c1.Start * c2), Convert.ToInt32(c1.End * c2));
+            }
+
+            public static Range operator /(Range c1, double c2)
+            {
+                return new Range(Convert.ToInt32(c1.Start / c2), Convert.ToInt32(c1.End / c2));
+            }
+
+            public static Range operator +(Range c1, Range c2)
+            {
+                return new Range(c1.Start + c2.Start, c1.End + c2.End);
+            }
+
+            public static Range operator -(Range c1, Range c2)
+            {
+                return new Range(c1.Start - c2.Start, c1.End - c2.End);
+            }
+
+            public static Range operator *(Range c1, Range c2)
+            {
+                return new Range(c1.Start * c2.Start, c1.End * c2.End);
+            }
+
+            public static Range operator /(Range c1, Range c2)
+            {
+                return new Range(c1.Start / c2.Start, c1.End / c2.End);
             }
         }
 

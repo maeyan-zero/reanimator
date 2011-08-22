@@ -13,7 +13,7 @@ namespace MediaWiki.Util
         public static FileManager Manager { get; set; }
         private static Evaluator Evaluator { get; set; }
 
-        public static string[] GetDisplayStrings(Unit unit)
+        public static string[] GetDisplayStrings(Unit unit, bool inherent = false)
         {
             if (Manager == null) throw new Exception("FileManager Null");
 
@@ -25,8 +25,16 @@ namespace MediaWiki.Util
 
             foreach (DataRow row in itemDisplay.Rows)
             {
-                if (((int)row["toolTipArea"]) != 0) continue;
-                //&& ((int)row["toolTipArea"]) != 20
+                if (inherent)
+                {
+                    if (((int)row["toolTipArea"]) != 20)
+                        continue;
+                }
+                else
+                {
+                    if (((int)row["toolTipArea"]) != 0)
+                        continue;
+                }
 
                 var rule1 = (Display.Rule)row["rule1"];
                 var rule2 = (Display.Rule)row["rule2"];
@@ -58,6 +66,10 @@ namespace MediaWiki.Util
         private static bool IsConditionMet(string condition)
         {
             if (String.IsNullOrEmpty(condition)) return true;
+
+            if (condition == "GetStat666('evade') || (GetStat666('evade', 1) == GetStat666('evade', 2) && GetStat666('evade', 1) != 0);")
+                return false;
+
             var result = Evaluator.Evaluate(condition);
             if (result[0] is int) return (int) result[0] > 0;
             if (result[0] is double) return (double) result[0] > 0;
@@ -208,12 +220,43 @@ namespace MediaWiki.Util
                         strings.Add("Ammo: " + slot.Value);
                         break;
                     case "rockets":
-                        strings.Add("rockets" + slot.Value);
+                        strings.Add("Rockets: " + slot.Value);
                         break;
                     default:
                         throw new Exception("Unknown mod slot: " + slot.Key);
                 }
             }
+            return strings.ToArray();
+        }
+
+        public static string[] GetFeedCosts(Unit unit)
+        {
+            var strings = new List<string>();
+
+            var stamina = unit.GetStat("stamina_feed");
+            if (stamina is double && (double) stamina != 0)
+                strings.Add("Stamina: " + (double) stamina);
+            if (stamina is string)
+                strings.Add("Stamina: " + stamina);
+
+            var willpower = unit.GetStat("willpower_feed");
+            if (willpower is double && (double) willpower != 0)
+                strings.Add("Willpower: " + (double) willpower);
+            if (willpower is string)
+                strings.Add("Willpower:" + willpower);
+
+            var strength = unit.GetStat("strength_feed");
+            if (strength is double && (double) strength != 0)
+                strings.Add("Strength: " +(double) strength);
+            if (strength is string)
+                strings.Add("Strength: " + strength);
+
+            var accuracy = unit.GetStat("accuracy_feed");
+            if (accuracy is double && (double) accuracy != 0)
+                strings.Add("Accuracy: " + (double) accuracy);
+            if (accuracy is string)
+                strings.Add("Accuracy: " + accuracy);
+
             return strings.ToArray();
         }
     }

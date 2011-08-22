@@ -32,6 +32,7 @@ namespace MediaWiki.Articles
                 "damage TEXT",
                 "affixes TEXT",
                 "mods TEXT",
+                "feeds TEXT",
                 "level VARCHAR(3)"
                 );
 
@@ -39,12 +40,12 @@ namespace MediaWiki.Articles
             var items = Manager.GetDataTable("ITEMS");
             var qualityTable = Manager.GetDataTable("ITEM_QUALITY");
 
-            string id, code, name, type, flavor, quality, damage, affixes, modslots, level;
+            string id, code, name, type, flavor, quality, damage, affixes, modslots, feeds, level;
 
             foreach (DataRow item in items.Rows)
             {
                 if (item["code"].ToString() == "0") continue; // ignore blank rows
-                //if (item["Index"].ToString() != "896") continue;
+                //if (item["Index"].ToString() != "1211") continue;
 
                 Debug.WriteLine("Parsing: " + item["Index"] + " (" + item["name"] + ")");
 
@@ -59,9 +60,10 @@ namespace MediaWiki.Articles
                 damage = GetSqlEncapsulatedString(item["tooltipDamageString_string"].ToString());
                 affixes = GetAffixes((int) item["index"]);
                 modslots = GetModSlots(item["props2"].ToString());
+                feeds = GetFeeds((int) item["index"]);
                 level = GetSqlEncapsulatedString(item["fixedLevel"].ToString().Replace(";", ""));
 
-                TableScript.AddRow(id, code, name, type, flavor, quality, damage, affixes, modslots, level);
+                TableScript.AddRow(id, code, name, type, flavor, quality, damage, affixes, modslots, feeds, level);
             }
 
             return TableScript.GetFullScript();
@@ -78,11 +80,75 @@ namespace MediaWiki.Articles
 
         private string GetAffixes(int itemid)
         {
+            var evaluator = new Evaluator {Unit = new Item(), Manager = Manager, Game3 = new Game3()};
+            var item = Manager.GetDataTable("ITEMS").Rows[itemid];
+            var table = Manager.GetDataTable("AFFIXES");
+            var affixes = item["affix"].ToString();
+            var scripts = item["props1"].ToString() + item["props2"] + item["props3"] + item["props4"] + item["props5"];
+
+            var level = item["fixedLevel"].ToString();
+            level = level.Replace(";", "");
+            int ilevel = 0;
+            if (!string.IsNullOrEmpty(level))
+            {
+                ilevel = int.Parse(level);
+                evaluator.Unit.SetStat("level", ilevel);
+            }
+
+            string[] strings;
+            string concat = string.Empty;
+
+            if (scripts != string.Empty)
+            {
+                evaluator.Evaluate(scripts);
+                strings = ItemDisplay.GetDisplayStrings(evaluator.Unit);
+                concat = ConcatStrings(strings);
+            }
+
+            evaluator.Unit = new Item();
+            evaluator.Unit.SetStat("level", ilevel);
+
+            string[] split = affixes.Split(',');
+            foreach (var i in split)
+            {
+                var affix = int.Parse(i);
+                if (affix == -1) break; // no more affixes
+                var script = table.Rows[affix]["property1"].ToString();
+                script += table.Rows[affix]["property2"].ToString();
+                script += table.Rows[affix]["property3"].ToString();
+                script += table.Rows[affix]["property4"].ToString();
+                script += table.Rows[affix]["property5"].ToString();
+                script += table.Rows[affix]["property6"].ToString();
+                if (String.IsNullOrEmpty(script)) continue; // no affix script
+                evaluator.Evaluate(script);
+            }
+
+            strings = ItemDisplay.GetDisplayStrings(evaluator.Unit);
+            if (strings.Length != 0) concat += "\n";
+            concat += ConcatStrings(strings);
+
+            return GetSqlEncapsulatedString(concat);
+        }
+
+        private string ConcatStrings(string[] strings)
+        {
+            string concat = string.Empty;
+            for (int i = 0; i < strings.Length; i++)
+            {
+                concat += strings[i];
+                if (strings.Length != i + 1) concat += "\n";
+            }
+            return concat;
+        }
+
+        private string GetFeeds(int itemid)
+        {
             var evaluator = new Evaluator { Unit = new Item(), Manager = Manager };
             var item = Manager.GetDataTable("ITEMS").Rows[itemid];
             var table = Manager.GetDataTable("AFFIXES");
             var affixes = item["affix"].ToString();
-            var scripts = item["props1"].ToString();
+            var scripts = item["perLevelProps1"].ToString();
+            scripts += item["perLevelProps2"].ToString();
 
             var level = item["fixedLevel"].ToString();
             level = level.Replace(";", "");
@@ -98,26 +164,20 @@ namespace MediaWiki.Articles
                 var affix = int.Parse(i);
                 if (affix == -1) break; // no more affixes
                 var script = table.Rows[affix]["property1"].ToString();
+                script += table.Rows[affix]["property2"].ToString();
+                script += table.Rows[affix]["property3"].ToString();
+                script += table.Rows[affix]["property4"].ToString();
+                script += table.Rows[affix]["property5"].ToString();
+                script += table.Rows[affix]["property6"].ToString();
                 if (String.IsNullOrEmpty(script)) continue; // no affix script
                 evaluator.Evaluate(script);
             }
 
             if (scripts != string.Empty) evaluator.Evaluate(scripts);
 
-            var strings = ItemDisplay.GetDisplayStrings(evaluator.Unit);
+            var strings = ItemDisplay.GetFeedCosts(evaluator.Unit);
             var concat = ConcatStrings(strings);
             return GetSqlEncapsulatedString(concat);
-        }
-
-        private string ConcatStrings(string[] strings)
-        {
-            string concat = string.Empty;
-            for (int i = 0; i < strings.Length; i++)
-            {
-                concat += strings[i];
-                if (strings.Length != i + 1) concat += "\n";
-            }
-            return concat;
         }
     }
 }
