@@ -236,25 +236,25 @@ namespace MediaWiki.Util
             var stamina = unit.GetStat("stamina_feed");
             if (stamina is double && (double) stamina != 0)
                 strings.Add("Stamina: " + (double) stamina);
-            if (stamina is string)
+            if (stamina is string || stamina is Evaluator.Range)
                 strings.Add("Stamina: " + stamina);
 
             var willpower = unit.GetStat("willpower_feed");
             if (willpower is double && (double) willpower != 0)
                 strings.Add("Willpower: " + (double) willpower);
-            if (willpower is string)
+            if (willpower is string || willpower is Evaluator.Range)
                 strings.Add("Willpower: " + willpower);
 
             var strength = unit.GetStat("strength_feed");
             if (strength is double && (double) strength != 0)
                 strings.Add("Strength: " +(double) strength);
-            if (strength is string)
+            if (strength is string || strength is Evaluator.Range)
                 strings.Add("Strength: " + strength);
 
             var accuracy = unit.GetStat("accuracy_feed");
             if (accuracy is double && (double) accuracy != 0)
                 strings.Add("Accuracy: " + (double) accuracy);
-            if (accuracy is string)
+            if (accuracy is string || accuracy is Evaluator.Range)
                 strings.Add("Accuracy: " + accuracy);
 
             return strings.ToArray();
