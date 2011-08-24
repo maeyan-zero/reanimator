@@ -867,7 +867,11 @@ namespace MediaWiki.Parser
                 case "feed_stamina_pct":
                 case "affix_feed_stamina_pct":
                     var ilevel = (int) Unit.GetStat("level");
-                    if (ilevel == 0) return new Token("ilevel * " + param[0] + "%", Token.Formula);
+                    if (ilevel == 0)
+                    {
+                        Unit.SetStat("stamina_feed", "ilevel_feed * " + param[0] + "%");
+                        return new Token("ilevel * " + param[0] + "%", Token.Formula);
+                    }
                     var ilevels = Manager.GetDataTable("ITEM_LEVELS");
                     var feed = (int) ilevels.Rows[ilevel]["feed"];
                     var ifeed = Math.Ceiling(feed * (((double)param[0]) / 100));
@@ -877,7 +881,11 @@ namespace MediaWiki.Parser
                 case "feed_willpower_pct":
                 case "affix_feed_willpower_pct":
                     ilevel = (int)Unit.GetStat("level");
-                    if (ilevel == 0) return new Token("ilevel * " + param[0] + "%", Token.Formula);
+                    if (ilevel == 0)
+                    {
+                        Unit.SetStat("willpower_feed", "ilevel_feed * " + param[0] + "%");
+                        return new Token("ilevel * " + param[0] + "%", Token.Formula);
+                    }
                     ilevels = Manager.GetDataTable("ITEM_LEVELS");
                     feed = (int)ilevels.Rows[ilevel]["feed"];
                     ifeed = Math.Ceiling(feed * (((double)param[0]) / 100));
@@ -887,7 +895,11 @@ namespace MediaWiki.Parser
                 case "feed_strength_pct":
                 case "affix_feed_strength_pct":
                     ilevel = (int)Unit.GetStat("level");
-                    if (ilevel == 0) return new Token("ilevel * " + param[0] + "%", Token.Formula);
+                    if (ilevel == 0)
+                    {
+                        Unit.SetStat("strength_feed", "ilevel_feed * " + param[0] + "%");
+                        return new Token("ilevel * " + param[0] + "%", Token.Formula);
+                    }
                     ilevels = Manager.GetDataTable("ITEM_LEVELS");
                     feed = (int)ilevels.Rows[ilevel]["feed"];
                     ifeed = Math.Ceiling(feed * (((double)param[0]) / 100));
@@ -897,7 +909,11 @@ namespace MediaWiki.Parser
                 case "feed_accuracy_pct":
                 case "affix_feed_accuracy_pct":
                     ilevel = (int)Unit.GetStat("level");
-                    if (ilevel == 0) return new Token("ilevel * " + param[0] + "%", Token.Formula);
+                    if (ilevel == 0)
+                    {
+                        Unit.SetStat("accuracy_feed", "ilevel_feed * " + param[0] + "%");
+                        return new Token("ilevel * " + param[0] + "%", Token.Formula);
+                    }
                     ilevels = Manager.GetDataTable("ITEM_LEVELS");
                     feed = (int)ilevels.Rows[ilevel]["feed"];
                     ifeed = Math.Ceiling(feed * (((double)param[0]) / 100));
