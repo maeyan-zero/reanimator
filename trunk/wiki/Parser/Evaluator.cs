@@ -1378,6 +1378,7 @@ namespace MediaWiki.Parser
 
             public override string ToString()
             {
+                if (Start == End) return Start.ToString();
                 return Start + "~" + End;
             }
 
