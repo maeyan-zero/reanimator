@@ -12,12 +12,12 @@ namespace MediaWiki
     {
         static void Main(string[] args)
         {
-            var manager = new FileManager(@"C:\Hellgate");
+            var manager = new FileManager(@"C:\T3Fun\Hellgate");
             manager.BeginAllDatReadAccess();
             manager.LoadTableFiles();
             manager.EndAllDatAccess();
 
-            args = new[] { "ITEMS" };
+            args = new[] { "AFFIXES" };
 
             string sqlStatement;
             WikiScript script;
@@ -25,6 +25,9 @@ namespace MediaWiki
             {                
                 switch (arg)
                 {
+                    case "ACHIEVEMENTS":
+                        script = new Achievements(manager);
+                        break;
                     case "AFFIXES":
                         script = new Affixes(manager);
                         break;

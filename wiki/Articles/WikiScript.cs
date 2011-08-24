@@ -41,10 +41,17 @@ namespace MediaWiki.Articles
         /// </summary>
         /// <param name="name"></param>
         /// <returns></returns>
-        protected static string GetWikiArticleLink(string name)
+        protected static string GetWikiArticleLink(string name, string displayname = "")
         {
             if (name.Equals("")) return string.Empty;
-            return "[[" + name + "]]";
+
+            StringBuilder builder = new StringBuilder();
+            builder.Append("[[" + name);
+            if (!String.IsNullOrWhiteSpace(displayname))
+                builder.Append("|" + displayname);
+            builder.Append("]]");
+
+            return builder.ToString();
         }
 
         protected static string GetImage(string name, int pxWidth = 0, bool isThumb = false, string caption = "")
@@ -70,6 +77,11 @@ namespace MediaWiki.Articles
             var tab = "";
             for (var i = 0; i < depth; i++) tab += ":";
             return tab;
+        }
+
+        protected static string Colorize(string text, string colorType)
+        {
+            return String.Format("<span style=\"color:{0}\">{1}</span>", colorType, text);
         }
 
         protected static string GetFormattedString(string raw)
@@ -234,6 +246,27 @@ namespace MediaWiki.Articles
 
                 return table;
             }
+        }
+
+        //we could use all the in-game values, but a lot of them have terrible contrast with the page background
+        protected static class WikiColors
+        {
+            public const string Common = "#E1E1E1"; //shouldn't use this right now because it's near-white
+            public const string Enhanced = "LimeGreen";  //#40FF40
+            public const string Rare = "RoyalBlue"; //#00C0FF
+            public const string Legendary = "#F78E1E";
+            public const string Unique = "#EFC000";    //#FFD100
+            public const string Set = "#E61818";
+            public const string Mythic = "#A060FF";
+            public const string DoubleEdged = "DeepSkyBlue"; //#00FFD8
+
+            public const string Fire = "#C4111A";
+            public const string Physical = "#969696";
+            public const string Electricity = "Blue"; //#00AEEF
+            public const string Spectral = "#8F3F97";
+            public const string Toxic = "Green";    //#22B24B
+
+            public const string Epic = "#FF7F00";
         }
     }
 }
