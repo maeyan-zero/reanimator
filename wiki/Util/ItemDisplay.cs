@@ -243,7 +243,7 @@ namespace MediaWiki.Util
             if (willpower is double && (double) willpower != 0)
                 strings.Add("Willpower: " + (double) willpower);
             if (willpower is string)
-                strings.Add("Willpower:" + willpower);
+                strings.Add("Willpower: " + willpower);
 
             var strength = unit.GetStat("strength_feed");
             if (strength is double && (double) strength != 0)
