@@ -5,6 +5,7 @@ using Hellgate;
 using Hellgate.Excel;
 using MediaWiki.Parser;
 using MediaWiki.Parser.Class;
+using System.Linq;
 
 namespace MediaWiki.Util
 {
@@ -32,7 +33,7 @@ namespace MediaWiki.Util
                 }
                 else
                 {
-                    if (((int)row["toolTipArea"]) != 0)
+                    if (((int)row["toolTipArea"]) != 0 && !row["exampleDescription"].ToString().Contains("thorns"))
                         continue;
                 }
 
@@ -59,6 +60,10 @@ namespace MediaWiki.Util
 
                 strings.Add(result);
             }
+
+            string skill = GetSkillBonus(unit);
+            if (!String.IsNullOrWhiteSpace(skill))
+                strings.Add(skill);
 
             return strings.ToArray();
         }
@@ -101,7 +106,7 @@ namespace MediaWiki.Util
                             break;
 
                         result = ResultAsString(Evaluator.Evaluate(script));
-                        if (ctrl == Display.Ctrl.ScriptPlusminus) result = "+" + result; // todo lazy
+                        if (ctrl == Display.Ctrl.ScriptPlusminus&&result.ToString().Count(ch=>ch=='-')<2) result = "+" + result; // todo lazy
                         format = format.Replace("[string" + i + "]", result.ToString());
                         break;
                     case Display.Ctrl.ParamString:
@@ -152,7 +157,14 @@ namespace MediaWiki.Util
 
         private static string ResultAsString(IList<object> evaluated)
         {
-            return (evaluated.Count > 0) ? evaluated[0].ToString() : string.Empty;
+            if (evaluated.Count == 0)
+                return string.Empty;
+
+            var stat = evaluated[0];
+            if (stat is Parser.Evaluator.Range || stat is int || stat is double)
+                return stat.ToString();
+
+            return "(" + evaluated[0].ToString() + ")";
         }
 
         /// <summary>
@@ -233,31 +245,57 @@ namespace MediaWiki.Util
         {
             var strings = new List<string>();
 
-            var stamina = unit.GetStat("stamina_feed");
-            if (stamina is double && (double) stamina != 0)
-                strings.Add("Stamina: " + (double) stamina);
-            if (stamina is string || stamina is Evaluator.Range)
-                strings.Add("Stamina: " + stamina);
-
-            var willpower = unit.GetStat("willpower_feed");
-            if (willpower is double && (double) willpower != 0)
-                strings.Add("Willpower: " + (double) willpower);
-            if (willpower is string || willpower is Evaluator.Range)
-                strings.Add("Willpower: " + willpower);
-
-            var strength = unit.GetStat("strength_feed");
-            if (strength is double && (double) strength != 0)
-                strings.Add("Strength: " +(double) strength);
-            if (strength is string || strength is Evaluator.Range)
-                strings.Add("Strength: " + strength);
+            string feed = string.Empty;
 
             var accuracy = unit.GetStat("accuracy_feed");
-            if (accuracy is double && (double) accuracy != 0)
-                strings.Add("Accuracy: " + (double) accuracy);
-            if (accuracy is string || accuracy is Evaluator.Range)
-                strings.Add("Accuracy: " + accuracy);
+            if ((accuracy is double && (double)accuracy != 0)
+                || accuracy is string || accuracy is Evaluator.Range)
+            {
+                feed = FormatFeed(accuracy);
+                strings.Add(feed + " Acc");
+            }
+
+            var strength = unit.GetStat("strength_feed");
+            if ((strength is double && (double)strength != 0)
+                || strength is string || strength is Evaluator.Range)
+            {
+                feed = FormatFeed(strength);
+                strings.Add(feed + " Str");
+            }
+
+            var stamina = unit.GetStat("stamina_feed");
+            if ((stamina is double && (double)stamina != 0)
+                || stamina is string || stamina is Evaluator.Range)
+            {
+                feed = FormatFeed(stamina);
+                strings.Add(feed + " Stam");
+            }
+
+            var willpower = unit.GetStat("willpower_feed");
+            if ((willpower is double && (double)willpower != 0)
+                || willpower is string || willpower is Evaluator.Range)
+            {
+                feed = FormatFeed(willpower);
+                strings.Add(feed + " Will");
+            }
 
             return strings.ToArray();
+        }
+
+        private static string FormatFeed(object feed)
+        {
+            if (feed is Parser.Evaluator.Range)
+                return feed.ToString();
+
+            return "(" + feed + ")";
+        }
+
+        public static string GetSkillBonus(Unit unit)
+        {
+            string bonus = unit.GetStat("skill_bonus").ToString();
+            if (String.Compare(bonus, "0") == 0)
+                return string.Empty;
+            return bonus;
         }
     }
 }

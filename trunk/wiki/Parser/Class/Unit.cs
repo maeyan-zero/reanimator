@@ -54,14 +54,25 @@ namespace MediaWiki.Parser.Class
 
 	    public object GetStat(string label)
 	    {
-	        return !Stats.ContainsKey(label) ? 0 : Stats[label];
+            if (!Stats.ContainsKey(label))
+                return 0;
+
+            var stat = Stats[label];
+            if (label.CompareTo("skill_bonus") != 0 && stat is string)
+                stat = stat;// stat = "(" + stat + ")";
+
+            return stat;
 	    }
 
         public object GetStat(string label1, string label2)
         {
 		    if (!Stats.ContainsKey(label1)) return 0;
             if (!(Stats[label1] is Dictionary<string, object>)) return 0; // todo handle GetStat("evasion", 1);
-            return !((Dictionary<string, object>) Stats[label1]).ContainsKey(label2) ? 0 : ((Dictionary<string, object>) Stats[label1])[label2];
+            if (!((Dictionary<string, object>)Stats[label1]).ContainsKey(label2)) return 0;
+
+            var stat = ((Dictionary<string, object>)Stats[label1])[label2];
+
+            return stat;
         }
 
         public int GetStatCount(string label)

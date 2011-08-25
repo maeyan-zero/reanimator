@@ -1013,6 +1013,7 @@ namespace MediaWiki.Parser
                 case "pickskill":
                     if (param.Length != 3)
                         throw new Exception("Illegal number of parameters for pickskill function.");
+                    Unit.SetStat("skill_bonus", "RANDOM SKILL " + param[2]); //I think that's how it works?
                     //Unit.SetStat("thorns_dmg_toxic_item", param[0]);
                     return new Token("RANDOM SKILL", Token.Number);
 
@@ -1020,12 +1021,14 @@ namespace MediaWiki.Parser
                     if (param.Length != 4)
                         throw new Exception("Illegal number of parameters for pickskillbyunittype function.");
                     //Unit.SetStat("thorns_dmg_toxic_item", param[0]);
-                    return new Token("RANDOM " + param[2] + " SKILL", Token.Number);
+                    Unit.SetStat("skill_bonus", "RANDOM " + param[2].ToString().ToUpper() + " SKILL " + param[3]); //maybe?
+                    return new Token("RANDOM " + param[2].ToString().ToUpper() + " SKILL", Token.Number);
 
                 case "pickskillbyskillgroup":
                     if (param.Length != 4)
                         throw new Exception("Illegal number of parameters for pickskillbyskillgroup function.");
                     //Unit.SetStat("thorns_dmg_toxic_item", param[0]);
+                    Unit.SetStat("skill_bonus", "RANDOM " + param[2].ToString().ToUpper() + " SKILL " + param[3]); //maybe?
                     return new Token("RANDOM " + param[2] + " SKILL", Token.Number);
 
                 case "thorns_dmg_toxic_item":
@@ -1379,7 +1382,10 @@ namespace MediaWiki.Parser
             public override string ToString()
             {
                 if (Start == End) return Start.ToString();
-                return Start + "~" + End;
+                if (Start < 0 && End < 0)
+                    return "-[" + (-Start) + " - " + (-End) + "]";
+
+                return "[" + Start + " - " + End + "]";
             }
 
             public static Range operator +(Range c1, int c2)
