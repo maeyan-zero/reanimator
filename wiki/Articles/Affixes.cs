@@ -35,7 +35,7 @@ namespace MediaWiki.Articles
 
             string id, code, magicName, formattedName, displayString, levelRange, typeList, faction;
             string[] feeds;
-            string quality, property1, allowType;
+            string quality, property1, allowType, skillBonus;
             bool isMonster = false;
 
             Evaluator evaluator = new Evaluator();
@@ -44,6 +44,9 @@ namespace MediaWiki.Articles
 
             foreach (DataRow row in affixes.Rows)
             {
+                //don't show affixes that aren't used/implemented
+                if ((int)row["spawn"] == 0) continue;
+
                 isMonster = false;
 
                 magicName = row["magicNameString_string"].ToString();
@@ -83,15 +86,13 @@ namespace MediaWiki.Articles
                 for (int i = 1; i < 7; i++)
                 {
                     property1 = row["property" + i].ToString();
-                    
-                    if (property1.Contains("affix_feed"))
-                    {//debuggery (for breakpoint purposes)
-                    }
                     evaluator.Evaluate(property1);
                 }
 
                 String[] displayStrings = ItemDisplay.GetDisplayStrings(unit);
-                feeds = ItemDisplay.GetFeedCosts(evaluator.Unit);
+                feeds = ItemDisplay.GetFeedCosts(unit);
+
+                //skillBonus = ItemDisplay.GetSkillBonus(unit);
                 
 
                 id = row["Index"].ToString();
@@ -124,7 +125,7 @@ namespace MediaWiki.Articles
 
                 Debug.WriteLine(id + ", " + row["affix"] + ", " + displayString);
 
-                table.AddRow(id, code, magicName, formattedName, displayString, levelRange, typeList, faction, FormatAffixList(feeds));
+                table.AddRow(id, code, magicName, formattedName, displayString, levelRange, typeList, faction, GetSqlEncapsulatedString(FormatAffixList(feeds)));
             }
 
             return table.GetFullScript();
@@ -161,7 +162,7 @@ namespace MediaWiki.Articles
 
         private string FormatAffixList(string[] affixes)
         {
-            string list = affixes.Aggregate(string.Empty, (current, affix) => current + affix + "<br />");
+            string list = affixes.Aggregate(string.Empty, (current, affix) => current + affix + "<br />").Replace("'", "''");
             return list;
         }
 
