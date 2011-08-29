@@ -866,80 +866,47 @@ namespace MediaWiki.Parser
 
                 case "feed_stamina_pct":
                 case "affix_feed_stamina_pct":
-                    var ilevel = (int) Unit.GetStat("level");
-                    if (ilevel == 0)
-                    {
-                        Unit.SetStat("stamina_feed", "ilevel_feed * " + param[0] + "%");
-                        return new Token("ilevel * " + param[0] + "%", Token.Formula);
-                    }
-                    var ilevels = Manager.GetDataTable("ITEM_LEVELS");
-                    var feed = (int) ilevels.Rows[ilevel]["feed"];
-                    var ifeed = Math.Ceiling(feed * (((double)param[0]) / 100));
-                    Unit.SetStat("stamina_feed", ifeed);
-                    return new Token(feed, Token.Number);
+                    return SetFeed("stamina_feed", param);
 
                 case "feed_willpower_pct":
                 case "affix_feed_willpower_pct":
-                    ilevel = (int)Unit.GetStat("level");
-                    if (ilevel == 0)
-                    {
-                        Unit.SetStat("willpower_feed", "ilevel_feed * " + param[0] + "%");
-                        return new Token("ilevel * " + param[0] + "%", Token.Formula);
-                    }
-                    ilevels = Manager.GetDataTable("ITEM_LEVELS");
-                    feed = (int)ilevels.Rows[ilevel]["feed"];
-                    ifeed = Math.Ceiling(feed * (((double)param[0]) / 100));
-                    Unit.SetStat("willpower_feed", ifeed);
-                    return new Token(feed, Token.Number);
+                    return SetFeed("willpower_feed", param);
 
                 case "feed_strength_pct":
                 case "affix_feed_strength_pct":
-                    ilevel = (int)Unit.GetStat("level");
-                    if (ilevel == 0)
-                    {
-                        Unit.SetStat("strength_feed", "ilevel_feed * " + param[0] + "%");
-                        return new Token("ilevel * " + param[0] + "%", Token.Formula);
-                    }
-                    ilevels = Manager.GetDataTable("ITEM_LEVELS");
-                    feed = (int)ilevels.Rows[ilevel]["feed"];
-                    ifeed = Math.Ceiling(feed * (((double)param[0]) / 100));
-                    Unit.SetStat("strength_feed", ifeed);
-                    return new Token(feed, Token.Number);
+                    return SetFeed("strength_feed", param);
 
                 case "feed_accuracy_pct":
                 case "affix_feed_accuracy_pct":
-                    ilevel = (int)Unit.GetStat("level");
-                    if (ilevel == 0)
-                    {
-                        Unit.SetStat("accuracy_feed", "ilevel_feed * " + param[0] + "%");
-                        return new Token("ilevel * " + param[0] + "%", Token.Formula);
-                    }
-                    ilevels = Manager.GetDataTable("ITEM_LEVELS");
-                    feed = (int)ilevels.Rows[ilevel]["feed"];
-                    ifeed = Math.Ceiling(feed * (((double)param[0]) / 100));
-                    Unit.SetStat("accuracy_feed", ifeed);
-                    return new Token(feed, Token.Number);
+                    return SetFeed("accuracy_feed", param);
 
                 case "dmg_fire":
                 case "dmg_spec":
                 case "dmg_phys":
                 case "dmg_toxic":
                 case "dmg_elec":
-                case "field_fire":
-                case "field_spec":
-                case "field_phys":
-                case "field_toxic":
-                case "field_elec":
+                    return SetDirectDamage(func, param);
+
+
                 case "rad_fire":
                 case "rad_spec":
                 case "rad_phys":
                 case "rad_toxic":
                 case "rad_elec":
+                    return SetSplashDamage(func, param);
+
+
+                case "field_fire":
+                case "field_spec":
+                case "field_phys":
+                case "field_toxic":
+                case "field_elec":
                 case "dot_fire":
                 case "dot_spec":
                 case "dot_phys":
                 case "dot_toxic":
                 case "dot_elec":
+
                 case "ai_change_stop":
                 case "ai_change_convert":
                 case "ai_change_convert_field":
@@ -1005,29 +972,26 @@ namespace MediaWiki.Parser
                     return new Token(param[0], Token.Number);
 
                 case "monster_level_shields":
-                    if (param.Length != 1)
-                        throw new Exception("Illegal number of parameters for monster_level_shields function.");
+                    if (param.Length != 1) throw new Exception("Illegal number of parameters for monster_level_shields function.");
+
                     Unit.SetStat("set_shield_bonus", param[0]);
                     return new Token(param[0], Token.Number);
 
                 case "pickskill":
-                    if (param.Length != 3)
-                        throw new Exception("Illegal number of parameters for pickskill function.");
+                    if (param.Length != 3) throw new Exception("Illegal number of parameters for pickskill function.");
+
                     Unit.SetStat("skill_bonus", "RANDOM SKILL " + param[2]); //I think that's how it works?
-                    //Unit.SetStat("thorns_dmg_toxic_item", param[0]);
                     return new Token("RANDOM SKILL", Token.Number);
 
                 case "pickskillbyunittype":
-                    if (param.Length != 4)
-                        throw new Exception("Illegal number of parameters for pickskillbyunittype function.");
-                    //Unit.SetStat("thorns_dmg_toxic_item", param[0]);
+                    if (param.Length != 4)  throw new Exception("Illegal number of parameters for pickskillbyunittype function.");
+
                     Unit.SetStat("skill_bonus", "RANDOM " + param[2].ToString().ToUpper() + " SKILL " + param[3]); //maybe?
                     return new Token("RANDOM " + param[2].ToString().ToUpper() + " SKILL", Token.Number);
 
                 case "pickskillbyskillgroup":
-                    if (param.Length != 4)
-                        throw new Exception("Illegal number of parameters for pickskillbyskillgroup function.");
-                    //Unit.SetStat("thorns_dmg_toxic_item", param[0]);
+                    if (param.Length != 4) throw new Exception("Illegal number of parameters for pickskillbyskillgroup function.");
+
                     Unit.SetStat("skill_bonus", "RANDOM " + param[2].ToString().ToUpper() + " SKILL " + param[3]); //maybe?
                     return new Token("RANDOM " + param[2] + " SKILL", Token.Number);
 
@@ -1192,6 +1156,44 @@ namespace MediaWiki.Parser
                 default:
                     throw new Exception("Unknown function: " + func);
             }
+        }
+
+        private Token SetDirectDamage(string dmgType, object[] objects)
+        {
+            var damageMin = (int) Unit.GetStat("damage_min");
+            var damageMax = (int) Unit.GetStat("damage_max");
+            var directInc = (int) Unit.GetStat("dmg_increment");
+            var pct = (double) objects[0];
+            var ilevel = (int) Unit.GetStat("level");
+            var ilevels = Manager.GetDataTable("ITEM_LEVELS");
+            var dmgMulti = (int) ilevels.Rows[ilevel]["baseDamageMultiplyer"];
+            var absoluteMin = damageMin * ((dmgMulti * directInc * pct) / 1000000);
+            var absoluteMax = damageMax * ((dmgMulti * directInc * pct) / 1000000);
+            absoluteMin = Math.Ceiling(absoluteMin);
+            absoluteMax = Math.Ceiling(absoluteMax);
+            Unit.SetStat(dmgType, "min", absoluteMin);
+            Unit.SetStat(dmgType, "max", absoluteMax);
+            return new Token(dmgType + ": " + absoluteMin + "/" + absoluteMax, Token.Formula);
+        }
+
+        private Token SetSplashDamage(string dmgType, object[] objects)
+        {
+            var damageMin = (int)Unit.GetStat("damage_min");
+            var damageMax = (int)Unit.GetStat("damage_max");
+            var directInc = (int)Unit.GetStat("radial_increment");
+            var pct = (double)objects[0];
+            var range = (objects.Length < 3) ? 1 : (double)objects[2] / 10;
+            var ilevel = (int)Unit.GetStat("level");
+            var ilevels = Manager.GetDataTable("ITEM_LEVELS");
+            var dmgMulti = (int)ilevels.Rows[ilevel]["baseDamageMultiplyer"];
+            var absoluteMin = damageMin * ((dmgMulti * directInc * pct) / 1000000);
+            var absoluteMax = damageMax * ((dmgMulti * directInc * pct) / 1000000);
+            absoluteMin = Math.Ceiling(absoluteMin);
+            absoluteMax = Math.Ceiling(absoluteMax);
+            Unit.SetStat(dmgType, "min", absoluteMin);
+            Unit.SetStat(dmgType, "max", absoluteMax);
+            Unit.SetStat(dmgType, "range", range);
+            return new Token(dmgType + ": " + absoluteMin + "/" + absoluteMax, Token.Formula);
         }
 
         /// <summary>
@@ -1460,6 +1462,36 @@ namespace MediaWiki.Parser
             {
                 Tokens = tokens;
             }
+        }
+
+        private Token SetFeed(string label, params object[] param)
+        {
+            if (Unit.GetStat("level") is Range)
+            {
+                var levels = Manager.GetDataTable("ITEM_LEVELS");
+                var ilevelmin = ((Range)Unit.GetStat("level")).Start;
+                var ilevelmax = ((Range)Unit.GetStat("level")).End;
+                var ifeedmin = (int)levels.Rows[ilevelmin]["feed"];
+                var ifeedmax = (int)levels.Rows[ilevelmax]["feed"];
+                ifeedmin = Convert.ToInt32(Math.Ceiling(Convert.ToDouble(ifeedmin) * (((double)param[0]) / 100)));
+                ifeedmax = Convert.ToInt32(Math.Ceiling(Convert.ToDouble(ifeedmax) * (((double)param[0]) / 100)));
+                var range = new Range(ifeedmin, ifeedmax);
+                Unit.SetStat(label, range, true);
+                return new Token(range, Token.Range);
+            }
+
+            var ilevel = Convert.ToInt32(Unit.GetStat("level"));
+            if (ilevel == 0)
+            {
+                Unit.SetStat(label, "ilevel_feed * " + param[0] + "%", true);
+                return new Token("ilevel * " + param[0] + "%", Token.Formula);
+            }
+
+            var ilevels = Manager.GetDataTable("ITEM_LEVELS");
+            var feed = (int)ilevels.Rows[ilevel]["feed"];
+            var ifeed = Math.Ceiling(feed * (((double)param[0]) / 100));
+            Unit.SetStat(label, ifeed, true);
+            return new Token(feed, Token.Number);
         }
 
         ///
