@@ -46,7 +46,6 @@ namespace MediaWiki.Articles
             {
                 //don't show affixes that aren't used/implemented
                 if ((int)row["spawn"] == 0) continue;
-
                 isMonster = false;
 
                 magicName = row["magicNameString_string"].ToString();

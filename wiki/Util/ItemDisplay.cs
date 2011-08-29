@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.Data;
 using Hellgate;
 using Hellgate.Excel;
+using MediaWiki.Articles;
 using MediaWiki.Parser;
 using MediaWiki.Parser.Class;
 using System.Linq;
@@ -217,22 +218,22 @@ namespace MediaWiki.Util
                 switch (slot.Key)
                 {
                     case "fuel":
-                        strings.Add("Fuel: " + slot.Value);
+                        strings.Add(WikiScript.GetImage("fuel", 15) + " " + slot.Value);
                         break;
                     case "relic":
-                        strings.Add("Relic: " + slot.Value);
+                        strings.Add(WikiScript.GetImage("relic", 15) + " " + slot.Value);
                         break;
                     case "tech":
-                        strings.Add("Techs: " + slot.Value);
+                        strings.Add(WikiScript.GetImage("tech", 15) + " " + slot.Value);
                         break;
                     case "battery":
-                        strings.Add("Battery: " + slot.Value);
+                        strings.Add(WikiScript.GetImage("battery", 15) + " " + slot.Value);
                         break;
                     case "ammo":
-                        strings.Add("Ammo: " + slot.Value);
+                        strings.Add(WikiScript.GetImage("ammo", 15) + " " + slot.Value);
                         break;
                     case "rockets":
-                        strings.Add("Rockets: " + slot.Value);
+                        strings.Add(WikiScript.GetImage("rocket", 15) + " " + slot.Value);
                         break;
                     default:
                         throw new Exception("Unknown mod slot: " + slot.Key);
@@ -282,7 +283,7 @@ namespace MediaWiki.Util
             return strings.ToArray();
         }
 
-        private static string FormatFeed(object feed)
+        public static string FormatFeed(object feed)
         {
             if (feed is Parser.Evaluator.Range)
                 return feed.ToString();

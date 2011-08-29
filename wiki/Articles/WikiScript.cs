@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Collections.Generic;
 using System.Globalization;
 using System.Text;
 using Hellgate;
@@ -41,7 +42,7 @@ namespace MediaWiki.Articles
         /// </summary>
         /// <param name="name"></param>
         /// <returns></returns>
-        protected static string GetWikiArticleLink(string name, string displayname = "")
+        public static string GetWikiArticleLink(string name, string displayname = "")
         {
             if (name.Equals("")) return string.Empty;
 
@@ -54,7 +55,7 @@ namespace MediaWiki.Articles
             return builder.ToString();
         }
 
-        protected static string GetImage(string name, int pxWidth = 0, bool isThumb = false, string caption = "")
+        public static string GetImage(string name, int pxWidth = 0, bool isThumb = false, string caption = "")
         {
             if (String.IsNullOrWhiteSpace(name)) return string.Empty;
             System.Text.StringBuilder builder = new System.Text.StringBuilder();
@@ -72,36 +73,47 @@ namespace MediaWiki.Articles
             return builder.ToString();
         }
 
-        protected static string GetWikiTab(int depth)
+        public static string GetWikiTab(int depth)
         {
             var tab = "";
             for (var i = 0; i < depth; i++) tab += ":";
             return tab;
         }
 
-        protected static string Colorize(string text, string colorType)
+        public static string Colorize(string text, string colorType)
         {
             return String.Format("<span style=\"color:{0}\">{1}</span>", colorType, text);
         }
 
-        protected static string GetFormattedString(string raw)
+        public static string GetFormattedString(string raw)
         {
             var result = raw.Replace("_", " ");
             result = CultureInfo.CurrentCulture.TextInfo.ToTitleCase(result);
             return result;
         }
 
-        protected static string GetWikiListIndentation(int depth)
+        public static string GetWikiListIndentation(int depth)
         {
             var result = String.Empty;
             for (var i = 0; i < depth; i++)
             {
-                result += "*";
+                result += ":";
             }
             return result;
         }
 
-        protected static string GetSqlEncapsulatedString(string raw)
+        public static string GetCSVString(IList<string> list)
+        {
+            string output = string.Empty;
+            for (var i = 0; i < list.Count; i++)
+            {
+                output += list[i];
+                if (i < list.Count - 1) output += ", ";
+            }
+            return output;
+        }
+
+        public static string GetSqlEncapsulatedString(string raw)
         {
             if (raw == null) return string.Empty;
             var output = raw.Replace("\"", "\\\"");

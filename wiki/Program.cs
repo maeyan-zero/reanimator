@@ -12,12 +12,12 @@ namespace MediaWiki
     {
         static void Main(string[] args)
         {
-            var manager = new FileManager(@"C:\T3Fun\Hellgate");
+            var manager = new FileManager(@"C:\Hellgate");
             manager.BeginAllDatReadAccess();
             manager.LoadTableFiles();
             manager.EndAllDatAccess();
 
-            args = new[] { "AFFIXES" };
+            args = new[] { "ITEMS" };
 
             string sqlStatement;
             WikiScript script;
@@ -42,6 +42,9 @@ namespace MediaWiki
                         break;
                     case "ITEMS":
                         script = new Items(manager);
+                        break;
+                    case "TREASURE":
+                        script = new Treasure(manager);
                         break;
                     default:
                         throw new Exception("Unknown WikiScript: " + arg);

@@ -6,46 +6,67 @@ namespace MediaWiki.Parser.Class
     {
         protected Dictionary<string, object> Stats = new Dictionary<string, object>();
 
-	    public object SetStat(string label, object value)
+	    public object SetStat(string label, object value, bool append = false)
         {
             if (Stats.ContainsKey(label))
             {
-                if (Stats[label] is Evaluator.Range && value is Evaluator.Range)
-                    Stats[label] = (Evaluator.Range) Stats[label] + (Evaluator.Range) value;
-                if (Stats[label] is Evaluator.Range && value is int)
-                    Stats[label] = (Evaluator.Range) Stats[label] + (int) value;
-                if (Stats[label] is Evaluator.Range && value is double)
-                    Stats[label] = (Evaluator.Range) Stats[label] + (double) value;
-                if (Stats[label] is int && value is int)
-                    Stats[label] = (int) Stats[label] + (int) value;
-                if (Stats[label] is double && value is double)
-                    Stats[label] = (double) Stats[label] + (double) value;
-                if (Stats[label] is string)
-                    Stats[label] += ";" + value;
+                if (append)
+                {
+                    if (Stats[label] is Evaluator.Range && value is Evaluator.Range)
+                        Stats[label] = (Evaluator.Range) Stats[label] + (Evaluator.Range) value;
+                    if (Stats[label] is Evaluator.Range && value is int)
+                        Stats[label] = (Evaluator.Range) Stats[label] + (int) value;
+                    if (Stats[label] is Evaluator.Range && value is double)
+                        Stats[label] = (Evaluator.Range) Stats[label] + (double) value;
+                    if (Stats[label] is int && value is int)
+                        Stats[label] = (int) Stats[label] + (int) value;
+                    if (Stats[label] is double && value is double)
+                        Stats[label] = (double) Stats[label] + (double) value;
+                    if (Stats[label] is string)
+                        Stats[label] += ";" + value;
+                }
+                else
+                {
+                    Stats[label] = value;
+                }
             }
             else
                 Stats.Add(label, value);
 		    return value;
 	    }
 	
-	    public object SetStat(string label1, string label2, object value)
+	    public object SetStat(string label1, string label2, object value, bool append = false)
         {
 		    if (Stats.ContainsKey(label1) == false)
 			    Stats.Add(label1, new Dictionary<string, object>());
             if (((Dictionary<string, object>) Stats[label1]).ContainsKey(label2))
             {
-                if (((Dictionary<string, object>) Stats[label1])[label2] is Evaluator.Range && value is Evaluator.Range)
-                    ((Dictionary<string, object>) Stats[label1])[label2] = (Evaluator.Range)((Dictionary<string, object>) Stats[label1])[label2] + (Evaluator.Range)value;
-                if (((Dictionary<string, object>) Stats[label1])[label2] is Evaluator.Range && value is int)
-                    ((Dictionary<string, object>) Stats[label1])[label2] = (Evaluator.Range)((Dictionary<string, object>) Stats[label1])[label2] + (int)value;
-                if (((Dictionary<string, object>) Stats[label1])[label2] is Evaluator.Range && value is double)
-                    ((Dictionary<string, object>) Stats[label1])[label2] = (Evaluator.Range)((Dictionary<string, object>) Stats[label1])[label2] + (double)value;
-                if (((Dictionary<string, object>) Stats[label1])[label2] is int && value is int)
-                    ((Dictionary<string, object>) Stats[label1])[label2] = (int)((Dictionary<string, object>) Stats[label1])[label2] + (int)value;
-                if (((Dictionary<string, object>) Stats[label1])[label2] is double && value is double)
-                    ((Dictionary<string, object>) Stats[label1])[label2] = (double)((Dictionary<string, object>) Stats[label1])[label2] + (double)value;
-                if (((Dictionary<string, object>) Stats[label1])[label2] is string)
-                    ((Dictionary<string, object>) Stats[label1])[label2] += ";" + value;
+                if (append)
+                {
+                    if (((Dictionary<string, object>) Stats[label1])[label2] is Evaluator.Range &&
+                        value is Evaluator.Range)
+                        ((Dictionary<string, object>) Stats[label1])[label2] =
+                            (Evaluator.Range) ((Dictionary<string, object>) Stats[label1])[label2] +
+                            (Evaluator.Range) value;
+                    if (((Dictionary<string, object>) Stats[label1])[label2] is Evaluator.Range && value is int)
+                        ((Dictionary<string, object>) Stats[label1])[label2] =
+                            (Evaluator.Range) ((Dictionary<string, object>) Stats[label1])[label2] + (int) value;
+                    if (((Dictionary<string, object>) Stats[label1])[label2] is Evaluator.Range && value is double)
+                        ((Dictionary<string, object>) Stats[label1])[label2] =
+                            (Evaluator.Range) ((Dictionary<string, object>) Stats[label1])[label2] + (double) value;
+                    if (((Dictionary<string, object>) Stats[label1])[label2] is int && value is int)
+                        ((Dictionary<string, object>) Stats[label1])[label2] =
+                            (int) ((Dictionary<string, object>) Stats[label1])[label2] + (int) value;
+                    if (((Dictionary<string, object>) Stats[label1])[label2] is double && value is double)
+                        ((Dictionary<string, object>) Stats[label1])[label2] =
+                            (double) ((Dictionary<string, object>) Stats[label1])[label2] + (double) value;
+                    if (((Dictionary<string, object>) Stats[label1])[label2] is string)
+                        ((Dictionary<string, object>) Stats[label1])[label2] += ";" + value;
+                }
+                else
+                {
+                    ((Dictionary<string, object>)Stats[label1])[label2] = value;
+                }
             }
             else
 		        ((Dictionary<string, object>) Stats[label1]).Add(label2, value);
