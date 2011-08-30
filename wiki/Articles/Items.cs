@@ -31,6 +31,8 @@ namespace MediaWiki.Articles
                 "type TEXT",
                 "flavor TEXT",
                 "damage TEXT",
+                "defence TEXT",
+                "stats TEXT",
                 "mods TEXT",
                 "feeds TEXT",
                 "level TEXT",
@@ -42,7 +44,7 @@ namespace MediaWiki.Articles
             var items = Manager.GetDataTable("ITEMS");
             var qualityTable = Manager.GetDataTable("ITEM_QUALITY");
 
-            string id, code, name, type, flavor, quality, image, damage, affixes, modslots, feeds, level, inherent;
+            string id, code, name, type, flavor, quality, image, damage, stats, affixes, modslots, feeds, level, inherent, defence;
 
             foreach (DataRow item in items.Rows)
             {
@@ -57,7 +59,7 @@ namespace MediaWiki.Articles
                 // Guts
                 id = GetSqlEncapsulatedString(item["index"].ToString());
                 code = GetSqlEncapsulatedString(((int)item["code"]).ToString("X"));
-                image = GetSqlEncapsulatedString(GetImage(item["name"] + ".png", 256));
+                image = GetSqlEncapsulatedString(GetImage(item["name"] + ".png", 224));
 
                 name = item["String_string"].ToString();
                 name = "<div class=\"item_name " + quality.ToLower() + "\">" + name + "</div>";
@@ -75,6 +77,14 @@ namespace MediaWiki.Articles
                 damage = GetDamage(item);
                 if (!string.IsNullOrEmpty(damage)) damage = "<div class=\"item_heading\">Damage</div><div class=\"item_damage\">" + damage + "</div>";
                 damage = GetSqlEncapsulatedString(damage);
+
+                defence = GetDefence(item);
+                if (!string.IsNullOrEmpty(defence)) defence = "<div class=\"item_heading\">Defence</div><div class=\"item_defence\">" + defence + "</div>";
+                defence = GetSqlEncapsulatedString(defence);
+
+                stats = GetStats(item);
+                if (!string.IsNullOrEmpty(stats)) stats = "<div class=\"item_heading\">Stats</div><div class=\"item_stats\">" + stats + "</div>";
+                stats = GetSqlEncapsulatedString(stats);
 
                 modslots = GetModSlots(item["props2"].ToString());
                 modslots = GetSqlEncapsulatedString(modslots);
@@ -94,10 +104,54 @@ namespace MediaWiki.Articles
                 if (!string.IsNullOrEmpty(affixes)) affixes = "<div class=\"item_heading\">Special Affixes</div><div class=\"item_affixes\">" + affixes + "</div>";
                 affixes = GetSqlEncapsulatedString(affixes);
 
-                TableScript.AddRow(id, code, image, name, type, flavor, damage, modslots, feeds, level, inherent, affixes);
+                TableScript.AddRow(id, code, image, name, type, flavor, damage, defence, stats, modslots, feeds, level, inherent, affixes);
             }
 
             return TableScript.GetFullScript();
+        }
+
+        private string GetStats(DataRow item)
+        {
+            var strings = new List<string>();
+
+            if (((int)item["criticalPct"]) != 0) strings.Add("Critical Chance: " + item["criticalPct"] + "%");
+            if (((int)item["criticalMult"]) != 0) strings.Add("Critical Damage: " + item["criticalMult"] + "%");
+            if (((int)item["interruptAttackPct"]) != 0) strings.Add("Interrupt Strength: " + item["interruptAttackPct"]);
+            if (((int)item["firingErrorDecrease"]) != 0) strings.Add("Rate of fire: " + item["firingErrorDecrease"] + " shots/min");
+
+            if (((int)item["sfxPhysicalAbilityPct"]) != 0) strings.Add("Stun Attack Strength: " + item["sfxPhysicalAbilityPct"]);
+            if (((int)item["sfxPhysicalDefensePct"]) != 0) strings.Add("Stun Defence: " + item["sfxPhysicalDefensePct"]);
+            if (((int)item["sfxFireAbilityPct"]) != 0) strings.Add("Ignite Attack Strength: " + item["sfxFireAbilityPct"]);
+            if (((int)item["sfxFireDefensePct"]) != 0) strings.Add("Ignite Defence: " + item["sfxFireDefensePct"]);
+            if (((int)item["sfxElectricAbilityPct"]) != 0) strings.Add("Shock Attack Strength: " + item["sfxElectricAbilityPct"]);
+            if (((int)item["sfxElectricDefensePct"]) != 0) strings.Add("Shock Defence: " + item["sfxElectricDefensePct"]);
+            if (((int)item["sfxSpectralAbilityPct"]) != 0) strings.Add("Phase Attack Strength: " + item["sfxSpectralAbilityPct"]);
+            if (((int)item["sfxSpectralDefensePct"]) != 0) strings.Add("Phase Defence: " + item["sfxSpectralDefensePct"]);
+            if (((int)item["sfxToxicAbilityPct"]) != 0) strings.Add("Poison Attack Strength: " + item["sfxToxicAbilityPct"]);
+            if (((int)item["sfxToxicDefensePct"]) != 0) strings.Add("Poison Defence: " + item["sfxToxicDefensePct"]);
+
+            return ConcatStrings(strings);
+        }
+
+        private string GetDefence(DataRow item)
+        {
+            var level = !string.IsNullOrEmpty(item["fixedLevel"].ToString()) ?  Int32.Parse(item["fixedLevel"].ToString().Replace(";", "")) : (int)item["level"];
+            var strings = new List<string>();
+            if (((int) item["armor"]) != 0)
+            {
+                int armor = (int) item["armor"];
+                int buffer = (int) Manager.GetDataTable("ITEM_LEVELS").Rows[level]["armor"];
+                armor = armor * buffer / 100;
+                strings.Add("Armor: " + armor);
+            }
+            if (((int)item["shields"]) != 0)
+            {
+                int shields = (int)item["shields"];
+                int buffer = (int)Manager.GetDataTable("ITEM_LEVELS").Rows[level]["shields"];
+                shields = shields * buffer / 100;
+                strings.Add("Shields: " + shields);
+            }
+            return ConcatStrings(strings);
         }
 
         private IList<string> GetInherentAffixes(DataRow item)
@@ -105,13 +159,8 @@ namespace MediaWiki.Articles
             var evaluator = new Evaluator { Unit = new Item(), Manager = Manager, Game3 = new Game3() };
             var scripts = item["props1"].ToString() + item["props2"] + item["props3"] + item["props4"] + item["props5"];
 
-            var level = item["fixedLevel"].ToString();
-            level = level.Replace(";", "");
-            if (!string.IsNullOrEmpty(level))
-            {
-                int ilevel = int.Parse(level);
-                evaluator.Unit.SetStat("level", ilevel);
-            }
+            var level = !string.IsNullOrEmpty(item["fixedLevel"].ToString()) ?  Int32.Parse(item["fixedLevel"].ToString().Replace(";", "")) : (int)item["level"];
+            evaluator.Unit.SetStat("level", level);
 
             evaluator.Evaluate(scripts);
             return ItemDisplay.GetDisplayStrings(evaluator.Unit);
@@ -123,8 +172,7 @@ namespace MediaWiki.Articles
 
             var unit = new Item();
             var evaluator = new Evaluator { Unit = unit, Manager = Manager, Game3 = new Game3() };
-            var level = (int) item["level"];
-            if (item["fixedLevel"].ToString() != "") level = Int32.Parse(item["fixedLevel"].ToString().Replace(";", ""));
+            var level = !string.IsNullOrEmpty(item["fixedLevel"].ToString()) ? Int32.Parse(item["fixedLevel"].ToString().Replace(";", "")) : (int)item["level"];
             var dmgMin = Int32.Parse(item["minBaseDmg"].ToString().Replace(";", ""));
             var dmgMax = Int32.Parse(item["maxBaseDmg"].ToString().Replace(";", ""));
             var dmgIncrement = (int) item["dmgIncrement"];
@@ -243,7 +291,7 @@ namespace MediaWiki.Articles
             int itemLevel = int.Parse(level);
             int charLevel = itemLevel - 4 - ((itemLevel)/10);
             string output = "<div class=\"item_heading\">Item Level</div>";
-            output += "<div>Item Level: " + itemLevel;
+            output += "<div class=\"item_level\">Item Level: " + itemLevel;
             if (charLevel > 1) output += "<br/>Requires Character Level: " + charLevel + "</div>";
             return output;
         }
@@ -265,9 +313,9 @@ namespace MediaWiki.Articles
             strings.Append("<tr>");
             foreach (var slot in (Dictionary<string, object>)itemSlots)
             {
-                int maxSlot = (slot.Value is Evaluator.Range) ? ((Evaluator.Range) slot.Value).End : Convert.ToInt32(slot.Value);
+                //int maxSlot = (slot.Value is Evaluator.Range) ? ((Evaluator.Range) slot.Value).End : Convert.ToInt32(slot.Value);
                 strings.Append("<td>");
-                for (int i = 0; i < maxSlot; i++)
+                //for (int i = 0; i < maxSlot; i++)
                     strings.Append(GetImage(slot.Key + ".png", 48));
                 strings.Append("</td>");
                 noSlots += "<td>" + slot.Value + "</td>";
@@ -285,16 +333,8 @@ namespace MediaWiki.Articles
             var table = Manager.GetDataTable("AFFIXES");
             var affixes = item["affix"].ToString();
 
-            var level = item["fixedLevel"].ToString();
-            level = level.Replace(";", "");
-            int ilevel = 0;
-            if (!string.IsNullOrEmpty(level))
-            {
-                ilevel = int.Parse(level);
-                evaluator.Unit.SetStat("level", ilevel);
-            }
-
-            evaluator.Unit.SetStat("level", ilevel);
+            var level = !string.IsNullOrEmpty(item["fixedLevel"].ToString()) ?  Int32.Parse(item["fixedLevel"].ToString().Replace(";", "")) : (int)item["level"];
+            evaluator.Unit.SetStat("level", level);
 
             string[] split = affixes.Split(',');
             foreach (var i in split)
@@ -350,13 +390,8 @@ namespace MediaWiki.Articles
             var scripts = item["perLevelProps1"].ToString();
             scripts += item["perLevelProps2"].ToString();
 
-            var level = item["fixedLevel"].ToString();
-            level = level.Replace(";", "");
-            if (!string.IsNullOrEmpty(level))
-            {
-                var ilevel = int.Parse(level);
-                evaluator.Unit.SetStat("level", ilevel);
-            }
+            var level = !string.IsNullOrEmpty(item["fixedLevel"].ToString()) ?  Int32.Parse(item["fixedLevel"].ToString().Replace(";", "")) : (int)item["level"];
+            evaluator.Unit.SetStat("level", level);
 
             string[] split = affixes.Split(',');
             foreach (var i in split)
@@ -411,7 +446,7 @@ namespace MediaWiki.Articles
                 strings.Add(feed + " Will");
             }
 
-            return "<div class=\"item_heading\">Feed</div>" + GetCSVString(strings);
+            return "<div class=\"item_heading\">Feed</div><div class=\"item_feed\">" + GetCSVString(strings) + "</div>";
         }
 
         public string GetColorCode(int quality)
