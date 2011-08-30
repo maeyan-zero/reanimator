@@ -51,10 +51,14 @@ namespace MediaWiki.Articles
                 if (item["code"].ToString() == "0") continue; // ignore blank rows
                 Debug.WriteLine("Parsing: " + item["Index"] + " (" + item["name"] + ")");
 
+                //if (((int)item["Index"]) != 2680) continue;
+
                 // Dependencies
                 quality = ((int) item["itemQuality"]) != -1
                                     ? qualityTable.Rows[(int) item["itemQuality"]]["displayName_string"].ToString()
                                     : string.Empty;
+
+                Unit unit = new Item(); // for sharing stats
 
                 // Guts
                 id = GetSqlEncapsulatedString(item["index"].ToString());
@@ -78,10 +82,6 @@ namespace MediaWiki.Articles
                 if (!string.IsNullOrEmpty(damage)) damage = "<div class=\"item_heading\">Damage</div><div class=\"item_damage\">" + damage + "</div>";
                 damage = GetSqlEncapsulatedString(damage);
 
-                defence = GetDefence(item);
-                if (!string.IsNullOrEmpty(defence)) defence = "<div class=\"item_heading\">Defence</div><div class=\"item_defence\">" + defence + "</div>";
-                defence = GetSqlEncapsulatedString(defence);
-
                 stats = GetStats(item);
                 if (!string.IsNullOrEmpty(stats)) stats = "<div class=\"item_heading\">Stats</div><div class=\"item_stats\">" + stats + "</div>";
                 stats = GetSqlEncapsulatedString(stats);
@@ -100,9 +100,13 @@ namespace MediaWiki.Articles
                 if (!string.IsNullOrEmpty(inherent)) inherent = "<div class=\"item_heading\">Inherent Affixes</div><div class=\"item_affixes\">" + inherent + "</div>";
                 inherent = GetSqlEncapsulatedString(inherent);
 
-                affixes = ConcatStrings(GetAffixes(item));
+                affixes = ConcatStrings(GetAffixes(item, unit));
                 if (!string.IsNullOrEmpty(affixes)) affixes = "<div class=\"item_heading\">Special Affixes</div><div class=\"item_affixes\">" + affixes + "</div>";
                 affixes = GetSqlEncapsulatedString(affixes);
+
+                defence = GetDefence(item, unit);
+                if (!string.IsNullOrEmpty(defence)) defence = "<div class=\"item_heading\">Defence</div><div class=\"item_defence\">" + defence + "</div>";
+                defence = GetSqlEncapsulatedString(defence);
 
                 TableScript.AddRow(id, code, image, name, type, flavor, damage, defence, stats, modslots, feeds, level, inherent, affixes);
             }
@@ -133,30 +137,55 @@ namespace MediaWiki.Articles
             return ConcatStrings(strings);
         }
 
-        private string GetDefence(DataRow item)
+        private string GetDefence(DataRow item, Unit unit)
         {
             var level = !string.IsNullOrEmpty(item["fixedLevel"].ToString()) ?  Int32.Parse(item["fixedLevel"].ToString().Replace(";", "")) : (int)item["level"];
             var strings = new List<string>();
             if (((int) item["armor"]) != 0)
             {
-                int armor = (int) item["armor"];
-                int buffer = (int) Manager.GetDataTable("ITEM_LEVELS").Rows[level]["armor"];
-                armor = armor * buffer / 100;
-                strings.Add("Armor: " + armor);
+                var armor = (int) item["armor"];
+                var buffer = (int) Manager.GetDataTable("ITEM_LEVELS").Rows[level]["armor"];
+                object bonus;
+                if (unit.GetStat("armor_bonus") is int)
+                    bonus = 0;
+                else
+                    bonus = ((Dictionary<string, object>) unit.GetStat("armor_bonus"))["all"];
+                if (bonus is Evaluator.Range)
+                {
+                    armor = armor * buffer / 100;
+                    Evaluator.Range range = (Evaluator.Range) bonus + armor;
+                    strings.Add("Armor: " + range);
+                }
+                else
+                {
+                    armor = armor * buffer / 100;
+                    strings.Add("Armor: " + armor + Convert.ToInt32(bonus));
+                }
             }
             if (((int)item["shields"]) != 0)
             {
-                int shields = (int)item["shields"];
-                int buffer = (int)Manager.GetDataTable("ITEM_LEVELS").Rows[level]["shields"];
-                shields = shields * buffer / 100;
-                strings.Add("Shields: " + shields);
+                var shields = (int)item["shields"];
+                var buffer = (int)Manager.GetDataTable("ITEM_LEVELS").Rows[level]["shields"];
+                var bonus = unit.GetStat("shields_bonus");
+                if (bonus is Evaluator.Range)
+                {
+                    shields = shields * buffer / 100;
+                    Evaluator.Range range = (Evaluator.Range)bonus + shields;
+                    strings.Add("Shields: " + range);
+                }
+                else
+                {
+                    shields = shields * buffer / 100;
+                    if (bonus.ToString() != "0") shields += Convert.ToInt32(bonus);
+                    strings.Add("Shields: " + shields);
+                }
             }
             return ConcatStrings(strings);
         }
 
-        private IList<string> GetInherentAffixes(DataRow item)
+        private IList<string> GetInherentAffixes(DataRow item, Unit unit = null)
         {
-            var evaluator = new Evaluator { Unit = new Item(), Manager = Manager, Game3 = new Game3() };
+            var evaluator = new Evaluator { Unit = unit ?? new Item(), Manager = Manager, Game3 = new Game3() };
             var scripts = item["props1"].ToString() + item["props2"] + item["props3"] + item["props4"] + item["props5"];
 
             var level = !string.IsNullOrEmpty(item["fixedLevel"].ToString()) ?  Int32.Parse(item["fixedLevel"].ToString().Replace(";", "")) : (int)item["level"];
@@ -327,9 +356,9 @@ namespace MediaWiki.Articles
             return strings.ToString();
         }
 
-        private IList<string> GetAffixes(DataRow item)
+        private IList<string> GetAffixes(DataRow item, Unit unit)
         {
-            var evaluator = new Evaluator {Unit = new Item(), Manager = Manager, Game3 = new Game3()};
+            var evaluator = new Evaluator {Unit = unit, Manager = Manager, Game3 = new Game3()};
             var table = Manager.GetDataTable("AFFIXES");
             var affixes = item["affix"].ToString();
 
