@@ -69,7 +69,13 @@ namespace MediaWiki.Articles
                 name = "<div class=\"item_name " + quality.ToLower() + "\">" + name + "</div>";
                 name = GetSqlEncapsulatedString(name);
 
-                type = item["typeDescription_string"].ToString();
+                //we can toss the base type if needed, or make another column for displaying below the in-game type description
+                int baseRow = (int)item["baseRow"];
+                if (baseRow >= 0)
+                    type = items.Rows[baseRow]["String_string"].ToString();
+                else
+                    type = item["typeDescription_string"].ToString();
+
                 type = (type != string.Empty) ? "<div class=\"item_type " + quality.ToLower() + "\">" + quality + " " + type + "</div>" : string.Empty;
                 type = GetSqlEncapsulatedString(type);
 
