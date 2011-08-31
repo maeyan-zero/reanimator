@@ -1169,8 +1169,8 @@ namespace MediaWiki.Parser
             var dmgMulti = (int) ilevels.Rows[ilevel]["baseDamageMultiplyer"];
             var absoluteMin = damageMin * ((dmgMulti * directInc * pct) / 1000000);
             var absoluteMax = damageMax * ((dmgMulti * directInc * pct) / 1000000);
-            absoluteMin = Math.Ceiling(absoluteMin);
-            absoluteMax = Math.Ceiling(absoluteMax);
+            absoluteMin = Round(absoluteMin);
+            absoluteMax = Round(absoluteMax);
             Unit.SetStat(dmgType, "min", absoluteMin);
             Unit.SetStat(dmgType, "max", absoluteMax);
             return new Token(dmgType + ": " + absoluteMin + "/" + absoluteMax, Token.Formula);
@@ -1188,8 +1188,8 @@ namespace MediaWiki.Parser
             var dmgMulti = (int)ilevels.Rows[ilevel]["baseDamageMultiplyer"];
             var absoluteMin = damageMin * ((dmgMulti * directInc * pct) / 1000000);
             var absoluteMax = damageMax * ((dmgMulti * directInc * pct) / 1000000);
-            absoluteMin = Math.Ceiling(absoluteMin);
-            absoluteMax = Math.Ceiling(absoluteMax);
+            absoluteMin = Round(absoluteMin);
+            absoluteMax = Round(absoluteMax);
             Unit.SetStat(dmgType, "min", absoluteMin);
             Unit.SetStat(dmgType, "max", absoluteMax);
             Unit.SetStat(dmgType, "range", range);
@@ -1473,8 +1473,8 @@ namespace MediaWiki.Parser
                 var ilevelmax = ((Range)Unit.GetStat("level")).End;
                 var ifeedmin = (int)levels.Rows[ilevelmin]["feed"];
                 var ifeedmax = (int)levels.Rows[ilevelmax]["feed"];
-                ifeedmin = Convert.ToInt32(Math.Ceiling(Convert.ToDouble(ifeedmin) * (((double)param[0]) / 100)));
-                ifeedmax = Convert.ToInt32(Math.Ceiling(Convert.ToDouble(ifeedmax) * (((double)param[0]) / 100)));
+                ifeedmin = Convert.ToInt32(Round(Convert.ToDouble(ifeedmin) * (((double)param[0]) / 100)));
+                ifeedmax = Convert.ToInt32(Round(Convert.ToDouble(ifeedmax) * (((double)param[0]) / 100)));
                 var range = new Range(ifeedmin, ifeedmax);
                 Unit.SetStat(label, range, true);
                 return new Token(range, Token.Range);
@@ -1489,7 +1489,7 @@ namespace MediaWiki.Parser
 
             var ilevels = Manager.GetDataTable("ITEM_LEVELS");
             var feed = (int)ilevels.Rows[ilevel]["feed"];
-            var ifeed = Math.Ceiling(feed * (((double)param[0]) / 100));
+            var ifeed = Round(feed * (((double)param[0]) / 100));
             Unit.SetStat(label, ifeed, true);
             return new Token(feed, Token.Number);
         }
@@ -1541,6 +1541,11 @@ namespace MediaWiki.Parser
         {
             int num;
             return Int32.TryParse(input.ToString(), out num);
+        }
+
+        private double Round(double number)
+        {
+            return Math.Floor(number);
         }
     }
 }

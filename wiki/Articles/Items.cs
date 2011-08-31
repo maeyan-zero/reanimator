@@ -23,7 +23,7 @@ namespace MediaWiki.Articles
 
         public override string ExportTableInsertScript()
         {
-            TableScript = new SQLTableScript("id", "code",
+            SQLTableScript table = new SQLTableScript("id", "code",
                 "id INT NOT NULL",
                 "code VARCHAR(4) NOT NULL",
                 "image TEXT",
@@ -108,10 +108,10 @@ namespace MediaWiki.Articles
                 if (!string.IsNullOrEmpty(defence)) defence = "<div class=\"item_heading\">Defence</div><div class=\"item_defence\">" + defence + "</div>";
                 defence = GetSqlEncapsulatedString(defence);
 
-                TableScript.AddRow(id, code, image, name, type, flavor, damage, defence, stats, modslots, feeds, level, inherent, affixes);
+                table.AddRow(id, code, image, name, type, flavor, damage, defence, stats, modslots, feeds, level, inherent, affixes);
             }
 
-            return TableScript.GetFullScript();
+            return table.GetFullScript();
         }
 
         private string GetStats(DataRow item)
@@ -121,7 +121,7 @@ namespace MediaWiki.Articles
             if (((int)item["criticalPct"]) != 0) strings.Add("Critical Chance: " + item["criticalPct"] + "%");
             if (((int)item["criticalMult"]) != 0) strings.Add("Critical Damage: " + item["criticalMult"] + "%");
             if (((int)item["interruptAttackPct"]) != 0) strings.Add("Interrupt Strength: " + item["interruptAttackPct"]);
-            if (((int)item["firingErrorDecrease"]) != 0) strings.Add("Rate of fire: " + item["firingErrorDecrease"] + " shots/min");
+            if (((int)item["cdTicks"]) != 0) strings.Add("Rate of fire: " + (153600 / (int)item["cdTicks"]) + " shots/min");
 
             if (((int)item["sfxPhysicalAbilityPct"]) != 0) strings.Add("Stun Attack Strength: " + item["sfxPhysicalAbilityPct"]);
             if (((int)item["sfxPhysicalDefensePct"]) != 0) strings.Add("Stun Defence: " + item["sfxPhysicalDefensePct"]);

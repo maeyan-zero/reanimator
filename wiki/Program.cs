@@ -31,6 +31,9 @@ namespace MediaWiki
                     case "AFFIXES":
                         script = new Affixes(manager);
                         break;
+                    case "ITEMLEVELS":
+                        script = new ItemLevels(manager);
+                        break;
                     case "MONSTERS":
                         script = new Monsters(manager);
                         break;

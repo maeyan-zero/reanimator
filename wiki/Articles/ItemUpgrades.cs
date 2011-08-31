@@ -45,7 +45,7 @@ namespace MediaWiki.Articles
 
         public override string ExportTableInsertScript()
         {
-            TableScript = new SQLTableScript("id", string.Empty,
+            SQLTableScript table = new SQLTableScript("id", string.Empty,
                 "id INT NOT NULL",
                 "damage_mult INT NOT NULL",
                 "shields INT NOT NULL",
@@ -58,7 +58,7 @@ namespace MediaWiki.Articles
             DataTable itemUpgrade = Manager.GetDataTable("ITEMUPGRADE");
             foreach (DataRow row in itemUpgrade.Rows)
             {
-                TableScript.AddRow(
+                table.AddRow(
                     row["Index"].ToString(),
                     row["damageMult"].ToString(),
                     row["shields"].ToString(),
@@ -69,7 +69,7 @@ namespace MediaWiki.Articles
                     );
             }
 
-            return TableScript.GetFullScript();
+            return table.GetFullScript();
         }
     }
 }

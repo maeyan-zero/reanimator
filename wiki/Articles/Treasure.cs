@@ -19,7 +19,7 @@ namespace MediaWiki.Articles
 
         public override string ExportTableInsertScript()
         {
-            TableScript = new SQLTableScript("id", string.Empty,
+            SQLTableScript table = new SQLTableScript("id", string.Empty,
                 "id INT NOT NULL",
                 "loot TEXT"
                 );
@@ -28,13 +28,13 @@ namespace MediaWiki.Articles
 
             foreach (DataRow row in treasure.Rows)
             {
-                TableScript.AddRow(
+                table.AddRow(
                     row["Index"].ToString(),
                     GetSqlEncapsulatedString(GetTreasureTable((int)row["Index"]))
                     );
             }
 
-            return TableScript.GetFullScript();
+            return table.GetFullScript();
         }
 
         //TODO: somehow make this play nice with the DB wiki extension so it displays properly

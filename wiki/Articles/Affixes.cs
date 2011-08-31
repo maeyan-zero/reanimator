@@ -35,7 +35,7 @@ namespace MediaWiki.Articles
 
             string id, code, magicName, formattedName, displayString, levelRange, typeList, faction;
             string[] feeds;
-            string quality, property1, allowType, skillBonus;
+            string quality, property1, allowType;
             bool isMonster = false;
 
             Evaluator evaluator = new Evaluator();
@@ -89,10 +89,7 @@ namespace MediaWiki.Articles
                 }
 
                 String[] displayStrings = ItemDisplay.GetDisplayStrings(unit);
-                feeds = ItemDisplay.GetFeedCosts(unit);
-
-                //skillBonus = ItemDisplay.GetSkillBonus(unit);
-                
+                feeds = ItemDisplay.GetFeedCosts(unit);                
 
                 id = row["Index"].ToString();
                 code = GetSqlEncapsulatedString(((int)row["code"]).ToString("X"));
