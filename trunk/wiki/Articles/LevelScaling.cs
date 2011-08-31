@@ -21,7 +21,7 @@ namespace MediaWiki.Articles
 
         public override string ExportTableInsertScript()
         {
-            TableScript = new SQLTableScript("id", string.Empty,
+            SQLTableScript table = new SQLTableScript("id", string.Empty,
                 "id INT NOT NULL",
                 "level_diff INT NOT NULL",
                 "pvm_damage INT NOT NULL",
@@ -42,10 +42,10 @@ namespace MediaWiki.Articles
                 mvpDmg = row["MonsterAttackPlayerDmg"].ToString();
                 treasure = row["PlayerAttackMonsterTreasureBonusPct"].ToString();
 
-                TableScript.AddRow(id, diff, pvmDmg, pvmXp, mvpDmg, treasure);
+                table.AddRow(id, diff, pvmDmg, pvmXp, mvpDmg, treasure);
             }
 
-            return TableScript.GetFullScript();
+            return table.GetFullScript();
         }
     }
 }

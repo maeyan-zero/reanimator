@@ -18,7 +18,7 @@ namespace MediaWiki.Articles
 
         public override string ExportTableInsertScript()
         {
-            TableScript = new SQLTableScript("id", "code",
+            SQLTableScript table = new SQLTableScript("id", "code",
                 "id INT NOT NULL",
                 "code VARCHAR(4) NOT NULL",
                 "name TEXT",
@@ -48,10 +48,10 @@ namespace MediaWiki.Articles
                 charName = GetSqlEncapsulatedString(row["characterSheetString_string"].ToString());
                 icon = GetSqlEncapsulatedString(GetImage(row["characterSheetIcon"].ToString() + ".png"));
 
-                TableScript.AddRow(id, code, name, charName, xp, icon);
+                table.AddRow(id, code, name, charName, xp, icon);
             }
 
-            return TableScript.GetFullScript();
+            return table.GetFullScript();
         }
     }
 }

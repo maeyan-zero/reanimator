@@ -46,6 +46,7 @@
     <Compile Include="Articles\Achievements.cs" />
     <Compile Include="Articles\Affixes.cs" />
     <Compile Include="Articles\Cube.cs" />
+    <Compile Include="Articles\ItemLevels.cs" />
     <Compile Include="Articles\Items.cs" />
     <Compile Include="Articles\ItemUpgrades.cs" />
     <Compile Include="Articles\LevelScaling.cs" />

@@ -12,7 +12,6 @@ namespace MediaWiki.Articles
 
         private static String Prefix = "";
         private static string TableName = string.Empty;
-        protected static SQLTableScript TableScript = null;
         protected static string FullTableName
         {
             get { return Prefix + TableName; }

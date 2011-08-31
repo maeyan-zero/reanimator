@@ -60,7 +60,7 @@ namespace MediaWiki.Articles
 
         public override string ExportTableInsertScript()
         {
-            TableScript = new SQLTableScript("id", string.Empty,
+            SQLTableScript table = new SQLTableScript("id", string.Empty,
                 "id INT NOT NULL",
                 "name TEXT NOT NULL",
                 "description TEXT NOT NULL",
@@ -106,10 +106,10 @@ namespace MediaWiki.Articles
                 title = title.Replace("[PLAYERNAME]", "").Trim();
                 title = "\"" + title + "\"";
 
-                TableScript.AddRow(id.ToString(), name, desc, skillFile, skillText, title);
+                table.AddRow(id.ToString(), name, desc, skillFile, skillText, title);
             }
 
-            return TableScript.GetFullScript();
+            return table.GetFullScript();
         }
     }
 }

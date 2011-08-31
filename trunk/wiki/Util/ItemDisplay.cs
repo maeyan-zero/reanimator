@@ -59,6 +59,9 @@ namespace MediaWiki.Util
                 var result = GetDisplayString(row);
                 if (String.IsNullOrEmpty(result)) continue;
 
+                if (result.Contains("Thorns"))
+                    result = FormatThorns(result);
+
                 strings.Add(result);
             }
 
@@ -140,6 +143,8 @@ namespace MediaWiki.Util
                 }
             }
 
+
+
             return format;
         }
 
@@ -205,6 +210,12 @@ namespace MediaWiki.Util
                 }
             }
             return String.Empty;
+        }
+
+        private static string FormatThorns(string thorns)
+        {
+            string element = thorns.Split(' ')[0];
+            return "<span class=\"" + element + "\">" + thorns + "</span>";
         }
 
         internal static string[] GetModSlots(Unit unit)
