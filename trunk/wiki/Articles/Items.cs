@@ -37,21 +37,26 @@ namespace MediaWiki.Articles
                 "feeds TEXT",
                 "level TEXT",
                 "inherent TEXT",
-                "affixes TEXT"
+                "affixes TEXT",
+                "quality_id INT",
+                "name_raw TEXT",
+                "type_raw TEXT",
+                "level_raw INT"
                 );
 
             ItemDisplay.Manager = Manager;
             var items = Manager.GetDataTable("ITEMS");
             var qualityTable = Manager.GetDataTable("ITEM_QUALITY");
 
-            string id, code, name, type, flavor, quality, image, damage, stats, affixes, modslots, feeds, level, inherent, defence;
+            string id, code, name, type, flavor, quality, image, damage, stats, affixes, modslots, feeds, level, inherent, defence,
+                qualityId, typeRaw, nameRaw, levelRaw;
 
             foreach (DataRow item in items.Rows)
             {
                 if (item["code"].ToString() == "0") continue; // ignore blank rows
                 Debug.WriteLine("Parsing: " + item["Index"] + " (" + item["name"] + ")");
 
-                //if (((int)item["Index"]) != 2680) continue;
+                //if (((int)item["Index"]) != 1914) continue;
 
                 // Dependencies
                 quality = ((int) item["itemQuality"]) != -1
@@ -61,60 +66,67 @@ namespace MediaWiki.Articles
                 Unit unit = new Item(); // for sharing stats
 
                 // Guts
-                id = GetSqlEncapsulatedString(item["index"].ToString());
-                code = GetSqlEncapsulatedString(((int)item["code"]).ToString("X"));
-                image = GetSqlEncapsulatedString(GetImage(item["name"] + ".png", 224));
+                id = GetSqlString(item["index"].ToString());
+                code = GetSqlString(((int)item["code"]).ToString("X"));
+                image = GetSqlString(GetImage(item["name"] + ".png", 224));
+                qualityId = item["itemQuality"].ToString();
 
-                name = item["String_string"].ToString();
-                name = "<div class=\"item_name " + quality.ToLower() + "\">" + name + "</div>";
-                name = GetSqlEncapsulatedString(name);
+                nameRaw = item["String_string"].ToString();
+                name = "<div class=\"item_name " + quality.ToLower() + "\">" + nameRaw + "</div>";
+                nameRaw = GetSqlString(nameRaw);
+                name = GetSqlString(name);
 
                 //we can toss the base type if needed, or make another column for displaying below the in-game type description
                 int baseRow = (int)item["baseRow"];
                 if (baseRow >= 0)
-                    type = items.Rows[baseRow]["String_string"].ToString();
+                    typeRaw = items.Rows[baseRow]["String_string"].ToString();
                 else
-                    type = item["typeDescription_string"].ToString();
+                    typeRaw = item["typeDescription_string"].ToString();
 
-                type = (type != string.Empty) ? "<div class=\"item_type " + quality.ToLower() + "\">" + quality + " " + type + "</div>" : string.Empty;
-                type = GetSqlEncapsulatedString(type);
+                type = (typeRaw != string.Empty) ? "<div class=\"item_type " + quality.ToLower() + "\">" + quality + " " + typeRaw + "</div>" : string.Empty;
+                type = GetSqlString(type);
+                typeRaw = GetSqlString(typeRaw);
+
 
                 flavor = item["flavorText_string"].ToString();
                 flavor = flavor.Replace("\n", "<br/>");
                 flavor = (flavor != string.Empty) ? "<div class=\"item_flavor\">" + flavor + "</div>" : string.Empty;
-                flavor = GetSqlEncapsulatedString(flavor);
+                flavor = GetSqlString(flavor);
 
                 damage = GetDamage(item);
                 if (!string.IsNullOrEmpty(damage)) damage = "<div class=\"item_heading\">Damage</div><div class=\"item_damage\">" + damage + "</div>";
-                damage = GetSqlEncapsulatedString(damage);
+                damage = GetSqlString(damage);
 
                 stats = GetStats(item);
                 if (!string.IsNullOrEmpty(stats)) stats = "<div class=\"item_heading\">Stats</div><div class=\"item_stats\">" + stats + "</div>";
-                stats = GetSqlEncapsulatedString(stats);
+                stats = GetSqlString(stats);
 
                 modslots = GetModSlots(item["props2"].ToString());
-                modslots = GetSqlEncapsulatedString(modslots);
+                modslots = GetSqlString(modslots);
 
                 feeds = GetFeeds((int)item["index"]);
-                feeds = GetSqlEncapsulatedString(feeds);
+                feeds = GetSqlString(feeds);
 
-                level = item["fixedLevel"].ToString().Replace(";", "");
-                level = (!string.IsNullOrEmpty(level)) ? GetItemLevels(level) : string.Empty;
-                level = GetSqlEncapsulatedString(level);
+                levelRaw = item["fixedLevel"].ToString().Replace(";", "");
+                if (levelRaw.Equals("")) levelRaw = item["maxLevel"].ToString();
+                if (qualityId == "12") levelRaw = "63";
+                level = levelRaw;
+                level = (!string.IsNullOrEmpty(level)) ? GetItemLevels(level, (int) item["itemQuality"]) : string.Empty;
+                level = GetSqlString(level);
 
                 inherent = ConcatStrings(GetInherentAffixes(item));
                 if (!string.IsNullOrEmpty(inherent)) inherent = "<div class=\"item_heading\">Inherent Affixes</div><div class=\"item_affixes\">" + inherent + "</div>";
-                inherent = GetSqlEncapsulatedString(inherent);
+                inherent = GetSqlString(inherent);
 
                 affixes = ConcatStrings(GetAffixes(item, unit));
                 if (!string.IsNullOrEmpty(affixes)) affixes = "<div class=\"item_heading\">Special Affixes</div><div class=\"item_affixes\">" + affixes + "</div>";
-                affixes = GetSqlEncapsulatedString(affixes);
+                affixes = GetSqlString(affixes);
 
                 defence = GetDefence(item, unit);
                 if (!string.IsNullOrEmpty(defence)) defence = "<div class=\"item_heading\">Defence</div><div class=\"item_defence\">" + defence + "</div>";
-                defence = GetSqlEncapsulatedString(defence);
+                defence = GetSqlString(defence);
 
-                table.AddRow(id, code, image, name, type, flavor, damage, defence, stats, modslots, feeds, level, inherent, affixes);
+                table.AddRow(id, code, image, name, type, flavor, damage, defence, stats, modslots, feeds, level, inherent, affixes, qualityId, nameRaw, typeRaw, levelRaw);
             }
 
             return table.GetFullScript();
@@ -147,45 +159,43 @@ namespace MediaWiki.Articles
         {
             var level = !string.IsNullOrEmpty(item["fixedLevel"].ToString()) ?  Int32.Parse(item["fixedLevel"].ToString().Replace(";", "")) : (int)item["level"];
             var strings = new List<string>();
-            if (((int) item["armor"]) != 0)
+
+            var armor = (int) item["armor"];
+            var buffer = (int) Manager.GetDataTable("ITEM_LEVELS").Rows[level]["armor"];
+            object bonus;
+            if (unit.GetStat("armor_bonus") is int)
+                bonus = 0;
+            else
+                bonus = ((Dictionary<string, object>) unit.GetStat("armor_bonus"))["all"];
+            if (bonus is Evaluator.Range)
             {
-                var armor = (int) item["armor"];
-                var buffer = (int) Manager.GetDataTable("ITEM_LEVELS").Rows[level]["armor"];
-                object bonus;
-                if (unit.GetStat("armor_bonus") is int)
-                    bonus = 0;
-                else
-                    bonus = ((Dictionary<string, object>) unit.GetStat("armor_bonus"))["all"];
-                if (bonus is Evaluator.Range)
-                {
-                    armor = armor * buffer / 100;
-                    Evaluator.Range range = (Evaluator.Range) bonus + armor;
-                    strings.Add("Armor: " + range);
-                }
-                else
-                {
-                    armor = armor * buffer / 100;
-                    strings.Add("Armor: " + armor + Convert.ToInt32(bonus));
-                }
+                armor = armor * buffer / 100;
+                Evaluator.Range range = (Evaluator.Range) bonus + armor;
+                if (range.ToString() != "0") strings.Add("Armor: " + range);
             }
-            if (((int)item["shields"]) != 0)
+            else
             {
-                var shields = (int)item["shields"];
-                var buffer = (int)Manager.GetDataTable("ITEM_LEVELS").Rows[level]["shields"];
-                var bonus = unit.GetStat("shields_bonus");
-                if (bonus is Evaluator.Range)
-                {
-                    shields = shields * buffer / 100;
-                    Evaluator.Range range = (Evaluator.Range)bonus + shields;
-                    strings.Add("Shields: " + range);
-                }
-                else
-                {
-                    shields = shields * buffer / 100;
-                    if (bonus.ToString() != "0") shields += Convert.ToInt32(bonus);
-                    strings.Add("Shields: " + shields);
-                }
+                armor = armor * buffer / 100;
+                if (bonus.ToString() != "0") armor += Convert.ToInt32(bonus);
+                if (armor.ToString() != "0") strings.Add("Armor: " + armor);
             }
+
+            var shields = (int)item["shields"];
+            buffer = (int)Manager.GetDataTable("ITEM_LEVELS").Rows[level]["shields"];
+            bonus = unit.GetStat("shields_bonus");
+            if (bonus is Evaluator.Range)
+            {
+                shields = shields * buffer / 100;
+                Evaluator.Range range = (Evaluator.Range)bonus + shields;
+                if (range.ToString() != "0") strings.Add("Shields: " + range);
+            }
+            else
+            {
+                shields = shields * buffer / 100;
+                if (bonus.ToString() != "0") shields += Convert.ToInt32(bonus);
+                if (shields.ToString() != "0") strings.Add("Shields: " + shields);
+            }
+
             return ConcatStrings(strings);
         }
 
@@ -212,11 +222,14 @@ namespace MediaWiki.Articles
             var dmgMax = Int32.Parse(item["maxBaseDmg"].ToString().Replace(";", ""));
             var dmgIncrement = (int) item["dmgIncrement"];
             var radialIncrement = (int) item["radialDmgIncrement"];
-            unit.SetStat("damage_min", dmgMin);
+            var fieldIncrement = (int) item["fieldDmgIncrement"];
+            //var dotIncrement = (int) item["dotDmgIncrement"]; // doesnt seem to be used
+;           unit.SetStat("damage_min", dmgMin);
             unit.SetStat("damage_max", dmgMax);
             unit.SetStat("level", level);
             unit.SetStat("dmg_increment", dmgIncrement);
             unit.SetStat("radial_increment", radialIncrement);
+            unit.SetStat("field_increment", fieldIncrement);
             var scripts = item["props1"].ToString() + item["props2"] + item["props3"] + item["props4"] + item["props5"];
             evaluator.Evaluate(scripts);
 
@@ -292,7 +305,107 @@ namespace MediaWiki.Articles
                 builder.Append(fireDmg);
             }
 
+            values = unit.GetStat("field_fire");
+            if (!(values is int))
+            {
+                var fireDmg = FormatFieldDmg((Dictionary<string, object>)values, "Fire");
+                builder.Append(fireDmg);
+            }
+
+            values = unit.GetStat("field_spec");
+            if (!(values is int))
+            {
+                var fireDmg = FormatFieldDmg((Dictionary<string, object>)values, "Spectral");
+                builder.Append(fireDmg);
+            }
+
+            values = unit.GetStat("field_phys");
+            if (!(values is int))
+            {
+                var fireDmg = FormatFieldDmg((Dictionary<string, object>)values, "Physical");
+                builder.Append(fireDmg);
+            }
+
+            values = unit.GetStat("field_toxic");
+            if (!(values is int))
+            {
+                var fireDmg = FormatFieldDmg((Dictionary<string, object>)values, "Toxic");
+                builder.Append(fireDmg);
+            }
+
+            values = unit.GetStat("field_elec");
+            if (!(values is int))
+            {
+                var fireDmg = FormatFieldDmg((Dictionary<string, object>)values, "Electricity");
+                builder.Append(fireDmg);
+            }
+
+            values = unit.GetStat("dot_fire");
+            if (!(values is int))
+            {
+                var fireDmg = FormatDotDmg((Dictionary<string, object>)values, "Fire");
+                builder.Append(fireDmg);
+            }
+
+            values = unit.GetStat("dot_spec");
+            if (!(values is int))
+            {
+                var fireDmg = FormatDotDmg((Dictionary<string, object>)values, "Spectral");
+                builder.Append(fireDmg);
+            }
+
+            values = unit.GetStat("dot_phys");
+            if (!(values is int))
+            {
+                var fireDmg = FormatDotDmg((Dictionary<string, object>)values, "Physical");
+                builder.Append(fireDmg);
+            }
+
+            values = unit.GetStat("dot_toxic");
+            if (!(values is int))
+            {
+                var fireDmg = FormatDotDmg((Dictionary<string, object>)values, "Toxic");
+                builder.Append(fireDmg);
+            }
+
+            values = unit.GetStat("dot_elec");
+            if (!(values is int))
+            {
+                var fireDmg = FormatDotDmg((Dictionary<string, object>)values, "Electricity");
+                builder.Append(fireDmg);
+            }
+
             return builder.ToString();
+        }
+        
+        internal string FormatDotDmg(Dictionary<string, object> values, string classid)
+        {
+            var mask = "[classid] Dmg (DoT): [string1]-[string2]/sec for [string3] seconds";
+            var min = values["min"].ToString();
+            var max = values["max"].ToString();
+            var secs = values["secs"].ToString();
+            mask = mask.Replace("[classid]", classid);
+            mask = mask.Replace("[string1]", min);
+            mask = mask.Replace("[string2]", max);
+            mask = mask.Replace("[string3]", secs);
+            mask = "<div class=\"" + classid + "\">" + mask + "</div>";
+            return mask;
+        }
+
+        internal string FormatFieldDmg(Dictionary<string, object> values, string classid)
+        {
+            var mask = "[classid] Dmg (Field): [string1]-[string2]/sec/[string4]m for [string3] seconds";
+            var min = values["min"].ToString();
+            var max = values["max"].ToString();
+            var range = values["range"].ToString();
+            var secs = values["secs"].ToString();
+            mask = mask.Replace("[classid]", classid);
+            mask = mask.Replace("[string1]", min);
+            mask = mask.Replace("[string2]", max);
+            mask = mask.Replace("[string4]", range);
+            mask = mask.Replace("[string3]", secs);
+            mask = "<div class=\"" + classid + "\">" + mask + "</div>";
+            return mask;
         }
 
         internal string FormatDirectDmg(Dictionary<string, object> values, string classid)
@@ -321,10 +434,10 @@ namespace MediaWiki.Articles
             return mask;
         }
 
-        private string GetItemLevels(string level)
+        private string GetItemLevels(string level, int quality)
         {
-            int itemLevel = int.Parse(level);
-            int charLevel = itemLevel - 4 - ((itemLevel)/10);
+            int itemLevel = (quality == 12) ? 63 : int.Parse(level);
+            int charLevel = (quality == 12) ? 55 : itemLevel - 4 - ((itemLevel)/10);
             string output = "<div class=\"item_heading\">Item Level</div>";
             output += "<div class=\"item_level\">Item Level: " + itemLevel;
             if (charLevel > 1) output += "<br/>Requires Character Level: " + charLevel + "</div>";

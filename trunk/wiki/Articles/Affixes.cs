@@ -54,7 +54,7 @@ namespace MediaWiki.Articles
                 typeList = string.Empty;
                 faction = row["onlyOnItemsRequiringUnitType_string"].ToString();
                 if (!String.IsNullOrWhiteSpace(faction))
-                    faction = GetSqlEncapsulatedString(faction);
+                    faction = GetSqlString(faction);
 
                 for (int i = 1; i < 7; i++)
                 {
@@ -75,8 +75,8 @@ namespace MediaWiki.Articles
 
                 if (isMonster) continue;
 
-                typeList = GetSqlEncapsulatedString(typeList);
-                levelRange = GetSqlEncapsulatedString(row["minLevel"].ToString() + "-" + row["maxLevel"].ToString());
+                typeList = GetSqlString(typeList);
+                levelRange = GetSqlString(row["minLevel"].ToString() + "-" + row["maxLevel"].ToString());
 
                 Unit unit = new Item();
                 Game3 game3 = new Game3();
@@ -92,7 +92,7 @@ namespace MediaWiki.Articles
                 feeds = ItemDisplay.GetFeedCosts(unit);                
 
                 id = row["Index"].ToString();
-                code = GetSqlEncapsulatedString(((int)row["code"]).ToString("X"));
+                code = GetSqlString(((int)row["code"]).ToString("X"));
 
                 magicName = magicName.Replace("[item]", string.Empty).Trim();
                 formattedName = String.Format("'''{0}'''", magicName);
@@ -115,13 +115,13 @@ namespace MediaWiki.Articles
                     default:
                         throw new NotImplementedException(String.Format("Apparently we need '{0}'?", quality));
                 }
-                magicName = GetSqlEncapsulatedString(magicName);
-                formattedName = GetSqlEncapsulatedString(formattedName);
-                displayString = GetSqlEncapsulatedString(FormatAffixList(displayStrings));
+                magicName = GetSqlString(magicName);
+                formattedName = GetSqlString(formattedName);
+                displayString = GetSqlString(FormatAffixList(displayStrings));
 
                 Debug.WriteLine(id + ", " + row["affix"] + ", " + displayString);
 
-                table.AddRow(id, code, magicName, formattedName, displayString, levelRange, typeList, faction, GetSqlEncapsulatedString(FormatAffixList(feeds)));
+                table.AddRow(id, code, magicName, formattedName, displayString, levelRange, typeList, faction, GetSqlString(FormatAffixList(feeds)));
             }
 
             return table.GetFullScript();

@@ -49,6 +49,9 @@ namespace MediaWiki
                     case "TREASURE":
                         script = new Treasure(manager);
                         break;
+                    case "MONSTER_QUALITY":
+                        script = new MonsterQuality(manager);
+                        break;
                     default:
                         throw new Exception("Unknown WikiScript: " + arg);
                 }
