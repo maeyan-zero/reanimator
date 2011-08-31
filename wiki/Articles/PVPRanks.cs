@@ -39,14 +39,14 @@ namespace MediaWiki.Articles
                 if (xpMin <= 0) continue;
 
                 id = row["Index"].ToString();
-                code = GetSqlEncapsulatedString(((int)row["code"]).ToString("X"));
-                name = GetSqlEncapsulatedString(row["rankName"].ToString());
+                code = GetSqlString(((int)row["code"]).ToString("X"));
+                name = GetSqlString(row["rankName"].ToString());
                 xp = xpMin.ToString();
                 maxPct = row["maxPercentile"].ToString();
                 maxRank = row["maxRankPlayer"].ToString();
                 minusXp = row["minusExpEnable"].ToString();
-                charName = GetSqlEncapsulatedString(row["characterSheetString_string"].ToString());
-                icon = GetSqlEncapsulatedString(GetImage(row["characterSheetIcon"].ToString() + ".png"));
+                charName = GetSqlString(row["characterSheetString_string"].ToString());
+                icon = GetSqlString(GetImage(row["characterSheetIcon"].ToString() + ".png"));
 
                 table.AddRow(id, code, name, charName, xp, icon);
             }

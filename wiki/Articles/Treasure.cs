@@ -30,7 +30,7 @@ namespace MediaWiki.Articles
             {
                 table.AddRow(
                     row["Index"].ToString(),
-                    GetSqlEncapsulatedString(GetTreasureTable((int)row["Index"]))
+                    GetSqlString(GetTreasureTable((int)row["Index"]))
                     );
             }
 

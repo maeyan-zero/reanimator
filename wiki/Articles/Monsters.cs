@@ -76,20 +76,20 @@ namespace MediaWiki.Articles
             foreach (DataRow row in monsters.Rows)
             {
                 id = row["Index"].ToString();
-                code = GetSqlEncapsulatedString(((int)row["code"]).ToString("X"));
-                image = GetImage(row["name"] + ".jpg", 230);
-                image = GetSqlEncapsulatedString(image);
-                name = GetSqlEncapsulatedString(row["String_string"] as string ?? string.Empty);
+                code = GetSqlString(((int)row["code"]).ToString("X"));
+                image = GetImage(row["name"] + ".png", 224);
+                image = GetSqlString(image);
+                name = GetSqlString(row["String_string"] as string ?? string.Empty);
 
                 baseType = ((int)row["baseRow"] != -1 ? monsters.Rows[(int)row["baseRow"]]["String_string"] as string : "") ?? string.Empty;
                 baseType = GetWikiArticleLink(baseType);
-                baseType = GetSqlEncapsulatedString(baseType);
+                baseType = GetSqlString(baseType);
 
                 unitType = GetUnitType((int) row["unitType"]);
-                unitType = GetSqlEncapsulatedString(unitType);
+                unitType = GetSqlString(unitType);
 
                 quality = GetQualityType((int) row["monsterQuality"]);
-                quality = GetSqlEncapsulatedString(quality);
+                quality = GetSqlString(quality);
 
                 hpMin = row["hpMin"].ToString();
                 hpMax = row["hpMax"].ToString();
@@ -98,17 +98,17 @@ namespace MediaWiki.Articles
                 shields = row["shields"].ToString();
 
                 damage = GetDamageType((int) row["dmgType"]);
-                damage = GetSqlEncapsulatedString(damage);
+                damage = GetSqlString(damage);
                 damageMin = row["minBaseDmg"].ToString().Replace(";", "");
                 damageMax = row["maxBaseDmg"].ToString().Replace(";", "");
                 criticalPercent = row["criticalPct"].ToString();
                 criticalMultiplier = row["criticalMult"].ToString();
 
                 angerRange = row["angerRange"].ToString();
-                interruptAttack = ((int) row["interruptAttackPct"] == 0) ? "0" : ((Convert.ToDouble((int)row["interruptAttackPct"])) / 10).ToString();
-                interruptDefence = ((int)row["interruptDefensePct"] == 0) ? "0" : ((Convert.ToDouble((int)row["interruptDefensePct"])) / 10).ToString();
-                stealthDefence = ((int)row["stealthDefensePct"] == 0) ? "0" : ((Convert.ToDouble((int)row["stealthDefensePct"])) / 10).ToString();
-                aiChangeDefence = ((int)row["aiChangeDefense"] == 0) ? "0" : ((Convert.ToDouble((int)row["aiChangeDefense"])) / 10).ToString();
+                interruptAttack = ((int) row["interruptAttackPct"] == 0) ? "0" : row["interruptAttackPct"].ToString();
+                interruptDefence = ((int)row["interruptDefensePct"] == 0) ? "0" : row["interruptDefensePct"].ToString();
+                stealthDefence = ((int)row["stealthDefensePct"] == 0) ? "0" : row["stealthDefensePct"].ToString();
+                aiChangeDefence = ((int)row["aiChangeDefense"] == 0) ? "0" : row["aiChangeDefense"].ToString();
 
                 physAtk = row["sfxPhysicalAbilityPct"].ToString();
                 physDef = row["sfxPhysicalDefensePct"].ToString();

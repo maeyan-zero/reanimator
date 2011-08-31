@@ -887,7 +887,6 @@ namespace MediaWiki.Parser
                 case "dmg_elec":
                     return SetDirectDamage(func, param);
 
-
                 case "rad_fire":
                 case "rad_spec":
                 case "rad_phys":
@@ -895,17 +894,19 @@ namespace MediaWiki.Parser
                 case "rad_elec":
                     return SetSplashDamage(func, param);
 
-
                 case "field_fire":
                 case "field_spec":
                 case "field_phys":
                 case "field_toxic":
                 case "field_elec":
+                    return SetFieldDamage(func, param);
+
                 case "dot_fire":
                 case "dot_spec":
                 case "dot_phys":
                 case "dot_toxic":
                 case "dot_elec":
+                    return SetDotDamage(func, param);
 
                 case "ai_change_stop":
                 case "ai_change_convert":
@@ -1156,6 +1157,48 @@ namespace MediaWiki.Parser
                 default:
                     throw new Exception("Unknown function: " + func);
             }
+        }
+
+        private Token SetDotDamage(string dmgType, object[] objects)
+        {
+            var damageMin = (int)Unit.GetStat("damage_min");
+            var damageMax = (int)Unit.GetStat("damage_max");
+            //var dotInc = (int)Unit.GetStat("dot_increment");
+            var pct = (double)objects[0];
+            var secs = (double)objects[2] / 20;
+            var ilevel = (int)Unit.GetStat("level");
+            var ilevels = Manager.GetDataTable("ITEM_LEVELS");
+            var dmgMulti = (int)ilevels.Rows[ilevel]["baseDamageMultiplyer"];
+            var absoluteMin = damageMin * ((dmgMulti * pct) / 10000);
+            var absoluteMax = damageMax * ((dmgMulti * pct) / 10000);
+            absoluteMin = Math.Ceiling(absoluteMin);
+            absoluteMax = Math.Ceiling(absoluteMax);
+            Unit.SetStat(dmgType, "min", absoluteMin);
+            Unit.SetStat(dmgType, "max", absoluteMax);
+            Unit.SetStat(dmgType, "secs", secs);
+            return new Token(dmgType + ": " + absoluteMin + "/" + absoluteMax, Token.Formula);
+        }
+
+        private Token SetFieldDamage(string dmgType, object[] objects)
+        {
+            var damageMin = (int)Unit.GetStat("damage_min");
+            var damageMax = (int)Unit.GetStat("damage_max");
+            var fieldInc = (int)Unit.GetStat("field_increment");
+            var pct = (double)objects[0];
+            var range = (objects.Length < 3) ? 1 : (double)objects[2] / 10;
+            var time = (double) objects[3]/20;
+            var ilevel = (int)Unit.GetStat("level");
+            var ilevels = Manager.GetDataTable("ITEM_LEVELS");
+            var dmgMulti = (int)ilevels.Rows[ilevel]["baseDamageMultiplyer"];
+            var absoluteMin = damageMin * ((dmgMulti * fieldInc * pct) / 1000000);
+            var absoluteMax = damageMax * ((dmgMulti * fieldInc * pct) / 1000000);
+            absoluteMin = Math.Ceiling(absoluteMin);
+            absoluteMax = Math.Ceiling(absoluteMax);
+            Unit.SetStat(dmgType, "min", absoluteMin);
+            Unit.SetStat(dmgType, "max", absoluteMax);
+            Unit.SetStat(dmgType, "range", range);
+            Unit.SetStat(dmgType, "secs", time);
+            return new Token(dmgType + ": " + absoluteMin + "/" + absoluteMax, Token.Formula);
         }
 
         private Token SetDirectDamage(string dmgType, object[] objects)

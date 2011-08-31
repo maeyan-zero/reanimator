@@ -49,10 +49,10 @@ namespace MediaWiki.Articles
                 sfxDef = row["sfxDefenceAbility"].ToString();
                 feed = row["feed"].ToString();
                 clvl = row["levelRequirement"].ToString();
-                ilvlRange = GetSqlEncapsulatedString(row["itemLevelMin"].ToString() + "-" + row["itemLevelMax"].ToString());
-                augC = GetSqlEncapsulatedString(((int)row["augmentCostCommon"]).ToString("0,0"));
-                augR = GetSqlEncapsulatedString(((int)row["augmentCostRare"]).ToString("0,0"));
-                augL = GetSqlEncapsulatedString(((int)row["augmentCostLegendary"]).ToString("0,0"));
+                ilvlRange = GetSqlString(row["itemLevelMin"].ToString() + "-" + row["itemLevelMax"].ToString());
+                augC = GetSqlString(((int)row["augmentCostCommon"]).ToString("0,0"));
+                augR = GetSqlString(((int)row["augmentCostRare"]).ToString("0,0"));
+                augL = GetSqlString(((int)row["augmentCostLegendary"]).ToString("0,0"));
                 scraps = row["scrapUpgradeQuantity"].ToString();
                 specScraps = row["specialScrapUpgradeQuantity"].ToString();
 

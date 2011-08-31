@@ -112,7 +112,7 @@ namespace MediaWiki.Articles
             return output;
         }
 
-        public static string GetSqlEncapsulatedString(string raw)
+        public static string GetSqlString(string raw)
         {
             if (raw == null) return string.Empty;
             var output = raw.Replace("\"", "\\\"");

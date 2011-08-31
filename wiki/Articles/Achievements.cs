@@ -94,7 +94,7 @@ namespace MediaWiki.Articles
 
                     var icon = skills.Rows[s]["largeIcon"].ToString();
 
-                    skillFile = GetSqlEncapsulatedString(GetImage(icon + ".png", 40));
+                    skillFile = GetSqlString(GetImage(icon + ".png", 40));
                     skillText = "\"" + skill + "\"";
                 }
                 else
