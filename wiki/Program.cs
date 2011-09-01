@@ -17,7 +17,10 @@ namespace MediaWiki
             manager.LoadTableFiles();
             manager.EndAllDatAccess();
 
-            args = new[] { "RECIPES" };
+            args = new[] { "ITEMS" };
+
+            //new Items(manager).WriteAllUniqueLegendaryItemPages();
+            //return;
 
             string sqlStatement;
             WikiScript script;
