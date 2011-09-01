@@ -7,6 +7,7 @@ using Hellgate;
 using MediaWiki.Parser;
 using MediaWiki.Parser.Class;
 using MediaWiki.Util;
+using System.IO;
 
 namespace MediaWiki.Articles
 {
@@ -19,6 +20,44 @@ namespace MediaWiki.Articles
         public override string ExportArticle()
         {
             throw new NotImplementedException();
+        }
+
+        public void WriteAllUniqueLegendaryItemPages()
+        {
+            string quality, name, code, itemType;
+            string item;
+            var items = Manager.GetDataTable("ITEMS");
+
+            StringBuilder builder = new StringBuilder();
+
+            foreach (DataRow row in items.Rows)
+            {
+                //make sure it has a base row (spawn isn't an indicator)
+                if ((int)row["baseRow"] < 0) continue;
+                //test quality
+                quality = row["itemQuality_string"].ToString();
+                if (quality.CompareTo("unique") != 0 && quality.CompareTo("legendary") != 0) continue;
+                //skip rings
+                itemType = row["unitType_string"].ToString();
+                if (itemType.CompareTo("trinket_ring") == 0) continue;
+
+                code = ((int)row["code"]).ToString("X");
+                name = row["String_string"].ToString();
+
+
+                item = string.Format("{{{{Item|code={0}}}}}", code);
+
+                builder.AppendLine(string.Format("--{0}--", name));
+                builder.AppendLine(item);
+                builder.AppendLine(string.Format("[[Category: {0} Items]]", char.ToUpper(quality[0]) + quality.Substring(1)));
+                builder.AppendLine("TYPE: " + itemType);
+
+                //determine categories by item type
+
+                builder.AppendLine("\n");
+            }
+
+            File.WriteAllText("itempages.txt", builder.ToString());
         }
 
         public override string ExportTableInsertScript()
@@ -490,6 +529,9 @@ namespace MediaWiki.Articles
                 var affix = int.Parse(i);
                 if (affix == -1) break; // no more affixes
                 var script = table.Rows[affix]["property1"].ToString();
+                //weird level-changing property that screws up formulas, skip it (always appears in first property, pretty sure it doesn't affect anything else)
+                if (script.Contains("SetStat673('level'"))
+                    script = string.Empty;
                 script += table.Rows[affix]["property2"].ToString();
                 script += table.Rows[affix]["property3"].ToString();
                 script += table.Rows[affix]["property4"].ToString();
