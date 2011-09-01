@@ -17,7 +17,7 @@ namespace MediaWiki
             manager.LoadTableFiles();
             manager.EndAllDatAccess();
 
-            args = new[] { "ITEMS" };
+            args = new[] { "RECIPES" };
 
             string sqlStatement;
             WikiScript script;
@@ -51,6 +51,9 @@ namespace MediaWiki
                         break;
                     case "MONSTER_QUALITY":
                         script = new MonsterQuality(manager);
+                        break;
+                    case "RECIPES":
+                        script = new Recipes(manager);
                         break;
                     default:
                         throw new Exception("Unknown WikiScript: " + arg);

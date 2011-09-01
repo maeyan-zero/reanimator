@@ -115,7 +115,7 @@ namespace MediaWiki.Articles
         public static string GetSqlString(string raw)
         {
             if (raw == null) return string.Empty;
-            var output = raw.Replace("\"", "\\\"");
+            var output = raw.Replace("\"", "\\\"").Replace("'", "\'");
             return "\"" + output + "\"";
         }
 
