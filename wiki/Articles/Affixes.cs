@@ -158,7 +158,7 @@ namespace MediaWiki.Articles
 
         private string FormatAffixList(string[] affixes)
         {
-            string list = affixes.Aggregate(string.Empty, (current, affix) => current + affix + "<br />").Replace("'", "''");
+            string list = affixes.Aggregate(string.Empty, (current, affix) => current + affix + "<br />");
             return list;
         }
 

@@ -55,6 +55,7 @@
     <Compile Include="Articles\Monsters.cs" />
     <Compile Include="Articles\NewTreasure.cs" />
     <Compile Include="Articles\PVPRanks.cs" />
+    <Compile Include="Articles\Recipes.cs" />
     <Compile Include="Articles\Treasure.cs" />
     <Compile Include="Parser\Class\Context.cs" />
     <Compile Include="Parser\Class\Game3.cs" />
