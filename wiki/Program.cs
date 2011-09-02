@@ -19,8 +19,8 @@ namespace MediaWiki
 
             args = new[] { "ITEMS" };
 
-            new Items(manager).WriteAllUniqueLegendaryItemPages();
-            return;
+            //new Items(manager).WriteAllUniqueLegendaryItemPages();
+            //return;
 
             string sqlStatement;
             WikiScript script;
