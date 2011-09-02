@@ -25,7 +25,6 @@ namespace MediaWiki.Articles
                                             "id INT",
                                             "code VARCHAR(4)",
                                             "name TEXT",
-                                            "name_string TEXT",
                                             "rarity INT",
                                             "nightmare_rarity INT",
                                             "hell_rarity INT",
@@ -40,7 +39,6 @@ namespace MediaWiki.Articles
             string id,
                    code,
                    name,
-                   nameString,
                    rarity,
                    nightmareRarity,
                    hellRarity,
@@ -56,9 +54,35 @@ namespace MediaWiki.Articles
             foreach (DataRow row in data.Rows)
             {
                 id = row["Index"].ToString();
+                if (id == "13") continue;//core
+                if (id == "11") continue;//powerup
+                if (id == "4") continue;//mutant
+                if (id == "9") continue;//mutant-mod
+                if (id == "10") continue;//unique-mod
+
+                code = row["code"].ToString();
+                code = GetSqlString(code);
 
                 name = row["quality"].ToString();
+                name = GetFormattedString(name);
+                name = name.Replace("-M", " Mod");
                 name = GetSqlString(name);
+
+                //nameString = row["displayName_string"].ToString();
+                //nameString = GetSqlString(nameString);
+
+                rarity = row["rarity"].ToString();
+                nightmareRarity = row["nightmareRarity"].ToString();
+                hellRarity = row["hellRarity"].ToString();
+                vendorRarity = row["vendorRarity"].ToString();
+                luckRarity = row["luckRarity"].ToString();
+                gamblingRarity = row["gamblingRarity"].ToString();
+                successRate = row["successRate"].ToString();
+                nanoshardChance = row["extraScrapChance"].ToString();
+                qualityLevel = row["qualityLevel"].ToString();
+                procChange = row["procChance"].ToString();
+
+                script.AddRow(id, code, name, rarity, nightmareRarity, hellRarity, vendorRarity, luckRarity, gamblingRarity, successRate, nanoshardChance, qualityLevel, procChange);
             }
 
             return script.GetFullScript();

@@ -25,6 +25,7 @@ namespace MediaWiki.Articles
                 "id INT NOT NULL",
                 "code VARCHAR(4) NOT NULL",
                 "image TEXT",
+                "info TEXT",
                 "name TEXT",
                 "base TEXT",
                 "unit TEXT",
@@ -66,20 +67,22 @@ namespace MediaWiki.Articles
             // stealth defence
 
             var monsters = Manager.GetDataTable("MONSTERS");
-
             string id, code, image, name, baseType, quality, hpMin, hpMax, xp, armor, shields, 
                 physAtk, physDef, fireAtk, fireDef, elecAtk, elecDef, specAtk, specDef, poisAtk, poisDef, 
                 treasure, treasureChamp, treasureFirst, unitType, damage, damageMin, damageMax,
                 angerRange, interruptAttack, interruptDefence, aiChangeDefence, stealthDefence,
-                criticalPercent, criticalMultiplier;
+                criticalPercent, criticalMultiplier, info;
 
             foreach (DataRow row in monsters.Rows)
             {
                 id = row["Index"].ToString();
                 code = GetSqlString(((int)row["code"]).ToString("X"));
                 image = GetImage(row["name"] + ".png", 224);
+                image = "<div style=\"vertical-align: middle;\">" + image + "</div>";
                 image = GetSqlString(image);
                 name = GetSqlString(row["String_string"] as string ?? string.Empty);
+                info = row["name"].ToString();
+                info = GetSqlString(info);
 
                 baseType = ((int)row["baseRow"] != -1 ? monsters.Rows[(int)row["baseRow"]]["String_string"] as string : "") ?? string.Empty;
                 baseType = GetWikiArticleLink(baseType);
@@ -125,7 +128,7 @@ namespace MediaWiki.Articles
                 treasureChamp = row["championTreasure"].ToString();
                 treasureFirst = row["firstTimeTreasure"].ToString(); 
 
-                table.AddRow(id, code, image, name, baseType, unitType, quality, hpMin, hpMax, xp, armor, shields,
+                table.AddRow(id, code, image, info, name, baseType, unitType, quality, hpMin, hpMax, xp, armor, shields,
                     damage, damageMin, damageMax, criticalPercent, criticalMultiplier,
                     angerRange, interruptAttack, interruptDefence, stealthDefence, aiChangeDefence,
                     physAtk, physDef, fireAtk, fireDef, elecAtk, elecDef, specAtk, specDef, poisAtk, poisDef,
