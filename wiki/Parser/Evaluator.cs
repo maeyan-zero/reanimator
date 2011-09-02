@@ -1074,7 +1074,7 @@ namespace MediaWiki.Parser
                         return new Token(param[0], Token.Formula);
                     }
 
-                    Unit.SetStat("power_regen", (double)param[0] * 4.26);
+                    Unit.SetStat("power_regen", Convert.ToInt32((double) param[0] * 4.26));
                     return new Token(param[0], Token.Number);
 
                 case "hp_regen_per_min":
@@ -1093,7 +1093,7 @@ namespace MediaWiki.Parser
                         return new Token(param[0], Token.Formula);
                     }
 
-                    Unit.SetStat("hp_regen", (double) param[0] * 4.26);
+                    Unit.SetStat("hp_regen", Convert.ToInt32((double) param[0] * 4.26));
                     return new Token(param[0], Token.Number);
 
                 case "all_stats_bonus":

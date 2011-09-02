@@ -49,6 +49,9 @@ namespace MediaWiki
                     case "ITEMS":
                         script = new Items(manager);
                         break;
+                    case "ITEM_QUALITY":
+                        script = new ItemQuality(manager);
+                        break;
                     case "TREASURE":
                         script = new Treasure(manager);
                         break;

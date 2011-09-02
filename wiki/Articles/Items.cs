@@ -13,6 +13,8 @@ namespace MediaWiki.Articles
 {
     class Items : WikiScript
     {
+        private readonly int _height = 19;
+
         public Items(FileManager manager) : base(manager, "items")
         {
         }
@@ -402,12 +404,11 @@ namespace MediaWiki.Articles
                 // Guts
                 id = GetSqlString(item["index"].ToString());
                 code = GetSqlString(((int)item["code"]).ToString("X"));
-                image = GetSqlString(GetImage(item["name"] + ".png", 224));
+                
                 qualityId = item["itemQuality"].ToString();
 
                 nameRaw = item["String_string"].ToString();
                 name = "<div class=\"item_name " + quality.ToLower() + "\">" + nameRaw + "</div>";
-                nameRaw = GetSqlString(nameRaw);
                 name = GetSqlString(name);
 
                 //we can toss the base type if needed, or make another column for displaying below the in-game type description
@@ -419,8 +420,10 @@ namespace MediaWiki.Articles
 
                 type = (typeRaw != string.Empty) ? "<div class=\"item_type " + quality.ToLower() + "\">" + quality + " " + typeRaw + "</div>" : string.Empty;
                 type = GetSqlString(type);
-                typeRaw = GetSqlString(typeRaw);
 
+                image = GetSqlString(GetImage((baseRow > 0) ? typeRaw.Replace("\"", "'") + ".png" : nameRaw.Replace("\"", "'") + ".png", 224));
+                typeRaw = GetSqlString(typeRaw);
+                nameRaw = GetSqlString(nameRaw);
 
                 flavor = item["flavorText_string"].ToString();
                 flavor = flavor.Replace("\n", "<br/>");
@@ -432,6 +435,7 @@ namespace MediaWiki.Articles
                 damage = GetSqlString(damage);
 
                 stats = GetStats(item);
+                //stats = AddElementThumbs(stats);
                 if (!string.IsNullOrEmpty(stats)) stats = "<div class=\"item_heading\">Stats</div><div class=\"item_stats\">" + stats + "</div>";
                 stats = GetSqlString(stats);
 
@@ -449,7 +453,7 @@ namespace MediaWiki.Articles
                 level = GetSqlString(level);
 
                 inherent = ConcatStrings(GetInherentAffixes(item));
-                if (!string.IsNullOrEmpty(inherent)) inherent = "<div class=\"item_heading\">Inherent Affixes</div><div class=\"item_affixes\">" + inherent + "</div>";
+                if (!string.IsNullOrEmpty(inherent)) inherent = "<div class=\"item_heading\">Inherent + Hidden Affixes</div><div class=\"item_affixes\">" + inherent + "</div>";
                 inherent = GetSqlString(inherent);
 
                 affixes = ConcatStrings(GetAffixes(item, unit));
@@ -512,13 +516,13 @@ namespace MediaWiki.Articles
             {
                 armor = armor * buffer / 100;
                 Evaluator.Range range = (Evaluator.Range) bonus + armor;
-                if (range.ToString() != "0") strings.Add("Armor: " + range);
+                if (range.ToString() != "0") strings.Add(GetImage("armor.png", _height) + " Armor: " + range);
             }
             else
             {
                 armor = armor * buffer / 100;
                 if (bonus.ToString() != "0") armor += Convert.ToInt32(bonus);
-                if (armor.ToString() != "0") strings.Add("Armor: " + armor);
+                if (armor.ToString() != "0") strings.Add(GetImage("armor.png", _height) + " Armor: " + armor);
             }
 
             var shields = (int)item["shields"];
@@ -528,13 +532,13 @@ namespace MediaWiki.Articles
             {
                 shields = shields * buffer / 100;
                 Evaluator.Range range = (Evaluator.Range)bonus + shields;
-                if (range.ToString() != "0") strings.Add("Shields: " + range);
+                if (range.ToString() != "0") strings.Add(GetImage("shields.png", _height) + " Shields: " + range);
             }
             else
             {
                 shields = shields * buffer / 100;
                 if (bonus.ToString() != "0") shields += Convert.ToInt32(bonus);
-                if (shields.ToString() != "0") strings.Add("Shields: " + shields);
+                if (shields.ToString() != "0") strings.Add(GetImage("shields.png", _height) + " Shields: " + shields);
             }
 
             return ConcatStrings(strings);
@@ -550,6 +554,16 @@ namespace MediaWiki.Articles
 
             evaluator.Evaluate(scripts);
             return ItemDisplay.GetDisplayStrings(evaluator.Unit);
+        }
+
+        private string AddElementThumbs(string source)
+        {
+            source = source.Replace("Ignite", GetImage("Ignite.png", _height) + " Ignite");
+            source = source.Replace("Shock", GetImage("Shock.png", _height) + "Shock");
+            source = source.Replace("Poison", GetImage("Poison.png", _height) + "Poison");
+            source = source.Replace("Phase", GetImage("Phase.png", _height) + "Phase");
+            source = source.Replace("Stun", GetImage("Stun.png", _height) + "Stun");
+            return source;
         }
 
         private string GetDamage(DataRow item)
@@ -721,10 +735,13 @@ namespace MediaWiki.Articles
         
         internal string FormatDotDmg(Dictionary<string, object> values, string classid)
         {
+            //var mask = "[icon][classid] Dmg (DoT): [string1]-[string2]/sec for [string3] seconds";
             var mask = "[classid] Dmg (DoT): [string1]-[string2]/sec for [string3] seconds";
+            var icon = GetImage(classid + "DoT.png", _height);
             var min = values["min"].ToString();
             var max = values["max"].ToString();
             var secs = values["secs"].ToString();
+            mask = mask.Replace("[icon]", icon);
             mask = mask.Replace("[classid]", classid);
             mask = mask.Replace("[string1]", min);
             mask = mask.Replace("[string2]", max);
@@ -735,11 +752,14 @@ namespace MediaWiki.Articles
 
         internal string FormatFieldDmg(Dictionary<string, object> values, string classid)
         {
+            //var mask = "[icon][classid] Dmg (Field): [string1]-[string2]/sec/[string4]m for [string3] seconds";
             var mask = "[classid] Dmg (Field): [string1]-[string2]/sec/[string4]m for [string3] seconds";
+            var icon = GetImage(classid + "Field.png", _height);
             var min = values["min"].ToString();
             var max = values["max"].ToString();
             var range = values["range"].ToString();
             var secs = values["secs"].ToString();
+            mask = mask.Replace("[icon]", icon);
             mask = mask.Replace("[classid]", classid);
             mask = mask.Replace("[string1]", min);
             mask = mask.Replace("[string2]", max);
@@ -751,9 +771,12 @@ namespace MediaWiki.Articles
 
         internal string FormatDirectDmg(Dictionary<string, object> values, string classid)
         {
+            //var mask = "[icon][classid] Dmg (Direct): [string1]-[string2]";
             var mask = "[classid] Dmg (Direct): [string1]-[string2]";
+            var icon = GetImage(classid + "Direct.png", _height);
             var min = values["min"].ToString();
             var max = values["max"].ToString();
+            mask = mask.Replace("[icon]", icon);
             mask = mask.Replace("[classid]", classid);
             mask = mask.Replace("[string1]", min);
             mask = mask.Replace("[string2]", max);
@@ -763,10 +786,13 @@ namespace MediaWiki.Articles
 
         internal string FormatSplashDmg(Dictionary<string, object> values, string classid)
         {
+            //var mask = "[icon][classid] Dmg (Splash): [string1]-[string2]/[string3]m";
             var mask = "[classid] Dmg (Splash): [string1]-[string2]/[string3]m";
+            var icon = GetImage(classid + "Splash.png", _height);
             var min = values["min"].ToString();
             var max = values["max"].ToString();
             var range = values["range"].ToString();
+            mask = mask.Replace("[icon]", icon);
             mask = mask.Replace("[classid]", classid);
             mask = mask.Replace("[string1]", min);
             mask = mask.Replace("[string2]", max);
@@ -937,6 +963,8 @@ namespace MediaWiki.Articles
                 feed = ItemDisplay.FormatFeed(willpower);
                 strings.Add(feed + " Will");
             }
+
+            if (strings.Count == 0) return string.Empty;
 
             return "<div class=\"item_heading\">Feed</div><div class=\"item_feed\">" + GetCSVString(strings) + "</div>";
         }
