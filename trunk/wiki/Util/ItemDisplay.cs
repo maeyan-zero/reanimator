@@ -120,6 +120,7 @@ namespace MediaWiki.Util
                         {
                             case "power_cost_pct_skillgroup":
                             case "cooldown_pct_skillgroup":
+                            case "damage_percent_skillgroup":
                                 result = GetGroupString((string) result);
                                 break;
                             case "skill_level":
