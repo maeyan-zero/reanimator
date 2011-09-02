@@ -470,21 +470,28 @@ namespace MediaWiki.Articles
         {
             var strings = new List<string>();
 
+            var level = !string.IsNullOrEmpty(item["fixedLevel"].ToString()) ?  Int32.Parse(item["fixedLevel"].ToString().Replace(";", "")) : (int)item["level"];
+            var itemlevels = Manager.GetDataTable("ITEM_LEVELS");
+
+            int interrupt = (int)itemlevels.Rows[level]["interruptAttack"];
+            int sfxAtk = (int)itemlevels.Rows[level]["sfxAttackAbility"];
+            int sfxDef = (int)itemlevels.Rows[level]["sfxDefenceAbility"];
+
             if (((int)item["criticalPct"]) != 0) strings.Add("Critical Chance: " + item["criticalPct"] + "%");
             if (((int)item["criticalMult"]) != 0) strings.Add("Critical Damage: " + item["criticalMult"] + "%");
-            if (((int)item["interruptAttackPct"]) != 0) strings.Add("Interrupt Strength: " + item["interruptAttackPct"]);
+            if (((int)item["interruptAttackPct"]) != 0) strings.Add("Interrupt Strength: " + (interrupt * (int)item["interruptAttackPct"] / 100));
             if (((int)item["cdTicks"]) != 0) strings.Add("Rate of fire: " + (153600 / (int)item["cdTicks"]) + " shots/min");
 
-            if (((int)item["sfxPhysicalAbilityPct"]) != 0) strings.Add("Stun Attack Strength: " + item["sfxPhysicalAbilityPct"]);
-            if (((int)item["sfxPhysicalDefensePct"]) != 0) strings.Add("Stun Defence: " + item["sfxPhysicalDefensePct"]);
-            if (((int)item["sfxFireAbilityPct"]) != 0) strings.Add("Ignite Attack Strength: " + item["sfxFireAbilityPct"]);
-            if (((int)item["sfxFireDefensePct"]) != 0) strings.Add("Ignite Defence: " + item["sfxFireDefensePct"]);
-            if (((int)item["sfxElectricAbilityPct"]) != 0) strings.Add("Shock Attack Strength: " + item["sfxElectricAbilityPct"]);
-            if (((int)item["sfxElectricDefensePct"]) != 0) strings.Add("Shock Defence: " + item["sfxElectricDefensePct"]);
-            if (((int)item["sfxSpectralAbilityPct"]) != 0) strings.Add("Phase Attack Strength: " + item["sfxSpectralAbilityPct"]);
-            if (((int)item["sfxSpectralDefensePct"]) != 0) strings.Add("Phase Defence: " + item["sfxSpectralDefensePct"]);
-            if (((int)item["sfxToxicAbilityPct"]) != 0) strings.Add("Poison Attack Strength: " + item["sfxToxicAbilityPct"]);
-            if (((int)item["sfxToxicDefensePct"]) != 0) strings.Add("Poison Defence: " + item["sfxToxicDefensePct"]);
+            if (((int)item["sfxPhysicalAbilityPct"]) != 0) strings.Add("Stun Attack Strength: " + (sfxAtk * (int)item["sfxPhysicalAbilityPct"] / 100));
+            if (((int)item["sfxPhysicalDefensePct"]) != 0) strings.Add("Stun Defence: " + (sfxDef * (int)item["sfxPhysicalDefensePct"] / 100));
+            if (((int)item["sfxFireAbilityPct"]) != 0) strings.Add("Ignite Attack Strength: " + (sfxAtk * (int)item["sfxFireAbilityPct"] / 100));
+            if (((int)item["sfxFireDefensePct"]) != 0) strings.Add("Ignite Defence: " + (sfxDef * (int)item["sfxFireDefensePct"] / 100));
+            if (((int)item["sfxElectricAbilityPct"]) != 0) strings.Add("Shock Attack Strength: " + (sfxAtk * (int)item["sfxElectricAbilityPct"] / 100));
+            if (((int)item["sfxElectricDefensePct"]) != 0) strings.Add("Shock Defence: " + (sfxDef * (int)item["sfxElectricDefensePct"] / 100));
+            if (((int)item["sfxSpectralAbilityPct"]) != 0) strings.Add("Phase Attack Strength: " + (sfxAtk * (int)item["sfxSpectralAbilityPct"] / 100));
+            if (((int)item["sfxSpectralDefensePct"]) != 0) strings.Add("Phase Defence: " + (sfxDef * (int)item["sfxSpectralDefensePct"] / 100));
+            if (((int)item["sfxToxicAbilityPct"]) != 0) strings.Add("Poison Attack Strength: " + (sfxAtk * (int)item["sfxToxicAbilityPct"] / 100));
+            if (((int)item["sfxToxicDefensePct"]) != 0) strings.Add("Poison Defence: " + (sfxDef * (int)item["sfxToxicDefensePct"] / 100));
 
             return ConcatStrings(strings);
         }
