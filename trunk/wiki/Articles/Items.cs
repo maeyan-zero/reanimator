@@ -50,7 +50,302 @@ namespace MediaWiki.Articles
                 builder.AppendLine(string.Format("--{0}--", name));
                 builder.AppendLine(item);
                 builder.AppendLine(string.Format("[[Category: {0} Items]]", char.ToUpper(quality[0]) + quality.Substring(1)));
-                builder.AppendLine("TYPE: " + itemType);
+
+                //only list additional categories for uniques
+                if (quality.CompareTo("unique") == 0)
+                {
+                    switch (itemType)
+                    {
+                        case "hunter_gun1h":
+                            builder.AppendLine("[[Category: Unique Hunter Items]]");
+                            builder.AppendLine("[[Category: Unique Hunter One-Handed Guns]]");
+                            builder.AppendLine("[[Category: Unique Hunter Weapons]]");
+                            builder.AppendLine("[[Category: Weapons]]");
+                            break;
+                        case "hunter_gun2h":
+                            builder.AppendLine("[[Category: Unique Hunter Items]]");
+                            builder.AppendLine("[[Category: Unique Hunter Two-Handed Guns]]");
+                            builder.AppendLine("[[Category: Unique Hunter Weapons]]");
+                            builder.AppendLine("[[Category: Weapons]]");
+                            break;
+                        case "hunter_gun1h_beam":
+                            builder.AppendLine("[[Category: Unique Hunter Items]]");
+                            builder.AppendLine("[[Category: Unique Hunter One-Handed Guns]]");
+                            builder.AppendLine("[[Category: Unique Hunter One-Handed Beam Weapons]]");
+                            builder.AppendLine("[[Category: Unique Hunter Weapons]]");
+                            builder.AppendLine("[[Category: Weapons]]");
+                            break;
+                        case "hunter_gun2h_beam":
+                            builder.AppendLine("[[Category: Unique Hunter Items]]");
+                            builder.AppendLine("[[Category: Unique Hunter Two-Handed Guns]]");
+                            builder.AppendLine("[[Category: Unique Hunter Two-Handed Beam Weapons]]");
+                            builder.AppendLine("[[Category: Unique Hunter Weapons]]");
+                            builder.AppendLine("[[Category: Weapons]]");
+                            break;
+                        case "templar_gun1h":
+                            builder.AppendLine("[[Category: Unique Templar Items]]");
+                            builder.AppendLine("[[Category: Unique Templar One-Handed Guns]]");
+                            builder.AppendLine("[[Category: Unique Templar Weapons]]");
+                            builder.AppendLine("[[Category: Weapons]]");
+                            break;
+                        case "hunter_sniper2h":
+                            builder.AppendLine("[[Category: Unique Hunter Items]]");
+                            builder.AppendLine("[[Category: Unique Hunter Two-Handed Guns]]");
+                            builder.AppendLine("[[Category: Unique Hunter Sniper Rifles]]");
+                            builder.AppendLine("[[Category: Unique Hunter Weapons]]");
+                            builder.AppendLine("[[Category: Weapons]]");
+                            break;
+                        case "quest_hunter":
+                            builder.AppendLine("[[Category: Unique Hunter Items]]");
+                            builder.AppendLine("[[Category: Quest Items]]");
+                            break;
+                        case "hunter_gun2h_field":
+                            builder.AppendLine("[[Category: Unique Hunter Items]]");
+                            builder.AppendLine("[[Category: Unique Hunter Two-Handed Guns]]");
+                            builder.AppendLine("[[Category: Unique Hunter Field Weapons]]");
+                            builder.AppendLine("[[Category: Unique Hunter Weapons]]");
+                            builder.AppendLine("[[Category: Weapons]]");
+                            break;
+                        case "revealer_1h":
+                            builder.AppendLine("[[Category: Unique Templar Items]]");
+                            builder.AppendLine("[[Category: Unique Templar One-Handed Guns]]");
+                            builder.AppendLine("[[Category: Unique Templar Nova Guns]]");
+                            builder.AppendLine("[[Category: Unique Templar Weapons]]");
+                            builder.AppendLine("[[Category: Weapons]]");
+                            break;
+                        case "templar_gun1h_beam":
+                            builder.AppendLine("[[Category: Unique Templar Items]]");
+                            builder.AppendLine("[[Category: Unique Templar One-Handed Guns]]");
+                            builder.AppendLine("[[Category: Unique Templar One-Handed Beam Weapons]]");
+                            builder.AppendLine("[[Category: Unique Templar Weapons]]");
+                            builder.AppendLine("[[Category: Weapons]]");
+                            break;
+                        case "sword":
+                            builder.AppendLine("[[Category: Unique Templar Items]]");
+                            builder.AppendLine("[[Category: Unique Templar One-Handed Swords]]");
+                            builder.AppendLine("[[Category: Unique Templar Melee Weapons]]");
+                            builder.AppendLine("[[Category: Unique Templar Swords]]");
+                            builder.AppendLine("[[Category: Unique Templar Weapons]]");
+                            builder.AppendLine("[[Category: Weapons]]");
+                            break;
+                        case "sword_cricket":
+                            builder.AppendLine("[[Category: Unique Templar Items]]");
+                            builder.AppendLine("[[Category: Unique Templar Melee Weapons]]");
+                            builder.AppendLine("[[Category: Unique Templar Cricket Bats]]");
+                            builder.AppendLine("[[Category: Unique Templar Weapons]]");
+                            builder.AppendLine("[[Category: Weapons]]");
+                            break;
+                        case "quest_templar_sword":
+                        case "quest_templar_shield":
+                        case "quest_templar_2hsword":
+                            builder.AppendLine("[[Category: Unique Templar Items]]");
+                            builder.AppendLine("[[Category: Quest Items]]");
+                            break;
+                        case "axe":
+                            builder.AppendLine("[[Category: Unique Templar Items]]");
+                            builder.AppendLine("[[Category: Unique Templar Melee Weapons]]");
+                            builder.AppendLine("[[Category: Unique Templar Axes]]");
+                            builder.AppendLine("[[Category: Unique Templar Weapons]]");
+                            builder.AppendLine("[[Category: Weapons]]");
+                            break;
+                        case "2hsword":
+                            builder.AppendLine("[[Category: Unique Templar Items]]");
+                            builder.AppendLine("[[Category: Unique Templar Two-Handed Swords]]");
+                            builder.AppendLine("[[Category: Unique Templar Melee Weapons]]");
+                            builder.AppendLine("[[Category: Unique Templar Swords]]");
+                            builder.AppendLine("[[Category: Unique Templar Weapons]]");
+                            builder.AppendLine("[[Category: Weapons]]");
+                            break;
+                        case "shield_offensive":
+                            builder.AppendLine("[[Category: Unique Templar Items]]");
+                            builder.AppendLine("[[Category: Unique Templar Shields]]");
+                            break;
+                        case "cabalist_focus":
+                            builder.AppendLine("[[Category: Unique Cabalist Items]]");
+                            builder.AppendLine("[[Category: Unique Cabalist Focus Items]]");
+                            builder.AppendLine("[[Category: Unique Cabalist Weapons]]");
+                            builder.AppendLine("[[Category: Weapons]]");
+                            break;
+                        case "quest_cabalist":
+                            builder.AppendLine("[[Category: Unique Cabalist Items]]");
+                            builder.AppendLine("[[Category: Quest Items]]");
+                            break;
+                        case "cabalist_gun1h":
+                            builder.AppendLine("[[Category: Unique Cabalist Items]]");
+                            builder.AppendLine("[[Category: Unique Cabalist One-Handed Guns]]");
+                            builder.AppendLine("[[Category: Unique Cabalist Weapons]]");
+                            builder.AppendLine("[[Category: Weapons]]");
+                            break;
+                        case "cabalist_gun2h":
+                            builder.AppendLine("[[Category: Unique Cabalist Items]]");
+                            builder.AppendLine("[[Category: Unique Cabalist Two-Handed Guns]]");
+                            builder.AppendLine("[[Category: Unique Cabalist Weapons]]");
+                            builder.AppendLine("[[Category: Weapons]]");
+                            break;
+                        case "cabalist_gun1h_beam":
+                            builder.AppendLine("[[Category: Unique Cabalist Items]]");
+                            builder.AppendLine("[[Category: Unique Cabalist One-Handed Guns]]");
+                            builder.AppendLine("[[Category: Unique Cabalist One-Handed Beam Weapons]]");
+                            builder.AppendLine("[[Category: Unique Cabalist Weapons]]");
+                            builder.AppendLine("[[Category: Weapons]]");
+                            break;
+                        case "cabalist_gun2h_beam":
+                            builder.AppendLine("[[Category: Unique Cabalist Items]]");
+                            builder.AppendLine("[[Category: Unique Cabalist Two-Handed Guns]]");
+                            builder.AppendLine("[[Category: Unique Cabalist Two-Handed Beam Weapons]]");
+                            builder.AppendLine("[[Category: Unique Cabalist Weapons]]");
+                            builder.AppendLine("[[Category: Weapons]]");
+                            break;
+                        case "cabalist_gun2h_hive":
+                            builder.AppendLine("[[Category: Unique Cabalist Items]]");
+                            builder.AppendLine("[[Category: Unique Cabalist Two-Handed Guns]]");
+                            builder.AppendLine("[[Category: Unique Cabalist Two-Handed Hive Weapons]]");
+                            builder.AppendLine("[[Category: Unique Cabalist Weapons]]");
+                            builder.AppendLine("[[Category: Weapons]]");
+                            break;
+                        case "harp2h":
+                            builder.AppendLine("[[Category: Unique Cabalist Items]]");
+                            builder.AppendLine("[[Category: Unique Cabalist Two-Handed Guns]]");
+                            builder.AppendLine("[[Category: Unique Cabalist Two-Handed HARP Weapons]]");
+                            builder.AppendLine("[[Category: Unique Cabalist Weapons]]");
+                            builder.AppendLine("[[Category: Weapons]]");
+                            break;
+                        case "cabalist_helm":
+                            builder.AppendLine("[[Category: Unique Cabalist Items]]");
+                            builder.AppendLine("[[Category: Unique Cabalist Helms]]");
+                            builder.AppendLine("[[Category: Unique Cabalist Armor]]");
+                            builder.AppendLine("[[Category: Armor]]");
+                            break;
+                        case "hunter_helm":
+                            builder.AppendLine("[[Category: Unique Hunter Items]]");
+                            builder.AppendLine("[[Category: Unique Hunter Helms]]");
+                            builder.AppendLine("[[Category: Unique Hunter Armor]]");
+                            builder.AppendLine("[[Category: Armor]]");
+                            break;
+                        case "templar_helm":
+                            builder.AppendLine("[[Category: Unique Templar Items]]");
+                            builder.AppendLine("[[Category: Unique Templar Helms]]");
+                            builder.AppendLine("[[Category: Unique Templar Armor]]");
+                            builder.AppendLine("[[Category: Armor]]");
+                            break;
+                        case "cabalist_belt":
+                            builder.AppendLine("[[Category: Unique Cabalist Items]]");
+                            builder.AppendLine("[[Category: Unique Cabalist Belts]]");
+                            builder.AppendLine("[[Category: Unique Cabalist Armor]]");
+                            builder.AppendLine("[[Category: Armor]]");
+                            break;
+                        case "cabalist_arms":
+                            builder.AppendLine("[[Category: Unique Cabalist Items]]");
+                            builder.AppendLine("[[Category: Unique Cabalist Arms]]");
+                            builder.AppendLine("[[Category: Unique Cabalist Armor]]");
+                            builder.AppendLine("[[Category: Armor]]");
+                            break;
+                        case "cabalist_legarmor":
+                            builder.AppendLine("[[Category: Unique Cabalist Items]]");
+                            builder.AppendLine("[[Category: Unique Cabalist Leg Armor]]");
+                            builder.AppendLine("[[Category: Unique Cabalist Armor]]");
+                            builder.AppendLine("[[Category: Armor]]");
+                            break;
+                        case "cabalist_shoulderpads":
+                            builder.AppendLine("[[Category: Unique Cabalist Items]]");
+                            builder.AppendLine("[[Category: Unique Cabalist Shoulderpads]]");
+                            builder.AppendLine("[[Category: Unique Cabalist Armor]]");
+                            builder.AppendLine("[[Category: Armor]]");
+                            break;
+                        case "cabalist_torso":
+                            builder.AppendLine("[[Category: Unique Cabalist Items]]");
+                            builder.AppendLine("[[Category: Unique Cabalist Torso Armor]]");
+                            builder.AppendLine("[[Category: Unique Cabalist Armor]]");
+                            builder.AppendLine("[[Category: Armor]]");
+                            break;
+                        case "cabalist_boots":
+                            builder.AppendLine("[[Category: Unique Cabalist Items]]");
+                            builder.AppendLine("[[Category: Unique Cabalist Boots]]");
+                            builder.AppendLine("[[Category: Unique Cabalist Armor]]");
+                            builder.AppendLine("[[Category: Armor]]");
+                            break;
+                        case "hunter_legarmor":
+                            builder.AppendLine("[[Category: Unique Hunter Items]]");
+                            builder.AppendLine("[[Category: Unique Hunter Leg Armor]]");
+                            builder.AppendLine("[[Category: Unique Hunter Armor]]");
+                            builder.AppendLine("[[Category: Armor]]");
+                            break;
+                        case "hunter_belt":
+                            builder.AppendLine("[[Category: Unique Hunter Items]]");
+                            builder.AppendLine("[[Category: Unique Hunter Belts]]");
+                            builder.AppendLine("[[Category: Unique Hunter Armor]]");
+                            builder.AppendLine("[[Category: Armor]]");
+                            break;
+                        case "hunter_arms":
+                            builder.AppendLine("[[Category: Unique Hunter Items]]");
+                            builder.AppendLine("[[Category: Unique Hunter Arms]]");
+                            builder.AppendLine("[[Category: Unique Hunter Armor]]");
+                            builder.AppendLine("[[Category: Armor]]");
+                            break;
+                        case "hunter_shoulderpads":
+                            builder.AppendLine("[[Category: Unique Hunter Items]]");
+                            builder.AppendLine("[[Category: Unique Hunter Shoulderpads]]");
+                            builder.AppendLine("[[Category: Unique Hunter Armor]]");
+                            builder.AppendLine("[[Category: Armor]]");
+                            break;
+                        case "hunter_torso":
+                            builder.AppendLine("[[Category: Unique Hunter Items]]");
+                            builder.AppendLine("[[Category: Unique Hunter Torso Armor]]");
+                            builder.AppendLine("[[Category: Unique Hunter Armor]]");
+                            builder.AppendLine("[[Category: Armor]]");
+                            break;
+                        case "hunter_boots":
+                            builder.AppendLine("[[Category: Unique Hunter Items]]");
+                            builder.AppendLine("[[Category: Unique Hunter Boots]]");
+                            builder.AppendLine("[[Category: Unique Hunter Armor]]");
+                            builder.AppendLine("[[Category: Armor]]");
+                            break;
+                        case "templar_belt":
+                            builder.AppendLine("[[Category: Unique Templar Items]]");
+                            builder.AppendLine("[[Category: Unique Templar Belts]]");
+                            builder.AppendLine("[[Category: Unique Templar Armor]]");
+                            builder.AppendLine("[[Category: Armor]]");
+                            break;
+                        case "templar_arms":
+                            builder.AppendLine("[[Category: Unique Templar Items]]");
+                            builder.AppendLine("[[Category: Unique Templar Arms]]");
+                            builder.AppendLine("[[Category: Unique Templar Armor]]");
+                            builder.AppendLine("[[Category: Armor]]");
+                            break;
+                        case "templar_legarmor":
+                            builder.AppendLine("[[Category: Unique Templar Items]]");
+                            builder.AppendLine("[[Category: Unique Templar Leg Armor]]");
+                            builder.AppendLine("[[Category: Unique Templar Armor]]");
+                            builder.AppendLine("[[Category: Armor]]");
+                            break;
+                        case "templar_shoulderpads":
+                            builder.AppendLine("[[Category: Unique Templar Items]]");
+                            builder.AppendLine("[[Category: Unique Templar Shoulderpads]]");
+                            builder.AppendLine("[[Category: Unique Templar Armor]]");
+                            builder.AppendLine("[[Category: Armor]]");
+                            break;
+                        case "templar_torso":
+                            builder.AppendLine("[[Category: Unique Templar Items]]");
+                            builder.AppendLine("[[Category: Unique Templar Torso Armor]]");
+                            builder.AppendLine("[[Category: Unique Templar Armor]]");
+                            builder.AppendLine("[[Category: Armor]]");
+                            break;
+                        case "templar_boots":
+                            builder.AppendLine("[[Category: Unique Templar Items]]");
+                            builder.AppendLine("[[Category: Unique Templar Boots]]");
+                            builder.AppendLine("[[Category: Unique Templar Armor]]");
+                            builder.AppendLine("[[Category: Armor]]");
+                            break;
+                        case "trinket_ring":    //there aren't any implemented, but just so it doesn't throw errors
+                            builder.AppendLine("[[Category: Unique Trinkets]]");
+                            builder.AppendLine("[[Category: Unique Rings]]");
+                            builder.AppendLine("[[Category: Trinkets]]");
+                            break;
+                        default:
+                            throw new NotImplementedException("Unimplemented type: " + itemType);
+                    }
+                }
+                //builder.AppendLine("TYPE: " + itemType);
 
                 //determine categories by item type
 
