@@ -1171,8 +1171,8 @@ namespace MediaWiki.Parser
             var dmgMulti = (int)ilevels.Rows[ilevel]["baseDamageMultiplyer"];
             var absoluteMin = damageMin * ((dmgMulti * pct) / 10000);
             var absoluteMax = damageMax * ((dmgMulti * pct) / 10000);
-            absoluteMin = Math.Ceiling(absoluteMin);
-            absoluteMax = Math.Ceiling(absoluteMax);
+            absoluteMin = Round(absoluteMin);
+            absoluteMax = Round(absoluteMax);
             Unit.SetStat(dmgType, "min", absoluteMin);
             Unit.SetStat(dmgType, "max", absoluteMax);
             Unit.SetStat(dmgType, "secs", secs);
@@ -1192,8 +1192,8 @@ namespace MediaWiki.Parser
             var dmgMulti = (int)ilevels.Rows[ilevel]["baseDamageMultiplyer"];
             var absoluteMin = damageMin * ((dmgMulti * fieldInc * pct) / 1000000);
             var absoluteMax = damageMax * ((dmgMulti * fieldInc * pct) / 1000000);
-            absoluteMin = Math.Ceiling(absoluteMin);
-            absoluteMax = Math.Ceiling(absoluteMax);
+            absoluteMin = Round(absoluteMin);
+            absoluteMax = Round(absoluteMax);
             Unit.SetStat(dmgType, "min", absoluteMin);
             Unit.SetStat(dmgType, "max", absoluteMax);
             Unit.SetStat(dmgType, "range", range);
