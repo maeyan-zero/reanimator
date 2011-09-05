@@ -8,6 +8,7 @@ using MediaWiki.Parser;
 using MediaWiki.Parser.Class;
 using MediaWiki.Util;
 using System.IO;
+using System.Linq;
 
 namespace MediaWiki.Articles
 {
@@ -484,7 +485,14 @@ namespace MediaWiki.Articles
             if (((int)item["criticalPct"]) != 0) strings.Add("Critical Chance: " + item["criticalPct"] + "%");
             if (((int)item["criticalMult"]) != 0) strings.Add("Critical Damage: " + item["criticalMult"] + "%");
             if (((int)item["interruptAttackPct"]) != 0) strings.Add("Interrupt Strength: " + (interrupt * (int)item["interruptAttackPct"] / 100));
-            if (((int)item["cdTicks"]) != 0) strings.Add("Rate of fire: " + (153600 / (int)item["cdTicks"]) + " shots/min");
+            if (((int)item["cdTicks"]) != 0)
+            {
+                string itemType = item["unitType_string"].ToString();
+                if (itemType.Contains("beam"))
+                    strings.Add("Rate of fire: constant");
+                else
+                    strings.Add("Rate of fire: " + (153600 / (int)item["cdTicks"]) + " shots/min");
+            }
 
             if (((int)item["sfxPhysicalAbilityPct"]) != 0) strings.Add("Stun Attack Strength: " + (sfxAtk * (int)item["sfxPhysicalAbilityPct"] / 100));
             if (((int)item["sfxPhysicalDefensePct"]) != 0) strings.Add("Stun Defence: " + (sfxDef * (int)item["sfxPhysicalDefensePct"] / 100));
@@ -821,6 +829,7 @@ namespace MediaWiki.Articles
             if (itemSlots is int) return strings.ToString();
 
             var noSlots = string.Empty;
+            int slotsAdded = 0;
 
             strings.Append("<div class=\"item_heading\">Mods</div>");
             strings.Append("<div class=\"item_mods\">");
@@ -828,6 +837,11 @@ namespace MediaWiki.Articles
             strings.Append("<tr>");
             foreach (var slot in (Dictionary<string, object>)itemSlots)
             {
+                //skip slots with 0
+                if (slot.Value is double && ((double)slot.Value) == 0) continue;
+
+                slotsAdded++;
+
                 //int maxSlot = (slot.Value is Evaluator.Range) ? ((Evaluator.Range) slot.Value).End : Convert.ToInt32(slot.Value);
                 strings.Append("<td>");
                 //for (int i = 0; i < maxSlot; i++)
@@ -839,6 +853,10 @@ namespace MediaWiki.Articles
             strings.Append("<tr>" + noSlots + "</tr>");
             strings.Append("</table>");
             strings.Append("</div>");
+
+            //if no slots were added, return blank (might not be able to effectively determine this before the loop)
+            if (slotsAdded == 0) return string.Empty;
+
             return strings.ToString();
         }
 
