@@ -1,4 +1,5 @@
 ﻿using System.Collections.Generic;
+using System.Linq;
 
 namespace MediaWiki.Parser.Class
 {
@@ -79,8 +80,8 @@ namespace MediaWiki.Parser.Class
                 return 0;
 
             var stat = Stats[label];
-            if (label.CompareTo("skill_bonus") != 0 && stat is string)
-                stat = stat;// stat = "(" + stat + ")";
+            //if (label.CompareTo("skill_bonus") != 0 && stat is string)
+              //  stat = "(" + stat + ")";
 
             return stat;
 	    }
@@ -101,12 +102,13 @@ namespace MediaWiki.Parser.Class
             return !Stats.ContainsKey(label) ? 0 : ((Dictionary<string, object>) Stats[label]).Count;
         }
 
-        public string GetStatParam(string label)
+        public string[] GetStatParam(string label)
         {
-            if (!Stats.ContainsKey(label)) return string.Empty;
+            if (!Stats.ContainsKey(label)) return null;// string.Empty;
             string[] keys = new string[6];
             ((Dictionary<string, object>)Stats[label]).Keys.CopyTo(keys, 0);
-            return keys[0];
+            return keys.Where(s => s != null).ToArray();
+            //return keys[0];
         }
 
         public object GetStatValue(string label)
@@ -114,7 +116,8 @@ namespace MediaWiki.Parser.Class
             if (!Stats.ContainsKey(label)) return string.Empty;
             string[] keys = new string[6];
             ((Dictionary<string, object>)Stats[label]).Keys.CopyTo(keys, 0);
-            return ((Dictionary<string, object>)Stats[label])[keys[0]];
+            return ((Dictionary<string, object>)Stats[label]).Values.ToArray();
+            //return ((Dictionary<string, object>)Stats[label])[keys[0]];
         }
     }
 }

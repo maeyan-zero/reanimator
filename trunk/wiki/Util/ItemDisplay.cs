@@ -116,23 +116,41 @@ namespace MediaWiki.Util
                     case Display.Ctrl.ParamString:
                         control = (string) row["ctrlStat_string"];
                         result = Evaluator.Unit.GetStatParam(control);
-                        switch (control)
+                        string total = string.Empty;
+                        //there might be more than one (like skill bonuses), so go through them all
+                        string[] ary = (string[])result;
+                        for (int e = 0; e < ary.Length; e++)
                         {
-                            case "power_cost_pct_skillgroup":
-                            case "cooldown_pct_skillgroup":
-                            case "damage_percent_skillgroup":
-                                result = GetGroupString((string) result);
-                                break;
-                            case "skill_level":
-                                result = GetSkillString((string) result);
-                                break;
+                            switch (control)
+                            {
+                                case "power_cost_pct_skillgroup":
+                                case "cooldown_pct_skillgroup":
+                                case "damage_percent_skillgroup":
+                                    result = GetGroupString(ary[e]);
+                                    break;
+                                case "skill_level":
+                                    result = GetSkillString(ary[e]);
+                                    break;
+                            }
+                            total += format.Replace("[string" + i + "]", result.ToString());
+                            if (e < ary.Length - 1)
+                                total += "<br />";
                         }
-                        format = format.Replace("[string" + i + "]", result.ToString());
+                        format = total;//format.Replace("[string" + i + "]", result.ToString());
                         break;
                     case Display.Ctrl.StatValue:
                         control = (string) row["ctrlStat_string"];
                         result = Evaluator.Unit.GetStatValue(control);
-                        format = format.Replace("[string" + i + "]", result.ToString());
+                        object[] array = (object[])result;
+                        string[] parts = format.Split(new string[] { "<br />" }, StringSplitOptions.RemoveEmptyEntries);
+                        //might be multiple entries, so go through all of them
+                        for (int p = 0; p < array.Length; p++)
+                        {
+                            parts[p] = parts[p].Replace("[string" + i + "]", array[p].ToString());
+                            if (p < array.Length - 1)
+                                parts[p] += "<br />";
+                        }
+                        format = parts.Aggregate((r,s)=>r+s);//format.Replace("[string" + i + "]", result.ToString());
                         break;
                     case Display.Ctrl.DivBy10:
                         script = (string)row["val" + i];
@@ -143,8 +161,6 @@ namespace MediaWiki.Util
                         break;
                 }
             }
-
-
 
             return format;
         }
