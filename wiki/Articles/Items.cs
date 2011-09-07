@@ -408,16 +408,16 @@ namespace MediaWiki.Articles
                 
                 qualityId = item["itemQuality"].ToString();
 
-                nameRaw = item["String_string"].ToString();
+                nameRaw = GetDisplayString(item["String"].ToString());
                 name = "<div class=\"item_name " + quality.ToLower() + "\">" + nameRaw + "</div>";
                 name = GetSqlString(name);
 
                 //we can toss the base type if needed, or make another column for displaying below the in-game type description
                 int baseRow = (int)item["baseRow"];
                 if (baseRow >= 0)
-                    typeRaw = items.Rows[baseRow]["String_string"].ToString();
+                    typeRaw = GetDisplayString(items.Rows[baseRow]["String"].ToString());
                 else
-                    typeRaw = item["typeDescription_string"].ToString();
+                    typeRaw = item["typeDescription_string"].ToString();    //probably fine as it is
 
                 type = (typeRaw != string.Empty) ? "<div class=\"item_type " + quality.ToLower() + "\">" + quality + " " + typeRaw + "</div>" : string.Empty;
                 type = GetSqlString(type);
@@ -469,6 +469,34 @@ namespace MediaWiki.Articles
             }
 
             return table.GetFullScript();
+        }
+
+        private string GetDisplayString(string itemRow)
+        {
+            //skip invalid entries
+            if (string.IsNullOrWhiteSpace(itemRow) || itemRow.CompareTo("-1") == 0)
+                return string.Empty;
+
+            var strings = Manager.GetDataTable("Strings_Strings");
+            string name = string.Empty;
+            foreach (DataRow row in strings.Rows)
+            {
+                //check if it's a reference row with the default display string
+                if (row["ReferenceId"].ToString().CompareTo(itemRow) == 0
+                    && (row["Attribute1"].ToString().CompareTo("Default") == 0
+                        || row["Attribute2"].ToString().CompareTo("Default") == 0
+                        || row["Attribute3"].ToString().CompareTo("Default") == 0
+                        || row["Attribute4"].ToString().CompareTo("Default") == 0))
+                {
+                    name = row["String"].ToString();
+                    break;
+                }
+            }
+
+            if (string.IsNullOrWhiteSpace(name))
+                throw new Exception("Name with reference ID " + itemRow + " not found");
+
+            return name;
         }
 
         private string GetStats(DataRow item)
@@ -736,6 +764,16 @@ namespace MediaWiki.Articles
             {
                 var fireDmg = FormatDotDmg((Dictionary<string, object>)values, "Electricity");
                 builder.Append(fireDmg);
+            }
+
+            //if there's no damage to display, it must be a focus item that has power damage
+            if (builder.Length == 0)
+            {
+                DataRow lvlRow = Manager.GetDataTable("ITEM_LEVELS").Rows[(int)unit.GetStat("level")];
+                builder.Append(string.Format("'''Power''': {0}-{1}",
+                    (int)(dmgMin / 100.0 * (int)lvlRow["baseDamageMultiplyer"]),
+                    (int)(dmgMax / 100.0 * (int)lvlRow["baseDamageMultiplyer"])
+                    ));
             }
 
             return builder.ToString();
