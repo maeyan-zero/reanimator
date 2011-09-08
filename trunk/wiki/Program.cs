@@ -17,7 +17,7 @@ namespace MediaWiki
             manager.LoadTableFiles();
             manager.EndAllDatAccess();
 
-            //TODO: beam damage (listed as direct but apparently uses some other calculation)
+            //TODO: beam damage types (listed as direct but apparently uses some other calculation)
 
             // *****while this message is still here, correct the following manually after every item export*****
             //TODO: fix stats that are super inaccurate (manually changed in DB for now):
