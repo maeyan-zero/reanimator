@@ -384,6 +384,7 @@ namespace MediaWiki.Articles
             ItemDisplay.Manager = Manager;
             var items = Manager.GetDataTable("ITEMS");
             var qualityTable = Manager.GetDataTable("ITEM_QUALITY");
+            var ilvls = Manager.GetDataTable("ITEM_LEVELS");
 
             string id, code, name, type, flavor, quality, image, damage, stats, affixes, modslots, feeds, level, inherent, defence,
                 qualityId, typeRaw, nameRaw, levelRaw;
@@ -450,7 +451,7 @@ namespace MediaWiki.Articles
                 if (levelRaw.Equals("")) levelRaw = item["maxLevel"].ToString();
                 if (qualityId == "12") levelRaw = "63";
                 level = levelRaw;
-                level = (!string.IsNullOrEmpty(level)) ? GetItemLevels(level, (int) item["itemQuality"]) : string.Empty;
+                level = (!string.IsNullOrEmpty(level)) ? GetItemLevels(level, ilvls.Rows[int.Parse(level)]["levelRequirement"].ToString(), (int)item["itemQuality"]) : string.Empty;
                 level = GetSqlString(level);
 
                 inherent = ConcatStrings(GetInherentAffixes(item));
@@ -847,10 +848,10 @@ namespace MediaWiki.Articles
             return mask;
         }
 
-        private string GetItemLevels(string level, int quality)
+        private string GetItemLevels(string level, string clvl, int quality)
         {
             int itemLevel = (quality == 12) ? 63 : int.Parse(level);
-            int charLevel = (quality == 12) ? 55 : itemLevel - 4 - ((itemLevel)/10);
+            int charLevel = int.Parse(clvl);// (quality == 12) ? 55 : itemLevel - 4 - ((itemLevel) / 10);
             string output = "<div class=\"item_heading\">Item Level</div>";
             output += "<div class=\"item_level\">Item Level: " + itemLevel;
             if (charLevel > 1) output += "<br/>Requires Character Level: " + charLevel + "</div>";
