@@ -126,10 +126,10 @@ namespace MediaWiki.Util
                                 case "power_cost_pct_skillgroup":
                                 case "cooldown_pct_skillgroup":
                                 case "damage_percent_skillgroup":
-                                    result = GetGroupString(ary[e]);
+                                    ary[e] = GetGroupString(ary[e]);
                                     break;
                                 case "skill_level":
-                                    result = GetSkillString(ary[e]);
+                                    ary[e] = GetSkillString(ary[e]);
                                     break;
                             }
                             total += format.Replace("[string" + i + "]", ary[e]);
