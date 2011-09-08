@@ -132,7 +132,7 @@ namespace MediaWiki.Util
                                     result = GetSkillString(ary[e]);
                                     break;
                             }
-                            total += format.Replace("[string" + i + "]", result.ToString());
+                            total += format.Replace("[string" + i + "]", ary[e]);
                             if (e < ary.Length - 1)
                                 total += "<br />";
                         }
