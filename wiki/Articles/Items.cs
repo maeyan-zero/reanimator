@@ -388,6 +388,7 @@ namespace MediaWiki.Articles
 
             string id, code, name, type, flavor, quality, image, damage, stats, affixes, modslots, feeds, level, inherent, defence,
                 qualityId, typeRaw, nameRaw, levelRaw;
+            string clvl;
 
             foreach (DataRow item in items.Rows)
             {
@@ -451,6 +452,13 @@ namespace MediaWiki.Articles
                 if (levelRaw.Equals("")) levelRaw = item["maxLevel"].ToString();
                 if (qualityId == "12") levelRaw = "63";
                 level = levelRaw;
+
+                //ignore clvl for necklaces
+                //(not sure if this will always be the case)
+                clvl = "0";
+                if (((int)item["typeDescription"]) != 3430) 
+                    clvl = ilvls.Rows[int.Parse(level)]["levelRequirement"].ToString();
+
                 level = (!string.IsNullOrEmpty(level)) ? GetItemLevels(level, ilvls.Rows[int.Parse(level)]["levelRequirement"].ToString(), (int)item["itemQuality"]) : string.Empty;
                 level = GetSqlString(level);
 
@@ -585,6 +593,9 @@ namespace MediaWiki.Articles
         {
             var evaluator = new Evaluator { Unit = unit ?? new Item(), Manager = Manager, Game3 = new Game3() };
             var scripts = item["props1"].ToString() + item["props2"] + item["props3"] + item["props4"] + item["props5"];
+
+            //it might be hidden but it's a fraction that's likely rounded to 0, so it's not worth displaying
+            scripts = scripts.Replace("SetStat673('hp_regen', 1);", "").Replace("SetStat673('power_regen', 1);", "");
 
             var level = !string.IsNullOrEmpty(item["fixedLevel"].ToString()) ?  Int32.Parse(item["fixedLevel"].ToString().Replace(";", "")) : (int)item["level"];
             evaluator.Unit.SetStat("level", level);

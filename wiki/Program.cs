@@ -18,6 +18,7 @@ namespace MediaWiki
             manager.EndAllDatAccess();
 
             //TODO: beam damage types (listed as direct but apparently uses some other calculation)
+            //TODO: sword attack rates
 
             // *****while this message is still here, correct the following manually after every item export*****
             //TODO: fix stats that are super inaccurate (manually changed in DB for now):
