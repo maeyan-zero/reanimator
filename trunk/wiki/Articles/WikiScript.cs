@@ -259,6 +259,17 @@ namespace MediaWiki.Articles
             }
         }
 
+        public static string ConcatStrings(IList<string> strings)
+        {
+            string concat = string.Empty;
+            for (int i = 0; i < strings.Count; i++)
+            {
+                concat += strings[i];
+                if (strings.Count != i + 1) concat += "<br/>";
+            }
+            return concat;
+        }
+
         //we could use all the in-game values, but a lot of them have terrible contrast with the page background
         protected static class WikiColors
         {
