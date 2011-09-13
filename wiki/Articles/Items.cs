@@ -367,6 +367,7 @@ namespace MediaWiki.Articles
                 "name TEXT",
                 "type TEXT",
                 "flavor TEXT",
+                "dmg_icon TEXT",
                 "damage TEXT",
                 "defence TEXT",
                 "stats TEXT",
@@ -387,7 +388,7 @@ namespace MediaWiki.Articles
             var ilvls = Manager.GetDataTable("ITEM_LEVELS");
 
             string id, code, name, type, flavor, quality, image, damage, stats, affixes, modslots, feeds, level, inherent, defence,
-                qualityId, typeRaw, nameRaw, levelRaw;
+                qualityId, typeRaw, nameRaw, levelRaw, dmgIcon;
             string clvl;
 
             foreach (DataRow item in items.Rows)
@@ -437,6 +438,14 @@ namespace MediaWiki.Articles
                 if (!string.IsNullOrEmpty(damage)) damage = "<div class=\"item_heading\">Damage</div><div class=\"item_damage\">" + damage + "</div>";
                 damage = GetSqlString(damage);
 
+                dmgIcon = item["tooltipDamageIcon"].ToString();
+                if (!string.IsNullOrEmpty(dmgIcon))
+                {
+                    dmgIcon = GetImage(dmgIcon + ".png", 50);
+                    dmgIcon = "<div class=\"dmg_icon\">" + dmgIcon + "</div>";
+                }
+                dmgIcon = GetSqlString(dmgIcon);
+
                 stats = GetStats(item);
                 //stats = AddElementThumbs(stats);
                 if (!string.IsNullOrEmpty(stats)) stats = "<div class=\"item_heading\">Stats</div><div class=\"item_stats\">" + stats + "</div>";
@@ -451,15 +460,20 @@ namespace MediaWiki.Articles
                 levelRaw = item["fixedLevel"].ToString().Replace(";", "");
                 if (levelRaw.Equals("")) levelRaw = item["maxLevel"].ToString();
                 if (qualityId == "12") levelRaw = "63";
-                level = levelRaw;
+                level = levelRaw != "0" ? levelRaw : "Scales";
 
                 //ignore clvl for necklaces
                 //(not sure if this will always be the case)
                 clvl = "0";
-                if (((int)item["typeDescription"]) != 3430) 
+                if (((int)item["typeDescription"]) != 3430 && level != "Scales")
+                {
                     clvl = ilvls.Rows[int.Parse(level)]["levelRequirement"].ToString();
 
-                level = (!string.IsNullOrEmpty(level)) ? GetItemLevels(level, ilvls.Rows[int.Parse(level)]["levelRequirement"].ToString(), (int)item["itemQuality"]) : string.Empty;
+                    level = (!string.IsNullOrEmpty(level))
+                                ? GetItemLevels(level, ilvls.Rows[int.Parse(level)]["levelRequirement"].ToString(),
+                                                (int) item["itemQuality"])
+                                : string.Empty;
+                }
                 level = GetSqlString(level);
 
                 inherent = ConcatStrings(GetInherentAffixes(item));
@@ -474,7 +488,7 @@ namespace MediaWiki.Articles
                 if (!string.IsNullOrEmpty(defence)) defence = "<div class=\"item_heading\">Defence</div><div class=\"item_defence\">" + defence + "</div>";
                 defence = GetSqlString(defence);
 
-                table.AddRow(id, code, image, name, type, flavor, damage, defence, stats, modslots, feeds, level, inherent, affixes, qualityId, nameRaw, typeRaw, levelRaw);
+                table.AddRow(id, code, image, name, type, flavor, dmgIcon, damage, defence, stats, modslots, feeds, level, inherent, affixes, qualityId, nameRaw, typeRaw, levelRaw);
             }
 
             return table.GetFullScript();
@@ -861,8 +875,11 @@ namespace MediaWiki.Articles
 
         private string GetItemLevels(string level, string clvl, int quality)
         {
-            int itemLevel = (quality == 12) ? 63 : int.Parse(level);
+            int itemLevel = int.Parse(level);
+            if (itemLevel <= 1) return string.Empty;
+            if (quality == 12) itemLevel = 63;
             int charLevel = int.Parse(clvl);// (quality == 12) ? 55 : itemLevel - 4 - ((itemLevel) / 10);
+            
             string output = "<div class=\"item_heading\">Item Level</div>";
             output += "<div class=\"item_level\">Item Level: " + itemLevel;
             if (charLevel > 1) output += "<br/>Requires Character Level: " + charLevel + "</div>";
@@ -917,6 +934,7 @@ namespace MediaWiki.Articles
             var affixes = item["affix"].ToString();
 
             var level = !string.IsNullOrEmpty(item["fixedLevel"].ToString()) ?  Int32.Parse(item["fixedLevel"].ToString().Replace(";", "")) : (int)item["level"];
+            if (level == 0) level = 55;
             evaluator.Unit.SetStat("level", level);
 
             string[] split = affixes.Split(',');
@@ -938,17 +956,6 @@ namespace MediaWiki.Articles
             }
 
             return ItemDisplay.GetDisplayStrings(evaluator.Unit);
-        }
-
-        private string ConcatStrings(IList<string> strings)
-        {
-            string concat = string.Empty;
-            for (int i = 0; i < strings.Count; i++)
-            {
-                concat += strings[i];
-                if (strings.Count != i + 1) concat += "<br/>";
-            }
-            return concat;
         }
 
         private string ArrayToHtmlList(IList<string> strings, string classid)

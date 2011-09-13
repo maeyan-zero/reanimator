@@ -23,9 +23,7 @@ namespace MediaWiki
             // *****while this message is still here, correct the following manually after every item export*****
             //TODO: fix stats that are super inaccurate (manually changed in DB for now):
             //Beryl Dragon - damage is 0-1, missing stream depletion -20
-            
-            
-
+          
             args = new[] { "ITEMS" };
 
             //new Items(manager).WriteAllUniqueLegendaryItemPages();
@@ -69,6 +67,9 @@ namespace MediaWiki
                         break;
                     case "RECIPES":
                         script = new Recipes(manager);
+                        break;
+                    case "ITEM_SETS":
+                        script = new Sets(manager);
                         break;
                     default:
                         throw new Exception("Unknown WikiScript: " + arg);
