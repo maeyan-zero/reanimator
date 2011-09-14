@@ -441,13 +441,18 @@ namespace MediaWiki.Articles
                 if (!string.IsNullOrEmpty(dmgIcon))
                 {
                     dmgIcon = GetImage(dmgIcon + ".png", 50);
-                    dmgIcon = "<div class=\"dmg_icon\">" + dmgIcon + "</div>";
+                    dmgIcon = "<td class=\"dmg_icon\">" + dmgIcon + "</td>";
                 }
+
+                damage = GetDamage(item);//<div class=\"item_heading\">Damage</div>
+                if (!string.IsNullOrEmpty(damage)) damage = "<td><div class=\"item_damage\">" + damage + "</div></td>";
+                damage = "<div class=\"simple_line\"></div><table><tr>" + dmgIcon + damage + "</tr></table>";
+                damage = GetSqlString(damage);
                 dmgIcon = GetSqlString(dmgIcon);
 
                 stats = GetStats(item);
-                //stats = AddElementThumbs(stats);
-                if (!string.IsNullOrEmpty(stats)) stats = "<div class=\"item_heading\">Stats</div><div class=\"item_stats\">" + stats + "</div>";
+                //stats = AddElementThumbs(stats); //<div class=\"item_heading\">Stats</div>
+                if (!string.IsNullOrEmpty(stats)) stats = "<div class=\"simple_line\"></div><div class=\"item_stats\">" + stats + "</div>";
                 stats = GetSqlString(stats);
 
                 modslots = GetModSlots(item["props2"].ToString());
@@ -463,14 +468,11 @@ namespace MediaWiki.Articles
 
                 //ignore clvl for necklaces
                 //(not sure if this will always be the case)
-                clvl = "0";
                 if (((int)item["typeDescription"]) != 3430 && level != "Scales")
                 {
                     clvl = ilvls.Rows[int.Parse(level)]["levelRequirement"].ToString();
-
                     level = (!string.IsNullOrEmpty(level))
-                                ? GetItemLevels(level, ilvls.Rows[int.Parse(level)]["levelRequirement"].ToString(),
-                                                (int) item["itemQuality"])
+                                ? GetItemLevels(level, clvl, (int) item["itemQuality"])
                                 : string.Empty;
                 }
                 level = GetSqlString(level);
@@ -483,13 +485,14 @@ namespace MediaWiki.Articles
                 if (!string.IsNullOrEmpty(affixes)) affixes = "<div class=\"item_heading\">Special Affixes</div><div class=\"item_affixes\">" + affixes + "</div>";
                 affixes = GetSqlString(affixes);
 
+
+                defence = GetDefence(item, unit);//<div class=\"item_heading\">Defence</div>
+                if (!string.IsNullOrEmpty(defence)) defence = "<div class=\"item_defence\">" + defence + "</div>";
+                defence = GetSqlString(defence);
+
                 damage = GetDamage(item, unit);
                 if (!string.IsNullOrEmpty(damage)) damage = "<div class=\"item_heading\">Damage</div><div class=\"item_damage\">" + damage + "</div>";
                 damage = GetSqlString(damage);
-
-                defence = GetDefence(item, unit);
-                if (!string.IsNullOrEmpty(defence)) defence = "<div class=\"item_heading\">Defence</div><div class=\"item_defence\">" + defence + "</div>";
-                defence = GetSqlString(defence);
 
                 table.AddRow(id, code, image, name, type, flavor, dmgIcon, damage, defence, stats, modslots, feeds, level, inherent, affixes, qualityId, nameRaw, typeRaw, levelRaw);
             }
@@ -972,8 +975,8 @@ namespace MediaWiki.Articles
             if (itemLevel <= 1) return string.Empty;
             if (quality == 12) itemLevel = 63;
             int charLevel = int.Parse(clvl);// (quality == 12) ? 55 : itemLevel - 4 - ((itemLevel) / 10);
-            
-            string output = "<div class=\"item_heading\">Item Level</div>";
+
+            string output = "<div class=\"simple_line\"></div>";
             output += "<div class=\"item_level\">Item Level: " + itemLevel;
             if (charLevel > 1) output += "<br/>Requires Character Level: " + charLevel + "</div>";
             return output;
@@ -991,7 +994,7 @@ namespace MediaWiki.Articles
             var noSlots = string.Empty;
             int slotsAdded = 0;
 
-            strings.Append("<div class=\"item_heading\">Mods</div>");
+            strings.Append("<div class=\"simple_line\"></div>");
             strings.Append("<div class=\"item_mods\">");
             strings.Append("<table>");
             strings.Append("<tr>");
@@ -1133,8 +1136,7 @@ namespace MediaWiki.Articles
             }
 
             if (strings.Count == 0) return string.Empty;
-
-            return "<div class=\"item_heading\">Feed</div><div class=\"item_feed\">" + GetCSVString(strings) + "</div>";
+            return "<div class=\"simple_line\"></div><div class=\"item_feed\">" + GetCSVString(strings) + "</div>";
         }
 
         public string GetColorCode(int quality)
