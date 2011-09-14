@@ -39,10 +39,10 @@ namespace MediaWiki.Articles
                 if ((int)row["baseRow"] < 0) continue;
                 //test quality
                 quality = row["itemQuality_string"].ToString();
-                if (quality.CompareTo("unique") != 0 && quality.CompareTo("legendary") != 0) continue;
+                if (quality.CompareTo("unique") != 0 && quality.CompareTo("legendary") != 0 && quality.CompareTo("rare") != 0) continue;
                 //skip rings
                 itemType = row["unitType_string"].ToString();
-                if (itemType.CompareTo("trinket_ring") == 0) continue;
+                //if (itemType.CompareTo("trinket_ring") == 0) continue;
 
                 code = ((int)row["code"]).ToString("X");
                 name = row["String_string"].ToString();
@@ -52,7 +52,10 @@ namespace MediaWiki.Articles
 
                 builder.AppendLine(string.Format("--{0}--", name));
                 builder.AppendLine(item);
-                builder.AppendLine(string.Format("[[Category: {0} Items]]", char.ToUpper(quality[0]) + quality.Substring(1)));
+                if (quality.CompareTo("unique") == 0)
+                    builder.AppendLine(string.Format("[[Category: {0} Items]]", char.ToUpper(quality[0]) + quality.Substring(1)));
+                else
+                    builder.AppendLine(string.Format("[[Category: {0} Named Items]]", char.ToUpper(quality[0]) + quality.Substring(1)));
 
                 //only list additional categories for uniques
                 if (quality.CompareTo("unique") == 0)
@@ -434,10 +437,6 @@ namespace MediaWiki.Articles
                 flavor = (flavor != string.Empty) ? "<div class=\"item_flavor\">" + flavor + "</div>" : string.Empty;
                 flavor = GetSqlString(flavor);
 
-                damage = GetDamage(item);
-                if (!string.IsNullOrEmpty(damage)) damage = "<div class=\"item_heading\">Damage</div><div class=\"item_damage\">" + damage + "</div>";
-                damage = GetSqlString(damage);
-
                 dmgIcon = item["tooltipDamageIcon"].ToString();
                 if (!string.IsNullOrEmpty(dmgIcon))
                 {
@@ -483,6 +482,10 @@ namespace MediaWiki.Articles
                 affixes = ConcatStrings(GetAffixes(item, unit));
                 if (!string.IsNullOrEmpty(affixes)) affixes = "<div class=\"item_heading\">Special Affixes</div><div class=\"item_affixes\">" + affixes + "</div>";
                 affixes = GetSqlString(affixes);
+
+                damage = GetDamage(item, unit);
+                if (!string.IsNullOrEmpty(damage)) damage = "<div class=\"item_heading\">Damage</div><div class=\"item_damage\">" + damage + "</div>";
+                damage = GetSqlString(damage);
 
                 defence = GetDefence(item, unit);
                 if (!string.IsNullOrEmpty(defence)) defence = "<div class=\"item_heading\">Defence</div><div class=\"item_defence\">" + defence + "</div>";
@@ -628,11 +631,11 @@ namespace MediaWiki.Articles
             return source;
         }
 
-        private string GetDamage(DataRow item)
+        private string GetDamage(DataRow item,Unit unit)
         {
             if (string.IsNullOrEmpty(item["minBaseDmg"].ToString())) return string.Empty;
 
-            var unit = new Item();
+            //var unit = new Item();
             var evaluator = new Evaluator { Unit = unit, Manager = Manager, Game3 = new Game3() };
             var level = !string.IsNullOrEmpty(item["fixedLevel"].ToString()) ? Int32.Parse(item["fixedLevel"].ToString().Replace(";", "")) : (int)item["level"];
             var dmgMin = Int32.Parse(item["minBaseDmg"].ToString().Replace(";", ""));
@@ -641,12 +644,21 @@ namespace MediaWiki.Articles
             var radialIncrement = (int) item["radialDmgIncrement"];
             var fieldIncrement = (int) item["fieldDmgIncrement"];
             //var dotIncrement = (int) item["dotDmgIncrement"]; // doesnt seem to be used
+            //custom stuff for beam and hive damage (temporary until the type stuff is redone)
+            //beam - direct damage of any element, or HARP
+            bool isBeam = item["unitType_string"].ToString().Contains("beam") || item["unitType_string"].ToString().Contains("harp");
+            //hive - any hive/funky bug thing weapon, used for eel (direct) and swarm (splash, never used)
+            bool isHive = item["unitType_string"].ToString().Contains("hive") || item["unitType_string"].ToString().Contains("cabalist_bug2h_achiev");
+            unit.SetStat("isBeam", isBeam);
+            unit.SetStat("isHive", isHive);
+
 ;           unit.SetStat("damage_min", dmgMin);
             unit.SetStat("damage_max", dmgMax);
             unit.SetStat("level", level);
             unit.SetStat("dmg_increment", dmgIncrement);
             unit.SetStat("radial_increment", radialIncrement);
             unit.SetStat("field_increment", fieldIncrement);
+
             var scripts = item["props1"].ToString() + item["props2"] + item["props3"] + item["props4"] + item["props5"];
             evaluator.Evaluate(scripts);
 
@@ -655,35 +667,57 @@ namespace MediaWiki.Articles
             var values = unit.GetStat("dmg_fire");
             if (!(values is int))
             {
-                var fireDmg = FormatDirectDmg((Dictionary<string, object>) values, "Fire");
+                string fireDmg;
+                if (isBeam)
+                    fireDmg = FormatBeamDmg((Dictionary<string, object>)values, "Fire");
+                else
+                    fireDmg = FormatDirectDmg((Dictionary<string, object>)values, "Fire");
                 builder.Append(fireDmg);
             }
 
             values = unit.GetStat("dmg_spec");
             if (!(values is int))
             {
-                var fireDmg = FormatDirectDmg((Dictionary<string, object>)values, "Spectral");
+                string fireDmg;
+                if (isBeam)
+                    fireDmg = FormatBeamDmg((Dictionary<string, object>)values, "Spectral");
+                else
+                    fireDmg = FormatDirectDmg((Dictionary<string, object>)values, "Spectral");
                 builder.Append(fireDmg);
             }
 
             values = unit.GetStat("dmg_phys");
             if (!(values is int))
             {
-                var fireDmg = FormatDirectDmg((Dictionary<string, object>)values, "Physical");
+                string fireDmg;
+                if (isBeam)
+                    fireDmg = FormatBeamDmg((Dictionary<string, object>)values, "Physical");
+                else
+                    fireDmg = FormatDirectDmg((Dictionary<string, object>)values, "Physical");
                 builder.Append(fireDmg);
             }
 
             values = unit.GetStat("dmg_toxic");
             if (!(values is int))
             {
-                var fireDmg = FormatDirectDmg((Dictionary<string, object>)values, "Toxic");
+                string fireDmg;
+                if (isBeam)
+                    fireDmg = FormatBeamDmg((Dictionary<string, object>)values, "Toxic");
+                else
+                    fireDmg = FormatDirectDmg((Dictionary<string, object>)values, "Toxic");
                 builder.Append(fireDmg);
             }
 
             values = unit.GetStat("dmg_elec");
             if (!(values is int))
             {
-                var fireDmg = FormatDirectDmg((Dictionary<string, object>)values, "Electricity");
+                string fireDmg;
+                if (isBeam)
+                    fireDmg = FormatBeamDmg((Dictionary<string, object>)values, "Electricity");
+                else if (isHive)
+                    fireDmg = FormatEelDmg((Dictionary<string, object>)values, "Electricity");  //item display says it uses splash, but IT LIES
+                else
+                    fireDmg = FormatDirectDmg((Dictionary<string, object>)values, "Electricity");
                 builder.Append(fireDmg);
             }
 
@@ -711,14 +745,22 @@ namespace MediaWiki.Articles
             values = unit.GetStat("rad_toxic");
             if (!(values is int))
             {
-                var fireDmg = FormatSplashDmg((Dictionary<string, object>)values, "Toxic");
+                string fireDmg;
+                if (isHive)
+                    fireDmg = FormatSwarmDmg((Dictionary<string, object>)values, "Toxic");
+                else
+                    fireDmg = FormatSplashDmg((Dictionary<string, object>)values, "Toxic");
                 builder.Append(fireDmg);
             }
 
             values = unit.GetStat("rad_elec");
             if (!(values is int))
             {
-                var fireDmg = FormatSplashDmg((Dictionary<string, object>)values, "Electricity");
+                string fireDmg;
+                //if (isHive)
+                    //fireDmg = FormatEelDmg((Dictionary<string, object>)values, "Electricity");
+                //else
+                    fireDmg = FormatSplashDmg((Dictionary<string, object>)values, "Electricity");
                 builder.Append(fireDmg);
             }
 
@@ -792,6 +834,13 @@ namespace MediaWiki.Articles
                 builder.Append(fireDmg);
             }
 
+            values = unit.GetStat("rad_toxic_hive");
+            if (!(values is int))
+            {
+                var fireDmg = FormatSwarmDmg((Dictionary<string, object>)values, "Toxic");
+                builder.Append(fireDmg);
+            }
+
             //if there's no damage to display, it must be a focus item that has power damage
             if (builder.Length == 0)
             {
@@ -803,6 +852,50 @@ namespace MediaWiki.Articles
             }
 
             return builder.ToString();
+        }
+
+        internal string FormatBeamDmg(Dictionary<string, object> values, string classid)
+        {
+            var mask = "[classid] Dmg (Beam): [string1]-[string2]/sec";
+            var icon = GetImage(classid + "Direct.png", _height);
+            var min = values["min"].ToString();
+            var max = values["max"].ToString();
+            mask = mask.Replace("[icon]", icon);
+            mask = mask.Replace("[classid]", classid);
+            mask = mask.Replace("[string1]", min);
+            mask = mask.Replace("[string2]", max);
+            mask = "<div class=\"" + classid + "\">" + mask + "</div>";
+            return mask;
+        }
+
+        internal string FormatEelDmg(Dictionary<string, object> values, string classid)
+        {
+            var mask = "[classid] Dmg (Eel): [string1]-[string2]/sec";
+            var icon = GetImage(classid + "Direct.png", _height);
+            var min = values["min"].ToString();
+            var max = values["max"].ToString();
+            mask = mask.Replace("[icon]", icon);
+            mask = mask.Replace("[classid]", classid);
+            mask = mask.Replace("[string1]", min);
+            mask = mask.Replace("[string2]", max);
+            mask = "<div class=\"" + classid + "\">" + mask + "</div>";
+            return mask;
+        }
+
+        internal string FormatSwarmDmg(Dictionary<string, object> values, string classid)
+        {
+            var mask = "[classid] Dmg (Swarm): [string1]-[string2]/sec/[string3]m";
+            var icon = GetImage(classid + "Direct.png", _height);
+            var min = values["min"].ToString();
+            var max = values["max"].ToString();
+            var range = values["range"].ToString();
+            mask = mask.Replace("[icon]", icon);
+            mask = mask.Replace("[classid]", classid);
+            mask = mask.Replace("[string1]", min);
+            mask = mask.Replace("[string2]", max);
+            mask = mask.Replace("[string3]", range);
+            mask = "<div class=\"" + classid + "\">" + mask + "</div>";
+            return mask;
         }
         
         internal string FormatDotDmg(Dictionary<string, object> values, string classid)

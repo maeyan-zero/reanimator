@@ -885,14 +885,29 @@ namespace MediaWiki.Parser
                 case "dmg_phys":
                 case "dmg_toxic":
                 case "dmg_elec":
-                    return SetDirectDamage(func, param);
+                    if ((bool)Unit.GetStat("isBeam"))
+                        return SetBeamDamage(func, param);
+                    else if ((bool)Unit.GetStat("isHive"))
+                        return SetEelDamage(func, param);
+                    else
+                        return SetDirectDamage(func, param);
 
                 case "rad_fire":
                 case "rad_spec":
                 case "rad_phys":
-                case "rad_toxic":
-                case "rad_elec":
                     return SetSplashDamage(func, param);
+
+                case "rad_toxic":
+                    if ((bool)Unit.GetStat("isHive"))
+                        return SetSwarmDamage(func, param);
+                    else
+                        return SetSplashDamage(func, param);
+
+                case "rad_elec":
+                    //if ((bool)Unit.GetStat("isHive"))
+                        //return SetEelDamage(func, param);
+                    //else
+                        return SetSplashDamage(func, param);
 
                 case "field_fire":
                 case "field_spec":
@@ -911,9 +926,10 @@ namespace MediaWiki.Parser
                 case "ai_change_stop":
                 case "ai_change_convert":
                 case "ai_change_convert_field":
-                case "ai_change_fear":
-                case "rad_toxic_hive":
+                case "ai_change_fear":                
                     return new Token(0, Token.Number); // todo
+                case "rad_toxic_hive":
+                    return SetSwarmDamage(func, param);
 
                 case "basetotal":
                     result = Unit.GetStat(param[1].ToString());
@@ -1184,14 +1200,15 @@ namespace MediaWiki.Parser
             var damageMin = (int)Unit.GetStat("damage_min");
             var damageMax = (int)Unit.GetStat("damage_max");
             var fieldInc = (int)Unit.GetStat("field_increment");
+            //get affix bonuses (will cause damage rangeception, eg [9-10]-[13-14])
             var pct = (double)objects[0];
             var range = (objects.Length < 3) ? 1 : (double)objects[2] / 10;
             var time = (double) objects[3]/20;
             var ilevel = (int)Unit.GetStat("level");
             var ilevels = Manager.GetDataTable("ITEM_LEVELS");
             var dmgMulti = (int)ilevels.Rows[ilevel]["baseDamageMultiplyer"];
-            var absoluteMin = damageMin * ((dmgMulti * fieldInc * pct) / 1000000);
-            var absoluteMax = damageMax * ((dmgMulti * fieldInc * pct) / 1000000);
+            var absoluteMin = damageMin * ((dmgMulti * fieldInc * pct * 4) / 1000000);
+            var absoluteMax = Math.Max(damageMax * ((dmgMulti * fieldInc * pct * 4) / 1000000), 1);
             absoluteMin = Round(absoluteMin);
             absoluteMax = Round(absoluteMax);
             Unit.SetStat(dmgType, "min", absoluteMin);
@@ -1206,12 +1223,13 @@ namespace MediaWiki.Parser
             var damageMin = (int) Unit.GetStat("damage_min");
             var damageMax = (int) Unit.GetStat("damage_max");
             var directInc = (int) Unit.GetStat("dmg_increment");
+            //get affix bonuses (will cause damage rangeception, eg [9-10]-[13-14])
             var pct = (double) objects[0];
             var ilevel = (int) Unit.GetStat("level");
             var ilevels = Manager.GetDataTable("ITEM_LEVELS");
             var dmgMulti = (int) ilevels.Rows[ilevel]["baseDamageMultiplyer"];
             var absoluteMin = damageMin * ((dmgMulti * directInc * pct) / 1000000);
-            var absoluteMax = damageMax * ((dmgMulti * directInc * pct) / 1000000);
+            var absoluteMax = Math.Max(damageMax * ((dmgMulti * directInc * pct) / 1000000), 1);
             absoluteMin = Round(absoluteMin);
             absoluteMax = Round(absoluteMax);
             Unit.SetStat(dmgType, "min", absoluteMin);
@@ -1223,14 +1241,80 @@ namespace MediaWiki.Parser
         {
             var damageMin = (int)Unit.GetStat("damage_min");
             var damageMax = (int)Unit.GetStat("damage_max");
-            var directInc = (int)Unit.GetStat("radial_increment");
+            var directInc = (int)Unit.GetStat("dmg_increment");
+            var radialInc = (int)Unit.GetStat("radial_increment");
+            //get affix bonuses (will cause damage rangeception, eg [9-10]-[13-14])
             var pct = (double)objects[0];
             var range = (objects.Length < 3) ? 1 : (double)objects[2] / 10;
             var ilevel = (int)Unit.GetStat("level");
             var ilevels = Manager.GetDataTable("ITEM_LEVELS");
             var dmgMulti = (int)ilevels.Rows[ilevel]["baseDamageMultiplyer"];
-            var absoluteMin = damageMin * ((dmgMulti * directInc * pct) / 1000000);
-            var absoluteMax = damageMax * ((dmgMulti * directInc * pct) / 1000000);
+            var absoluteMin = damageMin * ((dmgMulti * directInc * radialInc * pct) / 100000000);
+            var absoluteMax = Math.Max(damageMax * ((dmgMulti * directInc * radialInc * pct) / 100000000), 1);
+            absoluteMin = Round(absoluteMin);
+            absoluteMax = Round(absoluteMax);
+            Unit.SetStat(dmgType, "min", absoluteMin);
+            Unit.SetStat(dmgType, "max", absoluteMax);
+            Unit.SetStat(dmgType, "range", range);
+            return new Token(dmgType + ": " + absoluteMin + "/" + absoluteMax, Token.Formula);
+        }
+
+        private Token SetBeamDamage(string dmgType, object[] objects)
+        {
+            var damageMin = (int)Unit.GetStat("damage_min");
+            var damageMax = (int)Unit.GetStat("damage_max");
+            //var directInc = (int)Unit.GetStat("dmg_increment");
+            //get affix bonuses (will cause damage rangeception, eg [9-10]-[13-14])
+            var pct = (double)objects[0];
+            var ilevel = (int)Unit.GetStat("level");
+            var ilevels = Manager.GetDataTable("ITEM_LEVELS");
+            var dmgMulti = (int)ilevels.Rows[ilevel]["baseDamageMultiplyer"];
+            var absoluteMin = damageMin * ((dmgMulti * pct) / 10000.0);
+            var absoluteMax = Math.Max(damageMax * ((dmgMulti * pct) / 10000.0), 1);
+            absoluteMin = Round(absoluteMin);
+            absoluteMax = Round(absoluteMax);
+            Unit.SetStat(dmgType, "min", absoluteMin);
+            Unit.SetStat(dmgType, "max", absoluteMax);
+            return new Token(dmgType + ": " + absoluteMin + "/" + absoluteMax, Token.Formula);
+        }
+
+        private Token SetEelDamage(string dmgType, object[] objects)
+        {
+            var damageMin = (int)Unit.GetStat("damage_min");
+            var damageMax = (int)Unit.GetStat("damage_max");
+            var directInc = (int)Unit.GetStat("dmg_increment");
+            var radialInc = (int)Unit.GetStat("radial_increment");
+            //get affix bonuses (will cause damage rangeception, eg [9-10]-[13-14])
+            var pct = (double)objects[0];
+            var range = (objects.Length < 3) ? 1 : (double)objects[2] / 10;
+            var ilevel = (int)Unit.GetStat("level");
+            var ilevels = Manager.GetDataTable("ITEM_LEVELS");
+            var dmgMulti = (int)ilevels.Rows[ilevel]["baseDamageMultiplyer"];
+            var absoluteMin = damageMin * ((dmgMulti * directInc * radialInc * pct * 10) / 100000000);
+            var absoluteMax = Math.Max(damageMax * ((dmgMulti * directInc * radialInc * pct * 10) / 100000000), 1);
+            absoluteMin = Round(absoluteMin);
+            absoluteMax = Round(absoluteMax);
+            Unit.SetStat(dmgType, "min", absoluteMin);
+            Unit.SetStat(dmgType, "max", absoluteMax);
+            Unit.SetStat(dmgType, "range", range);
+            return new Token(dmgType + ": " + absoluteMin + "/" + absoluteMax, Token.Formula);
+        }
+
+        //really the same as regular splash, but might as well make the distinction
+        private Token SetSwarmDamage(string dmgType, object[] objects)
+        {
+            var damageMin = (int)Unit.GetStat("damage_min");
+            var damageMax = (int)Unit.GetStat("damage_max");
+            var directInc = (int)Unit.GetStat("dmg_increment");
+            var radialInc = (int)Unit.GetStat("radial_increment");
+            //get affix bonuses (will cause damage rangeception, eg [9-10]-[13-14])
+            var pct = (double)objects[0];
+            var range = (objects.Length < 3) ? 1 : (double)objects[2] / 10;
+            var ilevel = (int)Unit.GetStat("level");
+            var ilevels = Manager.GetDataTable("ITEM_LEVELS");
+            var dmgMulti = (int)ilevels.Rows[ilevel]["baseDamageMultiplyer"];
+            var absoluteMin = damageMin * ((dmgMulti * directInc * radialInc * pct) / 100000000);
+            var absoluteMax = Math.Max(damageMax * ((dmgMulti * directInc * radialInc * pct) / 100000000), 1);
             absoluteMin = Round(absoluteMin);
             absoluteMax = Round(absoluteMax);
             Unit.SetStat(dmgType, "min", absoluteMin);
