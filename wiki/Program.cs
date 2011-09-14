@@ -17,13 +17,19 @@ namespace MediaWiki
             manager.LoadTableFiles();
             manager.EndAllDatAccess();
 
-            //TODO: beam damage types (listed as direct but apparently uses some other calculation)
+            //note: "display dmg" is ilvl multi*item dmg*dmg% (before "increments" are applied), where dmg% is the first or second argument in dmg_elec(100,100)
+
+            //TODO: apply affix bonuses (eg damage and splash radius) and add affix names to properties
             //TODO: sword attack rates
 
             // *****while this message is still here, correct the following manually after every item export*****
-            //TODO: fix stats that are super inaccurate (manually changed in DB for now):
-            //Beryl Dragon - damage is 0-1, missing stream depletion -20
-          
+            //TODO: fix stats (manually changed in DB for now):
+            //Beryl Dragon - missing stream depletion -20
+
+            //TODO: wtf is up with ilvls that don't match any of the listed numbers (maxlevel, fixedlevel, level)?
+            
+            //long term TODO: assign unit types so "isa" functions (among other things) work
+
             args = new[] { "ITEMS" };
 
             //new Items(manager).WriteAllUniqueLegendaryItemPages();
