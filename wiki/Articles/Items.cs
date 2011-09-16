@@ -39,7 +39,7 @@ namespace MediaWiki.Articles
                 if ((int)row["baseRow"] < 0) continue;
                 //test quality
                 quality = row["itemQuality_string"].ToString();
-                if (quality.CompareTo("unique") != 0 && quality.CompareTo("legendary") != 0 && quality.CompareTo("rare") != 0) continue;
+                if (quality.CompareTo("unique") != 0 && quality.CompareTo("legendary") != 0 && quality.CompareTo("rare") != 0 && quality.CompareTo("rare-m") != 0) continue;
                 //skip rings
                 itemType = row["unitType_string"].ToString();
                 //if (itemType.CompareTo("trinket_ring") == 0) continue;
@@ -425,9 +425,14 @@ namespace MediaWiki.Articles
                 else
                     typeRaw = item["typeDescription_string"].ToString();    //probably fine as it is
 
+                if (nameRaw == "Megan's Fury")//(quality == "Unique" &&item["inventory_string"].ToString().Contains("weapon"))
+                { }
                 type = (typeRaw != string.Empty) ? "<div class=\"item_type " + quality.ToLower() + "\">" + quality + " " + typeRaw + "</div>" : string.Empty;
                 type = GetSqlString(type);
 
+                //image name is whatever the index name thing is
+                //image = item["name"].ToString();
+                //if it's an armor item, add both the male and female versions side-by-side
                 image = GetSqlString(GetImage((baseRow > 0) ? typeRaw.Replace("\"", "'") + ".png" : nameRaw.Replace("\"", "'") + ".png", 224));
                 typeRaw = GetSqlString(typeRaw);
                 nameRaw = GetSqlString(nameRaw);
@@ -443,12 +448,6 @@ namespace MediaWiki.Articles
                     dmgIcon = GetImage(dmgIcon + ".png", 50);
                     dmgIcon = "<td class=\"dmg_icon\">" + dmgIcon + "</td>";
                 }
-
-                damage = GetDamage(item);//<div class=\"item_heading\">Damage</div>
-                if (!string.IsNullOrEmpty(damage)) damage = "<td><div class=\"item_damage\">" + damage + "</div></td>";
-                damage = "<div class=\"simple_line\"></div><table><tr>" + dmgIcon + damage + "</tr></table>";
-                damage = GetSqlString(damage);
-                dmgIcon = GetSqlString(dmgIcon);
 
                 stats = GetStats(item);
                 //stats = AddElementThumbs(stats); //<div class=\"item_heading\">Stats</div>
@@ -477,6 +476,13 @@ namespace MediaWiki.Articles
                 }
                 level = GetSqlString(level);
 
+                //since the increment stuff is only set when retrieving the damage, the function needs to be called twice
+                //once to set the increments (ignore return value), and once to format the damage display after affixes have been set (to include bonuses)
+
+                //first damage
+                damage = GetDamage(item, unit);
+
+                //assign affixes
                 inherent = ConcatStrings(GetInherentAffixes(item));
                 if (!string.IsNullOrEmpty(inherent)) inherent = "<div class=\"item_heading\">Inherent + Hidden Affixes</div><div class=\"item_affixes\">" + inherent + "</div>";
                 inherent = GetSqlString(inherent);
@@ -485,14 +491,24 @@ namespace MediaWiki.Articles
                 if (!string.IsNullOrEmpty(affixes)) affixes = "<div class=\"item_heading\">Special Affixes</div><div class=\"item_affixes\">" + affixes + "</div>";
                 affixes = GetSqlString(affixes);
 
+                //second damage
+                //I think this is right, since two damage things ended up here
+                damage = GetDamage(item, unit);//<div class=\"item_heading\">Damage</div>
+                if (!string.IsNullOrEmpty(damage))
+                {
+                    damage = "<td><div class=\"item_damage\">" + damage + "</div></td>";
+                    damage = "<div class=\"simple_line\"></div><table><tr>" + dmgIcon + damage + "</tr></table>";
+                }
+                damage = GetSqlString(damage);
+                dmgIcon = GetSqlString(dmgIcon);
+
+                //damage = GetDamage(item, unit);
+                //if (!string.IsNullOrEmpty(damage)) damage = "<div class=\"item_heading\">Damage</div><div class=\"item_damage\">" + damage + "</div>";
+                //damage = GetSqlString(damage);
 
                 defence = GetDefence(item, unit);//<div class=\"item_heading\">Defence</div>
                 if (!string.IsNullOrEmpty(defence)) defence = "<div class=\"item_defence\">" + defence + "</div>";
                 defence = GetSqlString(defence);
-
-                damage = GetDamage(item, unit);
-                if (!string.IsNullOrEmpty(damage)) damage = "<div class=\"item_heading\">Damage</div><div class=\"item_damage\">" + damage + "</div>";
-                damage = GetSqlString(damage);
 
                 table.AddRow(id, code, image, name, type, flavor, dmgIcon, damage, defence, stats, modslots, feeds, level, inherent, affixes, qualityId, nameRaw, typeRaw, levelRaw);
             }
@@ -641,6 +657,7 @@ namespace MediaWiki.Articles
             //var unit = new Item();
             var evaluator = new Evaluator { Unit = unit, Manager = Manager, Game3 = new Game3() };
             var level = !string.IsNullOrEmpty(item["fixedLevel"].ToString()) ? Int32.Parse(item["fixedLevel"].ToString().Replace(";", "")) : (int)item["level"];
+            //if (item["itemQuality"].ToString() == "12") level = 63; //manually correct mythic (although it seems to use a different ilvl anyway)
             var dmgMin = Int32.Parse(item["minBaseDmg"].ToString().Replace(";", ""));
             var dmgMax = Int32.Parse(item["maxBaseDmg"].ToString().Replace(";", ""));
             var dmgIncrement = (int) item["dmgIncrement"];

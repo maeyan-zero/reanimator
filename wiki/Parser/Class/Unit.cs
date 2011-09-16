@@ -86,7 +86,7 @@ namespace MediaWiki.Parser.Class
             return stat;
 	    }
 
-        public object GetStat(string label1, string label2)
+        public dynamic GetStat(string label1, string label2)
         {
 		    if (!Stats.ContainsKey(label1)) return 0;
             if (!(Stats[label1] is Dictionary<string, object>)) return 0; // todo handle GetStat("evasion", 1);

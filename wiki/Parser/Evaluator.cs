@@ -1174,7 +1174,7 @@ namespace MediaWiki.Parser
                     throw new Exception("Unknown function: " + func);
             }
         }
-
+        //this isn't being updated because it's probably never used
         private Token SetDotDamage(string dmgType, object[] objects)
         {
             var damageMin = (int)Unit.GetStat("damage_min");
@@ -1202,15 +1202,16 @@ namespace MediaWiki.Parser
             var fieldInc = (int)Unit.GetStat("field_increment");
             //get affix bonuses (will cause damage rangeception, eg [9-10]-[13-14])
             var pct = (double)objects[0];
-            var range = (objects.Length < 3) ? 1 : (double)objects[2] / 10;
+            var range = GetSplashRadiusPercent() * ((objects.Length < 3) ? 1 : (double)objects[2] / 10) / 100;
             var time = (double) objects[3]/20;
             var ilevel = (int)Unit.GetStat("level");
             var ilevels = Manager.GetDataTable("ITEM_LEVELS");
             var dmgMulti = (int)ilevels.Rows[ilevel]["baseDamageMultiplyer"];
-            var absoluteMin = damageMin * ((dmgMulti * fieldInc * pct * 4) / 1000000);
-            var absoluteMax = Math.Max(damageMax * ((dmgMulti * fieldInc * pct * 4) / 1000000), 1);
-            absoluteMin = Round(absoluteMin);
-            absoluteMax = Round(absoluteMax);
+            Range dmgPercent = GetDamagePercent(dmgType);
+            var absoluteMin = dmgPercent * (damageMin * ((dmgMulti * fieldInc * pct * 4) / 1000000)) / 100;
+            var absoluteMax = dmgPercent * Math.Max(damageMax * ((dmgMulti * fieldInc * pct * 4) / 1000000), 1) / 100;
+            //absoluteMin = Round(absoluteMin);
+            //absoluteMax = Round(absoluteMax);
             Unit.SetStat(dmgType, "min", absoluteMin);
             Unit.SetStat(dmgType, "max", absoluteMax);
             Unit.SetStat(dmgType, "range", range);
@@ -1228,10 +1229,12 @@ namespace MediaWiki.Parser
             var ilevel = (int) Unit.GetStat("level");
             var ilevels = Manager.GetDataTable("ITEM_LEVELS");
             var dmgMulti = (int) ilevels.Rows[ilevel]["baseDamageMultiplyer"];
-            var absoluteMin = damageMin * ((dmgMulti * directInc * pct) / 1000000);
-            var absoluteMax = Math.Max(damageMax * ((dmgMulti * directInc * pct) / 1000000), 1);
-            absoluteMin = Round(absoluteMin);
-            absoluteMax = Round(absoluteMax);
+            Range dmgPercent = GetDamagePercent(dmgType);
+            var absoluteMin = dmgPercent * (damageMin * ((dmgMulti * directInc * pct) / 1000000)) / 100;
+            var absoluteMax = dmgPercent * Math.Max(damageMax * ((dmgMulti * directInc * pct) / 1000000), 1) / 100;
+
+            //absoluteMin = Round(absoluteMin);
+            //absoluteMax = Round(absoluteMax);
             Unit.SetStat(dmgType, "min", absoluteMin);
             Unit.SetStat(dmgType, "max", absoluteMax);
             return new Token(dmgType + ": " + absoluteMin + "/" + absoluteMax, Token.Formula);
@@ -1244,15 +1247,19 @@ namespace MediaWiki.Parser
             var directInc = (int)Unit.GetStat("dmg_increment");
             var radialInc = (int)Unit.GetStat("radial_increment");
             //get affix bonuses (will cause damage rangeception, eg [9-10]-[13-14])
+            //example: absoluteMax=(((((Range)Unit.GetStat("damage_percent","physical"))+100)*absoluteMax)/100).ToString()
+            //percent bonus damage is 100 + GetStat666('damage_percent', 'all') + GetStat666('damage_percent', 'toxic') + GetStat666('damage_augmentation', 'all') + GetStat666('damage_augmentation', 'toxic'))
+            //splash damage is splash*(1+bonus/100)
             var pct = (double)objects[0];
-            var range = (objects.Length < 3) ? 1 : (double)objects[2] / 10;
+            var range = GetSplashRadiusPercent() * ((objects.Length < 3) ? 1 : (double)objects[2] / 10) / 100;
             var ilevel = (int)Unit.GetStat("level");
             var ilevels = Manager.GetDataTable("ITEM_LEVELS");
             var dmgMulti = (int)ilevels.Rows[ilevel]["baseDamageMultiplyer"];
-            var absoluteMin = damageMin * ((dmgMulti * directInc * radialInc * pct) / 100000000);
-            var absoluteMax = Math.Max(damageMax * ((dmgMulti * directInc * radialInc * pct) / 100000000), 1);
-            absoluteMin = Round(absoluteMin);
-            absoluteMax = Round(absoluteMax);
+            Range dmgPercent = GetDamagePercent(dmgType);
+            var absoluteMin = dmgPercent * (damageMin * ((dmgMulti * directInc * radialInc * pct) / 100000000)) / 100;
+            var absoluteMax = dmgPercent * Math.Max(damageMax * ((dmgMulti * directInc * radialInc * pct) / 100000000), 1) / 100;
+            //absoluteMin = Round(absoluteMin);
+            //absoluteMax = Round(absoluteMax);
             Unit.SetStat(dmgType, "min", absoluteMin);
             Unit.SetStat(dmgType, "max", absoluteMax);
             Unit.SetStat(dmgType, "range", range);
@@ -1269,10 +1276,11 @@ namespace MediaWiki.Parser
             var ilevel = (int)Unit.GetStat("level");
             var ilevels = Manager.GetDataTable("ITEM_LEVELS");
             var dmgMulti = (int)ilevels.Rows[ilevel]["baseDamageMultiplyer"];
-            var absoluteMin = damageMin * ((dmgMulti * pct) / 10000.0);
-            var absoluteMax = Math.Max(damageMax * ((dmgMulti * pct) / 10000.0), 1);
-            absoluteMin = Round(absoluteMin);
-            absoluteMax = Round(absoluteMax);
+            Range dmgPercent = GetDamagePercent(dmgType);
+            var absoluteMin = dmgPercent * (damageMin * ((dmgMulti * pct) / 10000.0)) / 100;
+            var absoluteMax = dmgPercent * Math.Max(damageMax * ((dmgMulti * pct) / 10000.0), 1) / 100;
+            //absoluteMin = Round(absoluteMin);
+            //absoluteMax = Round(absoluteMax);
             Unit.SetStat(dmgType, "min", absoluteMin);
             Unit.SetStat(dmgType, "max", absoluteMax);
             return new Token(dmgType + ": " + absoluteMin + "/" + absoluteMax, Token.Formula);
@@ -1290,10 +1298,11 @@ namespace MediaWiki.Parser
             var ilevel = (int)Unit.GetStat("level");
             var ilevels = Manager.GetDataTable("ITEM_LEVELS");
             var dmgMulti = (int)ilevels.Rows[ilevel]["baseDamageMultiplyer"];
-            var absoluteMin = damageMin * ((dmgMulti * directInc * radialInc * pct * 10) / 100000000);
-            var absoluteMax = Math.Max(damageMax * ((dmgMulti * directInc * radialInc * pct * 10) / 100000000), 1);
-            absoluteMin = Round(absoluteMin);
-            absoluteMax = Round(absoluteMax);
+            Range dmgPercent = GetDamagePercent(dmgType);
+            var absoluteMin = dmgPercent * (damageMin * ((dmgMulti * directInc * radialInc * pct * 10) / 100000000)) / 100;
+            var absoluteMax = dmgPercent * Math.Max(damageMax * ((dmgMulti * directInc * radialInc * pct * 10) / 100000000), 1) / 100;
+            //absoluteMin = Round(absoluteMin);
+            //absoluteMax = Round(absoluteMax);
             Unit.SetStat(dmgType, "min", absoluteMin);
             Unit.SetStat(dmgType, "max", absoluteMax);
             Unit.SetStat(dmgType, "range", range);
@@ -1309,18 +1318,58 @@ namespace MediaWiki.Parser
             var radialInc = (int)Unit.GetStat("radial_increment");
             //get affix bonuses (will cause damage rangeception, eg [9-10]-[13-14])
             var pct = (double)objects[0];
-            var range = (objects.Length < 3) ? 1 : (double)objects[2] / 10;
+            var range = GetSplashRadiusPercent() * ((objects.Length < 3) ? 1 : (double)objects[2] / 10) / 100;
             var ilevel = (int)Unit.GetStat("level");
             var ilevels = Manager.GetDataTable("ITEM_LEVELS");
             var dmgMulti = (int)ilevels.Rows[ilevel]["baseDamageMultiplyer"];
-            var absoluteMin = damageMin * ((dmgMulti * directInc * radialInc * pct) / 100000000);
-            var absoluteMax = Math.Max(damageMax * ((dmgMulti * directInc * radialInc * pct) / 100000000), 1);
-            absoluteMin = Round(absoluteMin);
-            absoluteMax = Round(absoluteMax);
+            Range dmgPercent = GetDamagePercent(dmgType);
+            var absoluteMin = dmgPercent * (damageMin * ((dmgMulti * directInc * radialInc * pct) / 100000000)) / 100;
+            var absoluteMax = dmgPercent * Math.Max(damageMax * ((dmgMulti * directInc * radialInc * pct) / 100000000), 1) / 100;
+            //absoluteMin = Round(absoluteMin);
+            //absoluteMax = Round(absoluteMax);
             Unit.SetStat(dmgType, "min", absoluteMin);
             Unit.SetStat(dmgType, "max", absoluteMax);
             Unit.SetStat(dmgType, "range", range);
             return new Token(dmgType + ": " + absoluteMin + "/" + absoluteMax, Token.Formula);
+        }
+
+        private Range GetSplashRadiusPercent()
+        {
+            return new Range(100, 100) + Unit.GetStat("damage_radius_pct", "all");
+        }
+
+        private Range GetDamagePercent(string dmgType)
+        {
+            //start at 100 and add "increases" and "adds" percentages
+            Range percentRange = new Range(100, 100) + Unit.GetStat("damage_percent", "all") + Unit.GetStat("damage_augmentation", "all");
+            percentRange += Unit.GetStat("damage_augmentation", "all");
+
+            //determine what the element is and get the increase/add
+            string elementType = string.Empty;
+            switch (dmgType.Split('_')[1])
+            {
+                case "fire":
+                    elementType = "fire";
+                    break;
+                case "spec":
+                    elementType = "spectral";
+                    break;
+                case "phys":
+                    elementType = "physical";
+                    break;
+                case "toxic":
+                    elementType = "toxic";
+                    break;
+                case "elec":
+                    elementType = "electricity";
+                    break;
+                default:
+                    throw new Exception("'" + dmgType + "' isn't an element");
+            }
+
+            percentRange += Unit.GetStat("damage_percent", elementType) + Unit.GetStat("damage_augmentation", elementType);
+
+            return percentRange;
         }
 
         /// <summary>
