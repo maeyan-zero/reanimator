@@ -19,7 +19,8 @@ namespace MediaWiki
 
             //note: "display dmg" is ilvl multi*item dmg*dmg% (before "increments" are applied), where dmg% is the first or second argument in dmg_elec(100,100)
 
-            //TODO: apply affix bonuses (eg damage and splash radius) and add affix names to properties
+            //TODO: weapon ranges
+            //TODO: add affix names to properties
             //TODO: sword attack rates
 
             // *****while this message is still here, correct the following manually after every item export*****
