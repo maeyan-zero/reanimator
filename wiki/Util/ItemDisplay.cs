@@ -76,12 +76,15 @@ namespace MediaWiki.Util
         {
             if (String.IsNullOrEmpty(condition)) return true;
 
-            if (condition == "GetStat666('evade') || (GetStat666('evade', 1) == GetStat666('evade', 2) && GetStat666('evade', 1) != 0);")
-                return false;
+            //if (condition == "GetStat666('evade') || (GetStat666('evade', 1) == GetStat666('evade', 2) && GetStat666('evade', 1) != 0);")
+                //return false;
 
             var result = Evaluator.Evaluate(condition);
-            if (result[0] is int) return (int) result[0] > 0;
-            if (result[0] is double) return (double) result[0] > 0;
+            //make the number positive if it's elemental resistance
+            //if (condition.Contains("elemental_vulnerability"))
+                //result[0] = -((int)result[0]);
+            if (result[0] is int) return (int) result[0] != 0;
+            if (result[0] is double) return (double) result[0] != 0;
             if (result[0] is bool) return (bool) result[0];
             return true; // If its a string or anything else - its true
         }
@@ -103,14 +106,28 @@ namespace MediaWiki.Util
                 {
                     case Display.Ctrl.Script:
                     case Display.Ctrl.ScriptPlusminus: // todo
+                    case Display.Ctrl.ScriptPlusminusNozero:    //not sure if it's the same, but it seems to work
                         script = (string) row["val" + i];
 
                         // DEBUG until Alex fixes the decompiler
                         if (script == "GetStat666('evade') + (GetStat666('evade', 1) == GetStat666('evade', 2)) ? GetStat666('evade', 1) : 0;")
-                            break;
-
-                        result = ResultAsString(Evaluator.Evaluate(script));
-                        if (ctrl == Display.Ctrl.ScriptPlusminus&&result.ToString().Count(ch=>ch=='-')<2) result = "+" + result; // todo lazy
+                        {
+                            //do this shiznit manually
+                            double evasion = (double)Evaluator.Unit.GetStat("evade");
+                            int evade1 = (int)Evaluator.Unit.GetStat("evade", "1"); //assuming numbers work as string ok
+                            int evade2 = (int)Evaluator.Unit.GetStat("evade", "2");
+                            //the parentheses are messed up in the script and used to group the == comparison rather than the whole if/else statement
+                            result = evasion + (evade1 == evade2 ? evade1 : 0);
+                            
+                            //break;
+                        }
+                        else
+                            result = ResultAsString(Evaluator.Evaluate(script));
+                        //if the result is either a positive number or a range without a minus sign in front of it, add a plus sign
+                        //(kinda weird way of doing it, we'll fix it later)
+                        if (ctrl == Display.Ctrl.ScriptPlusminus && (result.ToString().Contains("[") && (result.ToString().Count(ch => ch == '-') < 2)
+                            || (!result.ToString().Contains("[") && !result.ToString().Contains("-")) ))
+                            result = "+" + result; // todo lazy
                         format = format.Replace("[string" + i + "]", result.ToString());
                         break;
                     case Display.Ctrl.ParamString:

@@ -1202,7 +1202,8 @@ namespace MediaWiki.Parser
             var fieldInc = (int)Unit.GetStat("field_increment");
             //get affix bonuses (will cause damage rangeception, eg [9-10]-[13-14])
             var pct = (double)objects[0];
-            var range = GetSplashRadiusPercent() * ((objects.Length < 3) ? 1 : (double)objects[2] / 10) / 100;
+            Range splash = GetSplashRadiusPercent() * ((objects.Length < 3) ? 1 : (double)objects[2] / 100);
+            var range = splash.Start == splash.End ? (splash.Start / 10.0).ToString() : "[" + splash.Start / 10.0 + " - " + splash.End / 10.0 + "]"; ;//GetSplashRadiusPercent() * ((objects.Length < 3) ? 1 : (double)objects[2] / 10) / 100.0;
             var time = (double) objects[3]/20;
             var ilevel = (int)Unit.GetStat("level");
             var ilevels = Manager.GetDataTable("ITEM_LEVELS");
@@ -1251,7 +1252,9 @@ namespace MediaWiki.Parser
             //percent bonus damage is 100 + GetStat666('damage_percent', 'all') + GetStat666('damage_percent', 'toxic') + GetStat666('damage_augmentation', 'all') + GetStat666('damage_augmentation', 'toxic'))
             //splash damage is splash*(1+bonus/100)
             var pct = (double)objects[0];
-            var range = GetSplashRadiusPercent() * ((objects.Length < 3) ? 1 : (double)objects[2] / 10) / 100;
+            //do splash damage manually since Ranges are ints
+            Range splash = GetSplashRadiusPercent() * ((objects.Length < 3) ? 1 : (double)objects[2] / 100);
+            var range = splash.Start == splash.End ? (splash.Start / 10.0).ToString() : "[" + splash.Start / 10.0 + " - " + splash.End / 10.0 + "]"; ;//GetSplashRadiusPercent() * ((objects.Length < 3) ? 1 : (double)objects[2] / 10) / 100.0;
             var ilevel = (int)Unit.GetStat("level");
             var ilevels = Manager.GetDataTable("ITEM_LEVELS");
             var dmgMulti = (int)ilevels.Rows[ilevel]["baseDamageMultiplyer"];
@@ -1259,7 +1262,7 @@ namespace MediaWiki.Parser
             var absoluteMin = dmgPercent * (damageMin * ((dmgMulti * directInc * radialInc * pct) / 100000000)) / 100;
             var absoluteMax = dmgPercent * Math.Max(damageMax * ((dmgMulti * directInc * radialInc * pct) / 100000000), 1) / 100;
             //absoluteMin = Round(absoluteMin);
-            //absoluteMax = Round(absoluteMax);
+            //absoluteMax = Round(absoluteMax);1
             Unit.SetStat(dmgType, "min", absoluteMin);
             Unit.SetStat(dmgType, "max", absoluteMax);
             Unit.SetStat(dmgType, "range", range);
@@ -1312,13 +1315,17 @@ namespace MediaWiki.Parser
         //really the same as regular splash, but might as well make the distinction
         private Token SetSwarmDamage(string dmgType, object[] objects)
         {
+            return SetSplashDamage(dmgType, objects);
+            //if anything changes, we'll just customize this stuff
+            /*
             var damageMin = (int)Unit.GetStat("damage_min");
             var damageMax = (int)Unit.GetStat("damage_max");
             var directInc = (int)Unit.GetStat("dmg_increment");
             var radialInc = (int)Unit.GetStat("radial_increment");
             //get affix bonuses (will cause damage rangeception, eg [9-10]-[13-14])
             var pct = (double)objects[0];
-            var range = GetSplashRadiusPercent() * ((objects.Length < 3) ? 1 : (double)objects[2] / 10) / 100;
+            Range splash = GetSplashRadiusPercent() * ((objects.Length < 3) ? 1 : (double)objects[2] / 10);
+            var range = splash.Start == splash.End ? (splash.Start / 100.0).ToString() : "[" + splash.Start / 100.0 + " - " + splash.End / 100.0 + "]"; ;//GetSplashRadiusPercent() * ((objects.Length < 3) ? 1 : (double)objects[2] / 10) / 100.0;
             var ilevel = (int)Unit.GetStat("level");
             var ilevels = Manager.GetDataTable("ITEM_LEVELS");
             var dmgMulti = (int)ilevels.Rows[ilevel]["baseDamageMultiplyer"];
@@ -1331,6 +1338,7 @@ namespace MediaWiki.Parser
             Unit.SetStat(dmgType, "max", absoluteMax);
             Unit.SetStat(dmgType, "range", range);
             return new Token(dmgType + ": " + absoluteMin + "/" + absoluteMax, Token.Formula);
+            */
         }
 
         private Range GetSplashRadiusPercent()
