@@ -156,6 +156,17 @@ namespace MediaWiki.Articles
             return itemType;
         }
 
+        private string GetAffixType(string type)
+        {
+            string result = string.Empty;
+
+            switch (type)
+            {
+            }
+
+            return result;
+        }
+
         private string FormatAffixList(string[] affixes)
         {
             string list = affixes.Aggregate(string.Empty, (current, affix) => current + affix + "<br />");

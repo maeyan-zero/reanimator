@@ -393,6 +393,7 @@ namespace MediaWiki.Articles
             string id, code, name, type, flavor, quality, image, damage, stats, affixes, modslots, feeds, level, inherent, defence,
                 qualityId, typeRaw, nameRaw, levelRaw, dmgIcon;
             string clvl;
+            int levelNum;
 
             foreach (DataRow item in items.Rows)
             {
@@ -407,7 +408,7 @@ namespace MediaWiki.Articles
                                     : string.Empty;
 
                 Unit unit = new Item(); // for sharing stats
-
+                levelNum = 0;
                 // Guts
                 id = GetSqlString(item["index"].ToString());
                 code = GetSqlString(((int)item["code"]).ToString("X"));
@@ -425,8 +426,6 @@ namespace MediaWiki.Articles
                 else
                     typeRaw = item["typeDescription_string"].ToString();    //probably fine as it is
 
-                if (nameRaw == "Megan's Fury")//(quality == "Unique" &&item["inventory_string"].ToString().Contains("weapon"))
-                { }
                 type = (typeRaw != string.Empty) ? "<div class=\"item_type " + quality.ToLower() + "\">" + quality + " " + typeRaw + "</div>" : string.Empty;
                 type = GetSqlString(type);
 
@@ -449,7 +448,16 @@ namespace MediaWiki.Articles
                     dmgIcon = "<td class=\"dmg_icon\">" + dmgIcon + "</td>";
                 }
 
-                stats = GetStats(item);
+                //ilvl
+                levelRaw = item["fixedLevel"].ToString().Replace(";", "");
+                if (levelRaw.Equals("")) levelRaw = item["level"].ToString();
+                if (qualityId == "12") levelRaw = "63";
+                level = levelRaw != "0" ? levelRaw : "Scales";
+                //if the level has a number, set the ilvl
+                if (int.TryParse(level, out levelNum))
+                    unit.SetStat("level", levelNum);
+
+                stats = GetStats(item, levelNum);
                 //stats = AddElementThumbs(stats); //<div class=\"item_heading\">Stats</div>
                 if (!string.IsNullOrEmpty(stats)) stats = "<div class=\"simple_line\"></div><div class=\"item_stats\">" + stats + "</div>";
                 stats = GetSqlString(stats);
@@ -457,13 +465,8 @@ namespace MediaWiki.Articles
                 modslots = GetModSlots(item["props2"].ToString());
                 modslots = GetSqlString(modslots);
 
-                feeds = GetFeeds((int)item["index"]);
+                feeds = GetFeeds((int)item["index"], unit);
                 feeds = GetSqlString(feeds);
-
-                levelRaw = item["fixedLevel"].ToString().Replace(";", "");
-                if (levelRaw.Equals("")) levelRaw = item["maxLevel"].ToString();
-                if (qualityId == "12") levelRaw = "63";
-                level = levelRaw != "0" ? levelRaw : "Scales";
 
                 //ignore clvl for necklaces
                 //(not sure if this will always be the case)
@@ -483,7 +486,7 @@ namespace MediaWiki.Articles
                 damage = GetDamage(item, unit);
 
                 //assign affixes
-                inherent = ConcatStrings(GetInherentAffixes(item));
+                inherent = ConcatStrings(GetInherentAffixes(item, unit));
                 if (!string.IsNullOrEmpty(inherent)) inherent = "<div class=\"item_heading\">Inherent + Hidden Affixes</div><div class=\"item_affixes\">" + inherent + "</div>";
                 inherent = GetSqlString(inherent);
 
@@ -544,11 +547,11 @@ namespace MediaWiki.Articles
             return name;
         }
 
-        private string GetStats(DataRow item)
+        private string GetStats(DataRow item, int ilvl)
         {
             var strings = new List<string>();
 
-            var level = !string.IsNullOrEmpty(item["fixedLevel"].ToString()) ?  Int32.Parse(item["fixedLevel"].ToString().Replace(";", "")) : (int)item["level"];
+            var level = ilvl;// !string.IsNullOrEmpty(item["fixedLevel"].ToString()) ? Int32.Parse(item["fixedLevel"].ToString().Replace(";", "")) : (int)item["level"];
             var itemlevels = Manager.GetDataTable("ITEM_LEVELS");
 
             int interrupt = (int)itemlevels.Rows[level]["interruptAttack"];
@@ -566,7 +569,9 @@ namespace MediaWiki.Articles
                 else
                     strings.Add("Rate of fire: " + (153600 / (int)item["cdTicks"]) + " shots/min");
             }
-
+            //all elements
+            if (((int)item["sfxAttackPctFocus"]) != 0) strings.Add("All Elemental Effects Attack Strength: " + (sfxAtk * (int)item["sfxAttackPctFocus"] / 100));
+            //individual elements
             if (((int)item["sfxPhysicalAbilityPct"]) != 0) strings.Add("Stun Attack Strength: " + (sfxAtk * (int)item["sfxPhysicalAbilityPct"] / 100));
             if (((int)item["sfxPhysicalDefensePct"]) != 0) strings.Add("Stun Defence: " + (sfxDef * (int)item["sfxPhysicalDefensePct"] / 100));
             if (((int)item["sfxFireAbilityPct"]) != 0) strings.Add("Ignite Attack Strength: " + (sfxAtk * (int)item["sfxFireAbilityPct"] / 100));
@@ -583,7 +588,7 @@ namespace MediaWiki.Articles
 
         private string GetDefence(DataRow item, Unit unit)
         {
-            var level = !string.IsNullOrEmpty(item["fixedLevel"].ToString()) ?  Int32.Parse(item["fixedLevel"].ToString().Replace(";", "")) : (int)item["level"];
+            int level = (int)unit.GetStat("level");// = !string.IsNullOrEmpty(item["fixedLevel"].ToString()) ?  Int32.Parse(item["fixedLevel"].ToString().Replace(";", "")) : (int)item["level"];
             var strings = new List<string>();
 
             var armor = (int) item["armor"];
@@ -625,16 +630,20 @@ namespace MediaWiki.Articles
             return ConcatStrings(strings);
         }
 
-        private IList<string> GetInherentAffixes(DataRow item, Unit unit = null)
+        private IList<string> GetInherentAffixes(DataRow item, Unit baseUnit)
         {
-            var evaluator = new Evaluator { Unit = unit ?? new Item(), Manager = Manager, Game3 = new Game3() };
+            Unit unit = new Item();
+            unit.SetStat("level", baseUnit.GetStat("level"));   //copy the level into a new unit so it won't re-display everything
+            var evaluator = new Evaluator { Unit = unit, Manager = Manager, Game3 = new Game3() };
             var scripts = item["props1"].ToString() + item["props2"] + item["props3"] + item["props4"] + item["props5"];
 
             //it might be hidden but it's a fraction that's likely rounded to 0, so it's not worth displaying
             scripts = scripts.Replace("SetStat673('hp_regen', 1);", "").Replace("SetStat673('power_regen', 1);", "");
+            //also get rid of any explicit level-setting
+            scripts = RemoveLevelSetters(scripts);
 
-            var level = !string.IsNullOrEmpty(item["fixedLevel"].ToString()) ?  Int32.Parse(item["fixedLevel"].ToString().Replace(";", "")) : (int)item["level"];
-            evaluator.Unit.SetStat("level", level);
+            //var level = !string.IsNullOrEmpty(item["fixedLevel"].ToString()) ?  Int32.Parse(item["fixedLevel"].ToString().Replace(";", "")) : (int)item["level"];
+            //evaluator.Unit.SetStat("level", level);
 
             evaluator.Evaluate(scripts);
             return ItemDisplay.GetDisplayStrings(evaluator.Unit);
@@ -656,7 +665,7 @@ namespace MediaWiki.Articles
 
             //var unit = new Item();
             var evaluator = new Evaluator { Unit = unit, Manager = Manager, Game3 = new Game3() };
-            var level = !string.IsNullOrEmpty(item["fixedLevel"].ToString()) ? Int32.Parse(item["fixedLevel"].ToString().Replace(";", "")) : (int)item["level"];
+            //var level = !string.IsNullOrEmpty(item["fixedLevel"].ToString()) ? Int32.Parse(item["fixedLevel"].ToString().Replace(";", "")) : (int)item["level"];
             //if (item["itemQuality"].ToString() == "12") level = 63; //manually correct mythic (although it seems to use a different ilvl anyway)
             var dmgMin = Int32.Parse(item["minBaseDmg"].ToString().Replace(";", ""));
             var dmgMax = Int32.Parse(item["maxBaseDmg"].ToString().Replace(";", ""));
@@ -674,7 +683,7 @@ namespace MediaWiki.Articles
 
 ;           unit.SetStat("damage_min", dmgMin);
             unit.SetStat("damage_max", dmgMax);
-            unit.SetStat("level", level);
+            //unit.SetStat("level", level);
             unit.SetStat("dmg_increment", dmgIncrement);
             unit.SetStat("radial_increment", radialIncrement);
             unit.SetStat("field_increment", fieldIncrement);
@@ -1046,24 +1055,22 @@ namespace MediaWiki.Articles
             var table = Manager.GetDataTable("AFFIXES");
             var affixes = item["affix"].ToString();
 
-            var level = !string.IsNullOrEmpty(item["fixedLevel"].ToString()) ?  Int32.Parse(item["fixedLevel"].ToString().Replace(";", "")) : (int)item["level"];
-            if (level == 0) level = 55;
-            evaluator.Unit.SetStat("level", level);
+            //var level = !string.IsNullOrEmpty(item["fixedLevel"].ToString()) ?  Int32.Parse(item["fixedLevel"].ToString().Replace(";", "")) : (int)item["level"];
+            //if (level == 0) level = 55;
+            //evaluator.Unit.SetStat("level", level);
 
             string[] split = affixes.Split(',');
             foreach (var i in split)
             {
                 var affix = int.Parse(i);
                 if (affix == -1) break; // no more affixes
-                var script = table.Rows[affix]["property1"].ToString();
-                //weird level-changing property that screws up formulas, skip it (always appears in first property, pretty sure it doesn't affect anything else)
-                if (script.Contains("SetStat673('level'"))
-                    script = string.Empty;
+                var script = table.Rows[affix]["property1"].ToString();                
                 script += table.Rows[affix]["property2"].ToString();
                 script += table.Rows[affix]["property3"].ToString();
                 script += table.Rows[affix]["property4"].ToString();
                 script += table.Rows[affix]["property5"].ToString();
                 script += table.Rows[affix]["property6"].ToString();
+                script = RemoveLevelSetters(script);
                 if (String.IsNullOrEmpty(script)) continue; // no affix script
                 evaluator.Evaluate(script);
             }
@@ -1086,9 +1093,9 @@ namespace MediaWiki.Articles
             return builder.ToString();
         }
 
-        private string GetFeeds(int itemid)
+        private string GetFeeds(int itemid, Unit unit)
         {
-            Unit unit = new Item();
+            //Unit unit = new Item();
             var evaluator = new Evaluator { Unit = unit, Manager = Manager };
             var item = Manager.GetDataTable("ITEMS").Rows[itemid];
             var table = Manager.GetDataTable("AFFIXES");
@@ -1096,8 +1103,8 @@ namespace MediaWiki.Articles
             var scripts = item["perLevelProps1"].ToString();
             scripts += item["perLevelProps2"].ToString();
 
-            var level = !string.IsNullOrEmpty(item["fixedLevel"].ToString()) ?  Int32.Parse(item["fixedLevel"].ToString().Replace(";", "")) : (int)item["level"];
-            evaluator.Unit.SetStat("level", level);
+            //var level = !string.IsNullOrEmpty(item["fixedLevel"].ToString()) ?  Int32.Parse(item["fixedLevel"].ToString().Replace(";", "")) : (int)item["level"];
+            //evaluator.Unit.SetStat("level", level);
 
             string[] split = affixes.Split(',');
             foreach (var i in split)
@@ -1110,6 +1117,7 @@ namespace MediaWiki.Articles
                 script += table.Rows[affix]["property4"].ToString();
                 script += table.Rows[affix]["property5"].ToString();
                 script += table.Rows[affix]["property6"].ToString();
+                script = RemoveLevelSetters(script);
                 if (String.IsNullOrEmpty(script)) continue; // no affix script
                 evaluator.Evaluate(script);
             }
@@ -1181,6 +1189,20 @@ namespace MediaWiki.Articles
                 default:
                     throw new ArgumentException("Unhandled color code: " + quality);
             }
+        }
+
+        //weird level-changing properties that screw up formulas, skip them (always appears in first property, pretty sure it doesn't affect anything else)
+        private string RemoveLevelSetters(string script)
+        {
+            //hardcode the crap out of it until someone feels like doing it right
+            return script.Replace("SetStat673('level', 1);", "")
+                .Replace("SetStat673('level', 2);", "")
+                .Replace("SetStat673('level', 3);", "")
+                .Replace("SetStat673('level', 4);", "")
+                .Replace("SetStat673('level', 5);", "")
+                .Replace("SetStat673('level', rand(@game4, 0, 3));", "")
+                .Replace("SetStat673('level', rand(@game4, 1, 1));", "")
+                .Replace("SetStat673('level', rand(@game4, 2, 2));", "");
         }
     }
 }
