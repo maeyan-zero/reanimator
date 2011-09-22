@@ -131,6 +131,12 @@ namespace MediaWiki.Util
                         format = format.Replace("[string" + i + "]", result.ToString());
                         break;
                     case Display.Ctrl.ParamString:
+                        //monsters don't need this since they don't have the proper formatting
+                        if (Evaluator.Unit is Monster)
+                        {
+                            format = string.Empty;
+                            break;
+                        }
                         control = (string) row["ctrlStat_string"];
                         result = Evaluator.Unit.GetStatParam(control);
                         string total = string.Empty;
@@ -156,6 +162,12 @@ namespace MediaWiki.Util
                         format = total;//format.Replace("[string" + i + "]", result.ToString());
                         break;
                     case Display.Ctrl.StatValue:
+                        //monsters don't need this
+                        if (Evaluator.Unit is Monster)
+                        {
+                            format = string.Empty;
+                            break;
+                        }
                         control = (string) row["ctrlStat_string"];
                         result = Evaluator.Unit.GetStatValue(control);
                         object[] array = (object[])result;
@@ -330,7 +342,7 @@ namespace MediaWiki.Util
 
         public static string FormatFeed(object feed)
         {
-            if (feed is Parser.Evaluator.Range)
+            if (feed is Parser.Evaluator.Range || feed is int)
                 return feed.ToString();
 
             return "(" + feed + ")";

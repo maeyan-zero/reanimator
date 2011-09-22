@@ -45,6 +45,7 @@
   <ItemGroup>
     <Compile Include="Articles\Achievements.cs" />
     <Compile Include="Articles\Affixes.cs" />
+    <Compile Include="Articles\ArmorAffixes.cs" />
     <Compile Include="Articles\Cube.cs" />
     <Compile Include="Articles\ItemQuality.cs" />
     <Compile Include="Articles\ItemLevels.cs" />
@@ -63,6 +64,7 @@
     <Compile Include="Parser\Class\Game3.cs" />
     <Compile Include="Parser\Class\Game4.cs" />
     <Compile Include="Parser\Class\Item.cs" />
+    <Compile Include="Parser\Class\Monster.cs" />
     <Compile Include="Parser\Class\StatsList.cs" />
     <Compile Include="Parser\Class\Unit.cs" />
     <Compile Include="Parser\Evaluator.cs" />

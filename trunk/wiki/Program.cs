@@ -17,21 +17,18 @@ namespace MediaWiki
             manager.LoadTableFiles();
             manager.EndAllDatAccess();
 
+            //TODO: hp/power regen is messed up when displaying the full formula because I guess the itemdisplay formula isn't used
+
             //note: "display dmg" is ilvl multi*item dmg*dmg% (before "increments" are applied), where dmg% is the first or second argument in dmg_elec(100,100)
 
             //TODO: weapon ranges
             //TODO: add affix names to properties
             //TODO: sword attack rates
-
-            // *****while this message is still here, correct the following manually after every item export*****
-            //TODO: fix stats (manually changed in DB for now):
-            //Beryl Dragon - missing stream depletion -20
-
             //TODO: wtf is up with ilvls that don't match any of the listed numbers (maxlevel, fixedlevel, level)?
             
             //long term TODO: assign unit types so "isa" functions (among other things) work
 
-            args = new[] { "ITEMS" };
+            args = new[] { "ARMORAFFIXES" };
 
             //new Items(manager).WriteAllUniqueLegendaryItemPages();
             //return;
@@ -50,6 +47,9 @@ namespace MediaWiki
                         break;
                     case "MONSTERAFFIXES":
                         script = new MonsterAffixes(manager);
+                        break;
+                    case "ARMORAFFIXES":
+                        script = new ArmorAffixes(manager);
                         break;
                     case "ITEMLEVELS":
                         script = new ItemLevels(manager);
