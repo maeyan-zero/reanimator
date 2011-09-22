@@ -885,6 +885,10 @@ namespace MediaWiki.Parser
                 case "dmg_phys":
                 case "dmg_toxic":
                 case "dmg_elec":
+                    //if it's a monster...assume it's % increase?
+                    if (Unit is Monster)                    
+                        return SetMonsterDamageBonus(func, param);
+                    
                     if ((bool)Unit.GetStat("isBeam"))
                         return SetBeamDamage(func, param);
                     else if ((bool)Unit.GetStat("isHive"))
@@ -973,26 +977,75 @@ namespace MediaWiki.Parser
                     return new Token(result1 / result2, Token.Number);
 
                 case "thorns_dmg_toxic_monster":
-                case "thorns_dmg_elec_monster":
-                case "thorns_dmg_spec_monster":
-                case "thorns_dmg_fire_monster":
-                case "thorns_dmg_phys_monster":
                     if (param.Length != 1)
                         throw new Exception("Illegal number of parameters for thorns_dmg_phys_monster function.");
-                    Unit.SetStat("thorns_dmg_phys_monster", param[0]);
+                    Unit.SetStat("damage_thorns_min", "toxic", param[0]);
+                    return new Token(param[0], Token.Number);
+
+                case "thorns_dmg_elec_monster":
+                    if (param.Length != 1)
+                        throw new Exception("Illegal number of parameters for thorns_dmg_phys_monster function.");
+                    Unit.SetStat("damage_thorns_min", "electricity", param[0]);
+                    return new Token(param[0], Token.Number);
+
+                case "thorns_dmg_spec_monster":
+                    if (param.Length != 1)
+                        throw new Exception("Illegal number of parameters for thorns_dmg_phys_monster function.");
+                    Unit.SetStat("damage_thorns_min", "spectral", param[0]);
+                    return new Token(param[0], Token.Number);
+
+                case "thorns_dmg_fire_monster":
+                    if (param.Length != 1)
+                        throw new Exception("Illegal number of parameters for thorns_dmg_phys_monster function.");
+                    Unit.SetStat("damage_thorns_min", "fire", param[0]);
+                    return new Token(param[0], Token.Number);
+
+                case "thorns_dmg_phys_monster":
+                    //Unit.SetStat("thorns_dmg_phys_monster", param[0]);
+                    if (param.Length != 1)
+                        throw new Exception("Illegal number of parameters for thorns_dmg_phys_monster function.");
+                    Unit.SetStat("damage_thorns_min", "physical", param[0]);
                     return new Token(param[0], Token.Number);
 
                 case "monster_level_sfx_attack":
                     if (param.Length != 1)
                         throw new Exception("Illegal number of parameters for monster_level_sfx_attack function.");
-                    Unit.SetStat("monster_level_sfx_attack", param[0]);
-                    return new Token(param[0], Token.Number);
+                    //Unit.SetStat("monster_level_sfx_attack", param[0]);
+                    if (!(param[0] is int)) return new Token("sfx_attack", Token.Formula);
+
+                    int mlevel = (int)param[0];
+
+                    // item level 0 means no level was specified, return a formulae part
+                    if (mlevel == 0) return new Token("sfx_attack", Token.Formula);                    
+
+                    // otherwise we can retrieve it.
+                    var monsterLevels = Manager.GetDataTable("MONLEVEL");
+                    var monsterSfxAttack = (int)monsterLevels.Rows[mlevel]["sfxAttack"];
+
+                    return new Token(monsterSfxAttack, Token.Number);
+
+                case "monster_level_sfx_defense":
+                    if (param.Length != 1)
+                        throw new Exception("Illegal number of parameters for monster_level_sfx_defense function.");
+
+                    if (!(param[0] is int)) return new Token("sfx_defense", Token.Formula);
+
+                    mlevel = (int)param[0];
+
+                    // item level 0 means no level was specified, return a formulae part
+                    if (mlevel == 0) return new Token("sfx_defense", Token.Formula);
+
+                    monsterLevels = Manager.GetDataTable("MONLEVEL");
+                    var monsterSfxDefense = (int)monsterLevels.Rows[mlevel]["sfxDefense"];
+
+                    return new Token(monsterSfxDefense, Token.Number);
 
                 case "monster_level_shields":
                     if (param.Length != 1) throw new Exception("Illegal number of parameters for monster_level_shields function.");
 
-                    Unit.SetStat("set_shield_bonus", param[0]);
-                    return new Token(param[0], Token.Number);
+                    Unit.SetStat("shields_bonus", param[0]);
+                    if ((param[0] is int)) return new Token(param[0], Token.Number);
+                    return new Token(param[0].ToString().Replace("ilevel", "mlevel_shield"), Token.Formula);
 
                 case "pickskill":
                     if (param.Length != 3) throw new Exception("Illegal number of parameters for pickskill function.");
@@ -1174,6 +1227,35 @@ namespace MediaWiki.Parser
                     throw new Exception("Unknown function: " + func);
             }
         }
+
+        private Token SetMonsterDamageBonus(string dmgType, object[] objects)
+        {
+            //a bit redundant, but it works and it's only "direct" damage assumed to be an additional percentage
+            string element = string.Empty;
+            switch (dmgType)
+            {
+                case "dmg_fire":
+                    element = "fire";
+                    break;
+                case "dmg_spec":
+                    element = "spectral";
+                    break;
+                case "dmg_phys":
+                    element = "physical";
+                    break;
+                case "dmg_toxic":
+                    element = "toxic";
+                    break;
+                case "dmg_elec":
+                    element = "electricity";
+                    break;
+                default:
+                    throw new Exception("Invalid element: " + dmgType);
+            }
+            Unit.SetStat("damage_augmentation", element, objects[0]);
+            return new Token(dmgType + ": " + objects[0].ToString(), Token.Formula);
+        }
+
         //this isn't being updated because it's probably never used
         private Token SetDotDamage(string dmgType, object[] objects)
         {
