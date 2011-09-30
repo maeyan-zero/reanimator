@@ -392,8 +392,10 @@ namespace MediaWiki.Articles
 
             string id, code, name, type, flavor, quality, image, damage, stats, affixes, modslots, feeds, level, inherent, defence,
                 qualityId, typeRaw, nameRaw, levelRaw, dmgIcon;
-            string clvl;
+            string clvl, invName;
+            string[] ringParts;
             int levelNum;
+            Dictionary<string, string> typeImages = new Dictionary<string, string>();
 
             foreach (DataRow item in items.Rows)
             {
@@ -429,10 +431,24 @@ namespace MediaWiki.Articles
                 type = (typeRaw != string.Empty) ? "<div class=\"item_type " + quality.ToLower() + "\">" + quality + " " + typeRaw + "</div>" : string.Empty;
                 type = GetSqlString(type);
 
-                //image name is whatever the index name thing is
-                //image = item["name"].ToString();
-                //if it's an armor item, add both the male and female versions side-by-side
-                image = GetSqlString(GetImage((baseRow > 0) ? typeRaw.Replace("\"", "'") + ".png" : nameRaw.Replace("\"", "'") + ".png", 224));
+                //get the base name
+                invName = item["folderInventory"].ToString();
+                if (invName.Contains("mods"))
+                    image = GetModImageName(item["name"].ToString());   //some mods have unique images
+                else if (invName.Contains("ring"))
+                {
+                    //only take the first two parts of the ring name, since they otherwise use the same image
+                    ringParts = item["name"].ToString().Split('_');
+                    image = ringParts[0] + "_" + ringParts[1];
+                }
+                else
+                    image = (baseRow > 0) ? typeRaw.Replace("\"", "'") : nameRaw.Replace("\"", "'");
+                //only record one image path for each type
+                if (!typeImages.ContainsKey(image))                
+                    typeImages.Add(image, item["name"].ToString());
+                //if it's an armor item, add both the male and female versions
+                image = GetSqlString(GetImage(image + ".png", 224)
+                    + (invName.Contains("armor") ? "<br />" + GetImage(image + "-f.png", 224) : string.Empty));
                 typeRaw = GetSqlString(typeRaw);
                 nameRaw = GetSqlString(nameRaw);
 
@@ -515,8 +531,29 @@ namespace MediaWiki.Articles
 
                 table.AddRow(id, code, image, name, type, flavor, dmgIcon, damage, defence, stats, modslots, feeds, level, inherent, affixes, qualityId, nameRaw, typeRaw, levelRaw);
             }
+            
+            //dump image names to a file so they're easier to find when uploading
+            string images = string.Empty;
+            foreach (var pair in typeImages)
+            {
+                images += pair.Key + "\n----" + pair.Value + "\n\n\n";
+            }
+
+            File.WriteAllText("images.txt", images);
 
             return table.GetFullScript();
+        }
+
+        private string GetModImageName(string name)
+        {
+            if (name.Contains("ammo") || name.Contains("rocket"))
+                return name.Replace("01", string.Empty).Replace("02", string.Empty);
+            if (name.Contains("relic"))
+                return name.Replace("relic_reward02", "relic_item");
+            if (name.Contains("tech"))
+                return name.Replace("tech_reward02", "tech_item");
+            //leave battery names alone
+            return name.Replace("Sleestak_gland", "fuel_reward02").Replace("Dynamo Cog", "tech_reward01");
         }
 
         private string GetDisplayString(string itemRow)
