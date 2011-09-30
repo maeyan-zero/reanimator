@@ -28,7 +28,7 @@ namespace MediaWiki
             
             //long term TODO: assign unit types so "isa" functions (among other things) work
 
-            args = new[] { "ARMORAFFIXES" };
+            args = new[] { "ITEMS" };
 
             //new Items(manager).WriteAllUniqueLegendaryItemPages();
             //return;
