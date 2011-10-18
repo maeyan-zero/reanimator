@@ -45,6 +45,9 @@ namespace MediaWiki
                     case "AFFIXES":
                         script = new Affixes(manager);
                         break;
+                    case "BASEWAVES":
+                        script = new BaseDefenseWaves(manager);
+                        break;
                     case "MONSTERAFFIXES":
                         script = new MonsterAffixes(manager);
                         break;
@@ -70,7 +73,7 @@ namespace MediaWiki
                         script = new ItemQuality(manager);
                         break;
                     case "TREASURE":
-                        script = new Treasure(manager);
+                        script = new NewTreasure(manager);
                         break;
                     case "MONSTER_QUALITY":
                         script = new MonsterQuality(manager);

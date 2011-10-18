@@ -46,6 +46,7 @@
     <Compile Include="Articles\Achievements.cs" />
     <Compile Include="Articles\Affixes.cs" />
     <Compile Include="Articles\ArmorAffixes.cs" />
+    <Compile Include="Articles\BaseDefenseWaves.cs" />
     <Compile Include="Articles\Cube.cs" />
     <Compile Include="Articles\ItemQuality.cs" />
     <Compile Include="Articles\ItemLevels.cs" />
@@ -55,6 +56,7 @@
     <Compile Include="Articles\MonsterAffixes.cs" />
     <Compile Include="Articles\MonsterQuality.cs" />
     <Compile Include="Articles\Monsters.cs" />
+    <Compile Include="Articles\NewNewTreasure.cs" />
     <Compile Include="Articles\NewTreasure.cs" />
     <Compile Include="Articles\PVPRanks.cs" />
     <Compile Include="Articles\Recipes.cs" />

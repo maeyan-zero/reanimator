@@ -591,6 +591,17 @@ namespace MediaWiki.Articles
             var level = ilvl;// !string.IsNullOrEmpty(item["fixedLevel"].ToString()) ? Int32.Parse(item["fixedLevel"].ToString().Replace(";", "")) : (int)item["level"];
             var itemlevels = Manager.GetDataTable("ITEM_LEVELS");
 
+            int itemDesc = (int)item["typeDescription"];
+            //if it's a sword, display attack speed
+            if (itemDesc == 477 || itemDesc == 478 || itemDesc == 479)
+            {
+                string speed = GetSwordAttackSpeed(item["stats"].ToString());
+                if (!string.IsNullOrEmpty(speed) && speed != "Unknown")
+                    strings.Add("Attack Speed: " + speed + "<br />");
+                else
+                    Debug.WriteLine(speed + ": " + item["index"].ToString() + " - " + item["String_string"].ToString());
+            }
+
             int interrupt = (int)itemlevels.Rows[level]["interruptAttack"];
             int sfxAtk = (int)itemlevels.Rows[level]["sfxAttackAbility"];
             int sfxDef = (int)itemlevels.Rows[level]["sfxDefenceAbility"];
@@ -621,6 +632,56 @@ namespace MediaWiki.Articles
             if (((int)item["sfxToxicDefensePct"]) != 0) strings.Add("Poison Defence: " + (sfxDef * (int)item["sfxToxicDefensePct"] / 100));
 
             return ConcatStrings(strings);
+        }
+
+        private string GetSwordAttackSpeed(string stats)
+        {
+            //check the last 10 bytes for certain sequences (thanks Nagahaku!!)
+            //all start with either 0x80,0xE6 or 0xA0,0x79
+            //very slow - nothing
+            //slow - 0x80,0xE6,0x0D,0x50,0x64,0x90,0x34,0x00,0x00,0x00 or 0xA0,0x79,0x03,0x14,0x19,0x24,0x0D,0x00,0x00,0x00
+            //normal - 0x80,0xE6,0x0D,0x50,0x64,0x10,0x37,0x00,0x00,0x00 or 0xA0,0x79,0x03,0x14,0x19,0xC4,0x0D,0x00,0x00,0x00
+            //fast - 0x80,0xE6,0x0D,0x50,0x64,0x90,0x39,0x00,0x00,0x00 or 0xA0,0x79,0x03,0x14,0x19,0x64,0x0E,0x00,0x00,0x00
+            //very fast - 0x80,0xE6,0x0D,0x50,0x64,0x10,0x3C,0x00,0x00,0x00 or 0xA0,0x79,0x03,0x14,0x19,0x04,0x0F,0x00,0x00,0x00
+            string speed = string.Empty;
+
+            byte[] bytes = new byte[stats.Count(c => c == ',') + 1];
+            int index = 0;
+            //convert everything to bytes
+            foreach (string part in stats.Split(','))
+            {
+                bytes[index++] = Convert.ToByte(part);
+            }
+
+            //doubtful, but check anyway
+            if (bytes.Length < 10)
+                return "Very Slow";
+
+            //grab the last 10 bytes
+            byte[] speedBytes = new byte[10];
+            for (int i = 10; i > 0; i--)
+            {
+                speedBytes[10 - i] = bytes[bytes.Length - i];
+            }
+
+            //check for the "header"/prefix thing
+            byte[] headerBytes = { speedBytes[0], speedBytes[1] };
+            if (!headerBytes.SequenceEqual(new byte[] { 0x80, 0xE6 }) && !headerBytes.SequenceEqual(new byte[] { 0xA0, 0x79 }))
+                return "Very Slow";
+
+            //there's speed stuff, so figure out what it is
+            if (speedBytes.SequenceEqual(AttackSpeeds.Slow1) || speedBytes.SequenceEqual(AttackSpeeds.Slow2))
+                speed = "Slow";
+            else if (speedBytes.SequenceEqual(AttackSpeeds.Normal1) || speedBytes.SequenceEqual(AttackSpeeds.Normal2))
+                speed = "Normal";
+            else if (speedBytes.SequenceEqual(AttackSpeeds.Fast1) || speedBytes.SequenceEqual(AttackSpeeds.Fast2))
+                speed = "Fast";
+            else if (speedBytes.SequenceEqual(AttackSpeeds.VeryFast1) || speedBytes.SequenceEqual(AttackSpeeds.VeryFast2) || speedBytes.SequenceEqual(AttackSpeeds.VeryFast3))
+                speed = "Very Fast";
+            else if (speedBytes.SequenceEqual(AttackSpeeds.Unknown1))
+                speed = "Unknown";
+
+            return speed;
         }
 
         private string GetDefence(DataRow item, Unit unit)
@@ -715,10 +776,10 @@ namespace MediaWiki.Articles
             bool isBeam = item["unitType_string"].ToString().Contains("beam") || item["unitType_string"].ToString().Contains("harp");
             //hive - any hive/funky bug thing weapon, used for eel (direct) and swarm (splash, never used)
             bool isHive = item["unitType_string"].ToString().Contains("hive") || item["unitType_string"].ToString().Contains("cabalist_bug2h_achiev");
-            unit.SetStat("isBeam", isBeam);
-            unit.SetStat("isHive", isHive);
+            unit.SetStat("isBeam", isBeam ? 1 : 0);
+            unit.SetStat("isHive", isHive ? 1 : 0);
 
-;           unit.SetStat("damage_min", dmgMin);
+            unit.SetStat("damage_min", dmgMin);
             unit.SetStat("damage_max", dmgMax);
             //unit.SetStat("level", level);
             unit.SetStat("dmg_increment", dmgIncrement);
@@ -1240,6 +1301,26 @@ namespace MediaWiki.Articles
                 .Replace("SetStat673('level', rand(@game4, 0, 3));", "")
                 .Replace("SetStat673('level', rand(@game4, 1, 1));", "")
                 .Replace("SetStat673('level', rand(@game4, 2, 2));", "");
+        }
+
+        private static class AttackSpeeds
+        {
+            public static readonly byte[] Slow1 = { 0x80, 0xE6, 0x0D, 0x50, 0x64, 0x90, 0x34, 0x00, 0x00, 0x00 };
+            public static readonly byte[] Slow2 = { 0xA0, 0x79, 0x03, 0x14, 0x19, 0x24, 0x0D, 0x00, 0x00, 0x00 };
+
+            public static readonly byte[] Normal1 = { 0x80, 0xE6, 0x0D, 0x50, 0x64, 0x10, 0x37, 0x00, 0x00, 0x00 };
+            public static readonly byte[] Normal2 = { 0xA0, 0x79, 0x03, 0x14, 0x19, 0xC4, 0x0D, 0x00, 0x00, 0x00 };
+
+            public static readonly byte[] Fast1 = { 0x80, 0xE6, 0x0D, 0x50, 0x64, 0x90, 0x39, 0x00, 0x00, 0x00 };
+            public static readonly byte[] Fast2 = { 0xA0, 0x79, 0x03, 0x14, 0x19, 0x64, 0x0E, 0x00, 0x00, 0x00 };
+
+            public static readonly byte[] VeryFast1 = { 0x80, 0xE6, 0x0D, 0x50, 0x64, 0x10, 0x3C, 0x00, 0x00, 0x00 };
+            public static readonly byte[] VeryFast2 = { 0xA0, 0x79, 0x03, 0x14, 0x19, 0x04, 0x0F, 0x00, 0x00, 0x00 };
+            //I guess there's another sequence (probably just applies to moon blades)
+            public static readonly byte[] VeryFast3 = { 0x80, 0xE6, 0x0D, 0x50, 0x64, 0x90, 0x3E, 0x00, 0x00, 0x00 };
+
+            //no idea what this is, but it only appears on an unimplemented item
+            public static readonly byte[] Unknown1 = { 0x80, 0xE6, 0x0D, 0x50, 0x64, 0x90, 0x32, 0x00, 0x00, 0x00 };
         }
     }
 }
