@@ -889,9 +889,9 @@ namespace MediaWiki.Parser
                     if (Unit is Monster)                    
                         return SetMonsterDamageBonus(func, param);
                     
-                    if ((bool)Unit.GetStat("isBeam"))
+                    if ((int)Unit.GetStat("isBeam")==1)
                         return SetBeamDamage(func, param);
-                    else if ((bool)Unit.GetStat("isHive"))
+                    else if ((int)Unit.GetStat("isHive") == 1)
                         return SetEelDamage(func, param);
                     else
                         return SetDirectDamage(func, param);
@@ -902,13 +902,13 @@ namespace MediaWiki.Parser
                     return SetSplashDamage(func, param);
 
                 case "rad_toxic":
-                    if ((bool)Unit.GetStat("isHive"))
+                    if ((int)Unit.GetStat("isHive") == 1)
                         return SetSwarmDamage(func, param);
                     else
                         return SetSplashDamage(func, param);
 
                 case "rad_elec":
-                    //if ((bool)Unit.GetStat("isHive"))
+                    //if ((int)Unit.GetStat("isHive") == 1)
                         //return SetEelDamage(func, param);
                     //else
                         return SetSplashDamage(func, param);
@@ -1676,6 +1676,27 @@ namespace MediaWiki.Parser
                 return new Range(c1.Start / c2, c1.End / c2);
             }
 
+            public static Range operator +(int c2, Range c1)
+            {
+                return new Range(c1.Start + c2, c1.End + c2);
+            }
+
+            public static Range operator -(int c2, Range c1)
+            {
+                return new Range(c1.Start - c2, c1.End - c2);
+            }
+
+            public static Range operator *(int c2, Range c1)
+            {
+                return new Range(c1.Start * c2, c1.End * c2);
+            }
+
+            public static Range operator /(int c2, Range c1)
+            {
+                return new Range(c1.Start / c2, c1.End / c2);
+            }
+
+
             public static Range operator +(Range c1, double c2)
             {
                 return new Range(Convert.ToInt32(c1.Start + c2), Convert.ToInt32(c1.End + c2));
@@ -1695,6 +1716,27 @@ namespace MediaWiki.Parser
             {
                 return new Range(Convert.ToInt32(c1.Start / c2), Convert.ToInt32(c1.End / c2));
             }
+
+            public static Range operator +(double c2, Range c1)
+            {
+                return new Range(Convert.ToInt32(c1.Start + c2), Convert.ToInt32(c1.End + c2));
+            }
+
+            public static Range operator -(double c2, Range c1)
+            {
+                return new Range(Convert.ToInt32(c1.Start - c2), Convert.ToInt32(c1.End - c2));
+            }
+
+            public static Range operator *(double c2, Range c1)
+            {
+                return new Range(Convert.ToInt32(c1.Start * c2), Convert.ToInt32(c1.End * c2));
+            }
+
+            public static Range operator /(double c2, Range c1)
+            {
+                return new Range(Convert.ToInt32(c1.Start / c2), Convert.ToInt32(c1.End / c2));
+            }
+
 
             public static Range operator +(Range c1, Range c2)
             {

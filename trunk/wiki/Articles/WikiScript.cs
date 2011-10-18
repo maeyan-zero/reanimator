@@ -119,6 +119,11 @@ namespace MediaWiki.Articles
             return "\"" + output + "\"";
         }
 
+        protected static string GetTimeInSeconds(int ticks)
+        {
+            return Math.Round(ticks / 20.0, 2).ToString(); //0.02/1000
+        }
+
         protected class SQLTableScript
         {
             private int columnCount = 0;
