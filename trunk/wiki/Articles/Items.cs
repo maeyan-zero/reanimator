@@ -394,7 +394,7 @@ namespace MediaWiki.Articles
                 qualityId, typeRaw, nameRaw, levelRaw, dmgIcon;
             string clvl, invName;
             string[] ringParts;
-            int levelNum;
+            int levelNum, itemType;
             Dictionary<string, string> typeImages = new Dictionary<string, string>();
 
             foreach (DataRow item in items.Rows)
@@ -411,6 +411,7 @@ namespace MediaWiki.Articles
 
                 Unit unit = new Item(); // for sharing stats
                 levelNum = 0;
+
                 // Guts
                 id = GetSqlString(item["index"].ToString());
                 code = GetSqlString(((int)item["code"]).ToString("X"));
@@ -484,11 +485,12 @@ namespace MediaWiki.Articles
                 feeds = GetFeeds((int)item["index"], unit);
                 feeds = GetSqlString(feeds);
 
-                //ignore clvl for necklaces
-                //(not sure if this will always be the case)
-                if (((int)item["typeDescription"]) != 3430 && level != "Scales")
+                if (level != "Scales")
                 {
-                    clvl = ilvls.Rows[int.Parse(level)]["levelRequirement"].ToString();
+                    itemType = (int)item["typeDescription"];
+                    //ignore clvl for necklaces and bracelets
+                    //(not sure if this will always be the case)
+                    clvl = (itemType == 3430 || itemType == 3431) ? "0" : ilvls.Rows[int.Parse(level)]["levelRequirement"].ToString();
                     level = (!string.IsNullOrEmpty(level))
                                 ? GetItemLevels(level, clvl, (int) item["itemQuality"])
                                 : string.Empty;
@@ -686,6 +688,7 @@ namespace MediaWiki.Articles
 
         private string GetDefence(DataRow item, Unit unit)
         {
+            //looks like armor and shields can round either way (not sure about sfx atk/def and stuff)
             int level = (int)unit.GetStat("level");// = !string.IsNullOrEmpty(item["fixedLevel"].ToString()) ?  Int32.Parse(item["fixedLevel"].ToString().Replace(";", "")) : (int)item["level"];
             var strings = new List<string>();
 
@@ -698,13 +701,13 @@ namespace MediaWiki.Articles
                 bonus = ((Dictionary<string, object>) unit.GetStat("armor_bonus"))["all"];
             if (bonus is Evaluator.Range)
             {
-                armor = armor * buffer / 100;
+                armor = (int)Math.Round(armor * buffer / 100.0);
                 Evaluator.Range range = (Evaluator.Range) bonus + armor;
                 if (range.ToString() != "0") strings.Add(GetImage("armor.png", _height) + " Armor: " + range);
             }
             else
             {
-                armor = armor * buffer / 100;
+                armor = (int)Math.Round(armor * buffer / 100.0);
                 if (bonus.ToString() != "0") armor += Convert.ToInt32(bonus);
                 if (armor.ToString() != "0") strings.Add(GetImage("armor.png", _height) + " Armor: " + armor);
             }
@@ -714,13 +717,13 @@ namespace MediaWiki.Articles
             bonus = unit.GetStat("shields_bonus");
             if (bonus is Evaluator.Range)
             {
-                shields = shields * buffer / 100;
+                shields = (int)Math.Round(shields * buffer / 100.0);
                 Evaluator.Range range = (Evaluator.Range)bonus + shields;
                 if (range.ToString() != "0") strings.Add(GetImage("shields.png", _height) + " Shields: " + range);
             }
             else
             {
-                shields = shields * buffer / 100;
+                shields = (int)Math.Round(shields * buffer / 100.0);
                 if (bonus.ToString() != "0") shields += Convert.ToInt32(bonus);
                 if (shields.ToString() != "0") strings.Add(GetImage("shields.png", _height) + " Shields: " + shields);
             }

@@ -32,7 +32,7 @@ namespace MediaWiki.Articles
         public override string ExportTableInsertScript()
         {
             var script = new SQLTableScript("id", string.Empty,
-                                            "id NOT NULL",
+                                            "id INT NOT NULL",
                                             "loot TEXT");
 
             string id, loot;
@@ -56,7 +56,7 @@ namespace MediaWiki.Articles
             var builder = new StringBuilder();
             var depth = 1;
             const string style = "style=\"vertical-align: top; width: auto; border-collapse: collapse; border: solid 1px black;\"";
-            builder.AppendLine("<table border=\"1\" cellpadding=\"3\" " + style + ">");
+            builder.AppendLine("<table class=\"wikitable\">");
             GetTableRows(treasure, builder, ref depth);
             builder.AppendLine("</table>");
             return builder.ToString();
@@ -71,11 +71,20 @@ namespace MediaWiki.Articles
             var hasContent = HasContent(treasure);
             var difficuly = GetDifficultyDropRate(treasure);
 
-            if (depth != 1)
+            if (depth != 1 && treasure.PickType != TreasureClass.PickTypes.All)
             {
+                string style = GetRowStyle(depth);
+                string title = GetTitleStyle(depth);
+                if (style != string.Empty && title != string.Empty)
+                {
+                    builder.AppendLine("</table>");
+                    builder.AppendLine("<table class=\"wikitable\">");
+                }
+
                 builder.AppendLine("<tr>");
                 //builder.AppendLine("<td colspan=\"" + depth + "\"></td>");
                 // colspan=\"" + (colSpan + 1) + "\"
+                
                 builder.AppendLine("<td colspan=\"3\" " + GetRowStyle(depth) + "><span " +  GetTitleStyle(depth) + ">" + rowName + "</span>" + ((difficuly != string.Empty) ? "<br/>" + difficuly : "") + "</td>");
                 builder.AppendLine("</tr>");
             }
@@ -206,7 +215,7 @@ namespace MediaWiki.Articles
                         items.Add(new KeyValuePair<string, string>(drop.Content.ToString(), GetDropChance(drop.Value, treasure.Drops).ToString("F") + "%"));
                         break;
                     default:
-                        items.Add(new KeyValuePair<string, string>(drop.Content.ToString(), string.Empty));
+                        items.Add(new KeyValuePair<string, string>(drop.Content.ToString(), GetDropChance(drop.Value, treasure.Drops).ToString("F") + "%"));
                         break;
                 }
             }

@@ -974,7 +974,7 @@ namespace MediaWiki.Parser
                     if (!Double.TryParse(param[0].ToString(), out result1) || !Double.TryParse(param[1].ToString(), out result2))
                         return new Token(param[0], Token.Formula);
 
-                    return new Token(result1 / result2, Token.Number);
+                    return new Token(result1 * (result2 / 100), Token.Number);
 
                 case "thorns_dmg_toxic_monster":
                     if (param.Length != 1)
