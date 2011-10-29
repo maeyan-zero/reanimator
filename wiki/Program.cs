@@ -57,6 +57,9 @@ namespace MediaWiki
                     case "ITEMLEVELS":
                         script = new ItemLevels(manager);
                         break;
+                    case "LEVELS":
+                        script = new Levels(manager);
+                        break;
                     case "MONSTERS":
                         script = new Monsters(manager);
                         break;

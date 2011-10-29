@@ -52,6 +52,7 @@
     <Compile Include="Articles\ItemLevels.cs" />
     <Compile Include="Articles\Items.cs" />
     <Compile Include="Articles\ItemUpgrades.cs" />
+    <Compile Include="Articles\Levels.cs" />
     <Compile Include="Articles\LevelScaling.cs" />
     <Compile Include="Articles\MonsterAffixes.cs" />
     <Compile Include="Articles\MonsterQuality.cs" />
