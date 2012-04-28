@@ -1,6 +1,5 @@
 ﻿using System;
 using System.IO;
-using System.Linq;
 using System.Windows.Forms;
 using Revival.Common;
 using Hellgate;
@@ -11,6 +10,7 @@ namespace Reanimator.Forms
     public partial class Options : Form
     {
         private readonly FileManager _fileManager;
+        private bool _needRestart; // persistent need-restart flag
 
         public Options(FileManager fileManager)
         {
@@ -19,12 +19,105 @@ namespace Reanimator.Forms
             InitializeComponent();
         }
 
-        private void _OkButton_Click(object sender, EventArgs e)
+        private void _OptionsOnLoad(object sender, EventArgs e)
         {
+            _LoadOptions();
+        }
+
+        private void _LoadOptions()
+        {
+            // General - Path Settings
+            hglDir_TextBox.Text = Config.HglDir; // restart required
+            gameClientPath_TextBox.Text = Config.GameClientPath;
+            scriptDirText.Text = Config.ScriptDir;
+
+            // General - Load Options
+            _tcv4_CheckBox.Checked = Config.LoadTCv4DataFiles; // restart required
+
+            // General - Language Files
+            _UpdateStringsLanguages(); // restart required
+
+            // Display - Xls Editor
+            intPtrTypeCombo.SelectedItem = Config.IntPtrCast;
+            relationsCheck.Checked = Config.GenerateRelations;
+
+            // Default Programs
+            txtEditor_TextBox.Text = Config.TxtEditor;
+            xmlEditor_TextBox.Text = Config.XmlEditor;
+            csvEditor_TextBox.Text = Config.CsvEditor;
+        }
+
+        private void _OkButtonClick(object sender, EventArgs e)
+        {
+            bool optionsSaved = _SaveOptions(); // apply changes and check if want/need to restart
+            if (!optionsSaved) return; // hit cancel
+
             Hide();
         }
 
-        private void _HglDirBrowse_Click(object sender, EventArgs e)
+        private void _CancelButtonClick(object sender, EventArgs e)
+        {
+            _LoadOptions(); // undo changes
+            Hide();
+        }
+
+        private bool _SaveOptions()
+        {
+            // have the settings changed - will we need to restart
+            if (Config.HglDir != hglDir_TextBox.Text ||
+                Config.LoadTCv4DataFiles != _tcv4_CheckBox.Checked ||
+                (_stringsLang_comboBox.SelectedItem != null && Config.StringsLanguage != (String)_stringsLang_comboBox.SelectedItem))
+            {
+                _needRestart = true;
+            }
+
+            // don't do this above - want this here for persistence
+            bool doRestart = false;
+            if (_needRestart)
+            {
+                DialogResult drRestart = MessageBox.Show("Some options require a restart to take effect.\nRestart now?", "Restart Needed", MessageBoxButtons.YesNoCancel, MessageBoxIcon.Question);
+
+                if (drRestart == DialogResult.Cancel)
+                {
+                    _needRestart = false;
+                    return false;
+                }
+
+                doRestart = (drRestart == DialogResult.Yes);
+            }
+
+            // apply changes
+            // path options
+            Config.HglDir = hglDir_TextBox.Text; // restart required
+            Config.GameClientPath = gameClientPath_TextBox.Text;
+            Config.ScriptDir = scriptDirText.Text;
+
+            // load options
+            Config.LoadTCv4DataFiles = _tcv4_CheckBox.Checked; // restart required
+
+            // editor options
+            Config.TxtEditor = txtEditor_TextBox.Text;
+            Config.XmlEditor = xmlEditor_TextBox.Text;
+            Config.CsvEditor = csvEditor_TextBox.Text;
+
+            // xls display options
+            Config.IntPtrCast = intPtrTypeCombo.Text;
+            Config.GenerateRelations = relationsCheck.Checked;
+
+            // language options
+            if (_stringsLang_comboBox.SelectedItem != null) // only update if valid (can happen when changing HglDir stuff etc.)
+            {
+                Config.StringsLanguage = (String) _stringsLang_comboBox.SelectedItem; // restart required
+                _UpdateStringsLanguages();
+            }
+
+            // restart if authorized
+            if (doRestart) Application.Restart();
+
+            return true;
+        }
+
+        private void _HglDirBrowseClick(object sender, EventArgs e)
         {
             FolderBrowserDialog folderBrowserDialogue = new FolderBrowserDialog
             {
@@ -35,21 +128,6 @@ namespace Reanimator.Forms
             if (folderBrowserDialogue.ShowDialog(this) != DialogResult.OK) return;
 
             hglDir_TextBox.Text = folderBrowserDialogue.SelectedPath;
-            UpdateConfigPaths();
-        }
-
-        private void Options_Load(object sender, EventArgs e)
-        {
-            hglDir_TextBox.Text = Config.HglDir;
-            gameClientPath_TextBox.Text = Config.GameClientPath;
-            scriptDirText.Text = Config.ScriptDir;
-            intPtrTypeCombo.SelectedItem = Config.IntPtrCast;
-            relationsCheck.Checked = Config.GenerateRelations;
-            txtEditor_TextBox.Text = Config.TxtEditor;
-            xmlEditor_TextBox.Text = Config.XmlEditor;
-            csvEditor_TextBox.Text = Config.CsvEditor;
-            _tcv4_CheckBox.Checked = Config.LoadTCv4DataFiles;
-            _UpdateStringsLanguages();
         }
 
         private void _UpdateStringsLanguages()
@@ -69,7 +147,7 @@ namespace Reanimator.Forms
             _stringsLang_comboBox.SelectedItem = Config.StringsLanguage;
         }
 
-        private void _GameClientPath_Button_Click(object sender, EventArgs e)
+        private void _GameClientPathButtonClick(object sender, EventArgs e)
         {
             String initialDir = Config.HglDir + "\\SP_x64";
             if (!Directory.Exists(initialDir)) initialDir = Config.HglDir;
@@ -83,10 +161,9 @@ namespace Reanimator.Forms
             if (openFileDialog.ShowDialog(this) != DialogResult.OK) return;
 
             gameClientPath_TextBox.Text = openFileDialog.FileName;
-            UpdateConfigPaths();
         }
 
-        private void _ScriptButton_Click(object sender, EventArgs e)
+        private void _ScriptButtonClick(object sender, EventArgs e)
         {
             FolderBrowserDialog folderBrowserDialogue = new FolderBrowserDialog
             {
@@ -97,94 +174,50 @@ namespace Reanimator.Forms
             if (folderBrowserDialogue.ShowDialog(this) != DialogResult.OK) return;
 
             scriptDirText.Text = folderBrowserDialogue.SelectedPath;
-            UpdateConfigPaths();
         }
 
-        private void _IntPtrTypeCombo_SelectedIndexChanged(object sender, EventArgs e)
-        {
-            Config.IntPtrCast = intPtrTypeCombo.Text;
-        }
-
-        private void _RelationsCheck_CheckedChanged(object sender, EventArgs e)
-        {
-            Config.GenerateRelations = relationsCheck.Checked;
-        }
-
-        private void _TxtEditor_Button_Click(object sender, EventArgs e)
+        private void _TxtEditorButtonClick(object sender, EventArgs e)
         {
             String filePath = FormTools.OpenFileDialogBox("exe", "Executable", Path.GetDirectoryName(Config.TxtEditor));
             if (filePath == null) return;
 
-            Config.TxtEditor = filePath;
-            txtEditor_TextBox.Text = Config.TxtEditor;
+            txtEditor_TextBox.Text = filePath;
         }
 
-        private void _XmlEditor_Button_Click(object sender, EventArgs e)
+        private void _XmlEditorButtonClick(object sender, EventArgs e)
         {
             String filePath = FormTools.OpenFileDialogBox("exe", "Executable", Path.GetDirectoryName(Config.TxtEditor));
             if (filePath == null) return;
 
-            Config.XmlEditor = filePath;
-            xmlEditor_TextBox.Text = Config.XmlEditor;
+            xmlEditor_TextBox.Text = filePath;
         }
 
-        private void _CsvEditor_Button_Click(object sender, EventArgs e)
+        private void _CsvEditorButtonClick(object sender, EventArgs e)
         {
             String filePath = FormTools.OpenFileDialogBox("exe", "Executable", Path.GetDirectoryName(Config.TxtEditor));
             if (filePath == null) return;
 
-            Config.CsvEditor = filePath;
-            csvEditor_TextBox.Text = Config.CsvEditor;
+            csvEditor_TextBox.Text = filePath;
         }
 
-        private void _TCv4_CheckBox_CheckedChanged(object sender, EventArgs e)
+        private void _HglConfigTextChanged(object sender, EventArgs e)
         {
-            Config.LoadTCv4DataFiles = _tcv4_CheckBox.Checked;
-        }
-
-        private void _StringsLang_ComboBox_SelectedIndexChanged(object sender, EventArgs e)
-        {
-            Config.StringsLanguage = (String)_stringsLang_comboBox.SelectedItem;
-        }
-
-        private void UpdateConfigPaths()
-        {
-            Config.HglDir = hglDir_TextBox.Text;
-            Config.GameClientPath = gameClientPath_TextBox.Text;
-            Config.ScriptDir = scriptDirText.Text;
-            _UpdateStringsLanguages();
-        }
-
-        private void HglConfig_TextChanged(object sender, EventArgs e)
-        {
-            bool valid = true;
             hglDir_TextBox.ForeColor = Color.Black;
-
             if (!Directory.Exists(hglDir_TextBox.Text))
             {
                 hglDir_TextBox.ForeColor = Color.Red;
-                valid = false;
             }
 
             gameClientPath_TextBox.ForeColor = Color.Black;
-
             if (!File.Exists(gameClientPath_TextBox.Text))
             {
                 gameClientPath_TextBox.ForeColor = Color.Red;
-                valid = false;
             }
 
             scriptDirText.ForeColor = Color.Black;
-
             if (!Directory.Exists(scriptDirText.Text))
             {
                 scriptDirText.ForeColor = Color.Red;
-                valid = false;
-            }
-
-            if (valid)
-            {
-                UpdateConfigPaths();
             }
         }
     }
