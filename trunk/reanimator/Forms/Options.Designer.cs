@@ -245,7 +245,6 @@
             this._stringsLang_comboBox.Name = "_stringsLang_comboBox";
             this._stringsLang_comboBox.Size = new System.Drawing.Size(199, 23);
             this._stringsLang_comboBox.TabIndex = 3;
-            this._stringsLang_comboBox.SelectedIndexChanged += new System.EventHandler(this._StringsLangComboBoxSelectedIndexChanged);
             // 
             // label7
             // 
@@ -288,7 +287,6 @@
             this._tcv4_CheckBox.TabIndex = 1;
             this._tcv4_CheckBox.Text = "Load TCv4 Excel and Strings files. (requires restart to take effect)\r\n";
             this._tcv4_CheckBox.UseVisualStyleBackColor = true;
-            this._tcv4_CheckBox.CheckedChanged += new System.EventHandler(this._TCv4CheckBoxCheckedChanged);
             // 
             // tabPage2
             // 
@@ -313,7 +311,6 @@
             this.relationsCheck.TabIndex = 2;
             this.relationsCheck.Text = "Generate Relations";
             this.relationsCheck.UseVisualStyleBackColor = true;
-            this.relationsCheck.CheckedChanged += new System.EventHandler(this._RelationsCheckCheckedChanged);
             // 
             // label2
             // 
@@ -335,7 +332,6 @@
             this.intPtrTypeCombo.Name = "intPtrTypeCombo";
             this.intPtrTypeCombo.Size = new System.Drawing.Size(140, 23);
             this.intPtrTypeCombo.TabIndex = 0;
-            this.intPtrTypeCombo.SelectedIndexChanged += new System.EventHandler(this._IntPtrTypeComboSelectedIndexChanged);
             // 
             // tabPage3
             // 
