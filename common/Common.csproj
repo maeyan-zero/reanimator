@@ -119,7 +119,6 @@
     <Compile Include="StreamTools.cs" />
     <Compile Include="TableTools.cs" />
     <Compile Include="ObjectDelegator.cs" />
-    <Compile Include="XmlUtilities.cs" />
   </ItemGroup>
   <ItemGroup>
     <BootstrapperPackage Include="Microsoft.Net.Client.3.5">

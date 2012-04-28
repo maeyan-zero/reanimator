@@ -1085,7 +1085,7 @@ namespace Reanimator.Forms
                     }
                     catch (Exception e)
                     {
-                        ExceptionLogger.LogException(e, "_DoCooking", true);
+                        ExceptionLogger.LogException(e, true);
 
                         String errorMsg = String.Format("Failed to cook file!\n{0}\n\n{1}", nodeFullPath, e);
                         dr = MessageBox.Show(errorMsg, "Error",
