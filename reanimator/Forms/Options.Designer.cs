@@ -38,7 +38,7 @@
             this.hglDir_Label = new System.Windows.Forms.Label();
             this.hglDir_Button = new System.Windows.Forms.Button();
             this.hglDir_TextBox = new System.Windows.Forms.TextBox();
-            this._ok_button = new System.Windows.Forms.Button();
+            this._okButton = new System.Windows.Forms.Button();
             this.tabControl1 = new System.Windows.Forms.TabControl();
             this.tabPage1 = new System.Windows.Forms.TabPage();
             this.groupBox2 = new System.Windows.Forms.GroupBox();
@@ -62,6 +62,7 @@
             this.label4 = new System.Windows.Forms.Label();
             this.txtEditor_TextBox = new System.Windows.Forms.TextBox();
             this.csvEditor_TextBox = new System.Windows.Forms.TextBox();
+            this._cancelButton = new System.Windows.Forms.Button();
             this._pathSettings_GroupBox.SuspendLayout();
             this.tabControl1.SuspendLayout();
             this.tabPage1.SuspendLayout();
@@ -74,9 +75,9 @@
             // 
             // _pathSettings_GroupBox
             // 
-            this._pathSettings_GroupBox.Anchor = ((System.Windows.Forms.AnchorStyles)((((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Bottom)
-                        | System.Windows.Forms.AnchorStyles.Left)
-                        | System.Windows.Forms.AnchorStyles.Right)));
+            this._pathSettings_GroupBox.Anchor = ((System.Windows.Forms.AnchorStyles)((((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Bottom) 
+            | System.Windows.Forms.AnchorStyles.Left) 
+            | System.Windows.Forms.AnchorStyles.Right)));
             this._pathSettings_GroupBox.Controls.Add(this.scriptButton);
             this._pathSettings_GroupBox.Controls.Add(this.scriptDirText);
             this._pathSettings_GroupBox.Controls.Add(this.label1);
@@ -102,17 +103,17 @@
             this.scriptButton.TabIndex = 13;
             this.scriptButton.Text = "Browse";
             this.scriptButton.UseVisualStyleBackColor = true;
-            this.scriptButton.Click += new System.EventHandler(this._ScriptButton_Click);
+            this.scriptButton.Click += new System.EventHandler(this._ScriptButtonClick);
             // 
             // scriptDirText
             // 
-            this.scriptDirText.Anchor = ((System.Windows.Forms.AnchorStyles)(((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Left)
-                        | System.Windows.Forms.AnchorStyles.Right)));
+            this.scriptDirText.Anchor = ((System.Windows.Forms.AnchorStyles)(((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Left) 
+            | System.Windows.Forms.AnchorStyles.Right)));
             this.scriptDirText.Location = new System.Drawing.Point(12, 165);
             this.scriptDirText.Name = "scriptDirText";
             this.scriptDirText.Size = new System.Drawing.Size(408, 23);
             this.scriptDirText.TabIndex = 12;
-            this.scriptDirText.TextChanged += new System.EventHandler(this.HglConfig_TextChanged);
+            this.scriptDirText.TextChanged += new System.EventHandler(this._HglConfigTextChanged);
             // 
             // label1
             // 
@@ -132,17 +133,17 @@
             this.gameClientPath_Button.TabIndex = 10;
             this.gameClientPath_Button.Text = "Browse";
             this.gameClientPath_Button.UseVisualStyleBackColor = true;
-            this.gameClientPath_Button.Click += new System.EventHandler(this._GameClientPath_Button_Click);
+            this.gameClientPath_Button.Click += new System.EventHandler(this._GameClientPathButtonClick);
             // 
             // gameClientPath_TextBox
             // 
-            this.gameClientPath_TextBox.Anchor = ((System.Windows.Forms.AnchorStyles)(((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Left)
-                        | System.Windows.Forms.AnchorStyles.Right)));
+            this.gameClientPath_TextBox.Anchor = ((System.Windows.Forms.AnchorStyles)(((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Left) 
+            | System.Windows.Forms.AnchorStyles.Right)));
             this.gameClientPath_TextBox.Location = new System.Drawing.Point(12, 102);
             this.gameClientPath_TextBox.Name = "gameClientPath_TextBox";
             this.gameClientPath_TextBox.Size = new System.Drawing.Size(408, 23);
             this.gameClientPath_TextBox.TabIndex = 9;
-            this.gameClientPath_TextBox.TextChanged += new System.EventHandler(this.HglConfig_TextChanged);
+            this.gameClientPath_TextBox.TextChanged += new System.EventHandler(this._HglConfigTextChanged);
             // 
             // gameClientPath_Label
             // 
@@ -171,31 +172,28 @@
             this.hglDir_Button.TabIndex = 2;
             this.hglDir_Button.Text = "Browse";
             this.hglDir_Button.UseVisualStyleBackColor = true;
-            this.hglDir_Button.Click += new System.EventHandler(this._HglDirBrowse_Click);
+            this.hglDir_Button.Click += new System.EventHandler(this._HglDirBrowseClick);
             // 
             // hglDir_TextBox
             // 
-            this.hglDir_TextBox.Anchor = ((System.Windows.Forms.AnchorStyles)(((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Left)
-                        | System.Windows.Forms.AnchorStyles.Right)));
+            this.hglDir_TextBox.Anchor = ((System.Windows.Forms.AnchorStyles)(((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Left) 
+            | System.Windows.Forms.AnchorStyles.Right)));
             this.hglDir_TextBox.Location = new System.Drawing.Point(12, 42);
             this.hglDir_TextBox.Name = "hglDir_TextBox";
             this.hglDir_TextBox.Size = new System.Drawing.Size(408, 23);
             this.hglDir_TextBox.TabIndex = 1;
-            this.hglDir_TextBox.TextChanged += new System.EventHandler(this.HglConfig_TextChanged);
+            this.hglDir_TextBox.TextChanged += new System.EventHandler(this._HglConfigTextChanged);
             // 
-            // _ok_button
+            // _okButton
             // 
-            this._ok_button.Anchor = ((System.Windows.Forms.AnchorStyles)((((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Bottom)
-                        | System.Windows.Forms.AnchorStyles.Left)
-                        | System.Windows.Forms.AnchorStyles.Right)));
-            this._ok_button.Font = new System.Drawing.Font("Segoe UI", 9F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this._ok_button.Location = new System.Drawing.Point(441, 442);
-            this._ok_button.Name = "_ok_button";
-            this._ok_button.Size = new System.Drawing.Size(87, 27);
-            this._ok_button.TabIndex = 1;
-            this._ok_button.Text = "Ok";
-            this._ok_button.UseVisualStyleBackColor = true;
-            this._ok_button.Click += new System.EventHandler(this._OkButton_Click);
+            this._okButton.Font = new System.Drawing.Font("Segoe UI", 9F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this._okButton.Location = new System.Drawing.Point(344, 429);
+            this._okButton.Name = "_okButton";
+            this._okButton.Size = new System.Drawing.Size(87, 27);
+            this._okButton.TabIndex = 1;
+            this._okButton.Text = "Ok";
+            this._okButton.UseVisualStyleBackColor = true;
+            this._okButton.Click += new System.EventHandler(this._OkButtonClick);
             // 
             // tabControl1
             // 
@@ -225,9 +223,9 @@
             // 
             // groupBox2
             // 
-            this.groupBox2.Anchor = ((System.Windows.Forms.AnchorStyles)((((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Bottom)
-                        | System.Windows.Forms.AnchorStyles.Left)
-                        | System.Windows.Forms.AnchorStyles.Right)));
+            this.groupBox2.Anchor = ((System.Windows.Forms.AnchorStyles)((((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Bottom) 
+            | System.Windows.Forms.AnchorStyles.Left) 
+            | System.Windows.Forms.AnchorStyles.Right)));
             this.groupBox2.Controls.Add(this._stringsLang_comboBox);
             this.groupBox2.Controls.Add(this.label7);
             this.groupBox2.Controls.Add(this.label6);
@@ -247,7 +245,7 @@
             this._stringsLang_comboBox.Name = "_stringsLang_comboBox";
             this._stringsLang_comboBox.Size = new System.Drawing.Size(199, 23);
             this._stringsLang_comboBox.TabIndex = 3;
-            this._stringsLang_comboBox.SelectedIndexChanged += new System.EventHandler(this._StringsLang_ComboBox_SelectedIndexChanged);
+            this._stringsLang_comboBox.SelectedIndexChanged += new System.EventHandler(this._StringsLangComboBoxSelectedIndexChanged);
             // 
             // label7
             // 
@@ -257,7 +255,7 @@
             this.label7.Size = new System.Drawing.Size(225, 30);
             this.label7.TabIndex = 2;
             this.label7.Text = "(language availablity is dependant on\r\nhellgate path and data files being loaded)" +
-                "";
+    "";
             // 
             // label6
             // 
@@ -270,16 +268,16 @@
             // 
             // groupBox1
             // 
-            this.groupBox1.Anchor = ((System.Windows.Forms.AnchorStyles)((((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Bottom)
-                        | System.Windows.Forms.AnchorStyles.Left)
-                        | System.Windows.Forms.AnchorStyles.Right)));
+            this.groupBox1.Anchor = ((System.Windows.Forms.AnchorStyles)((((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Bottom) 
+            | System.Windows.Forms.AnchorStyles.Left) 
+            | System.Windows.Forms.AnchorStyles.Right)));
             this.groupBox1.Controls.Add(this._tcv4_CheckBox);
             this.groupBox1.Location = new System.Drawing.Point(5, 213);
             this.groupBox1.Name = "groupBox1";
             this.groupBox1.Size = new System.Drawing.Size(521, 91);
             this.groupBox1.TabIndex = 1;
             this.groupBox1.TabStop = false;
-            this.groupBox1.Text = "Advanced";
+            this.groupBox1.Text = "Load Options";
             // 
             // _tcv4_CheckBox
             // 
@@ -290,7 +288,7 @@
             this._tcv4_CheckBox.TabIndex = 1;
             this._tcv4_CheckBox.Text = "Load TCv4 Excel and Strings files. (requires restart to take effect)\r\n";
             this._tcv4_CheckBox.UseVisualStyleBackColor = true;
-            this._tcv4_CheckBox.CheckedChanged += new System.EventHandler(this._TCv4_CheckBox_CheckedChanged);
+            this._tcv4_CheckBox.CheckedChanged += new System.EventHandler(this._TCv4CheckBoxCheckedChanged);
             // 
             // tabPage2
             // 
@@ -315,7 +313,7 @@
             this.relationsCheck.TabIndex = 2;
             this.relationsCheck.Text = "Generate Relations";
             this.relationsCheck.UseVisualStyleBackColor = true;
-            this.relationsCheck.CheckedChanged += new System.EventHandler(this._RelationsCheck_CheckedChanged);
+            this.relationsCheck.CheckedChanged += new System.EventHandler(this._RelationsCheckCheckedChanged);
             // 
             // label2
             // 
@@ -337,7 +335,7 @@
             this.intPtrTypeCombo.Name = "intPtrTypeCombo";
             this.intPtrTypeCombo.Size = new System.Drawing.Size(140, 23);
             this.intPtrTypeCombo.TabIndex = 0;
-            this.intPtrTypeCombo.SelectedIndexChanged += new System.EventHandler(this._IntPtrTypeCombo_SelectedIndexChanged);
+            this.intPtrTypeCombo.SelectedIndexChanged += new System.EventHandler(this._IntPtrTypeComboSelectedIndexChanged);
             // 
             // tabPage3
             // 
@@ -382,7 +380,7 @@
             this.txtEditor_Button.TabIndex = 10;
             this.txtEditor_Button.Text = "Browse";
             this.txtEditor_Button.UseVisualStyleBackColor = true;
-            this.txtEditor_Button.Click += new System.EventHandler(this._TxtEditor_Button_Click);
+            this.txtEditor_Button.Click += new System.EventHandler(this._TxtEditorButtonClick);
             // 
             // csvEditor_Button
             // 
@@ -392,7 +390,7 @@
             this.csvEditor_Button.TabIndex = 9;
             this.csvEditor_Button.Text = "Browse";
             this.csvEditor_Button.UseVisualStyleBackColor = true;
-            this.csvEditor_Button.Click += new System.EventHandler(this._CsvEditor_Button_Click);
+            this.csvEditor_Button.Click += new System.EventHandler(this._CsvEditorButtonClick);
             // 
             // xmlEditor_Button
             // 
@@ -402,7 +400,7 @@
             this.xmlEditor_Button.TabIndex = 8;
             this.xmlEditor_Button.Text = "Browse";
             this.xmlEditor_Button.UseVisualStyleBackColor = true;
-            this.xmlEditor_Button.Click += new System.EventHandler(this._XmlEditor_Button_Click);
+            this.xmlEditor_Button.Click += new System.EventHandler(this._XmlEditorButtonClick);
             // 
             // xmlEditor_TextBox
             // 
@@ -458,22 +456,33 @@
             this.csvEditor_TextBox.Size = new System.Drawing.Size(324, 23);
             this.csvEditor_TextBox.TabIndex = 6;
             // 
+            // _cancelButton
+            // 
+            this._cancelButton.Location = new System.Drawing.Point(443, 429);
+            this._cancelButton.Name = "_cancelButton";
+            this._cancelButton.Size = new System.Drawing.Size(87, 27);
+            this._cancelButton.TabIndex = 3;
+            this._cancelButton.Text = "Cancel";
+            this._cancelButton.UseVisualStyleBackColor = true;
+            this._cancelButton.Click += new System.EventHandler(this._CancelButtonClick);
+            // 
             // Options
             // 
-            this.AcceptButton = this._ok_button;
+            this.AcceptButton = this._okButton;
             this.AutoScaleDimensions = new System.Drawing.SizeF(7F, 15F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
-            this.ClientSize = new System.Drawing.Size(540, 481);
+            this.ClientSize = new System.Drawing.Size(540, 464);
             this.ControlBox = false;
+            this.Controls.Add(this._cancelButton);
             this.Controls.Add(this.tabControl1);
-            this.Controls.Add(this._ok_button);
+            this.Controls.Add(this._okButton);
             this.Font = new System.Drawing.Font("Segoe UI", 9F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
             this.FormBorderStyle = System.Windows.Forms.FormBorderStyle.FixedSingle;
             this.MaximizeBox = false;
             this.Name = "Options";
             this.StartPosition = System.Windows.Forms.FormStartPosition.CenterParent;
             this.Text = "Options";
-            this.Load += new System.EventHandler(this.Options_Load);
+            this.Load += new System.EventHandler(this._OptionsOnLoad);
             this._pathSettings_GroupBox.ResumeLayout(false);
             this._pathSettings_GroupBox.PerformLayout();
             this.tabControl1.ResumeLayout(false);
@@ -503,7 +512,7 @@
         private System.Windows.Forms.TextBox gameClientPath_TextBox;
         private System.Windows.Forms.Button gameClientPath_Button;
 
-        private System.Windows.Forms.Button _ok_button;
+        private System.Windows.Forms.Button _okButton;
         private System.Windows.Forms.Button scriptButton;
         private System.Windows.Forms.TextBox scriptDirText;
         private System.Windows.Forms.Label label1;
@@ -530,6 +539,7 @@
         private System.Windows.Forms.Label label6;
         private System.Windows.Forms.Label label7;
         private System.Windows.Forms.ComboBox _stringsLang_comboBox;
+        private System.Windows.Forms.Button _cancelButton;
 
     }
 }
