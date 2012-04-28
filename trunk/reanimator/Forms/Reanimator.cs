@@ -711,7 +711,7 @@ namespace Reanimator.Forms
             }
             catch (Exception ex)
             {
-                ExceptionLogger.LogException(ex, "Reanimator_Load", false);
+                ExceptionLogger.LogException(ex, false);
                 MessageBox.Show(ex.Message, "Reanimator_Load");
             }
         }
@@ -773,7 +773,7 @@ namespace Reanimator.Forms
             }
             catch (Exception ex)
             {
-                ExceptionLogger.LogException(ex, "_HardcoreModex64DX9ToolStripMenuItem_Click", false);
+                ExceptionLogger.LogException(ex, false);
                 MessageBox.Show("Problem Applying Patch. :(");
             }
         }
@@ -878,7 +878,7 @@ namespace Reanimator.Forms
             }
             catch (Exception ex)
             {
-                ExceptionLogger.LogException(ex, "_PatchToolToolStripMenuItem_Click", false);
+                ExceptionLogger.LogException(ex, false);
             }
         }
 

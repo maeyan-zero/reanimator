@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Diagnostics;
 using System.IO;
 using System.Windows.Forms;
 using Revival.Common;
@@ -112,7 +113,16 @@ namespace Reanimator.Forms
             }
 
             // restart if authorized
-            if (doRestart) Application.Restart();
+            if (doRestart)
+            {
+                if (Debugger.IsAttached) // Application.Restart does not work for debuggers
+                {
+                    Application.Exit();
+                    return true;
+                }
+
+                Application.Restart();
+            }
 
             return true;
         }

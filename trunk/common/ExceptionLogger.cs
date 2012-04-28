@@ -1,194 +1,188 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Diagnostics;
 using System.IO;
+using System.Windows.Forms;
 using System.Xml.Serialization;
 
 namespace Revival.Common
 {
+    [XmlRoot("Exceptions")]
+    public class ExceptionsLog
+    {
+        private const int MaxExceptions = 150; // maintain a rolling-log of 100-150 exceptions
+        private const int TrimExceptions = 50;
+
+        [XmlElement("Exception")]
+        public List<ExceptionFormat> Exceptions { get; set; }
+
+        public ExceptionsLog()
+        {
+            Exceptions = new List<ExceptionFormat>();
+        }
+
+        public void Add(ExceptionFormat exceptionFormat)
+        {
+            Exceptions.Add(exceptionFormat);
+
+            if (Exceptions.Count > MaxExceptions)
+            {
+                Exceptions.RemoveRange(0, TrimExceptions);
+            }
+        }
+    }
+
+    [XmlRoot("Exception")]
     public class ExceptionFormat
     {
-        [XmlElement("Date")]
-        string _date;
-        [XmlElement("Time")]
-        string _time;
-        [XmlElement("Function")]
-        string _function;
-        [XmlElement("Source")]
-        string _source;
-        [XmlElement("TargetSite")]
-        string _targetSite;
-        [XmlElement("InnerException")]
-        string _innerException;
-        [XmlElement("ExceptionMessage")]
-        string _exceptionMessage;
-        [XmlElement("StackTrace")]
-        string _stackTrace;
-        [XmlElement("CustomMessage")]
-        string _customMessage;
+        public String Date { get; set; }
+        public String Time { get; set; }
+        public String Source { get; set; }
+        public String TargetSite { get; set; }
+        public String InnerException { get; set; }
+        public String ExceptionMessage { get; set; }
+        public String StackTrace { get; set; }
+        public String CustomMessage { get; set; }
 
-        #region Properties
-        public string Date
-        {
-            get { return _date; }
-            set { _date = value; }
-        }
+        public ExceptionFormat() { } // needed for XML serialization
 
-        public string Time
+        public ExceptionFormat(Exception exception, String customMessage = "")
         {
-            get { return _time; }
-            set { _time = value; }
-        }
+            Date = DateTime.Now.ToLongDateString();
+            Time = DateTime.Now.ToLongTimeString();
+            Source = exception.Source;
 
-        public string Source
-        {
-            get { return _source; }
-            set { _source = value; }
-        }
-
-        public string TargetSite
-        {
-            get { return _targetSite; }
-            set { _targetSite = value; }
-        }
-
-        public string Function
-        {
-            get { return _function; }
-            set { _function = value; }
-        }
-
-        public string InnerException
-        {
-            get { return _innerException; }
-            set { _innerException = value; }
-        }
-
-        public string ExceptionMessage
-        {
-            get { return _exceptionMessage; }
-            set { _exceptionMessage = value; }
-        }
-
-        public string StackTrace
-        {
-            get { return _stackTrace; }
-            set { _stackTrace = value; }
-        }
-
-        public string CustomMessage
-        {
-            get { return _customMessage; }
-            set { _customMessage = value; }
-        }
-        #endregion
-
-        public ExceptionFormat()
-        {
-        }
-
-        public ExceptionFormat(Exception exception, string functionName, string customMessage)
-        {
-            _date = DateTime.Now.ToLongDateString();
-            _time = DateTime.Now.ToLongTimeString();
-            _function = functionName;
-            _source = exception.Source;
             if (exception.TargetSite != null)
             {
-                _targetSite = exception.TargetSite.Name;
+                TargetSite = exception.TargetSite.Name;
             }
             if (exception.InnerException != null)
             {
-                _innerException = exception.InnerException.ToString();
+                InnerException = exception.InnerException.ToString();
             }
-            _exceptionMessage = exception.Message;
-            _stackTrace = exception.StackTrace;
-            _customMessage = customMessage;
-        }
 
-        public ExceptionFormat(Exception exception, string functionName) : this(exception, functionName, "")
-        {
+            ExceptionMessage = exception.Message;
+            StackTrace = exception.StackTrace;
+            CustomMessage = customMessage;
         }
 
         public override string ToString()
         {
             return
-                _date + Environment.NewLine +
-                _time + Environment.NewLine +
-                _function + Environment.NewLine +
-                _source + Environment.NewLine +
-                _targetSite + Environment.NewLine +
-                _innerException + Environment.NewLine +
-                _exceptionMessage + Environment.NewLine +
-                _stackTrace + Environment.NewLine +
-                _customMessage;
+                Date + Environment.NewLine +
+                Time + Environment.NewLine +
+                Source + Environment.NewLine +
+                TargetSite + Environment.NewLine +
+                InnerException + Environment.NewLine +
+                ExceptionMessage + Environment.NewLine +
+                StackTrace + Environment.NewLine +
+                CustomMessage;
         }
     }
 
     public class ExceptionLogger
     {
-        const string FILENAME = "errorLog.xml";
-        static ExceptionLogger _logger;
+        private const String FileName = "errorLog.xml";
 
-        [XmlArray("Exceptions")]
-        static List<ExceptionFormat> _exceptions;
+        private static readonly Object Lock = new Object();
+        private static volatile ExceptionLogger _logger;
 
+        private readonly ExceptionsLog _exceptionsLog;
+        private readonly XmlSerializer _serializer;
+        private readonly bool _isReadOnly;
+
+        /// <summary>
+        /// (private-Singleton) Constructor 
+        /// Is only called once in _GetInstace();
+        /// </summary>
         private ExceptionLogger()
         {
-            if(File.Exists(FILENAME))
+            FileInfo logFileInfo = new FileInfo(FileName);
+            if (logFileInfo.IsReadOnly)
             {
-                _exceptions = XmlUtilities<List<ExceptionFormat>>.Deserialize(FILENAME);
+                _isReadOnly = true;
+                MessageBox.Show("Log file is Read Only!\nNo exception logging will occur for this instance!", "Log Error", MessageBoxButtons.OK, MessageBoxIcon.Exclamation);
+                return;
             }
-            else
+
+            _serializer = new XmlSerializer(typeof(ExceptionsLog));
+            if (logFileInfo.Exists && logFileInfo.Length > 0)
             {
-                _exceptions = new List<ExceptionFormat>();
+                try
+                {
+                    _exceptionsLog = _Deserialize<ExceptionsLog>(FileName);
+                    return;
+                }
+                catch (Exception)
+                {
+                    MessageBox.Show("Log file load .Deserialize() failed! A new one will be created...");
+                }
             }
+
+            _exceptionsLog = new ExceptionsLog();
         }
 
-        //public static ExceptionLogger GetInstance()
-        //{
-        //    if (_logger == null)
-        //    {
-        //        _logger = new ExceptionLogger();
-        //    }
-
-        //    return _logger;
-        //}
-
-        public static void LogException(Exception exception)
+        public static void LogException(Exception exception, bool logSilent = false, String customMessage = "")
         {
-            LogException(exception, "Not specified", FILENAME, "", true);
-        }
-
-        public static void LogException(Exception exception, bool logSilent)
-        {
-            LogException(exception, "Not specified", FILENAME, "", logSilent);
-        }
-
-        public static void LogException(Exception exception, string functionName, bool logSilent)
-        {
-            LogException(exception, functionName, FILENAME, "", logSilent);
-        }
-
-        public static void LogException(Exception exception, string functionName, string customMessage, bool logSilent)
-        {
-            LogException(exception, functionName, FILENAME, customMessage, logSilent);
-        }
-
-        public static void LogException(Exception exception, string functionName, string fileName, string customMessage, bool logSilent)
-        {
-            if (_logger == null)
-            {
-                _logger = new ExceptionLogger();
-            }
+            _logger = _GetInstance();
+            if (_logger._isReadOnly) return;
 
             if (!logSilent)
             {
-                //MessageBox.Show(exception.Message + exception.StackTrace, "Error!", MessageBoxButtons.OK, MessageBoxIcon.Exclamation);
+                MessageBox.Show(exception.Message + "\n\n" + exception.StackTrace, "Error!", MessageBoxButtons.OK, MessageBoxIcon.Exclamation);
             }
 
-            _exceptions.Add(new ExceptionFormat(exception, functionName, customMessage));
+            ExceptionFormat exceptionFormat = new ExceptionFormat(exception, customMessage);
 
-            XmlUtilities<List<ExceptionFormat>>.Serialize(_exceptions, fileName);
+            lock (Lock)
+            {
+                _logger._AddExceptionFormat(exceptionFormat);
+                _logger._Serialize();
+            }
+        }
+
+        private static ExceptionLogger _GetInstance()
+        {
+            if (_logger == null)
+            {
+                lock (Lock)
+                {
+                    if (_logger == null)
+                    {
+                        _logger = new ExceptionLogger();
+                    }
+                }
+            }
+
+            return _logger;
+        }
+
+        private void _AddExceptionFormat(ExceptionFormat exceptionFormat)
+        {
+            _exceptionsLog.Add(exceptionFormat);
+        }
+
+        private void _Serialize()
+        {
+            if (_isReadOnly) return;
+            Debug.Assert(_exceptionsLog != null);
+
+            using (TextWriter textWriter = new StreamWriter(FileName))
+            {
+                _serializer.Serialize(textWriter, _exceptionsLog);
+                textWriter.Close();
+            }
+        }
+
+        private T _Deserialize<T>(String path)
+        {
+            using (TextReader textReader = new StreamReader(path))
+            {
+                T obj = (T)_serializer.Deserialize(textReader);
+                textReader.Close();
+
+                return obj;
+            }
         }
     }
 }

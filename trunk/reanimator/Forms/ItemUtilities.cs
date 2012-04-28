@@ -385,7 +385,7 @@ namespace Reanimator.Forms
                     return entry.Value;
                 }
 
-                ExceptionLogger.LogException(new Exception("IsComplexAttributeException"), "GetSimpleValue", unitStats.Code + " is of type ComplexValue", false);
+                ExceptionLogger.LogException(new Exception("IsComplexAttributeException"), false, unitStats.Code + " is of type ComplexValue");
             }
 
             //for (int counter = 0; counter < unit.Stats.Stats.Count; counter++)

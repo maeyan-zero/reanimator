@@ -671,7 +671,7 @@ namespace Reanimator.Forms
                     }
                     catch (Exception e)
                     {
-                        ExceptionLogger.LogException(e, "_DoUnooking", true);
+                        ExceptionLogger.LogException(e, true);
 
                         String errorMsg = String.Format("Failed to uncooked file!\n{0}\n\n{1}", relativePath, e);
                         dr = MessageBox.Show(errorMsg, "Error", MessageBoxButtons.AbortRetryIgnore, MessageBoxIcon.Exclamation);
@@ -699,7 +699,7 @@ namespace Reanimator.Forms
                     }
                     catch (Exception e)
                     {
-                        ExceptionLogger.LogException(e, "_DoUnooking", true);
+                        ExceptionLogger.LogException(e, true);
 
                         String errorMsg = String.Format("Failed to save file!\n{0}\n\n{1}", relativePath, e);
                         dr = MessageBox.Show(errorMsg, "Error", MessageBoxButtons.AbortRetryIgnore, MessageBoxIcon.Exclamation);
