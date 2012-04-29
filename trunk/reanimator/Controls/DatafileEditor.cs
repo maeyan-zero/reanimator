@@ -172,7 +172,6 @@ namespace Reanimator.Controls
         /// </summary>
         private void _CreateRowView()
         {
-            //_rows_LayoutPanel.CellPaint += (sender, e) => { if (e.Row % 2 == 0) e.Graphics.FillRectangle(Brushes.AliceBlue, e.CellBounds); };
             _rows_LayoutPanel.SuspendLayout();
             int column = 0;
             TextBox relationTextBox = null;

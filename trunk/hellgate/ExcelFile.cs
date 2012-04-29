@@ -119,7 +119,8 @@ namespace Hellgate
         /// <param name="buffer">Byte array of the given Excel file object.</param>
         /// <param name="filePath">Path to file being loaded.</param>
         /// <param name="clientVersion">The versions of excel files to try to load from.</param>
-        public ExcelFile(byte[] buffer, String filePath, FileManager.ClientVersions clientVersion = FileManager.ClientVersions.SinglePlayer) : this(filePath, clientVersion)
+        public ExcelFile(byte[] buffer, String filePath, FileManager.ClientVersions clientVersion = FileManager.ClientVersions.SinglePlayer)
+            : this(filePath, clientVersion)
         {
             if (Attributes == null || Attributes.IsEmpty) return;
 
@@ -127,7 +128,7 @@ namespace Hellgate
             int peek = FileTools.ByteArrayToInt32(buffer, 0);
             bool isCooked = (peek == Token.cxeh);
             HasIntegrity = isCooked ? ParseData(buffer) : ParseCSV(buffer, null); // ParseCSV from here should probably be removed
-                                                                                  //  without a FileManager it can cause some nasty issues on some files
+            //  without a FileManager it can cause some nasty issues on some files
 
             // if we parsed the buffer, but still not structure id, we parsed a CSV document and need to manually assign it
             if (_excelFileHeader.StructureID == 0)
@@ -251,7 +252,7 @@ namespace Hellgate
             // parse file header - could use Regex here - but don't think that'd but faster, in fact, probably a lot slower(?) - meh
             // format: %s(%s) // first %s = StringId, second %s = FileHeader as String
             String fileHeader = columns[0];
-            int fileHeaderStart = fileHeader.IndexOf("(")+1;
+            int fileHeaderStart = fileHeader.IndexOf("(") + 1;
             int fileHeaderEnd = fileHeader.IndexOf(")");
             String fileHeaderStr = fileHeader.Substring(fileHeaderStart, fileHeaderEnd - fileHeaderStart);
             _excelFileHeader = FileTools.StringToObject<ExcelHeader>(fileHeaderStr, ",", FileHeaderFields);
@@ -842,6 +843,7 @@ namespace Hellgate
 
                 if (!_CheckToken(buffer, ref offset, Token.cxeh)) return false;
                 int scriptsByteCount = FileTools.ByteArrayToInt32(buffer, ref offset);
+                //Debug.WriteLine(StringId + " has " + scriptsByteCount + " script bytes.");
                 if (scriptsByteCount != 0)
                 {
                     _scriptBuffer = new byte[scriptsByteCount];
@@ -874,19 +876,22 @@ namespace Hellgate
         /// Creates a ExcelFile based on the DataTable data.
         /// </summary>
         /// <param name="dataTable">The DataTable to read the data from.</param>
+        /// <param name="fileManager">The FileManager to use for script compilations etc.</param>
         /// <returns>True if the DataTable parsed okay.</returns>
         public override bool ParseDataTable(DataTable dataTable, FileManager fileManager)
         {
-            if (dataTable == null) throw new ArgumentNullException("dataTable");
-            //if (fileManager == null) throw new ArgumentNullException("fileManager");
+            if (dataTable == null) throw new ArgumentNullException("dataTable", "DataTable can not be null!");
+            if (fileManager == null) throw new ArgumentNullException("fileManager", "FileManager can not be null!");
 
             byte[] newStringBuffer = null;
             int newStringBufferOffset = 0;
-            byte[] newIntegerBuffer = null;
-            int newIntegerBufferOffset = 1;
+
+            byte[] newScriptBuffer = (Attributes.HasScriptTable) ? new byte[1024] : null;
+            int newScriptBufferOffset = 0; // don't start at 1 as it will resize the array wrong
+
             byte[][] newStatsBuffer = null;
             List<String> newSecondaryStrings = null;
-            List<Object> newTable = new List<object>();
+            List<Object> newRows = new List<Object>();
 
             bool failedParsing = false;
             const BindingFlags bindingFlags = (BindingFlags.Instance | BindingFlags.Public | BindingFlags.NonPublic);
@@ -910,42 +915,64 @@ namespace Hellgate
             {
                 int col = 1; // Skip the indice column (column 0)
                 Object rowInstance = Activator.CreateInstance(DataType);
-                foreach (ObjectDelegator.FieldDelegate fieldInfo in objectDelegator)
+                foreach (ObjectDelegator.FieldDelegate fieldDelegate in objectDelegator)
                 {
                     //if (fieldInfo.Name == "warpToFloor")
                     //{
                     //    int bp = 0;
                     //}
 
+                    OutputAttribute attribute = GetExcelAttribute(fieldDelegate.Info);
+
                     // Initialize private fields 
-                    if ((fieldInfo.IsPrivate))
+                    if (fieldDelegate.IsPrivate)
                     {
-                        if ((fieldInfo.FieldType == typeof(RowHeader)))
+                        // will be in DataTable (first column)
+                        if (fieldDelegate.FieldType == typeof(RowHeader))
                         {
-                            string headerString = (string)dataTable.Rows[row][col++];
+                            String headerString = (String)dataTable.Rows[row][col++];
                             RowHeader rowHeader = FileTools.StringToObject<RowHeader>(headerString, ",", RowHeaderFields);
-                            fieldInfo.SetValue(rowInstance, rowHeader);
+                            fieldDelegate.SetValue(rowInstance, rowHeader);
                             continue;
                         }
-                        if ((fieldInfo.FieldType.BaseType == typeof(Array)))
+
+                        // will not be in DataTable
+                        MarshalAsAttribute arrayMarshal = null;
+                        Array arrayInstance = null;
+                        if (fieldDelegate.FieldType.BaseType == typeof(Array))
                         {
-                            MarshalAsAttribute marshal = (MarshalAsAttribute)fieldInfo.Info.GetCustomAttributes(typeof(MarshalAsAttribute), false).First();
-                            Array arrayInstance = (Array)Activator.CreateInstance(fieldInfo.FieldType, marshal.SizeConst);
-                            fieldInfo.SetValue(rowInstance, arrayInstance);
-                            continue;
+                            arrayMarshal = (MarshalAsAttribute)fieldDelegate.Info.GetCustomAttributes(typeof(MarshalAsAttribute), false).First();
+                            arrayInstance = (Array)Activator.CreateInstance(fieldDelegate.FieldType, arrayMarshal.SizeConst);
+                            fieldDelegate.SetValue(rowInstance, arrayInstance);
                         }
-                        if ((fieldInfo.FieldType == typeof(String)))
+                        else if (fieldDelegate.FieldType == typeof(String))
                         {
-                            fieldInfo.SetValue(rowInstance, String.Empty);
-                            continue;
+                            fieldDelegate.SetValue(rowInstance, String.Empty);
                         }
+
+                        // assign constant non-zero values
+                        if (attribute == null || attribute.ConstantValue == null) continue;
+                        if (fieldDelegate.FieldType.BaseType == typeof(Array))
+                        {
+                            Debug.Assert(arrayInstance != null, "arrayInstance == null");
+                            Debug.Assert(arrayMarshal != null, "arrayMarshal == null");
+
+                            for (int i = 0; i < arrayMarshal.SizeConst; i++)
+                            {
+                                arrayInstance.SetValue(attribute.ConstantValue, i);
+                            }
+                        }
+                        else
+                        {
+                            objectDelegator[fieldDelegate.Name, rowInstance] = attribute.ConstantValue;
+                        }
+
                         continue;
                     }
 
                     // Public fields -> these are inside the datatable
                     Object value = dataTable.Rows[row][col++];
-                    OutputAttribute attribute = GetExcelAttribute(fieldInfo.Info);
-                    bool isArray = (fieldInfo.FieldType.BaseType == typeof(Array));
+                    bool isArray = (fieldDelegate.FieldType.BaseType == typeof(Array));
 
                     if (attribute != null)
                     {
@@ -954,7 +981,7 @@ namespace Hellgate
                             if (isArray)
                             {
                                 int arraySize = 1;
-                                MarshalAsAttribute arrayMarshal = (MarshalAsAttribute)fieldInfo.Info.GetCustomAttributes(typeof(MarshalAsAttribute), false).First();
+                                MarshalAsAttribute arrayMarshal = (MarshalAsAttribute)fieldDelegate.Info.GetCustomAttributes(typeof(MarshalAsAttribute), false).First();
                                 arraySize = arrayMarshal.SizeConst;
                                 Debug.Assert(arraySize > 0);
 
@@ -977,11 +1004,11 @@ namespace Hellgate
                                     rowIndices[i] = int.Parse(indexStrs[i]);
                                 }
 
-                                objectDelegator[fieldInfo.Name, rowInstance] = rowIndices;
+                                objectDelegator[fieldDelegate.Name, rowInstance] = rowIndices;
                             }
                             else
                             {
-                                objectDelegator[fieldInfo.Name, rowInstance] = int.Parse(value.ToString());
+                                objectDelegator[fieldDelegate.Name, rowInstance] = int.Parse(value.ToString());
                             }
 
                             // we need to make sure the following data column is a relational column; some tables (and thus the relational column) aren't present, even though the column "links" to them (e.g. LEVEL_AREAS)
@@ -996,46 +1023,41 @@ namespace Hellgate
 
                         if (attribute.IsStringIndex)
                         {
-                            fieldInfo.SetValue(rowInstance, value);
+                            fieldDelegate.SetValue(rowInstance, value);
                             col++; // Skip lookup
                             continue;
                         }
 
                         if (attribute.IsStringOffset)
                         {
+                            String strValue = value as String;
+                            if (strValue == null) throw new Exception("A script was not presented as a String!");
+
                             if (newStringBuffer == null)
                             {
                                 newStringBuffer = new byte[1024];
                             }
 
-                            string strValue = value as string;
-                            if (strValue == null) return false;
-
-                            if (String.IsNullOrEmpty(strValue))
+                            if (String.IsNullOrEmpty(strValue)) // i.e. is empty
                             {
-                                fieldInfo.SetValue(rowInstance, -1);
+                                fieldDelegate.SetValue(rowInstance, -1);
                                 continue;
                             }
 
-                            fieldInfo.SetValue(rowInstance, newStringBufferOffset);
+                            fieldDelegate.SetValue(rowInstance, newStringBufferOffset);
                             FileTools.WriteToBuffer(ref newStringBuffer, ref newStringBufferOffset, FileTools.StringToASCIIByteArray(strValue));
                             FileTools.WriteToBuffer(ref newStringBuffer, ref newStringBufferOffset, (byte)0x00);
                             continue;
                         }
 
-                        if ((attribute.IsScript))
+                        if (attribute.IsScript)
                         {
-                            String strValue = value as string;
+                            String strValue = value as String;
 
                             if (strValue == null || (fileManager == null && strValue == "0") || strValue == "")
                             {
-                                objectDelegator[fieldInfo.Name, rowInstance] = 0;
+                                objectDelegator[fieldDelegate.Name, rowInstance] = 0;
                                 continue;
-                            }
-                            if (newIntegerBuffer == null)
-                            {
-                                newIntegerBuffer = new byte[1024];
-                                newIntegerBuffer[0] = 0x00;
                             }
 
                             //if (strValue == "GetStat666('skill_points_bonus_total', '') > -1;")
@@ -1057,8 +1079,9 @@ namespace Hellgate
                                 scriptByteCode = strValue.ToArray<int>(',');
                             }
 
-                            objectDelegator[fieldInfo.Name, rowInstance] = newIntegerBufferOffset;
-                            FileTools.WriteToBuffer(ref newIntegerBuffer, ref newIntegerBufferOffset, scriptByteCode.ToByteArray());
+                            if (newScriptBufferOffset == 0) newScriptBufferOffset++; // 0 = no/null script
+                            objectDelegator[fieldDelegate.Name, rowInstance] = newScriptBufferOffset;
+                            FileTools.WriteToBuffer(ref newScriptBuffer, ref newScriptBufferOffset, scriptByteCode.ToByteArray());
                             continue;
                         }
 
@@ -1071,33 +1094,33 @@ namespace Hellgate
 
                             if (String.IsNullOrEmpty(strValue))
                             {
-                                fieldInfo.SetValue(rowInstance, -1);
+                                fieldDelegate.SetValue(rowInstance, -1);
                                 continue;
                             }
                             if (newSecondaryStrings.Contains(strValue) == false)
                             {
                                 newSecondaryStrings.Add(strValue);
                             }
-                            fieldInfo.SetValue(rowInstance, newSecondaryStrings.IndexOf(strValue));
+                            fieldDelegate.SetValue(rowInstance, newSecondaryStrings.IndexOf(strValue));
                             continue;
                         }
                     }
 
                     try
                     {
-                        if (fieldInfo.FieldType != value.GetType()) // i.e. if the type hasn't been converted yet (no attributes means it wasn't converted above)
+                        if (fieldDelegate.FieldType != value.GetType()) // i.e. if the type hasn't been converted yet (no attributes means it wasn't converted above)
                         {
-                            if (fieldInfo.FieldType.BaseType == typeof(Enum))
+                            if (fieldDelegate.FieldType.BaseType == typeof(Enum))
                             {
-                                value = Enum.Parse(fieldInfo.FieldType, value.ToString());
+                                value = Enum.Parse(fieldDelegate.FieldType, value.ToString());
                             }
-                            else if (fieldInfo.FieldType == typeof(Int32[]))
+                            else if (fieldDelegate.FieldType == typeof(Int32[]))
                             {
                                 value = ((String)value).ToArray<Int32>(',');
                             }
-                            else if (fieldInfo.FieldType.BaseType == typeof(Array))
+                            else if (fieldDelegate.FieldType.BaseType == typeof(Array))
                             {
-                                Type elementType = fieldInfo.FieldType.GetElementType();
+                                Type elementType = fieldDelegate.FieldType.GetElementType();
                                 if (elementType.BaseType == typeof(Enum))
                                 {
                                     String[] enumStrs = ((String)value).Split(new[] { ',' }, StringSplitOptions.None);
@@ -1116,11 +1139,11 @@ namespace Hellgate
                             }
                             else
                             {
-                                value = Convert.ChangeType(value, fieldInfo.FieldType);
+                                value = Convert.ChangeType(value, fieldDelegate.FieldType);
                             }
                         }
 
-                        fieldInfo.SetValue(rowInstance, value);
+                        fieldDelegate.SetValue(rowInstance, value);
                     }
                     catch (Exception e)
                     {
@@ -1156,15 +1179,24 @@ namespace Hellgate
                     newStatsBuffer[row] = byteArray;
                 }
 
-                newTable.Add(rowInstance);
+                newRows.Add(rowInstance);
             }
 
             // Parsing Complete, assign new references. These arn't assigned before now incase of a parsing error.
-            Rows = newTable;
+            Rows = newRows;
+
             _stringBuffer = newStringBuffer;
-            _scriptBuffer = newIntegerBuffer;
+            if (_stringBuffer != null) Array.Resize(ref _stringBuffer, newStringBufferOffset);
+
+            _scriptBuffer = newScriptBuffer;
+            if (_scriptBuffer != null) Array.Resize(ref _scriptBuffer, newScriptBufferOffset);
+
             StatsBuffer = newStatsBuffer;
             SecondaryStrings = newSecondaryStrings;
+
+            // assign file header details (they are not all the same!)
+            ExcelHeader excelHeader = (ExcelHeader)dataTable.ExtendedProperties["FileHeader"];
+            _excelFileHeader = excelHeader.DeepClone();
 
             return true;
         }
@@ -1352,7 +1384,7 @@ namespace Hellgate
 
             //// header row
             // tables can have different header values
-            String tableHeaderStr = String.Format("{0}({1})", StringId, FileTools.ObjectToStringGeneric(_excelFileHeader,","));
+            String tableHeaderStr = String.Format("{0}({1})", StringId, FileTools.ObjectToStringGeneric(_excelFileHeader, ","));
 
             // rest of columns
             List<String> columnsList = new List<String> { tableHeaderStr };
