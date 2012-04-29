@@ -41,6 +41,7 @@ namespace Hellgate
         private int _offset;
         private byte[] _buffer;
         private bool _generateXml;
+        private bool _isContextSP; // calculated in _ParseCookedBytes() and _ParseXmlBytes() = (CookExcludeTestCentre && CookExcludeResurrection); forces CountOffsetSP and DefaultValueSP to be used
 
         public XmlCookedFile(FileManager fileManager, String fileName = null)
         {
@@ -168,6 +169,7 @@ namespace Hellgate
         {
             if (fileBytes == null) throw new ArgumentNullException("fileBytes", "File bytes cannot be null!");
 
+            _isContextSP = (CookExcludeTestCentre && CookExcludeResurrection);
             _buffer = fileBytes;
             _offset = offset;
             _generateXml = generateXml;
@@ -258,7 +260,9 @@ namespace Hellgate
                             strValue = StreamTools.ReadStringAscii(_buffer, ref _offset, strLen, true);
                         }
 
-                        Debug.Assert((String)xmlElement.XmlAttribute.DefaultValue == strValue);
+                        String defaultValue = (String)xmlElement.XmlAttribute.DefaultValue;
+                        if (_isContextSP && xmlAttribute.UseDefaultValueSP) defaultValue = (String)xmlAttribute.DefaultValueSP;
+                        Debug.Assert(defaultValue == strValue);
                         xmlElement.Default = strValue;
 
                         if (token == ElementType.StringArrayFixed)
@@ -312,6 +316,7 @@ namespace Hellgate
                         }
 
                         Int32 arraySize = StreamTools.ReadInt32(_buffer, ref _offset);
+                        if (_isContextSP) arraySize -= xmlAttribute.CountOffsetSP;
                         Debug.Assert(xmlAttribute.Count == arraySize);
                         break;
 
@@ -361,6 +366,7 @@ namespace Hellgate
                     case ElementType.ExcelIndexArrayFixed:                                      // 0x0905
                         Xls.TableCodes excelTableArrCode = (Xls.TableCodes)StreamTools.ReadInt32(_buffer, ref _offset); // excel table code
                         Int32 excelTableArrCount = StreamTools.ReadInt32(_buffer, ref _offset);
+                        if (_isContextSP) excelTableArrCount -= xmlAttribute.CountOffsetSP;
 
                         Debug.Assert(xmlAttribute.TableCode == excelTableArrCode);
                         Debug.Assert(xmlAttribute.Count == excelTableArrCount);
@@ -536,8 +542,12 @@ namespace Hellgate
                         break;
 
                     case ElementType.ExcelIndexArrayFixed:          // 0x0905
-                        Object[] excelRows = new Object[xmlAttribute.Count];
-                        for (int j = 0; j < xmlAttribute.Count; j++)
+                        int count = xmlAttribute.Count;
+                        if (_isContextSP) count += xmlAttribute.CountOffsetSP;
+
+                        Object[] excelRows = new Object[count];
+
+                        for (int j = 0; j < count; j++)
                         {
                             Object excelRow = _ParseCookedExcelIndex(xmlAttribute, xmlRoot, xmlDesc);
                             excelRows[j] = excelRow;
@@ -594,7 +604,7 @@ namespace Hellgate
 
             _offset = 0;
             _buffer = new byte[1024];
-
+            _isContextSP = (CookExcludeTestCentre && CookExcludeResurrection);
 
             // header details
             FileHeader xmlCookFileHeader = new FileHeader
@@ -661,14 +671,16 @@ namespace Hellgate
 
                     // 1 + x bytes
                     case ElementType.String:                        // 0x0200
-                    case ElementType.StringArrayVariable:           // 0x0207       // AppearanceDefinition - not tested DefaultValue != null
-                        String strDefault = xmlAttribute.DefaultValue as String;
+                    case ElementType.StringArrayVariable:           // 0x0207
+                        String strDefault = (String)xmlAttribute.DefaultValue;
+                        if (_isContextSP && xmlAttribute.UseDefaultValueSP) strDefault = (String)xmlAttribute.DefaultValueSP;
+
                         byte strLen = (byte)((strDefault == null) ? 0 : strDefault.Length);
                         FileTools.WriteToBuffer(ref _buffer, ref _offset, strLen);
 
-                        if (xmlAttribute.DefaultValue == null) continue;
+                        if (strDefault == null) continue;
 
-                        byte[] stringBytes = FileTools.StringToASCIIByteArray(xmlAttribute.DefaultValue.ToString());
+                        byte[] stringBytes = FileTools.StringToASCIIByteArray(strDefault);
                         FileTools.WriteToBuffer(ref _buffer, ref _offset, stringBytes);
                         _offset++; // \0
                         break;
@@ -738,16 +750,22 @@ namespace Hellgate
 
                     // 8 bytes
                     case ElementType.ExcelIndexArrayFixed:          // 0x0905
+                        int excelArrayCount = xmlAttribute.Count;
+                        if (_isContextSP) excelArrayCount += xmlAttribute.CountOffsetSP;
+
                         FileTools.WriteToBuffer(ref _buffer, ref _offset, (UInt32)xmlAttribute.TableCode);
-                        FileTools.WriteToBuffer(ref _buffer, ref _offset, xmlAttribute.Count);
+                        FileTools.WriteToBuffer(ref _buffer, ref _offset, excelArrayCount);
                         break;
 
                     // 8 bytes
                     case ElementType.Int32ArrayFixed:               // 0x0006       // colorsets.xml.cooked (pdwColors)
                     case ElementType.FloatArrayFixed:               // 0x0106
                     case ElementType.Int32Array_0x0A06:             // 0x0A06       // AppearanceDefinition
+                        int numberArrayCount = xmlAttribute.Count;
+                        if (_isContextSP) numberArrayCount += xmlAttribute.CountOffsetSP;
+
                         FileTools.WriteToBuffer(ref _buffer, ref _offset, xmlAttribute.DefaultValue);
-                        FileTools.WriteToBuffer(ref _buffer, ref _offset, xmlAttribute.Count);
+                        FileTools.WriteToBuffer(ref _buffer, ref _offset, numberArrayCount);
                         break;
 
                     default:

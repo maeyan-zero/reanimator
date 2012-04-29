@@ -23,6 +23,25 @@ namespace Reanimator
         /// </summary>
         public static void TestDataTableExportAndImport(bool doTCv4 = false)
         {
+            /*
+            bytesXls						Bytes->Xls
+            bytesXlsBytes					Bytes->Xls->Bytes
+            bytesXlsCsv						Bytes->Xls->CSV
+            bytesXlsCsvXls					Bytes->Xls->CSV->Xls
+            bytesXlsCsvXlsBytes				Bytes->Xls->CSV->Xls->Bytes					== bytesXlsTableXlsBytes as single byte is stripped ->CSV
+
+            bytesXlsTable					Bytes->Xls->Table
+            bytesXlsTableXls				Bytes->Xls->Table->Xls
+            bytesXlsTableXlsBytes			Bytes->Xls->Table->Xls->Bytes				!= bytesXlsBytes because of single script byte thingy lost to table
+            bytesXlsTableXlsCsv				Bytes->Xls->Table->Xls->CSV
+            bytesXlsTableXlsCsvXls			Bytes->Xls->Table->Xls->CSV->Xls
+            bytesXlsTableXlsCsvXlsBytes		Bytes->Xls->Table->Xls->CSV->Xls->Bytes
+
+
+            byte[] bytesXlsBytes				= bytesXls.ToByteArray();
+            byte[] bytesXlsTableXlsCsvXlsBytes	= bytesXlsTableXlsCsvXls.ToByteArray();
+             */
+
             String root = @"C:\excel_datatable_debug";
             FileManager.ClientVersions clientVersion = FileManager.ClientVersions.SinglePlayer;
             if (doTCv4)
@@ -665,6 +684,25 @@ namespace Reanimator
         /// </summary>
         public static void TestExcelCooking(bool doTCv4 = false)
         {
+            /*																0
+0   byte[] fileBytes = fileManager.GetFileBytes(excelFile.FilePath, true);	Bytes													0-gen bytes
+
+                                                                            0      1           2        3            4
+    foreach (DataFile dataFile in fileManager.DataFiles.Values)				Bytes->Xls												1-gen Xls file
+1   byte[] dataFileBytes = dataFile.ToByteArray();							Bytes->Xls->Bytes										1-gen bytes
+    fromBytesExcel.ParseData(dataFileBytes);								Bytes->Xls->Bytes->Xls									2-gen Xls file
+1a  byte[] bytesXlsBytesXlsBytes = fromBytesExcel.ToByteArray();			Bytes->Xls->Bytes->Xls->Bytes							2-gen bytes
+1ba byte[] bytesXlsCsv = dataFile.ExportCSV(fileManager);					Bytes->Xls->CSV											1-gen CSV-bytes
+    bytesXlsCsvXls.ParseCSV(bytesXlsCsv, fileManager);						Bytes->Xls->CSV  ->Xls									2-gen Xls file
+1bb byte[] bytesXlsCsvXlsBytes = bytesXlsCsvXls.ToByteArray();				Bytes->Xls->CSV  ->Xls->Bytes							2-gen CSV-bytes
+1b  byte[] csvBytes = fromBytesExcel.ExportCSV(fileManager);				Bytes->Xls->Bytes->Xls->CSV								2-gen CSV file
+    csvExcel.ParseCSV(csvBytes, fileManager);								Bytes->Xls->Bytes->Xls->CSV->Xls						3-gen Xls file
+1c  byte[] bytesXlsBytesXlsCsvXlsBytes = csvExcel.ToByteArray();			Bytes->Xls->Bytes->Xls->CSV->Xls->Bytes					3-gen bytes
+    finalExcel.ParseData(recookedExcelBytes);								Bytes->Xls->Bytes->Xls->CSV->Xls->Bytes->Xls			4-gen Xls file
+1d  byte[] csvCheck = finalExcel.ExportCSV(fileManager);					Bytes->Xls->Bytes->Xls->CSV->Xls->Bytes->Xls->CSV		4-gen CSV file
+1e  byte[] finalCheck = finalExcel.ToByteArray();							Bytes->Xls->Bytes->Xls->CSV->Xls->Bytes->Xls->Bytes		4-gen bytes
+             */
+
             String root = @"C:\excel_debug";
             FileManager.ClientVersions clientVersion = FileManager.ClientVersions.SinglePlayer;
             if (doTCv4)
@@ -687,12 +725,12 @@ namespace Reanimator
                 ExcelFile excelFile = bytesXls as ExcelFile;
                 if (excelFile == null) continue;
 
-                //if (excelFile.StringId != "SKILLS") continue;
-
-                if (excelFile.StringId == "SKILLS")
-                {
-                    int bp = 0;
-                }
+                const String debugStr = "SKILLS";
+                //if (excelFile.StringId != debugStr) continue;
+                //if (excelFile.StringId == debugStr)
+                //{
+                //    int bp = 0;
+                //}
 
                 checkedCount++;
                 Debug.Write(String.Format("Checking {0}... ", bytesXls.StringId));
@@ -1972,6 +2010,8 @@ namespace Reanimator
             //fileManager.EndAllDatAccess();
             //XmlCookedFile.Initialize(fileManager);
 
+            String debugPath = @"C:\xml_debug\";
+            Directory.CreateDirectory(debugPath);
             int count = 0;
             List<XmlCookedFile> excelStringWarnings = new List<XmlCookedFile>();
             List<String> testCentreWarnings = new List<String>();
@@ -1982,6 +2022,15 @@ namespace Reanimator
                 if (!fileEntry.Path.EndsWith(XmlCookedFile.Extension)) continue;
 
                 String xmlFilePath = fileEntry.Path;
+
+                //const String debugStr = "shield09_appearance";
+                //if (!xmlFilePath.Contains(debugStr)) continue;
+                //if (xmlFilePath.Contains(debugStr))
+                //{
+                //    int bp = 0;
+                //}
+                
+
             //foreach (String xmlFilePath in xmlFiles)
             //{
                 //bool skip = ((i++ % 23) > 0);
@@ -2007,6 +2056,7 @@ namespace Reanimator
 
                 String path = xmlFilePath;
                 String fileName = Path.GetFileName(path);
+                Debug.Assert(!String.IsNullOrEmpty(fileName));
                 //path = @"D:\Games\Hellgate London\data\mp_hellgate_1.10.180.3416_1.0.86.4580\data\background\city\treasury\cap_path.xml.cooked";
                 //path = "D:\\Games\\Hellgate\\Data\\background\\_environments\\outdoor_redhellcow_env.xml.cooked";
                 //path = "D:\\Games\\Hellgate\\Data\\particles\\background\\t_background\\tokyo_dark_smoke_c_large_01.xml.cooked";
@@ -2015,63 +2065,39 @@ namespace Reanimator
                 //    int bp = 0;
                 //}
 
-                //XmlCookedFile xmlCookedFile1 = new XmlCookedFile(fileManager, fileName);
-                XmlCookedFile xmlCookedFile2 = new XmlCookedFile(fileManager, fileName);
-                //byte[] data = File.ReadAllBytes(path);
+                XmlCookedFile xmlCookedFile = new XmlCookedFile(fileManager, fileName);
                 byte[] data = fileManager.GetFileBytes(fileEntry);
                 Debug.Assert(data != null && data.Length > 0);
 
                 //Console.WriteLine("Uncooking: " + fileName);
 
-                //xmlCookedFile2.ParseFileBytes(data, true);
                 try
                 {
-                    //xmlCookedFile1.ParseFileBytes(data);
-                    xmlCookedFile2.ParseFileBytes(data, true);
+                    xmlCookedFile.ParseFileBytes(data, true);
                 }
                 catch (Exception e)
                 {
+                    File.WriteAllBytes(debugPath + fileName, data);
                     Console.WriteLine("Failed to uncooked file \"" + path + "\"\n" + e + "\n");
                     continue;
                 }
 
-                //String newPath = path.Replace(".xml.cooked", ".obj.xml");
-                //xmlCookedFile1.SaveXml(newPath);
-                byte[] newXmlBytes = xmlCookedFile2.ExportAsDocument();
-                Debug.Assert(newXmlBytes != null);
-                //File.WriteAllBytes(newPath, newXmlBytes);
+                byte[] newXmlBytes = xmlCookedFile.ExportAsDocument();
                 count++;
 
-                //byte[] origXmlBytes = File.ReadAllBytes(path.Replace(".cooked", ""));
-                //if (!origXmlBytes.SequenceEqual(newXmlBytes))
-                //{
-                //    int bp = 0;
-                //}
-
-                //if (xmlCookedFile1.HasExcelStringsMissing) excelStringWarnings.Add(xmlCookedFile1);
-                //if (xmlCookedFile1.HasTestCentreElements) testCentreWarnings.Add(Path.GetFileName(fileName));
-                //if (xmlCookedFile1.HasResurrectionElements) resurrectionWarnings.Add(Path.GetFileName(fileName));
-                //if (xmlCookedFile1.HasExcelStringsMissing || xmlCookedFile1.HasTestCentreElements || xmlCookedFile1.HasResurrectionElements) continue;
-
-                //if (path == @"D:\Games\Hellgate\Data\background\cans and boxes.xml.cooked")
-                //{
-                //    int bp = 0;
-                //}
+                if (xmlCookedFile.HasExcelStringsMissing) excelStringWarnings.Add(xmlCookedFile);
+                if (xmlCookedFile.HasTestCentreElements) testCentreWarnings.Add(Path.GetFileName(fileName));
+                if (xmlCookedFile.HasResurrectionElements) resurrectionWarnings.Add(Path.GetFileName(fileName));
+                if (xmlCookedFile.HasExcelStringsMissing || xmlCookedFile.HasTestCentreElements || xmlCookedFile.HasResurrectionElements) continue;
 
                 XmlCookedFile recookedXmlFile = new XmlCookedFile(fileManager, fileName);// { CookExcludeResurrection = false };
-                //byte[] origXmlCookedBytes = recookedXmlFile.ParseFileBytes(origXmlBytes);
                 byte[] newXmlCookedBytes = recookedXmlFile.ParseFileBytes(newXmlBytes);
-                //byte[] recookedData = recookedXmlFile.CookXmlDocument(xmlCookedFile1.XmlDoc);
-                //byte[] recookedData = recookedXmlFile.ToByteArray();
 
-                // check if *cooking method* is working. i.e. is the cook from the *original* XML format == the original.cooked
-                //bool identicalOrig = data.SequenceEqual(origXmlCookedBytes);
-
-                // check if *cooking method* is working. i.e. is the cook from the *new* XML format == the original.cooked
+                // check if *cooking method* is working. i.e. is the cook from the *new* XML format == the original cooked
                 bool identicalNew = data.SequenceEqual(newXmlCookedBytes);
 
                 // if file passes byte-byte test, then continue
-                if (/*identicalOrig &&*/ identicalNew)
+                if (identicalNew)
                 {
                     Console.WriteLine("{0} passed checks...", path);
                     continue;
@@ -2090,9 +2116,9 @@ namespace Reanimator
                     continue;
                 }
 
-                //File.WriteAllBytes(newPath, newXmlBytes);
-                //if (!identicalOrig) File.WriteAllBytes(path + "dataFROMorig", origXmlCookedBytes);
-                //if (!identicalNew) File.WriteAllBytes(path + "dataFROMnew", newXmlCookedBytes);
+                File.WriteAllBytes(debugPath + fileName, data);
+                File.WriteAllBytes(debugPath + fileName + "recooked", newXmlCookedBytes);
+                File.WriteAllBytes(debugPath + fileName.Replace(".cooked", ""), newXmlBytes);
 
                 Console.WriteLine("{0} failed!", path);
             }
