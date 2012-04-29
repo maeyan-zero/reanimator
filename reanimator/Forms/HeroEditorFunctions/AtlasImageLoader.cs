@@ -1,11 +1,10 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Diagnostics;
 using System.Linq;
-using System.Text;
 using System.Drawing;
 using System.Windows.Forms;
 using System.IO;
-using System.Drawing.Imaging;
 using Config = Revival.Common.Config;
 using Hellgate;
 
@@ -13,13 +12,13 @@ namespace Reanimator.Forms.HeroEditorFunctions
 {
     public class AtlasImageLoader
     {
-        List<string> _loadedAtlas;
-        Dictionary<string, Bitmap> _iconDictionary;
+        private readonly List<String> _loadedAtlas;
+        private readonly Dictionary<String, Bitmap> _iconDictionary;
 
         public AtlasImageLoader()
         {
-            _loadedAtlas = new List<string>();
-            _iconDictionary = new Dictionary<string, Bitmap>();
+            _loadedAtlas = new List<String>();
+            _iconDictionary = new Dictionary<String, Bitmap>();
         }
 
         public int ImageCount
@@ -27,81 +26,59 @@ namespace Reanimator.Forms.HeroEditorFunctions
             get { return _iconDictionary.Count(); }
         }
 
-        public void LoadAtlas(string filePath)
+        public void LoadAtlas(String filePath)
         {
-            try
+            if (_loadedAtlas.Contains(filePath)) return;
+
+            Atlas atlas = XmlUtilities<Atlas>.Deserialize(filePath);
+            if (atlas.file == null) return;
+
+            _loadedAtlas.Add(filePath);
+            IEnumerable<GameIcon> icons = _LoadImagesFromLocalFiles(atlas);
+
+            foreach (GameIcon icon in icons)
             {
-                if (!_loadedAtlas.Contains(filePath))
+                if (_iconDictionary.ContainsKey(icon.IconName))
                 {
-                    Atlas atlas = XmlUtilities<Atlas>.Deserialize(filePath);
-
-                    if (atlas.file == null)
-                    {
-                        return;
-                    }
-
-                    _loadedAtlas.Add(filePath);
-                    GameIcon[] icons = LoadImagesFromLocalFiles(atlas);
-
-                    foreach(GameIcon icon in icons)
-                    {
-                        if (_iconDictionary.ContainsKey(icon.IconName))
-                        {
-                            icon.IconName += "_1";
-                        }
-
-                        _iconDictionary.Add(icon.IconName, icon.Bitmap);
-                    }
+                    icon.IconName += "_1";
                 }
-            }
-            catch (Exception ex)
-            {
-                throw (ex);
+
+                _iconDictionary.Add(icon.IconName, icon.Bitmap);
             }
         }
 
-        public void LoadAtlas(string filePath, FileManager fileManager)
+        public void LoadAtlas(String filePath, FileManager fileManager)
         {
-            try
+            if (_loadedAtlas.Contains(filePath)) return;
+
+            fileManager.BeginAllDatReadAccess();
+            byte[] xmlFile = fileManager.GetFileBytes(filePath);
+
+            Atlas atlas;
+            using (Stream stream = new MemoryStream(xmlFile))
             {
-                if (!_loadedAtlas.Contains(filePath))
+                atlas = XmlUtilities<Atlas>.Deserialize(stream);
+                stream.Close();
+            }
+            if (atlas.file == null) return;
+
+            _loadedAtlas.Add(filePath);
+            IEnumerable<GameIcon> icons = _LoadImagesFromGameFiles(atlas, fileManager);
+
+            foreach (GameIcon icon in icons)
+            {
+                if (_iconDictionary.ContainsKey(icon.IconName))
                 {
-                    fileManager.BeginAllDatReadAccess();
-
-                    byte[] xmlFile = fileManager.GetFileBytes(filePath);
-                    
-                    Stream stream = new MemoryStream(xmlFile);
-                    Atlas atlas = XmlUtilities<Atlas>.Deserialize(stream);
-                    stream.Close();
-
-                    if (atlas.file == null)
-                    {
-                        return;
-                    }
-
-                    _loadedAtlas.Add(filePath);
-                    GameIcon[] icons = LoadImagesFromGameFiles(atlas, fileManager);
-
-                    foreach (GameIcon icon in icons)
-                    {
-                        if(_iconDictionary.ContainsKey(icon.IconName))
-                        {
-                            icon.IconName += "_1";
-                        }
-
-                        _iconDictionary.Add(icon.IconName, icon.Bitmap);
-                    }
-
-                    fileManager.EndAllDatAccess();
+                    icon.IconName += "_1";
                 }
+
+                _iconDictionary.Add(icon.IconName, icon.Bitmap);
             }
-            catch (Exception ex)
-            {
-                throw (ex);
-            }
+
+            fileManager.EndAllDatAccess();
         }
 
-        public static Bitmap TextureFromGameFile(string path, FileManager fileManager)
+        public static Bitmap TextureFromGameFile(String path, FileManager fileManager)
         {
             byte[] imageFile = fileManager.GetFileBytes(path);
             Stream stream = new MemoryStream(imageFile);
@@ -114,69 +91,57 @@ namespace Reanimator.Forms.HeroEditorFunctions
             return image;
         }
 
-        private GameIcon[] LoadImagesFromLocalFiles(Atlas atlas)
+        private IEnumerable<GameIcon> _LoadImagesFromLocalFiles(Atlas atlas)
         {
-            if (atlas.file == null || atlas.file == string.Empty)
-            {
-                return null;
-            }
+            if (String.IsNullOrEmpty(atlas.file)) return null;
 
-            string path = Path.Combine(Config.HglDir, atlas.file);
+            String path = Path.Combine(Config.HglDir, atlas.file);
             Bitmap bitmap = new Bitmap(path);
 
             return LoadImages(atlas, bitmap);
         }
 
-        private GameIcon[] LoadImagesFromGameFiles(Atlas atlas, FileManager fileManager)
+        private IEnumerable<GameIcon> _LoadImagesFromGameFiles(Atlas atlas, FileManager fileManager)
         {
-            if (atlas.file == null || atlas.file == string.Empty)
-            {
-                return null;
-            }
+            if (String.IsNullOrEmpty(atlas.file)) return null;
 
-            string extension = Path.GetExtension(atlas.file);
-            string path = atlas.file.Replace(extension, string.Empty) + ".dds";
+            String extension = Path.GetExtension(atlas.file);
+            Debug.Assert(extension != null);
+
+            String path = atlas.file.Replace(extension, String.Empty) + ".dds";
 
             Bitmap bitmap = TextureFromGameFile(path, fileManager);
 
             return LoadImages(atlas, bitmap);
         }
 
-        private GameIcon[] LoadImages(Atlas atlas, Bitmap bitmap)
+        private IEnumerable<GameIcon> LoadImages(Atlas atlas, Bitmap bitmap)
         {
-            try
+            List<GameIcon> icons = new List<GameIcon>();
+
+            foreach (Frame frame in atlas.frames)
             {
-                List<GameIcon> icons = new List<GameIcon>();
+                if (frame.w == 0 || frame.h == 0) continue;
 
-                foreach (Frame frame in atlas.frames)
-                {
-                    if (frame.w != 0 && frame.h != 0)
-                    {
-                        Bitmap bmp = new Bitmap((int)frame.w, (int)frame.h);
-                        Graphics g = Graphics.FromImage(bmp);
+                Bitmap bmp = new Bitmap((int)frame.w, (int)frame.h);
+                Graphics g = Graphics.FromImage(bmp);
 
-                        Rectangle toDraw = new Rectangle(0, 0, (int)frame.w, (int)frame.h);
+                Rectangle toDraw = new Rectangle(0, 0, (int)frame.w, (int)frame.h);
 
-                        g.Clear(Color.Transparent);
-                        g.DrawImage(bitmap, toDraw, frame.x, frame.y, frame.w, frame.h, GraphicsUnit.Pixel);
-                        g.Dispose();
+                g.Clear(Color.Transparent);
+                g.DrawImage(bitmap, toDraw, frame.x, frame.y, frame.w, frame.h, GraphicsUnit.Pixel);
+                g.Dispose();
 
-                        GameIcon icon = new GameIcon(frame.name, bmp);
-                        icons.Add(icon);
-                    }
-                }
-
-                bitmap.Dispose();
-
-                return icons.ToArray();
+                GameIcon icon = new GameIcon(frame.name, bmp);
+                icons.Add(icon);
             }
-            catch (Exception ex)
-            {
-                throw (ex);
-            }
+
+            bitmap.Dispose();
+
+            return icons.ToArray();
         }
 
-        public Bitmap GetImage(string name)
+        public Bitmap GetImage(String name)
         {
             if (_iconDictionary.ContainsKey(name))
             {
@@ -193,7 +158,7 @@ namespace Reanimator.Forms.HeroEditorFunctions
             _iconDictionary.Clear();
         }
 
-        public void SaveImagesToFolder(string folder)
+        public void SaveImagesToFolder(String folder)
         {
             try
             {
@@ -202,9 +167,9 @@ namespace Reanimator.Forms.HeroEditorFunctions
                     Directory.CreateDirectory(folder);
                 }
 
-                List<string> keys = new List<string>(_iconDictionary.Keys);
+                List<String> keys = new List<String>(_iconDictionary.Keys);
 
-                foreach (string key in keys)
+                foreach (String key in keys)
                 {
                     _iconDictionary[key].Save(Path.Combine(folder, key + ".bmp"));
                 }
@@ -215,9 +180,9 @@ namespace Reanimator.Forms.HeroEditorFunctions
             }
         }
 
-        public List<string> GetImageNames()
+        public List<String> GetImageNames()
         {
-            List<string> keys = new List<string>(_iconDictionary.Keys);
+            List<String> keys = new List<String>(_iconDictionary.Keys);
 
             return keys;
         }

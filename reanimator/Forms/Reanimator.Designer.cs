@@ -139,7 +139,7 @@
                         | System.Windows.Forms.Keys.O)));
             this.openToolStripMenuItem.Size = new System.Drawing.Size(174, 22);
             this.openToolStripMenuItem.Text = "&Open";
-            this.openToolStripMenuItem.Click += new System.EventHandler(this.OpenFile);
+            this.openToolStripMenuItem.Click += new System.EventHandler(this._OpenFile);
             // 
             // toolStripSeparator3
             // 
@@ -194,7 +194,7 @@
             this.optionsToolStripMenuItem.Name = "optionsToolStripMenuItem";
             this.optionsToolStripMenuItem.Size = new System.Drawing.Size(174, 22);
             this.optionsToolStripMenuItem.Text = "Options";
-            this.optionsToolStripMenuItem.Click += new System.EventHandler(this.optionsToolStripMenuItem_Click);
+            this.optionsToolStripMenuItem.Click += new System.EventHandler(this._OptionsToolStripMenuItemClick);
             // 
             // toolStripSeparator7
             // 
@@ -307,14 +307,14 @@
             this.excelTableEditorToolStripMenuItem.Name = "excelTableEditorToolStripMenuItem";
             this.excelTableEditorToolStripMenuItem.Size = new System.Drawing.Size(152, 22);
             this.excelTableEditorToolStripMenuItem.Text = "Table Editor";
-            this.excelTableEditorToolStripMenuItem.Click += new System.EventHandler(this.excelTableEditorToolStripMenuItem_Click);
+            this.excelTableEditorToolStripMenuItem.Click += new System.EventHandler(this._ExcelTableEditorToolStripMenuItemClick);
             // 
             // scriptEditorToolStripMenuItem
             // 
             this.scriptEditorToolStripMenuItem.Name = "scriptEditorToolStripMenuItem";
             this.scriptEditorToolStripMenuItem.Size = new System.Drawing.Size(152, 22);
             this.scriptEditorToolStripMenuItem.Text = "File Explorer";
-            this.scriptEditorToolStripMenuItem.Click += new System.EventHandler(this._FileExplorerToolStripMenuItem_Click);
+            this.scriptEditorToolStripMenuItem.Click += new System.EventHandler(this._FileExplorerToolStripMenuItemClick);
             // 
             // tradeItemsToolStripMenuItem
             // 
@@ -480,7 +480,7 @@
             this.aboutToolStripMenuItem.Name = "aboutToolStripMenuItem";
             this.aboutToolStripMenuItem.Size = new System.Drawing.Size(168, 22);
             this.aboutToolStripMenuItem.Text = "&About ...";
-            this.aboutToolStripMenuItem.Click += new System.EventHandler(_AboutToolStripMenuItem_Click);
+            this.aboutToolStripMenuItem.Click += new System.EventHandler(_AboutToolStripMenuItemClick);
             // 
             // statusStrip
             // 
@@ -517,8 +517,8 @@
             this.Name = "Reanimator";
             this.Text = "Reanimator";
             this.WindowState = System.Windows.Forms.FormWindowState.Maximized;
-            this.Load += new System.EventHandler(this._Reanimator_Load);
-            this.ResizeEnd += new System.EventHandler(this._Reanimator_ResizeEnd);
+            this.Load += new System.EventHandler(this._ReanimatorLoad);
+            this.ResizeEnd += new System.EventHandler(this._ReanimatorResizeEnd);
             this.menuStrip.ResumeLayout(false);
             this.menuStrip.PerformLayout();
             this.statusStrip.ResumeLayout(false);

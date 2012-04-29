@@ -83,6 +83,7 @@ namespace Revival.Common
     public class ExceptionLogger
     {
         private const String FileName = "errorLog.xml";
+        private const int AskLessThan = 3;
 
         private static readonly Object Lock = new Object();
         private static volatile ExceptionLogger _logger;
@@ -90,6 +91,9 @@ namespace Revival.Common
         private readonly ExceptionsLog _exceptionsLog;
         private readonly XmlSerializer _serializer;
         private readonly bool _isReadOnly;
+        private int _errorsShown;
+
+        public bool HideErrors { get; set; }
 
         /// <summary>
         /// (private-Singleton) Constructor 
@@ -98,7 +102,7 @@ namespace Revival.Common
         private ExceptionLogger()
         {
             FileInfo logFileInfo = new FileInfo(FileName);
-            if (logFileInfo.IsReadOnly)
+            if (logFileInfo.Exists && logFileInfo.IsReadOnly)
             {
                 _isReadOnly = true;
                 MessageBox.Show("Log file is Read Only!\nNo exception logging will occur for this instance!", "Log Error", MessageBoxButtons.OK, MessageBoxIcon.Exclamation);
@@ -127,9 +131,19 @@ namespace Revival.Common
             _logger = _GetInstance();
             if (_logger._isReadOnly) return;
 
-            if (!logSilent)
+            if (!_logger.HideErrors && !logSilent)
             {
                 MessageBox.Show(exception.Message + "\n\n" + exception.StackTrace, "Error!", MessageBoxButtons.OK, MessageBoxIcon.Exclamation);
+                _logger._errorsShown++;
+
+                if (_logger._errorsShown >= AskLessThan)
+                {
+                    DialogResult dr = MessageBox.Show("Show further errors?", "Exception Messages", MessageBoxButtons.YesNoCancel, MessageBoxIcon.Question);
+
+                    if (dr == DialogResult.Yes) _logger._errorsShown = (1 << 31);
+                    if (dr == DialogResult.No) _logger.HideErrors = true;
+                    if (dr == DialogResult.Cancel) _logger._errorsShown = 0;
+                }
             }
 
             ExceptionFormat exceptionFormat = new ExceptionFormat(exception, customMessage);

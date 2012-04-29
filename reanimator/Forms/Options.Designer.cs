@@ -63,6 +63,7 @@
             this.txtEditor_TextBox = new System.Windows.Forms.TextBox();
             this.csvEditor_TextBox = new System.Windows.Forms.TextBox();
             this._cancelButton = new System.Windows.Forms.Button();
+            this._showFileExplorer = new System.Windows.Forms.CheckBox();
             this._pathSettings_GroupBox.SuspendLayout();
             this.tabControl1.SuspendLayout();
             this.tabPage1.SuspendLayout();
@@ -270,6 +271,7 @@
             this.groupBox1.Anchor = ((System.Windows.Forms.AnchorStyles)((((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Bottom) 
             | System.Windows.Forms.AnchorStyles.Left) 
             | System.Windows.Forms.AnchorStyles.Right)));
+            this.groupBox1.Controls.Add(this._showFileExplorer);
             this.groupBox1.Controls.Add(this._tcv4_CheckBox);
             this.groupBox1.Location = new System.Drawing.Point(5, 213);
             this.groupBox1.Name = "groupBox1";
@@ -281,7 +283,7 @@
             // _tcv4_CheckBox
             // 
             this._tcv4_CheckBox.AutoSize = true;
-            this._tcv4_CheckBox.Location = new System.Drawing.Point(8, 23);
+            this._tcv4_CheckBox.Location = new System.Drawing.Point(6, 22);
             this._tcv4_CheckBox.Name = "_tcv4_CheckBox";
             this._tcv4_CheckBox.Size = new System.Drawing.Size(361, 19);
             this._tcv4_CheckBox.TabIndex = 1;
@@ -462,6 +464,16 @@
             this._cancelButton.UseVisualStyleBackColor = true;
             this._cancelButton.Click += new System.EventHandler(this._CancelButtonClick);
             // 
+            // _showFileExplorer
+            // 
+            this._showFileExplorer.AutoSize = true;
+            this._showFileExplorer.Location = new System.Drawing.Point(6, 47);
+            this._showFileExplorer.Name = "_showFileExplorer";
+            this._showFileExplorer.Size = new System.Drawing.Size(121, 19);
+            this._showFileExplorer.TabIndex = 2;
+            this._showFileExplorer.Text = "Show File Explorer";
+            this._showFileExplorer.UseVisualStyleBackColor = true;
+            // 
             // Options
             // 
             this.AcceptButton = this._okButton;
@@ -478,7 +490,7 @@
             this.Name = "Options";
             this.StartPosition = System.Windows.Forms.FormStartPosition.CenterParent;
             this.Text = "Options";
-            this.Load += new System.EventHandler(this._OptionsOnLoad);
+            this.Load += new System.EventHandler(this._OptionsLoad);
             this._pathSettings_GroupBox.ResumeLayout(false);
             this._pathSettings_GroupBox.PerformLayout();
             this.tabControl1.ResumeLayout(false);
@@ -536,6 +548,7 @@
         private System.Windows.Forms.Label label7;
         private System.Windows.Forms.ComboBox _stringsLang_comboBox;
         private System.Windows.Forms.Button _cancelButton;
+        private System.Windows.Forms.CheckBox _showFileExplorer;
 
     }
 }

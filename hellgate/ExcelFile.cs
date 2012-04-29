@@ -17,6 +17,8 @@ namespace Hellgate
     {
         #region Members
         private byte[] _stringBuffer;
+        public bool HasStringBuffer { get { return (_stringBuffer != null); } }
+
         private byte[] _scriptBuffer;
         private readonly byte[] _myshBuffer;
         private String[][] _csvTable;
@@ -124,7 +126,8 @@ namespace Hellgate
             // parse data
             int peek = FileTools.ByteArrayToInt32(buffer, 0);
             bool isCooked = (peek == Token.cxeh);
-            HasIntegrity = isCooked ? ParseData(buffer) : ParseCSV(buffer);
+            HasIntegrity = isCooked ? ParseData(buffer) : ParseCSV(buffer, null); // ParseCSV from here should probably be removed
+                                                                                  //  without a FileManager it can cause some nasty issues on some files
 
             // if we parsed the buffer, but still not structure id, we parsed a CSV document and need to manually assign it
             if (_excelFileHeader.StructureID == 0)
@@ -162,13 +165,9 @@ namespace Hellgate
         /// Creates a ExcelFile based on the CSV file.
         /// </summary>
         /// <param name="csvBytes">The CSV file as a byte array.</param>
+        /// <param name="fileManager">The FileManager used for script decompilations.</param>
         /// <returns>True if the buffer parsed okay.</returns>
-        public bool ParseCSV(byte[] csvBytes)
-        {
-            return (csvBytes != null && ParseCSV(csvBytes, null));
-        }
-
-        public override bool ParseCSV(byte[] csvBytes, FileManager fileManager)
+        public override sealed bool ParseCSV(byte[] csvBytes, FileManager fileManager)
         {
             if (csvBytes == null) return false;
             if (fileManager != null && fileManager.DataFiles.Count == 0) fileManager = null;
@@ -186,6 +185,11 @@ namespace Hellgate
             return result;
         }
 
+        /// <summary>
+        /// Parse a group of CSV files (why do we need to do it like this? - shouldn't the FileManager presence negate the need for it?)
+        /// </summary>
+        /// <param name="fileManager"></param>
+        /// <param name="csvExcelFiles"></param>
         public void ParseCSV(FileManager fileManager, Dictionary<String, ExcelFile> csvExcelFiles)
         {
             Debug.Assert(fileManager != null && fileManager.DataFiles.Count != 0);
@@ -244,6 +248,17 @@ namespace Hellgate
             }
 
 
+            // parse file header - could use Regex here - but don't think that'd but faster, in fact, probably a lot slower(?) - meh
+            // format: %s(%s) // first %s = StringId, second %s = FileHeader as String
+            String fileHeader = columns[0];
+            int fileHeaderStart = fileHeader.IndexOf("(")+1;
+            int fileHeaderEnd = fileHeader.IndexOf(")");
+            String fileHeaderStr = fileHeader.Substring(fileHeaderStart, fileHeaderEnd - fileHeaderStart);
+            _excelFileHeader = FileTools.StringToObject<ExcelHeader>(fileHeaderStr, ",", FileHeaderFields);
+
+            String strId = fileHeader.Substring(0, fileHeader.IndexOf("(")).Trim(); // asking for exception lol
+            Debug.Assert(strId == StringId);
+
 
             // Parse the tableRows
             bool failedParsing = false;
@@ -268,7 +283,7 @@ namespace Hellgate
                         if (fieldDelegate.FieldType == typeof(RowHeader))
                         {
                             String headerString = tableRows[row][csvCol++];
-                            RowHeader rowHeader = (RowHeader)FileTools.StringToObject(headerString, ",", typeof(RowHeader));
+                            RowHeader rowHeader = FileTools.StringToObject<RowHeader>(headerString, ",", RowHeaderFields);
                             objectDelegator[fieldDelegate.Name, rowInstance] = rowHeader;
                             continue;
                         }
@@ -386,6 +401,10 @@ namespace Hellgate
                                     {
                                         int code = StringToCode(value);
                                         rowIndex = fileManager.GetExcelRowIndexFromStringId(tableStringId, code, "code");
+                                    }
+                                    else if (fileManager.DataTableHasColumn(tableStringId, "name"))
+                                    {
+                                        rowIndex = fileManager.GetExcelRowIndexFromStringId(tableStringId, value, "name");
                                     }
                                     else
                                     {
@@ -904,8 +923,8 @@ namespace Hellgate
                         if ((fieldInfo.FieldType == typeof(RowHeader)))
                         {
                             string headerString = (string)dataTable.Rows[row][col++];
-                            RowHeader tableHeader = (RowHeader)FileTools.StringToObject(headerString, ",", typeof(RowHeader));
-                            fieldInfo.SetValue(rowInstance, tableHeader);
+                            RowHeader rowHeader = FileTools.StringToObject<RowHeader>(headerString, ",", RowHeaderFields);
+                            fieldInfo.SetValue(rowInstance, rowHeader);
                             continue;
                         }
                         if ((fieldInfo.FieldType.BaseType == typeof(Array)))
@@ -1332,7 +1351,11 @@ namespace Hellgate
 
 
             //// header row
-            List<String> columnsList = new List<String> { StringId };
+            // tables can have different header values
+            String tableHeaderStr = String.Format("{0}({1})", StringId, FileTools.ObjectToStringGeneric(_excelFileHeader,","));
+
+            // rest of columns
+            List<String> columnsList = new List<String> { tableHeaderStr };
             foreach (ObjectDelegator.FieldDelegate fieldDelegate in objectDelegator)
             {
                 if (columnNames == null)
@@ -1385,8 +1408,8 @@ namespace Hellgate
 
                     if (fieldDelegate.Name == "header")
                     {
-                        RowHeader tableHeader = (RowHeader)fieldDelegate.GetValue(rowObject);
-                        rowStr[col] = FileTools.ObjectToStringGeneric(tableHeader, ",");
+                        RowHeader rowHeader = (RowHeader)fieldDelegate.GetValue(rowObject);
+                        rowStr[col] = FileTools.ObjectToStringGeneric(rowHeader, ",");
                         continue;
                     }
 
@@ -1395,7 +1418,7 @@ namespace Hellgate
                         int code;
                         if (fieldDelegate.FieldType == typeof(short))
                         {
-                            code = (int)(short)fieldDelegate.GetValue(rowObject);
+                            code = (int)(short)fieldDelegate.GetValue(rowObject); // yes, that extra (int) is *needed* to cast the short correctly
                         }
                         else
                         {
@@ -1450,13 +1473,17 @@ namespace Hellgate
                                 String indexStr = null;
                                 if (fileManager.DataTableHasColumn(tableStringId, "code"))
                                 {
-                                    int code = fileManager.GetExcelIntFromStringId(tableStringId, "code", indexValues[i]);
+                                    int code = fileManager.GetExcelIntFromStringId(tableStringId, indexValues[i], "code");
                                     if (code != 0) indexStr = _CodeToString(code);
+                                }
+                                else if (fileManager.DataTableHasColumn(tableStringId, "name"))
+                                {
+                                    indexStr = fileManager.GetExcelStringFromStringId(tableStringId, indexValues[i], "name");
                                 }
 
                                 if (indexStr == null)
                                 {
-                                    indexStr = fileManager.GetExcelRowStringFromStringId(tableStringId, indexValues[i]);
+                                    indexStr = fileManager.GetExcelStringFromStringId(tableStringId, indexValues[i]);
                                 }
 
                                 indexStrs[i] = negative + indexStr;

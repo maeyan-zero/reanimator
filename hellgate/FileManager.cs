@@ -635,31 +635,6 @@ namespace Hellgate
         }
 
         /// <summary>
-        /// Obtains an int value from an excel table using a StringId, column name, and row index.
-        /// Returns 0x4C494146 on fail (will output as 'FAIL').
-        /// </summary>
-        /// <param name="stringId">An Excel Table StringId.</param>
-        /// <param name="colName">The column name to check.</param>
-        /// <param name="rowIndex">The row index to obtain the value from.</param>
-        /// <returns></returns>
-        public int GetExcelIntFromStringId(String stringId, String colName, int rowIndex)
-        {
-            if (DataFiles == null || !DataFiles.ContainsKey(stringId)) return 0x4C494146;
-
-            ExcelFile excelFile = DataFiles[stringId] as ExcelFile;
-            if (excelFile == null) return 0x4C494146;
-            if (rowIndex < 0 || rowIndex >= excelFile.Rows.Count) return 0x4C494146;
-
-            ObjectDelegator excelDelegator = DataFileDelegators[stringId];
-            Object row = excelFile.Rows[rowIndex];
-
-            Object value = excelDelegator[colName](row);
-            if (value is int) return (int)value;
-
-            return (int)(short)value;
-        }
-
-        /// <summary>
         /// Retrieves an Excel Table from its Code value. If it's not loaded, then it will be loaded and returned.
         /// </summary>
         /// <param name="code">The code of the Excel Table to retrieve.</param>
@@ -696,7 +671,7 @@ namespace Hellgate
         public String GetExcelRowStringFromTableIndex(int tableIndex, int rowIndex)
         {
             Xls.TableCodes tableCode = _GetTableCodeFromTableIndex(tableIndex);
-            return GetExcelRowStringFromRowIndex(tableCode, rowIndex);
+            return GetExcelStringFromRowIndex(tableCode, rowIndex);
         }
 
         public ExcelFile GetExcelTableFromIndex(int tableIndex)
@@ -739,9 +714,48 @@ namespace Hellgate
             return _excelIndexToCodeList[tableIndex];
         }
 
+        /// <summary>
+        /// Gets the RowIndex of a row containing a string, using the column name to search by.
+        /// Returns -2 on error, -1 on not found
+        /// </summary>
+        /// <param name="stringId">An Excel Table StringId.</param>
+        /// <param name="value">The value to search for.</param>
+        /// <param name="colName">The column name to check.</param>
+        /// <returns>Row index string found in column colName. (-2=error, -1=not found)</returns>
+        public int GetExcelRowIndexFromStringId(String stringId, String value, String colName)
+        {
+            if (DataFiles == null || String.IsNullOrEmpty(stringId) || DataFiles.ContainsKey(stringId) == false) return -2;
+
+            ExcelFile excelTable = DataFiles[stringId] as ExcelFile;
+            if (excelTable == null) return -2;
+
+            ObjectDelegator excelDelegator = DataFileDelegators[stringId];
+            ObjectDelegator.FieldDelegate fieldDelegate = excelDelegator.GetFieldDelegate(colName);
+            if (fieldDelegate == null) return -2;
+
+            bool isStringField = (fieldDelegate.FieldType == typeof(String));
+            int rowIndex = -1;
+            foreach (Object row in excelTable.Rows)
+            {
+                rowIndex++;
+
+                if (isStringField)
+                {
+                    if ((String)fieldDelegate.GetValue(row) == value) return rowIndex;
+                }
+                else
+                {
+                    int offset = (int)fieldDelegate.GetValue(row);
+                    if (excelTable.ReadStringTable(offset) == value) return rowIndex;
+                }
+            }
+
+            return -1;
+        }
+
         public int GetExcelRowIndexFromStringId(String stringId, int value, String colName)
         {
-            if (DataFiles == null || DataFiles[stringId] == null) return -1;
+            if (DataFiles == null || String.IsNullOrEmpty(stringId) || DataFiles.ContainsKey(stringId) == false) return -1;
 
             ExcelFile excelFile = (ExcelFile)DataFiles[stringId];
             ObjectDelegator excelDelegator = DataFileDelegators[stringId];
@@ -753,9 +767,9 @@ namespace Hellgate
             {
                 rowIndex++;
 
-                int intVal = 0;
+                int intVal;
                 Object val = getValue(row);
-                if (val.GetType() == typeof(Int16))
+                if (val is short)
                 {
                     intVal = (int)(short)val;
                 }
@@ -820,30 +834,83 @@ namespace Hellgate
             return -1;
         }
 
+        /// <summary>
+        /// Obtains an int value from an excel table using a StringId, column name, and row index.
+        /// Returns 0x4C494146 on fail (will output as 'FAIL').
+        /// </summary>
+        /// <param name="stringId">An Excel Table StringId.</param>
+        /// <param name="rowIndex">The row index to obtain the value from.</param>
+        /// <param name="colName">The column name to check.</param>
+        /// <returns></returns>
+        public int GetExcelIntFromStringId(String stringId, int rowIndex, String colName)
+        {
+            if (DataFiles == null || String.IsNullOrEmpty(stringId) || DataFiles.ContainsKey(stringId) == false) return 0x4C494146;
 
+            ExcelFile excelTable = DataFiles[stringId] as ExcelFile;
+            if (excelTable == null) return 0x4C494146;
+            if (rowIndex < 0 || rowIndex >= excelTable.Rows.Count) return 0x4C494146;
 
-        public String GetExcelRowStringFromStringId(String stringId, int rowIndex, int colIndex = 0)
+            ObjectDelegator excelDelegator = DataFileDelegators[stringId];
+            Object row = excelTable.Rows[rowIndex];
+
+            Object value = excelDelegator[colName](row);
+            if (value is int) return (int)value;
+
+            return (int)(short)value;
+        }
+
+        /// <summary>
+        /// Obtains a String value from an excel table using a StringId, column name, and row index.
+        /// Returns null on fail
+        /// </summary>
+        /// <param name="stringId">An Excel Table StringId.</param>
+        /// <param name="rowIndex">The row index to obtain the value from.</param>
+        /// <param name="colName">The column name to check.</param>
+        /// <returns></returns>
+        public String GetExcelStringFromStringId(String stringId, int rowIndex, String colName)
+        {
+            if (DataFiles == null || String.IsNullOrEmpty(stringId) || DataFiles.ContainsKey(stringId) == false) return null;
+
+            ExcelFile excelTable = DataFiles[stringId] as ExcelFile;
+            if (excelTable == null) return null;
+            if (rowIndex < 0 || rowIndex >= excelTable.Rows.Count) return null;
+
+            ObjectDelegator excelDelegator = DataFileDelegators[stringId];
+            ObjectDelegator.FieldDelegate fieldDelegate = excelDelegator.GetFieldDelegate(colName);
+            if (fieldDelegate == null) return null;
+
+            bool isStringField = (fieldDelegate.FieldType == typeof(String));
+            Object row = excelTable.Rows[rowIndex];
+
+            if (isStringField) return (String)fieldDelegate.GetValue(row);
+
+            int offset = (int)fieldDelegate.GetValue(row);
+            String stringVal = excelTable.ReadStringTable(offset);
+            return stringVal;
+        }
+
+        public String GetExcelStringFromStringId(String stringId, int rowIndex, int colIndex = 0)
         {
             if (DataFiles == null || String.IsNullOrEmpty(stringId) || DataFiles.ContainsKey(stringId) == false) return null;
 
             ExcelFile excelTable = DataFiles[stringId] as ExcelFile;
             if (excelTable == null) return null;
 
-            String stringVal = _GetExcelRowStringFromExcelFile(excelTable, rowIndex, colIndex);
+            String stringVal = _GetExcelStringFromExcelFile(excelTable, rowIndex, colIndex);
             return stringVal;
         }
 
-        public String GetExcelRowStringFromRowIndex(Xls.TableCodes code, int rowIndex, int colIndex = 0)
+        public String GetExcelStringFromRowIndex(Xls.TableCodes code, int rowIndex, int colIndex = 0)
         {
             if (DataFiles == null || DataFiles.ContainsKey(ExcelTablesStringId) == false || rowIndex < 0) return null;
 
             ExcelFile excelTable = GetExcelTableFromCode(code);
 
-            String stringVal = _GetExcelRowStringFromExcelFile(excelTable, rowIndex, colIndex);
+            String stringVal = _GetExcelStringFromExcelFile(excelTable, rowIndex, colIndex);
             return stringVal;
         }
 
-        private String _GetExcelRowStringFromExcelFile(ExcelFile excelTable, int rowIndex, int colIndex)
+        private String _GetExcelStringFromExcelFile(ExcelFile excelTable, int rowIndex, int colIndex)
         {
             if (excelTable == null || rowIndex >= excelTable.Rows.Count) return null;
 

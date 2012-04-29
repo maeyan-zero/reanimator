@@ -84,6 +84,8 @@ namespace Hellgate
 
         public byte[] ParseFileBytes(byte[] fileBytes, bool generateXml = false)
         {
+            if (fileBytes == null || fileBytes.Length == 0) return null;
+
             if (fileBytes[0] == 0x43) // 'C' from C00k header
             {
                 //_xmlCookedObject = new XmlCookedObject(fileManager);
