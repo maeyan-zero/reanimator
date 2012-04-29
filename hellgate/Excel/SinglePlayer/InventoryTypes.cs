@@ -1,10 +1,11 @@
-﻿using System.Runtime.InteropServices;
+﻿using System;
+using System.Runtime.InteropServices;
 using ExcelOutput = Hellgate.ExcelFile.OutputAttribute;
 using RowHeader = Hellgate.ExcelFile.RowHeader;
 
 namespace Hellgate.Excel
 {
-    [StructLayout(LayoutKind.Sequential, Pack = 1)]
+    [Serializable, StructLayout(LayoutKind.Sequential, Pack = 1)]
     class InventoryTypes
     {
         RowHeader header;

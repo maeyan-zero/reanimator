@@ -5,7 +5,7 @@ using RowHeader = Hellgate.ExcelFile.RowHeader;
 
 namespace Hellgate.Excel.SinglePlayer
 {
-    [StructLayout(LayoutKind.Sequential, Pack = 1)]
+    [Serializable, StructLayout(LayoutKind.Sequential, Pack = 1)]
     public class ExcelTablesRow
     {
         RowHeader header;
