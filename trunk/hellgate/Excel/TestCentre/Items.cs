@@ -6,7 +6,7 @@ using RowHeader = Hellgate.ExcelFile.RowHeader;
 namespace Hellgate.Excel.TestCentre
 {
     // size = 0x0000000000000DB8 (not including header)
-    [StructLayout(LayoutKind.Sequential, Pack = 1)]
+    [Serializable, StructLayout(LayoutKind.Sequential, Pack = 1)]
     public class ItemsTCv4
     {
         RowHeader header;                               			// ReadOrder   OffsetFromHeader     ReadFunction

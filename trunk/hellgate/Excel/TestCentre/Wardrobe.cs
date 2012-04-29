@@ -5,7 +5,7 @@ using RowHeader = Hellgate.ExcelFile.RowHeader;
 
 namespace Hellgate.Excel.TestCentre
 {
-    [StructLayout(LayoutKind.Sequential, Pack = 1)]
+    [Serializable, StructLayout(LayoutKind.Sequential, Pack = 1)]
     class WardrobeTCv4
     {
         RowHeader header;
