@@ -129,7 +129,7 @@ namespace Hellgate
                     foreach (FieldInfo flagInfo in flagFields)
                     {
                         Object value = flagInfo.GetValue(null);
-                        String valueStr = value.ToString();
+                        String valueStr = flagInfo.Name; // value.ToString() can return the wrong name if multiple enums define the same value
                         MemberInfo memberInfo = fieldDelegate.FieldType.GetMember(valueStr).FirstOrDefault();
                         Debug.Assert(memberInfo != null);
                         XmlCookedAttribute xmlFlagAttributes = (XmlCookedAttribute)memberInfo.GetCustomAttributes(typeof(XmlCookedAttribute), false).FirstOrDefault();
@@ -295,7 +295,7 @@ namespace Hellgate
 
         private void _ParseCookedInt32ArrayFixed(XmlCookedAttribute xmlCookedAttribute, FieldDelegate fieldDelegate, Object currObj, XmlNode xmlRoot)
         {
-            Object arrayObj = null;
+            Object arrayObj;
             if (xmlCookedAttribute.CustomType == ElementType.Unsigned)
             {
                 UInt32[] uint32Array = new UInt32[xmlCookedAttribute.Count];
@@ -308,6 +308,7 @@ namespace Hellgate
                     xmlRoot.AppendChild(arrElement);
                     arrElement.InnerText = uint32Array[intIndex].ToString();
                 }
+                arrayObj = uint32Array;
             }
             else
             {
@@ -321,6 +322,7 @@ namespace Hellgate
                     xmlRoot.AppendChild(arrElement);
                     arrElement.InnerText = int32Array[intIndex].ToString();
                 }
+                arrayObj = int32Array;
             }
 
             fieldDelegate.SetValue(currObj, arrayObj);
@@ -821,7 +823,7 @@ namespace Hellgate
             // if only want SP elements (excluding test centre and resurrection elements)
             if (CookExcludeTestCentre && CookExcludeResurrection)
             {
-                if (xmlCookedElement.IsTestCentre && xmlCookedElement.IsResurrection) return false;
+                if (xmlCookedElement.IsTestCentre || xmlCookedElement.IsResurrection) return false;
             }
 
             // else we must want all elments
@@ -900,6 +902,9 @@ namespace Hellgate
             int dwArrayCount = xmlCookElement.XmlAttribute.Count;
             List<T> dwElements = new List<T>();
             bool dwAllDefault = true;
+
+            if (_isContextSP) dwArrayCount += xmlCookElement.XmlAttribute.CountOffsetSP;
+
             foreach (XmlNode xmlChildNode in xmlNode.ChildNodes)
             {
                 if (xmlChildNode.Name != xmlCookElement.Name) continue;
@@ -1187,6 +1192,7 @@ namespace Hellgate
         private void _ParseXmlExcelIndexArrayFixed(XmlCookedElement xmlCookElement, XmlNode xmlNode)
         {
             int arrayCount = xmlCookElement.XmlAttribute.Count;
+            if (_isContextSP) arrayCount += xmlCookElement.XmlAttribute.CountOffsetSP;
             bool allDefault = true;
             List<String> elements = _ParseXmlGetArrayElementValues<String>(xmlCookElement, xmlNode, ref allDefault, arrayCount);
 

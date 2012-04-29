@@ -11,7 +11,7 @@ namespace Hellgate.Xml
         {
             ROOM_PATH_NODE_DEF_INDOOR_FLAG = (1 << 0),
             ROOM_PATH_NODE_DEF_NO_PATHNODES_FLAG = (1 << 1),
-            //ROOM_PATH_NODE_DEF_USE_TUGBOAT = (1 << 1),
+            ROOM_PATH_NODE_DEF_USE_TUGBOAT = (1 << 1), // seen in SP and TC client only - removed (renamed to below) in MP
             [XmlCookedAttribute(IsResurrection = true)]
             ROOM_PATH_NODE_DEF_USE_TUGBOAT_FLAG = (1 << 2) // field appears to be renamed and new valued (either that or I read in above wrong to start with... tood?)
         }

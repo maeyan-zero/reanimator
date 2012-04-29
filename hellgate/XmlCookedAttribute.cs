@@ -11,6 +11,8 @@ namespace Hellgate
         public String TrueName;             // some element names have illegal xml chars in them (bad FSS), so we need the "true" name if we want the correct string hash
         public UInt32 NameHash;
         public Object DefaultValue;
+        public Object DefaultValueSP;       // a default value override that will only be used in an SP-only context
+        public bool UseDefaultValueSP;      // set to true to use above in SP-only context (we need this as in some cases the DefaultValueSP is == null
         public Type ChildType;
         public UInt32 ChildTypeHash;
         public Xls.TableCodes TableCode;
@@ -22,6 +24,7 @@ namespace Hellgate
         public Int32 BitFlagIndex;
         public Int32 BitFlagCount;          // used for BitIndex, total field BitCount
         public Int32 Count;                 // general array-type count
+        public Int32 CountOffsetSP;         // general array-type count offset that will only be used in an SP-only context - results in applying an *OFFSET* to the Count (above) attribute
         public bool IsByteArray;
         public bool IsTestCentre;           // TestCentre elements only
         public bool IsResurrection;         // Resurrection elements only

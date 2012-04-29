@@ -221,7 +221,8 @@ namespace Hellgate.Xml
             DefaultValue = null,
             ElementType = ElementType.ExcelIndexArrayFixed,
             TableCode = Xls.TableCodes.WARDROBE_LAYER, // 25649 WARDROBE_LAYER
-            Count = 10)]
+            Count = 10,
+            CountOffsetSP = -5)] // i.e. Count = 5;
         public Wardrobe[] WardrobeLayers;
         public int[] WardrobeLayerIndices;
 
@@ -229,7 +230,8 @@ namespace Hellgate.Xml
             Name = "pnWardrobeLayerParams",
             DefaultValue = 0,
             ElementType = ElementType.Int32ArrayFixed,
-            Count = 10)]
+            Count = 10,
+            CountOffsetSP = -5)] // i.e. Count = 5;
         public Int32[] WardrobeLayerParams;
 
         [XmlCookedAttribute(
@@ -364,7 +366,9 @@ namespace Hellgate.Xml
 
         [XmlCookedAttribute(
             Name = "pszBoneNames",
-            DefaultValue = "0", // was null in SP/TC clients...
+            DefaultValue = "0", 
+            DefaultValueSP = null, // for  TC as well??
+            UseDefaultValueSP = true,
             ElementType = ElementType.StringArrayVariable)]
         public String[] BoneNames;
 

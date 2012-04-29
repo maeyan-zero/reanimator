@@ -56,8 +56,9 @@ namespace Hellgate.Xml
             SKILL_EVENT_FLAG2_CHARGE_POWER_AND_COOLDOWN = (1 << 6),
             SKILL_EVENT_FLAG2_MARK_SKILL_AS_SUCCESSFUL = (1 << 7),
             SKILL_EVENT_FLAG2_LASER_INCLUDE_IN_UI = (1 << 8),
-            SKILL_EVENT_FLAG2_LASER_DONT_TARGET_UNITS = (1 << 11),
 
+            [XmlCookedAttribute(IsTestCentre = true)]
+            SKILL_EVENT_FLAG2_LASER_DONT_TARGET_UNITS = (1 << 11),
             [XmlCookedAttribute(IsTestCentre = true)]
             SKILL_EVENT_FLAG2_DONT_EXECUTE_STATS = (1 << 12)
         }
