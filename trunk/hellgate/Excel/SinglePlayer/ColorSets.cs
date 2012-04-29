@@ -3,7 +3,7 @@ using System.Runtime.InteropServices;
 
 namespace Hellgate.Excel.SinglePlayer
 {
-    [StructLayout(LayoutKind.Sequential, Pack = 1)]
+    [Serializable, StructLayout(LayoutKind.Sequential, Pack = 1)]
     public class ColorSets
     {
         ExcelFile.RowHeader header;
