@@ -4,7 +4,7 @@ using ExcelOutput = Hellgate.ExcelFile.OutputAttribute;
 
 namespace Hellgate.Excel.JapaneseBeta
 {
-    [StructLayout(LayoutKind.Sequential, Pack = 1)]
+    [Serializable, StructLayout(LayoutKind.Sequential, Pack = 1)]
     class ActBeta
     {
         ExcelFile.RowHeader header;

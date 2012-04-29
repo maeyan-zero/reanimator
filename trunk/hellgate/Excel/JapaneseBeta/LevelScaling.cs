@@ -4,7 +4,7 @@ using RowHeader = Hellgate.ExcelFile.RowHeader;
 
 namespace Hellgate.Excel.JapaneseBeta
 {
-    [StructLayout(LayoutKind.Sequential, Pack = 1)]
+    [Serializable, StructLayout(LayoutKind.Sequential, Pack = 1)]
     class LevelScalingBeta
     {
         RowHeader header;
