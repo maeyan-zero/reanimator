@@ -37,10 +37,11 @@ namespace Reanimator.Forms
             #endregion
 
             #region alexs_stuff
-            //Config.HglDir = @"D:\Games\Hellgate";
+            //Config.HglDir = @"D:\Games\Hellgate"; // Resurrection dir
             //Config.HglDir = @"D:\Projects\Hellgate London\Flagshipped\ServerTest\bin\Debug";
-            //Config.HglDir = @"D:\Games\Hellgate London";
-            //TestScripts.UncookAllXml();
+            //Config.HglDir = @"D:\Games\Hellgate London"; // SP dir
+            //Config.HglDir = @"D:\Games\Hellgate London.fresh"; // virgin SP dir
+            //TestScripts.TestAllXml();
             //TestScripts.ExtractFunctionList();
             //TestScripts.TestAllExcelScripts();
             //TestScripts.TestExcelCooking();
@@ -195,79 +196,7 @@ namespace Reanimator.Forms
             #endregion
         }
 
-        /// <summary>
-        /// Checks the Windows Version and sets the coresponding icon
-        /// </summary>
-        private void _SetIcon()
-        {
-            OperatingSystem osInfo = Environment.OSVersion;
-            Icon pathName = Resources.icon2;
-
-            switch (osInfo.Platform)
-            {
-                case PlatformID.Win32NT:
-                    {
-                        switch (osInfo.Version.Major)
-                        {
-                            case 5:
-                                {
-                                    // 5 = XP/2000/2003 server edition
-                                    pathName = Resources.icon1;
-                                    break;
-                                }
-
-                            case 6:
-                                {
-                                    // 6 = Vista
-                                    pathName = Resources.icon2;
-                                    break;
-                                }
-                        }
-                        break;
-                    }
-            }
-            System.Drawing.Icon ico = pathName;
-            this.Icon = ico;
-        }
-
-
-        /// <summary>
-        /// Checks the registry for the Hellgate path, if it doesn't exist prompt the user to find it.
-        /// </summary>
-        /// <returns>True if the installation is okay.</returns>
-        private static bool CheckInstallation()
-        {
-            if (Directory.Exists(Config.HglDir)) return true;
-
-            string caption = "Reanimator Installation";
-            string message = "Please locate your Hellgate London installation directory.\n" +
-                             "For this program to work correctly, please ensure the latest Single Player patch is installed.\n" +
-                             "For more information, please visit our website: http://www.hellgateaus.net";
-            MessageBox.Show(message, caption, MessageBoxButtons.OK, MessageBoxIcon.Information);
-
-            FolderBrowserDialog folderBrowser = new FolderBrowserDialog();
-            DialogResult installResult;
-
-            do
-            {
-                DialogResult selectPathResult = folderBrowser.ShowDialog();
-                if ((selectPathResult == DialogResult.OK))
-                {
-                    Config.HglDir = folderBrowser.SelectedPath;
-                    Config.HglDataDir = Path.Combine(Config.HglDir, "\\data");
-                    return true;
-                }
-
-                caption = "Installation Error";
-                message = "You must have Hellgate: London installed and the directory set to use Reanimator.";
-                installResult = MessageBox.Show(message, caption, MessageBoxButtons.RetryCancel, MessageBoxIcon.Error);
-            }
-            while (installResult == DialogResult.Retry);
-
-            return false;
-        }
-
-        private void OpenFile(object sender, EventArgs e)
+        private void _OpenFile(object sender, EventArgs e)
         {
             OpenFileDialog openFileDialog = new OpenFileDialog
             {
@@ -288,7 +217,7 @@ namespace Reanimator.Forms
 
             if (fileName.EndsWith(IndexFile.Extension) || fileName.EndsWith(HellgatePackFile.Extension))
             {
-                OpenIndexFile(fileName);
+                _OpenIndexFile(fileName);
                 return;
             }
 
@@ -321,7 +250,7 @@ namespace Reanimator.Forms
         /// Opens a TableForm based on the path to a Index or StringsFile.
         /// </summary>
         /// <param name="filePath">Path to the Index or StringsFile.</param>
-        private void OpenIndexFile(String filePath)
+        private void _OpenIndexFile(String filePath)
         {
             TableForm tableForm;
             PackFile packFile;
@@ -642,12 +571,6 @@ namespace Reanimator.Forms
             }
         }
 
-        private void _OptionsToolStripMenuItem_Click(object sender, EventArgs e)
-        {
-            if (_optionsForm == null) _optionsForm = new Options(_fileManager);
-            _optionsForm.ShowDialog(this);
-        }
-
         private void _ClientPatcherToolStripMenuItem_Click(object sender, EventArgs e)
         {
             OpenFileDialog openFileDialog = new OpenFileDialog
@@ -682,13 +605,13 @@ namespace Reanimator.Forms
             clientFile.Dispose();
         }
 
-        private void _Reanimator_ResizeEnd(object sender, EventArgs e)
+        private void _ReanimatorResizeEnd(object sender, EventArgs e)
         {
             Config.ClientHeight = Height;
             Config.ClientWidth = Width;
         }
 
-        private void _Reanimator_Load(object sender, EventArgs e)
+        private void _ReanimatorLoad(object sender, EventArgs e)
         {
             try
             {
@@ -697,52 +620,50 @@ namespace Reanimator.Forms
                 Show();
                 Refresh();
 
-                if (CheckInstallation())
+                if (_CheckInstallation())
                 {
-                    ProgressForm progressForm = new ProgressForm(_DoLoading, null);
+                    ProgressForm progressForm = new ProgressForm(_DoLoadingThread, null);
                     progressForm.SetStyle(ProgressBarStyle.Marquee);
                     progressForm.SetLoadingText("Initializing Reanimator subsystems...");
                     progressForm.Disposed += delegate
                     {
-                        excelTableEditorToolStripMenuItem_Click(null, null);
+                        _OpenExcelTableEditor();
+                        _OpenExcelTableEditorTCv4();
+
+                        if (Config.ShowFileExplorer) _OpenFileExplorer();
                     };
                     progressForm.Show(this);
                 }
             }
             catch (Exception ex)
             {
-                ExceptionLogger.LogException(ex, false);
-                MessageBox.Show(ex.Message, "Reanimator_Load");
+                ExceptionLogger.LogException(ex);
+                MessageBox.Show(ex.Message, "ReanimatorLoad");
             }
         }
 
-        private void _DoLoading(ProgressForm progressForm, Object var)
+        private void _OptionsToolStripMenuItemClick(object sender, EventArgs e)
         {
-            progressForm.SetCurrentItemText("Loading File Manager...");
-            _fileManager = new FileManager(Config.HglDir);
-            //_fileManager = new FileManager(Config.HglDir, FileManager.ClientVersions.Mod);
+            Options options = new Options(_fileManager);
+            options.ShowDialog(this);
+        }
 
-            foreach (PackFile file in _fileManager.IndexFiles) file.BeginDatReading();
-            progressForm.SetCurrentItemText("Loading Excel and Strings Tables...");
-            if (!_fileManager.LoadTableFiles())
-            {
-                MessageBox.Show("Failed to load excel and strings files!", "Data Table Error", MessageBoxButtons.OK, MessageBoxIcon.Error);
-            }
-            foreach (PackFile file in _fileManager.IndexFiles) file.EndDatAccess();
+        private static void _AboutToolStripMenuItemClick(object sender, EventArgs e)
+        {
+            MessageBox.Show("Reanimator by the Revival Team (c) 2009-2010" + Environment.NewLine
+                + "Credits: Maeyan, Alex2069, Kite & Malachor" + Environment.NewLine
+                + "For more info visit us at: http://www.hellgateaus.net", "Credits", MessageBoxButtons.OK, MessageBoxIcon.Information);
+        }
 
-            if (_fileManager.IsVersionMod) _fileManager.ProcessTables();
+        private void _FileExplorerToolStripMenuItemClick(object sender, EventArgs e)
+        {
+            _OpenFileExplorer();
+        }
 
-            if (!Config.LoadTCv4DataFiles) return;
-            progressForm.SetCurrentItemText("Loading TCv4 File Manager...");
-            _fileManagerTCv4 = new FileManager(Config.HglDir, FileManager.ClientVersions.TestCenter);
-
-            foreach (PackFile file in _fileManagerTCv4.IndexFiles) file.BeginDatReading();
-            progressForm.SetCurrentItemText("Loading TCv4 Excel and Strings Tables...");
-            if (!_fileManagerTCv4.LoadTableFiles())
-            {
-                MessageBox.Show("Failed to load TCv4 excel and strings files!", "Data Table Error", MessageBoxButtons.OK, MessageBoxIcon.Error);
-            }
-            foreach (PackFile file in _fileManagerTCv4.IndexFiles) file.EndDatAccess();
+        private void _ExcelTableEditorToolStripMenuItemClick(object sender, EventArgs e)
+        {
+            _OpenExcelTableEditor();
+            _OpenExcelTableEditorTCv4();
         }
 
         private void _SaveToolStripButton_Click(object sender, EventArgs e)
@@ -841,34 +762,6 @@ namespace Reanimator.Forms
             //}
         }
 
-        private static void _AboutToolStripMenuItem_Click(object sender, EventArgs e)
-        {
-            MessageBox.Show("Reanimator by the Revival Team (c) 2009-2010" + Environment.NewLine
-                + "Credits: Maeyan, Alex2069, Kite & Malachor" + Environment.NewLine
-                + "For more info visit us at: http://www.hellgateaus.net", "Credits", MessageBoxButtons.OK, MessageBoxIcon.Information);
-        }
-
-        private void _FileExplorerToolStripMenuItem_Click(object sender, EventArgs e)
-        {
-            if (_fileExplorer == null || _fileExplorer.IsDisposed)
-            {
-                ProgressForm progressForm = new ProgressForm(_LoadFileExplorer, null);
-                progressForm.SetStyle(ProgressBarStyle.Marquee);
-                progressForm.SetLoadingText("Initializing File Explorer...");
-                progressForm.SetCurrentItemText("");
-                progressForm.Disposed += delegate
-                {
-                    _fileExplorer.Show();
-                };
-                progressForm.Show(this);
-            }
-        }
-
-        private void _LoadFileExplorer(ProgressForm progress, object obj)
-        {
-            _fileExplorer = new FileExplorer(_fileManager, _fileManagerTCv4);
-        }
-
         private void _PatchToolToolStripMenuItem_Click(object sender, EventArgs e)
         {
             try
@@ -878,7 +771,7 @@ namespace Reanimator.Forms
             }
             catch (Exception ex)
             {
-                ExceptionLogger.LogException(ex, false);
+                ExceptionLogger.LogException(ex);
             }
         }
 
@@ -908,36 +801,6 @@ namespace Reanimator.Forms
             //    }
         }
 
-        private void excelTableEditorToolStripMenuItem_Click(object sender, EventArgs e)
-        {
-            if (_excelTableForm == null || _excelTableForm.IsDisposed)
-            {
-                _excelTableForm = new TableEditorForm(_fileManager)
-                {
-                    MdiParent = this,
-                    Text = "Table Editor [" + _fileManager.ClientVersion + "]"
-                };
-            }
-
-            _excelTableForm.Show();
-            _excelTableForm.Focus();
-
-            if (Config.LoadTCv4DataFiles && (_excelTableFormTCv4 == null || _excelTableFormTCv4.IsDisposed))
-            {
-                _excelTableFormTCv4 = new TableEditorForm(_fileManagerTCv4)
-                {
-                    MdiParent = this,
-                    Text = "Table Editor [" + _fileManagerTCv4.ClientVersion + "]"
-                };
-            }
-
-            if (Config.LoadTCv4DataFiles)
-            {
-                _excelTableFormTCv4.Show();
-                _excelTableFormTCv4.Focus();
-            }
-        }
-
         private void importToolStripMenuItem_Click(object sender, EventArgs e)
         {
             IMdiChildBase mdiChildBase = ActiveMdiChild as IMdiChildBase;
@@ -950,12 +813,6 @@ namespace Reanimator.Forms
             IMdiChildBase mdiChildBase = ActiveMdiChild as IMdiChildBase;
             if (mdiChildBase == null) return;
             mdiChildBase.Export();
-        }
-
-        private void optionsToolStripMenuItem_Click(object sender, EventArgs e)
-        {
-            Options options = new Options(_fileManager);
-            options.ShowDialog(this);
         }
 
         private void saveAsToolStripMenuItem_Click_1(object sender, EventArgs e)

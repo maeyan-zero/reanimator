@@ -62,7 +62,7 @@
             this.currentItemLabel.TabIndex = 2;
             this.currentItemLabel.Text = "current item";
             this.currentItemLabel.UseWaitCursor = true;
-            this.currentItemLabel.TextChanged += new System.EventHandler(this.currentItemLabel_TextChanged);
+            this.currentItemLabel.TextChanged += new System.EventHandler(this._CurrentItemLabelTextChanged);
             // 
             // ProgressForm
             // 
@@ -85,7 +85,7 @@
             this.StartPosition = System.Windows.Forms.FormStartPosition.CenterParent;
             this.Text = "Loading...";
             this.UseWaitCursor = true;
-            this.Shown += new System.EventHandler(this.Progress_Shown);
+            this.Shown += new System.EventHandler(this._ProgressShown);
             this.ResumeLayout(false);
             this.PerformLayout();
 

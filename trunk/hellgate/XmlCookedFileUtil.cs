@@ -1162,7 +1162,7 @@ namespace Hellgate
             try
             {
                 int index = int.Parse(elementText);
-                excelString = _fileManager.GetExcelRowStringFromRowIndex(xmlCookElement.XmlAttribute.TableCode, index);
+                excelString = _fileManager.GetExcelStringFromRowIndex(xmlCookElement.XmlAttribute.TableCode, index);
             }
             catch (Exception)
             {

@@ -150,5 +150,11 @@ namespace Revival.Common
             get { return _GetValue("StringsLanguage", "english"); }
             set { _SetValue("StringsLanguage", value); }
         }
+
+        public static bool ShowFileExplorer
+        {
+            get { return _GetValue("ShowFileExplorer", false); }
+            set { _SetValue("ShowFileExplorer", value); }
+        }
     }
 }

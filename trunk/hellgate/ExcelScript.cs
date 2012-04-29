@@ -932,7 +932,7 @@ namespace Hellgate
                             break;
                     }
 
-                    rowName = _fileManager.GetExcelRowStringFromStringId(_debugStringId, _debugRow, colIndex);
+                    rowName = _fileManager.GetExcelStringFromStringId(_debugStringId, _debugRow, colIndex);
                 }
 
                 debugPos = String.Format("row({0}): '{1}', col({2}): '{3}', scriptBytes: {4}", _debugRow, rowName, _debugCol, _debugColName, _debugScriptByteString);

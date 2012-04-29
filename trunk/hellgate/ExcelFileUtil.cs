@@ -5,6 +5,7 @@ using System.IO;
 using System.Linq;
 using System.Reflection;
 using System.Runtime.InteropServices;
+using System.Runtime.Serialization.Formatters.Binary;
 using Revival.Common;
 using ScriptOpCodes = Hellgate.ExcelScript.ScriptOpCodes;
 
@@ -19,6 +20,7 @@ namespace Hellgate
         private const byte CSVDelimiter = (byte)'\t';
 
         private List<Object> _backupRows; // required for prescedence hack
+        private byte[] _backupStringBuffer; // as above
 
         #region Excel Types
         [StructLayout(LayoutKind.Sequential, Pack = 1)]
@@ -33,8 +35,12 @@ namespace Hellgate
             public Int16 Unknown164;
             public Int16 Unknown165;
             public Int16 Unknown166;
-        };
+        }                                // structures don't work on ObjectDelegators yet
+        private static readonly FieldInfo[] FileHeaderFields = typeof(ExcelHeader).GetFields(BindingFlags.Public | BindingFlags.NonPublic | BindingFlags.Instance);
+        private static readonly ObjectDelegator FileHeaderDelegator = new ObjectDelegator(typeof(ExcelHeader));//typeof(ExcelHeader).GetFields(BindingFlags.Public | BindingFlags.NonPublic | BindingFlags.Instance);
 
+
+        [Serializable]
         [StructLayout(LayoutKind.Sequential, Pack = 1)]
         public struct RowHeader
         {
@@ -44,7 +50,9 @@ namespace Hellgate
             public Int16 Reserved1;
             public Int16 VersionMinor;
             public Int16 Reserved2;
-        }
+        }                                // structures don't work on ObjectDelegators yet
+        private static readonly FieldInfo[] RowHeaderFields = typeof(RowHeader).GetFields(BindingFlags.Public | BindingFlags.NonPublic | BindingFlags.Instance);
+        private static readonly ObjectDelegator RowHeaderDelegator = new ObjectDelegator(typeof(RowHeader));
 
         [AttributeUsage(AttributeTargets.Field, AllowMultiple = false)]
         public class OutputAttribute : Attribute
@@ -281,11 +289,12 @@ namespace Hellgate
             return FileTools.ByteArrayToInt32Array(_scriptBuffer, ref offset, length);
         }
 
-        public string ReadStringTable(int offset)
+        public String ReadStringTable(int offset)
         {
-            if (_stringBuffer == null) return null;
+            if (_stringBuffer == null || offset > _stringBuffer.Length-1) return null;
+            if (offset < -1) return null; // -1 is an expected value, but less isn't
 
-            return offset == -1 ? String.Empty : FileTools.ByteArrayToStringASCII(_stringBuffer, offset);
+            return (offset == -1) ? String.Empty : FileTools.ByteArrayToStringASCII(_stringBuffer, offset);
         }
 
         public byte[] ReadStringTableAsBytes(int offset)
@@ -521,18 +530,27 @@ namespace Hellgate
             const char scoreReplace = '9';
 
             // back it up, these changes can't be undone
-            _backupRows = new List<object>(Rows);
-
-            if (fieldInfo.FieldType == typeof(string))
+            if (fieldInfo.FieldType == typeof(String))
             {
-                foreach (object row in Rows)
+                if (_backupRows == null) // back it up, these changes can't be undone
                 {
-                    fieldInfo.SetValue(row, ((string)fieldInfo.GetValue(row)).Replace(dash, dashReplace).Replace(score, scoreReplace));
+                    _backupRows = Rows.DeepClone();
+                }
+
+                foreach (Object row in Rows)
+                {
+                    fieldInfo.SetValue(row, ((String)fieldInfo.GetValue(row)).Replace(dash, dashReplace).Replace(score, scoreReplace));
                 }
             }
 
             if (outputAttribute.IsStringOffset)
             {
+                if (_backupStringBuffer == null) // back it up, these changes can't be undone
+                {
+                    _backupStringBuffer = new byte[_stringBuffer.Length];
+                    Buffer.BlockCopy(_stringBuffer, 0, _backupStringBuffer, 0, _stringBuffer.Length);
+                }
+
                 for (int i = 0; i < _stringBuffer.Length; i++)
                 {
                     switch (_stringBuffer[i])
@@ -554,14 +572,32 @@ namespace Hellgate
 
             foreach (object row in Rows)
             {
+                if (_backupRows == null) // back it up, these changes can't be undone
+                {
+                    _backupRows = Rows.DeepClone();
+                }
+
                 fieldInfo.SetValue(row, ((string)fieldInfo.GetValue(row)).Replace(dash, dashReplace).Replace(score, scoreReplace));
             }
         }
 
         private void _UndoPrecedenceHack()
         {
-            Rows = new List<object>(_backupRows);
-            _backupRows.Clear();
+            // restore rows backup
+            if (_backupRows != null)
+            {
+                Rows.Clear();
+                Rows = new List<object>(_backupRows);
+
+                _backupRows.Clear();
+                _backupRows = null;
+            }
+
+            // restore strings buffer backup
+            if (_backupStringBuffer == null) return;
+
+            Buffer.BlockCopy(_backupStringBuffer, 0, _stringBuffer, 0, _stringBuffer.Length);
+            _backupStringBuffer = null;
         }
 
         private IEnumerable<int[]> _GenerateSortedIndexArrays()
@@ -571,80 +607,95 @@ namespace Hellgate
             //    int bp = 0;
             //}
 
+            bool appliedPrecedenceHack = false;
             int[][] sortedIndexArrays = new int[4][];
-            FieldInfo rowHeaderField = DataType.GetField("header", BindingFlags.Public | BindingFlags.NonPublic | BindingFlags.Instance);
-            foreach (FieldInfo fieldInfo in DataType.GetFields())
+
+            try // the PrecedenceHack must be reversed if anything fucks up
             {
-                OutputAttribute attribute = GetExcelAttribute(fieldInfo);
-                if (attribute == null || attribute.SortColumnOrder == 0) continue;
+                FieldInfo rowHeaderField = DataType.GetField("header", BindingFlags.Public | BindingFlags.NonPublic | BindingFlags.Instance);
 
-                // Precedence Hack - excel files order special characters differently to convention
-                _DoPrecedenceHack(fieldInfo, attribute);
-
-                int pos = attribute.SortColumnOrder - 1;
-
-                // need to order by string, not string offset
-                if (attribute.IsStringOffset)
+                foreach (FieldInfo fieldInfo in DataType.GetFields())
                 {
-                    var sortedList = from element in Rows
-                                     let rowHeader = (RowHeader)rowHeaderField.GetValue(element)
-                                     where (rowHeader.Unknown1 != 0x02 &&
-                                            (rowHeader.Unknown2 >= 0x38 && rowHeader.Unknown2 <= 0x3F || rowHeader.Unknown2 == 0x01) && // 56 to 63 or 1
-                                            (rowHeader.VersionMajor == 0 || rowHeader.VersionMajor == 10))
-                                     group element by fieldInfo.GetValue(element) into groupedElements
-                                     let elementFirst = groupedElements.First()
-                                     orderby ReadStringTable((int)fieldInfo.GetValue(elementFirst))
-                                     select Rows.IndexOf(elementFirst);
-                    sortedIndexArrays[pos] = sortedList.ToArray();
+                    OutputAttribute attribute = GetExcelAttribute(fieldInfo);
+                    if (attribute == null || attribute.SortColumnOrder == 0) continue;
+
+                    // Precedence Hack - excel files order special characters differently to convention
+                    if (!appliedPrecedenceHack)
+                    {
+                        _DoPrecedenceHack(fieldInfo, attribute);
+                        appliedPrecedenceHack = true;
+                    }
+
+                    int pos = attribute.SortColumnOrder - 1;
+
+                    // need to order by string, not string offset
+                    if (attribute.IsStringOffset)
+                    {
+                        var sortedList = from element in Rows
+                                         let rowHeader = (RowHeader)rowHeaderField.GetValue(element)
+                                         where (rowHeader.Unknown1 != 0x02 &&
+                                                (rowHeader.Unknown2 >= 0x38 && rowHeader.Unknown2 <= 0x3F || rowHeader.Unknown2 == 0x01) && // 56 to 63 or 1
+                                                (rowHeader.VersionMajor == 0 || rowHeader.VersionMajor == 10))
+                                         group element by fieldInfo.GetValue(element) into groupedElements
+                                         let elementFirst = groupedElements.First()
+                                         orderby ReadStringTable((int)fieldInfo.GetValue(elementFirst))
+                                         select Rows.IndexOf(elementFirst);
+                        sortedIndexArrays[pos] = sortedList.ToArray();
+                    }
+
+                        // we don't want '-1' rows for not-present secondary strings
+                    else if (attribute.IsSecondaryString)
+                    {
+                        var sortedList = from element in Rows
+                                         let rowHeader = (RowHeader)rowHeaderField.GetValue(element)
+                                         where (rowHeader.Unknown1 != 0x02 &&
+                                                (rowHeader.Unknown2 >= 0x38 && rowHeader.Unknown2 <= 0x3F || rowHeader.Unknown2 == 0x01) &&
+                                                (rowHeader.VersionMajor == 0 || rowHeader.VersionMajor == 10))
+                                                && fieldInfo.GetValue(element).ToString() != "-1"
+                                         group element by fieldInfo.GetValue(element) into groupedElements
+                                         let elementFirst = groupedElements.First()
+                                         orderby fieldInfo.GetValue(elementFirst)
+                                         select Rows.IndexOf(elementFirst);
+                        sortedIndexArrays[pos] = sortedList.ToArray();
+                    }
+
+                        // with two column sorting we don't group
+                    else if (!String.IsNullOrEmpty(attribute.SecondarySortColumn))
+                    {
+                        FieldInfo sortBy2 = DataType.GetField(attribute.SecondarySortColumn);
+                        var sortedList = from element in Rows
+                                         let rowHeader = (RowHeader)rowHeaderField.GetValue(element)
+                                         where (rowHeader.Unknown1 != 0x02 &&
+                                                (rowHeader.Unknown2 >= 0x38 && rowHeader.Unknown2 <= 0x3F || rowHeader.Unknown2 == 0x01) &&
+                                                (rowHeader.VersionMajor == 0 || rowHeader.VersionMajor == 10))
+                                         orderby fieldInfo.GetValue(element), sortBy2.GetValue(element)
+                                         select Rows.IndexOf(element);
+                        sortedIndexArrays[pos] = sortedList.ToArray();
+                    }
+
+                        // main sorting
+                    else
+                    {
+                        var sortedList = from element in Rows
+                                         let rowHeader = (RowHeader)rowHeaderField.GetValue(element)
+                                         where (rowHeader.Unknown1 != 0x02 &&
+                                                (rowHeader.Unknown2 >= 0x38 && rowHeader.Unknown2 <= 0x3F || rowHeader.Unknown2 == 0x01) &&
+                                                (rowHeader.VersionMajor == 0 || rowHeader.VersionMajor == 10))
+                                         group element by fieldInfo.GetValue(element) into groupedElements
+                                         let elementFirst = groupedElements.First()
+                                         orderby fieldInfo.GetValue(elementFirst)
+                                         select Rows.IndexOf(elementFirst);
+                        sortedIndexArrays[pos] = sortedList.ToArray();
+                    }
                 }
 
-                    // we don't want '-1' rows for not-present secondary strings
-                else if (attribute.IsSecondaryString)
+            }
+            finally
+            {
+                if (appliedPrecedenceHack)
                 {
-                    var sortedList = from element in Rows
-                                     let rowHeader = (RowHeader)rowHeaderField.GetValue(element)
-                                     where (rowHeader.Unknown1 != 0x02 &&
-                                            (rowHeader.Unknown2 >= 0x38 && rowHeader.Unknown2 <= 0x3F || rowHeader.Unknown2 == 0x01) &&
-                                            (rowHeader.VersionMajor == 0 || rowHeader.VersionMajor == 10))
-                                            && fieldInfo.GetValue(element).ToString() != "-1"
-                                     group element by fieldInfo.GetValue(element) into groupedElements
-                                     let elementFirst = groupedElements.First()
-                                     orderby fieldInfo.GetValue(elementFirst)
-                                     select Rows.IndexOf(elementFirst);
-                    sortedIndexArrays[pos] = sortedList.ToArray();
+                    _UndoPrecedenceHack();
                 }
-
-                    // with two column sorting we don't group
-                else if (!String.IsNullOrEmpty(attribute.SecondarySortColumn))
-                {
-                    FieldInfo sortBy2 = DataType.GetField(attribute.SecondarySortColumn);
-                    var sortedList = from element in Rows
-                                     let rowHeader = (RowHeader)rowHeaderField.GetValue(element)
-                                     where (rowHeader.Unknown1 != 0x02 &&
-                                            (rowHeader.Unknown2 >= 0x38 && rowHeader.Unknown2 <= 0x3F || rowHeader.Unknown2 == 0x01) &&
-                                            (rowHeader.VersionMajor == 0 || rowHeader.VersionMajor == 10))
-                                     orderby fieldInfo.GetValue(element), sortBy2.GetValue(element)
-                                     select Rows.IndexOf(element);
-                    sortedIndexArrays[pos] = sortedList.ToArray();
-                }
-
-                    // main sorting
-                else
-                {
-                    var sortedList = from element in Rows
-                                     let rowHeader = (RowHeader)rowHeaderField.GetValue(element)
-                                     where (rowHeader.Unknown1 != 0x02 &&
-                                            (rowHeader.Unknown2 >= 0x38 && rowHeader.Unknown2 <= 0x3F || rowHeader.Unknown2 == 0x01) &&
-                                            (rowHeader.VersionMajor == 0 || rowHeader.VersionMajor == 10))
-                                     group element by fieldInfo.GetValue(element) into groupedElements
-                                     let elementFirst = groupedElements.First()
-                                     orderby fieldInfo.GetValue(elementFirst)
-                                     select Rows.IndexOf(elementFirst);
-                    sortedIndexArrays[pos] = sortedList.ToArray();
-                }
-
-                // Remove precedence hack
-                _UndoPrecedenceHack();
             }
 
             return sortedIndexArrays;

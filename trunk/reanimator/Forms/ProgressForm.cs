@@ -6,7 +6,7 @@ namespace Reanimator.Forms
 {
     public partial class ProgressForm : ThreadedFormBase
     {
-        public ProgressForm()
+        private ProgressForm()
         {
             InitializeComponent();
 
@@ -25,10 +25,10 @@ namespace Reanimator.Forms
             _threadFunc = func;
             _threadParam = param;
 
-            Disposed += ProgressForm_Disposed;
+            Disposed += _ProgressFormDisposed;
         }
 
-        private void ProgressForm_Disposed(Object sender, EventArgs e)
+        private void _ProgressFormDisposed(Object sender, EventArgs e)
         {
             if (_owner == null) return;
 
@@ -36,7 +36,7 @@ namespace Reanimator.Forms
             _owner.Show();
         }
 
-        private void Progress_Shown(Object sender, EventArgs e)
+        private void _ProgressShown(Object sender, EventArgs e)
         {
             if (_threadFunc == null) return;
 
@@ -46,11 +46,11 @@ namespace Reanimator.Forms
                 _owner = f.Owner;
             }
 
-            Thread t = new Thread(ProgressThread);
+            Thread t = new Thread(_ProgressThread);
             t.Start(_threadParam);
         }
 
-        private void ProgressThread(Object param)
+        private void _ProgressThread(Object param)
         {
             _threadFunc.Invoke(this, param);
             Dispose();
@@ -104,11 +104,11 @@ namespace Reanimator.Forms
         }
 
         delegate void StepProgressCallback();
-        public void StepProgress()
+        private void _StepProgress()
         {
             if (InvokeRequired)
             {
-                StepProgressCallback d = StepProgress;
+                StepProgressCallback d = _StepProgress;
                 Invoke(d);
             }
             else
@@ -135,9 +135,9 @@ namespace Reanimator.Forms
         }
 
         // Each time the text is modified (a new item is completed) let the progressbar progress and refresh the form
-        private void currentItemLabel_TextChanged(object sender, EventArgs e)
+        private void _CurrentItemLabelTextChanged(object sender, EventArgs e)
         {
-            StepProgress();
+            _StepProgress();
             Refresh();
         }
     }

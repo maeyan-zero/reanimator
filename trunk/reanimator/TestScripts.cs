@@ -18,6 +18,9 @@ namespace Reanimator
 {
     public static class TestScripts
     {
+        /// <summary>
+        /// Function to test saving/importing/exported/etc relating to DataTables (i.e. actions from WITHIN Reanimator etc.)
+        /// </summary>
         public static void TestDataTableExportAndImport()
         {
             FileManager fileManager = new FileManager(Config.HglDir);
@@ -583,23 +586,32 @@ namespace Reanimator
             Directory.CreateDirectory(root);
 
             FileManager fileManager = new FileManager(Config.HglDir, clientVersion);
+            fileManager.BeginAllDatReadAccess();
             fileManager.LoadTableFiles();
             ExcelFile.EnableDebug = true;
 
-            foreach (DataFile dataFile in fileManager.DataFiles.Values)
+            int checkedCount = 0;
+            List<String> excelFailed = new List<String>();
+            foreach (DataFile bytesXls in fileManager.DataFiles.Values)
             {
-                ExcelFile excelFile = dataFile as ExcelFile;
+                ExcelFile excelFile = bytesXls as ExcelFile;
                 if (excelFile == null) continue;
 
-                //if (excelFile.StringId != "LEVEL_THEMES") continue;
+                if (excelFile.StringId != "SKILLS") continue;
 
-                Debug.Write(String.Format("Checking {0}... ", dataFile.StringId));
+                if (excelFile.StringId == "SKILLS")
+                {
+                    int bp = 0;
+                }
 
-                byte[] fileBytes = fileManager.GetFileBytes(excelFile.FilePath, true);
+                checkedCount++;
+                Debug.Write(String.Format("Checking {0}... ", bytesXls.StringId));
+
+                byte[] bytes = fileManager.GetFileBytes(excelFile.FilePath, true);
                 try
                 {
-                    byte[] dataFileBytes = dataFile.ToByteArray();
-                    if (dataFile.StringId == "SOUNDS" && false)
+                    byte[] bytesXlsBytes = bytesXls.ToByteArray();
+                    if (bytesXls.StringId == "SOUNDS" && false)
                     {
                         byte[] csvBytesSounds = excelFile.ExportCSV(fileManager);
                         ExcelFile soundsCSV = new ExcelFile(excelFile.FilePath);
@@ -609,13 +621,13 @@ namespace Reanimator
                         //ExcelFile soundsCSVFromBytesFromCSV = new ExcelFile(soundsBytesFromCSV, fileEntry.RelativeFullPathWithoutPatch);
 
                         // some brute force ftw
-                        byte[][] bytesArrays = new[] { fileBytes, soundsBytes };
+                        byte[][] bytesArrays = new[] { bytes, soundsBytes };
                         for (int z = 0; z < bytesArrays.Length; z++)
                         {
-                            byte[] bytes = bytesArrays[z];
+                            byte[] bytesBrute = bytesArrays[z];
 
                             int offset = 0x20;
-                            int stringsBytesCount = FileTools.ByteArrayToInt32(bytes, ref offset);
+                            int stringsBytesCount = FileTools.ByteArrayToInt32(bytesBrute, ref offset);
 
                             StringWriter stringWriterByteStrings = new StringWriter();
                             stringWriterByteStrings.WriteLine(stringsBytesCount + " bytes");
@@ -624,7 +636,7 @@ namespace Reanimator
 
                             while (offset < stringsBytesCount + 0x20)
                             {
-                                String str = FileTools.ByteArrayToStringASCII(bytes, offset);
+                                String str = FileTools.ByteArrayToStringASCII(bytesBrute, offset);
                                 strings.Add(str);
                                 offsets.Add(offset);
 
@@ -645,30 +657,38 @@ namespace Reanimator
                     }
 
                     Debug.Write("ToByteArray... ");
-                    if (fileBytes.Length != dataFileBytes.Length && !doTCv4) // some TCv4 tables don't have their sort columns yet
+                    if (bytes.Length != bytesXlsBytes.Length && !doTCv4) // some TCv4 tables don't have their sort columns yet
                     {
-                        Debug.WriteLine("ToByteArray() dataFileBytes has differing length: " + dataFile.StringId);
-                        File.WriteAllBytes(root + dataFile.StringId + ".orig", fileBytes);
-                        File.WriteAllBytes(root + dataFile.StringId + ".toByteArray", dataFileBytes);
+                        Debug.WriteLine("ToByteArray() dataFileBytes has differing length: " + bytesXls.StringId);
+                        File.WriteAllBytes(root + bytesXls.StringId + "0.bytes", bytes);
+                        File.WriteAllBytes(root + bytesXls.StringId + "1.bytesXlsBytes", bytesXlsBytes);
+                        excelFailed.Add(bytesXls.StringId);
                         continue;
                     }
 
-                    ExcelFile fromBytesExcel = new ExcelFile(excelFile.FilePath, fileManager.ClientVersion);
-                    fromBytesExcel.ParseData(dataFileBytes);
+                    ExcelFile bytesXlsBytesXls = new ExcelFile(excelFile.FilePath, fileManager.ClientVersion);
+                    bytesXlsBytesXls.ParseData(bytesXlsBytes);
                     Debug.Write("new ExcelFile... ");
-                    if (!fromBytesExcel.HasIntegrity)
+                    if (!bytesXlsBytesXls.HasIntegrity)
                     {
                         Debug.WriteLine("fromBytesExcel = new Excel from ToByteArray() failed!");
+                        File.WriteAllBytes(root + bytesXls.StringId + "0.bytes", bytes);
+                        File.WriteAllBytes(root + bytesXls.StringId + "1.bytesXlsBytes", bytesXlsBytes);
+                        excelFailed.Add(bytesXls.StringId);
                         continue;
                     }
 
 
                     // more checks
-                    Debug.Write("ToByteArray -> ToByteArray... ");
-                    byte[] dataFileBytesFromToByteArray = fromBytesExcel.ToByteArray();
-                    if (fileBytes.Length != dataFileBytesFromToByteArray.Length && !doTCv4) // some TCv4 tables don't have their sort columns yet
+                    Debug.Write("ToByteArray->ToByteArray... ");
+                    byte[] bytesXlsBytesXlsBytes = bytesXlsBytesXls.ToByteArray(); // bytesXlsBytesXlsBytes
+                    if (bytes.Length != bytesXlsBytesXlsBytes.Length && !doTCv4) // some TCv4 tables don't have their sort columns yet
                     {
                         Debug.WriteLine("ToByteArray() dataFileBytesFromToByteArray has differing length!");
+                        File.WriteAllBytes(root + bytesXls.StringId + "0.bytes", bytes);
+                        File.WriteAllBytes(root + bytesXls.StringId + "1.bytesXlsBytes", bytesXlsBytes);
+                        File.WriteAllBytes(root + bytesXls.StringId + "1a.toByteArrayFromByteArray", bytesXlsBytesXlsBytes);
+                        excelFailed.Add(bytesXls.StringId);
                         continue;
                     }
 
@@ -677,16 +697,17 @@ namespace Reanimator
                     Debug.Write("IndexSortArrays... ");
                     if (excelFile.IndexSortArray != null)
                     {
-                        if (fromBytesExcel.IndexSortArray == null || excelFile.IndexSortArray.Count != fromBytesExcel.IndexSortArray.Count)
+                        if (bytesXlsBytesXls.IndexSortArray == null || excelFile.IndexSortArray.Count != bytesXlsBytesXls.IndexSortArray.Count)
                         {
                             Debug.WriteLine("fromBytesExcel has not-matching IndexSortArray count!");
+                            excelFailed.Add(bytesXls.StringId);
                             continue;
                         }
 
                         bool hasError = false;
                         for (int i = 0; i < excelFile.IndexSortArray.Count; i++)
                         {
-                            if (excelFile.IndexSortArray[i].SequenceEqual(fromBytesExcel.IndexSortArray[i])) continue;
+                            if (excelFile.IndexSortArray[i].SequenceEqual(bytesXlsBytesXls.IndexSortArray[i])) continue;
 
                             Debug.WriteLine(String.Format("IndexSortArray[{0}] NOT EQUAL to original!", i));
                             hasError = true;
@@ -694,75 +715,152 @@ namespace Reanimator
 
                         if (hasError)
                         {
-                            File.WriteAllBytes(root + dataFile.StringId + ".orig", fileBytes);
-                            File.WriteAllBytes(root + dataFile.StringId + ".toByteArrayFromByteArray", dataFileBytesFromToByteArray);
+                            File.WriteAllBytes(root + bytesXls.StringId + "0.bytes", bytes);
+                            File.WriteAllBytes(root + bytesXls.StringId + "1.bytesXlsBytes", bytesXlsBytes);
+                            File.WriteAllBytes(root + bytesXls.StringId + "1a.bytesXlsBytesXlsBytes", bytesXlsBytesXlsBytes);
+                            excelFailed.Add(bytesXls.StringId);
                             continue;
                         }
                     }
 
 
                     // some csv stuff
-                    Debug.Write("ExportCSV -> ");
-                    byte[] csvBytes = fromBytesExcel.ExportCSV(fileManager);
-                    Debug.Write("new ExcelFile");
-                    ExcelFile csvExcel = new ExcelFile(excelFile.FilePath, fileManager.ClientVersion);
-                    csvExcel.ParseCSV(csvBytes, fileManager);
-                    Debug.Write("... ");
-                    if (!csvExcel.HasIntegrity)
+                    Debug.Write("BaseXls->BaseCSV==");
+                    byte[] bytesXlsCsv = bytesXls.ExportCSV(fileManager); // Bytes->Xls->CSV
+                    Debug.Write("ExportCSV... ");
+                    byte[] bytesXlsBytesXlsCsv = bytesXlsBytesXls.ExportCSV(fileManager);
+                    if (!bytesXlsCsv.SequenceEqual(bytesXlsBytesXlsCsv))
                     {
-                        Debug.WriteLine("Failed!");
-                        File.WriteAllBytes(root + dataFile.StringId + ".orig", fileBytes);
-                        File.WriteAllBytes(root + dataFile.StringId + ".csv", csvBytes);
-                        File.WriteAllBytes(root + dataFile.StringId + ".toByteArray", dataFileBytes);
-                        File.WriteAllBytes(root + dataFile.StringId + ".toByteArrayFromByteArray", dataFileBytesFromToByteArray);
+                        Debug.WriteLine("FALSE!");
+                        File.WriteAllBytes(root + bytesXls.StringId + "0.bytes", bytes);
+                        File.WriteAllBytes(root + bytesXls.StringId + "1.bytesXlsBytes", bytesXlsBytes);
+                        File.WriteAllBytes(root + bytesXls.StringId + "1a.bytesXlsBytesXlsBytes", bytesXlsBytesXlsBytes);
+                        File.WriteAllBytes(root + bytesXls.StringId + "1b.bytesXlsBytesXlsCsv.csv", bytesXlsBytesXlsCsv);
+                        File.WriteAllBytes(root + bytesXls.StringId + "1ba.bytesXlsCsv.csv", bytesXlsCsv);
+                        excelFailed.Add(bytesXls.StringId);
                         continue;
                     }
 
-                    byte[] recookedExcelBytes = csvExcel.ToByteArray();
+
+                    ExcelFile bytesXlsCsvXls = new ExcelFile(excelFile.FilePath, fileManager.ClientVersion);
+                    bytesXlsCsvXls.ParseCSV(bytesXlsCsv, fileManager);
+                    byte[] bytesXlsCsvXlsBytes = bytesXlsCsvXls.ToByteArray(); // used later as well
+                    if (excelFile.ScriptBuffer == null && // can only compare here for no-script tables - can't compare to pure-base xls-bytes as xls->csv->xls rearranges script code
+                        !excelFile.HasStringBuffer) // xls->csv->xls also rearranges the strings buffer
+                    {
+                        Debug.Write("BytesXlsBytesXlsBytes==BytesXlsCsvXlsBytes... ");
+                        if (!bytesXlsBytesXlsBytes.SequenceEqual(bytesXlsCsvXlsBytes))
+                        {
+                            Debug.WriteLine("FALSE!");
+                            File.WriteAllBytes(root + bytesXls.StringId + "0.bytes", bytes);
+                            File.WriteAllBytes(root + bytesXls.StringId + "1.bytesXlsBytes", bytesXlsBytes);
+                            File.WriteAllBytes(root + bytesXls.StringId + "1a.bytesXlsBytesXlsBytes", bytesXlsBytesXlsBytes);
+                            File.WriteAllBytes(root + bytesXls.StringId + "1b.bytesXlsBytesXlsCsv.csv", bytesXlsBytesXlsCsv);
+                            File.WriteAllBytes(root + bytesXls.StringId + "1ba.bytesXlsCsv.csv", bytesXlsCsv);
+                            File.WriteAllBytes(root + bytesXls.StringId + "1bb.bytesXlsCsvXlsBytes", bytesXlsCsvXlsBytes);
+                            excelFailed.Add(bytesXls.StringId);
+                            continue;
+                        }
+                    
+                        Debug.Write("BytesXlsBytes==BytesXlsCsvXlsBytes... ");
+                        if (!bytesXlsBytes.SequenceEqual(bytesXlsCsvXlsBytes))
+                        {
+                            Debug.WriteLine("FALSE!");
+                            File.WriteAllBytes(root + bytesXls.StringId + "0.bytes", bytes);
+                            File.WriteAllBytes(root + bytesXls.StringId + "1.bytesXlsBytes", bytesXlsBytes);
+                            File.WriteAllBytes(root + bytesXls.StringId + "1a.bytesXlsBytesXlsBytes", bytesXlsBytesXlsBytes);
+                            File.WriteAllBytes(root + bytesXls.StringId + "1b.bytesXlsBytesXlsCsv.csv", bytesXlsBytesXlsCsv);
+                            File.WriteAllBytes(root + bytesXls.StringId + "1ba.bytesXlsCsv.csv", bytesXlsCsv);
+                            File.WriteAllBytes(root + bytesXls.StringId + "1bb.bytesXlsCsvXlsBytes", bytesXlsCsvXlsBytes);
+                            excelFailed.Add(bytesXls.StringId);
+                            continue;
+                        }
+                    }
+
+
+                    Debug.Write("BytesXlsBytesXlsCsv -> new ExcelFile");
+                    ExcelFile bytesXlsBytesXlsCsvXls = new ExcelFile(excelFile.FilePath, fileManager.ClientVersion);
+                    bytesXlsBytesXlsCsvXls.ParseCSV(bytesXlsBytesXlsCsv, fileManager);
+                    Debug.Write("... ");
+                    if (!bytesXlsBytesXlsCsvXls.HasIntegrity)
+                    {
+                        Debug.WriteLine("Failed!");
+                        File.WriteAllBytes(root + bytesXls.StringId + "0.bytes", bytes);
+                        File.WriteAllBytes(root + bytesXls.StringId + "1.bytesXlsBytes", bytesXlsBytes);
+                        File.WriteAllBytes(root + bytesXls.StringId + "1a.bytesXlsBytesXlsBytes", bytesXlsBytesXlsBytes);
+                        File.WriteAllBytes(root + bytesXls.StringId + "1b.bytesXlsBytesXlsCsv.csv", bytesXlsBytesXlsCsv);
+                        File.WriteAllBytes(root + bytesXls.StringId + "1ba.bytesXlsCsv.csv", bytesXlsCsv);
+                        excelFailed.Add(bytesXls.StringId);
+                        continue;
+                    }
+
+                    byte[] bytesXlsBytesXlsCsvXlsBytes = bytesXlsBytesXlsCsvXls.ToByteArray();
+                    Debug.Write("BytesXlsCsvXlsBytes==BytesXlsBytesXlsCsvXlsBytes... ");
+                    if (!bytesXlsCsvXlsBytes.SequenceEqual(bytesXlsBytesXlsCsvXlsBytes))
+                    {
+                        Debug.WriteLine("FALSE!");
+                        File.WriteAllBytes(root + bytesXls.StringId + "0.bytes", bytes);
+                        File.WriteAllBytes(root + bytesXls.StringId + "1.bytesXlsBytes", bytesXlsBytes);
+                        File.WriteAllBytes(root + bytesXls.StringId + "1a.bytesXlsBytesXlsBytes", bytesXlsBytesXlsBytes);
+                        File.WriteAllBytes(root + bytesXls.StringId + "1b.bytesXlsBytesXlsCsv.csv", bytesXlsBytesXlsCsv);
+                        File.WriteAllBytes(root + bytesXls.StringId + "1ba.bytesXlsCsv.csv", bytesXlsCsv);
+                        File.WriteAllBytes(root + bytesXls.StringId + "1bb.bytesXlsCsvXlsBytes", bytesXlsCsvXlsBytes);
+                        File.WriteAllBytes(root + bytesXls.StringId + "1c.bytesXlsBytesXlsCsvXlsBytes", bytesXlsBytesXlsCsvXlsBytes);
+                        excelFailed.Add(bytesXls.StringId);
+                        continue;
+                    }
+
                     if (!fileManager.IsVersionTestCenter)
                     {
                         Debug.Write("StructureId... ");
-                        UInt32 structureId = BitConverter.ToUInt32(fileBytes, 4);
-                        UInt32 fromCSVStructureId = BitConverter.ToUInt32(recookedExcelBytes, 4);
+                        UInt32 structureId = BitConverter.ToUInt32(bytes, 4);
+                        UInt32 fromCSVStructureId = BitConverter.ToUInt32(bytesXlsBytesXlsCsvXlsBytes, 4);
                         if (structureId != fromCSVStructureId)
                         {
                             Debug.WriteLine("Structure Id value do not match: " + structureId + " != " + fromCSVStructureId);
+                            excelFailed.Add(bytesXls.StringId);
                             continue;
                         }
                     }
 
                     Debug.Write("Almost Done... ");
-                    int recookedLength = recookedExcelBytes.Length;
-                    if (excelFile.StringId == "SKILLS") recookedLength += 12; // 12 bytes in int ptr data not used/referenced at all and are removed/lost in bytes -> csv -> bytes
-                    if (fileBytes.Length != recookedLength && !doTCv4) // some TCv4 tables don't have their sort columns yet
-                    {
-                        ExcelFile finalExcelDump = new ExcelFile(excelFile.FilePath, fileManager.ClientVersion);
-                        finalExcelDump.ParseData(recookedExcelBytes);
-                        byte[] csvDump = finalExcelDump.ExportCSV(fileManager);
+                    ExcelFile bytesXlsBytesXlsCsvXlsBytesXls = new ExcelFile(excelFile.FilePath, fileManager.ClientVersion);
+                    bytesXlsBytesXlsCsvXlsBytesXls.ParseData(bytesXlsBytesXlsCsvXlsBytes);
+                    byte[] bytesXlsBytesXlsCsvXlsBytesXlsCsv = bytesXlsBytesXlsCsvXlsBytesXls.ExportCSV(fileManager);
 
+                    int recookedLength = bytesXlsBytesXlsCsvXlsBytes.Length;
+                    if (excelFile.StringId == "SKILLS") recookedLength += 12; // 12 bytes in int ptr data not used/referenced at all and are removed/lost in bytes -> csv -> bytes
+                    if (bytes.Length != recookedLength && !doTCv4) // some TCv4 tables don't have their sort columns yet
+                    {
                         Debug.WriteLine("Recooked Excel file has differing length!");
-                        File.WriteAllBytes(root + dataFile.StringId + ".orig", fileBytes);
-                        File.WriteAllBytes(root + dataFile.StringId + ".txt", csvBytes);
-                        File.WriteAllBytes(root + dataFile.StringId + ".recooked.txt", csvDump);
-                        File.WriteAllBytes(root + dataFile.StringId + ".toByteArray", dataFileBytes);
-                        File.WriteAllBytes(root + dataFile.StringId + ".toByteArrayFromByteArray", dataFileBytesFromToByteArray);
-                        File.WriteAllBytes(root + dataFile.StringId + ".recookedExcelBytes", recookedExcelBytes);
+                        File.WriteAllBytes(root + bytesXls.StringId + "0.bytes", bytes);
+                        File.WriteAllBytes(root + bytesXls.StringId + "1.bytesXlsBytes", bytesXlsBytes);
+                        File.WriteAllBytes(root + bytesXls.StringId + "1a.bytesXlsBytesXlsBytes", bytesXlsBytesXlsBytes);
+                        File.WriteAllBytes(root + bytesXls.StringId + "1b.bytesXlsBytesXlsCsv.csv", bytesXlsBytesXlsCsv);
+                        File.WriteAllBytes(root + bytesXls.StringId + "1ba.bytesXlsCsv.csv", bytesXlsCsv);
+                        File.WriteAllBytes(root + bytesXls.StringId + "1c.bytesXlsBytesXlsCsvXlsBytes", bytesXlsBytesXlsCsvXlsBytes);
+                        File.WriteAllBytes(root + bytesXls.StringId + "1d.bytesXlsBytesXlsCsvXlsBytesXlsCsv.csv", bytesXlsBytesXlsCsvXlsBytesXlsCsv);
+                        excelFailed.Add(bytesXls.StringId);
                         continue;
                     }
 
-                    ExcelFile finalExcel = new ExcelFile(excelFile.FilePath, fileManager.ClientVersion);
-                    finalExcel.ParseData(recookedExcelBytes);
-                    Debug.Assert(finalExcel.HasIntegrity);
-                    byte[] finalCheck = finalExcel.ToByteArray();
-                    if (excelFile.StringId == "SKILLS") Debug.Assert(finalCheck.Length + 12 == dataFileBytes.Length);
-                    else Debug.Assert(finalCheck.Length == dataFileBytes.Length || doTCv4);
-                    byte[] csvCheck = finalExcel.ExportCSV(fileManager);
-
-                    if (!csvBytes.SequenceEqual(csvCheck))
+                    Debug.Assert(bytesXlsBytesXlsCsvXlsBytesXls.HasIntegrity);
+                    byte[] bytesXlsBytesXlsCsvXlsBytesXlsBytes = bytesXlsBytesXlsCsvXlsBytesXls.ToByteArray();
+                    if (excelFile.StringId == "SKILLS") Debug.Assert(bytesXlsBytesXlsCsvXlsBytesXlsBytes.Length + 12 == bytesXlsBytes.Length);
+                    else Debug.Assert(bytesXlsBytesXlsCsvXlsBytesXlsBytes.Length == bytesXlsBytes.Length || doTCv4);
+                    
+                    if (!bytesXlsBytesXlsCsv.SequenceEqual(bytesXlsBytesXlsCsvXlsBytesXlsCsv))
                     {
                         Debug.WriteLine("csvBytes.SequenceEqual failed!");
-                        File.WriteAllBytes(root + dataFile.StringId + ".txt", csvBytes);
-                        File.WriteAllBytes(root + dataFile.StringId + ".final.txt", csvCheck);
+                        File.WriteAllBytes(root + bytesXls.StringId + "0.bytes", bytes);
+                        File.WriteAllBytes(root + bytesXls.StringId + "1.bytesXlsBytes", bytesXlsBytes);
+                        File.WriteAllBytes(root + bytesXls.StringId + "1a.bytesXlsBytesXlsBytes", bytesXlsBytesXlsBytes);
+                        File.WriteAllBytes(root + bytesXls.StringId + "1b.bytesXlsBytesXlsCsv.csv", bytesXlsBytesXlsCsv);
+                        File.WriteAllBytes(root + bytesXls.StringId + "1ba.bytesXlsCsv.csv", bytesXlsCsv);
+                        File.WriteAllBytes(root + bytesXls.StringId + "1c.bytesXlsBytesXlsCsvXlsBytes", bytesXlsBytesXlsCsvXlsBytes);
+                        File.WriteAllBytes(root + bytesXls.StringId + "1d.bytesXlsBytesXlsCsvXlsBytesXlsCsv.csv", bytesXlsBytesXlsCsvXlsBytesXlsCsv);
+                        File.WriteAllBytes(root + bytesXls.StringId + "1e.bytesXlsBytesXlsCsvXlsBytesXlsBytes", bytesXlsBytesXlsCsvXlsBytesXlsBytes);
+                        excelFailed.Add(bytesXls.StringId);
                         continue;
                     }
 
@@ -771,7 +869,7 @@ namespace Reanimator
                     int lastPercent = 0;
                     int col = 0;
                     bool failed = false;
-                    foreach (ObjectDelegator.FieldDelegate fieldDelegate in objectDelegator)
+                    foreach (FieldDelegate fieldDelegate in objectDelegator)
                     {
                         int percent = col * 100 / objectDelegator.FieldCount - 1;
                         int dotCount = percent - lastPercent;
@@ -785,7 +883,7 @@ namespace Reanimator
                         for (int row = 0; row < excelFile.Rows.Count; row++)
                         {
                             Object obj1 = fieldDelegate.GetValue(excelFile.Rows[row]);
-                            Object obj2 = fieldDelegate.GetValue(finalExcel.Rows[row]);
+                            Object obj2 = fieldDelegate.GetValue(bytesXlsBytesXlsCsvXlsBytesXls.Rows[row]);
 
                             if (isArray)
                             {
@@ -823,7 +921,7 @@ namespace Reanimator
                                     int offset2 = (int)obj2;
 
                                     String str1 = excelFile.ReadStringTable(offset1);
-                                    String str2 = finalExcel.ReadStringTable(offset2);
+                                    String str2 = bytesXlsBytesXlsCsvXlsBytesXls.ReadStringTable(offset2);
 
                                     if (str1 == str2) continue;
 
@@ -837,7 +935,7 @@ namespace Reanimator
                                     int offset2 = (int)obj2;
 
                                     Int32[] script1 = excelFile.ReadScriptTable(offset1);
-                                    Int32[] script2 = finalExcel.ReadScriptTable(offset2);
+                                    Int32[] script2 = bytesXlsBytesXlsCsvXlsBytesXls.ReadScriptTable(offset2);
 
                                     if (script1.SequenceEqual(script2)) continue;
 
@@ -847,7 +945,7 @@ namespace Reanimator
                             }
 
                             String str = obj1 as String;
-                            if ((str != null && str.StartsWith("+N%-N% base damage as [elem]")) ||  // '+N%-N% base damage as [elem]…' != '+N%-N% base damage as [elem]?' on col(2) = 'exampleDescription', row(132)
+                            if ((str != null && str.StartsWith("+N%-N% base damage as [elem]")) ||  // "+N%-N% base damage as [elem]…" != "+N%-N% base damage as [elem]?" on col(2) = 'exampleDescription', row(132) // the '?' at end
                                 fieldDelegate.Name == "bonusStartingTreasure")                      // refernces multiple different blank rows
                                 continue;
 
@@ -862,8 +960,9 @@ namespace Reanimator
 
                     if (failed)
                     {
-                        File.WriteAllBytes(root + dataFile.StringId + ".txt", csvBytes);
-                        File.WriteAllBytes(root + dataFile.StringId + ".final.txt", csvCheck);
+                        File.WriteAllBytes(root + bytesXls.StringId + ".bytesXlsBytesXlsCsv.csv", bytesXlsBytesXlsCsv);
+                        File.WriteAllBytes(root + bytesXls.StringId + ".bytesXlsBytesXlsCsvXlsBytesXlsCsv.csv", bytesXlsBytesXlsCsvXlsBytesXlsCsv);
+                        excelFailed.Add(bytesXls.StringId);
                         continue;
                     }
 
@@ -871,11 +970,15 @@ namespace Reanimator
                 }
                 catch (Exception e)
                 {
-                    Debug.WriteLine("Excel file Exception: " + dataFile.StringId + "\n" + e);
+                    Debug.WriteLine("Excel file Exception: " + bytesXls.StringId + "\n" + e);
                 }
             }
 
-            Debug.WriteLine("All excel files checked.");
+            Debug.WriteLine(checkedCount + " excel files checked.");
+
+            if (excelFailed.Count <= 0) return;
+            Debug.WriteLine(excelFailed.Count + " failed excel checks! (" + ((float)excelFailed.Count / checkedCount * 100) + "%)");
+            foreach (String str in excelFailed) Debug.Write(str + ", ");
         }
 
         /// <summary>
@@ -1765,18 +1868,18 @@ namespace Reanimator
             }
         }
 
-        public static void UncookAllXml()
+        public static void TestAllXml()
         {
             //System.Security.Cryptography.MD5CryptoServiceProvider md5 = new System.Security.Cryptography.MD5CryptoServiceProvider();
-            const String root = @"D:\Games\Hellgate\Data\";
+            //const String root = @"D:\Games\Hellgate\Data\";
             //const String root = @"D:\Games\Hellgate London\data\mp_hellgate_1.10.180.3416_1.0.86.4580\";
             //const String root = @"D:\Games\Hellgate London\data\mp_hellgate_1.10.180.3416_1.0.86.4580\data\background\";
-            List<String> xmlFiles = new List<String>(Directory.GetFiles(root, "*.xml.cooked", SearchOption.AllDirectories));
+            //List<String> xmlFiles = new List<String>(Directory.GetFiles(root, "*.xml.cooked", SearchOption.AllDirectories));
 
             FileManager fileManager = new FileManager(Config.HglDir);
             fileManager.BeginAllDatReadAccess();
             fileManager.LoadTableFiles();
-            fileManager.EndAllDatAccess();
+            //fileManager.EndAllDatAccess();
             //XmlCookedFile.Initialize(fileManager);
 
             int count = 0;
@@ -1784,28 +1887,33 @@ namespace Reanimator
             List<String> testCentreWarnings = new List<String>();
             List<String> resurrectionWarnings = new List<String>();
             int i = 0;
-            foreach (String xmlFilePath in xmlFiles)
+            foreach (PackFileEntry fileEntry in fileManager.FileEntries.Values)
             {
-                bool skip = ((i++ % 23) > 0);
-                if (skip)
-                {
-                    if (xmlFilePath.Contains("\\Data\\colorsets.xml")) continue;
-                    if (xmlFilePath.Contains("\\Data\\ai\\")) continue;
-                    if (xmlFilePath.Contains("\\Data\\background\\")) continue;
-                    if (xmlFilePath.Contains("\\Data\\demolevel\\")) continue;
-                    if (xmlFilePath.Contains("\\Data\\lights\\")) continue;
-                    if (xmlFilePath.Contains("\\Data\\materials\\")) continue;
-                    if (xmlFilePath.Contains("\\Data\\particles\\")) continue;
-                    if (xmlFilePath.Contains("\\Data\\screenfx\\")) continue;
-                    if (xmlFilePath.Contains("\\Data\\skills\\")) continue;
-                    if (xmlFilePath.Contains("\\Data\\sounds\\")) continue;
-                    if (xmlFilePath.Contains("\\Data\\states\\")) continue;
-                    if (xmlFilePath.Contains("\\Data\\units\\items\\")) continue;
-                    if (xmlFilePath.Contains("\\Data\\units\\missiles\\")) continue;
-                    if (xmlFilePath.Contains("\\Data\\units\\monsters\\")) continue;
-                    if (xmlFilePath.Contains("\\Data\\units\\npc\\")) continue;
-                    if (xmlFilePath.Contains("\\Data\\units\\objects\\")) continue;
-                }
+                if (!fileEntry.Path.EndsWith(XmlCookedFile.Extension)) continue;
+
+                String xmlFilePath = fileEntry.Path;
+            //foreach (String xmlFilePath in xmlFiles)
+            //{
+                //bool skip = ((i++ % 23) > 0);
+                //if (skip)
+                //{
+                //    if (xmlFilePath.Contains("\\Data\\colorsets.xml")) continue;
+                //    if (xmlFilePath.Contains("\\Data\\ai\\")) continue;
+                //    if (xmlFilePath.Contains("\\Data\\background\\")) continue;
+                //    if (xmlFilePath.Contains("\\Data\\demolevel\\")) continue;
+                //    if (xmlFilePath.Contains("\\Data\\lights\\")) continue;
+                //    if (xmlFilePath.Contains("\\Data\\materials\\")) continue;
+                //    if (xmlFilePath.Contains("\\Data\\particles\\")) continue;
+                //    if (xmlFilePath.Contains("\\Data\\screenfx\\")) continue;
+                //    if (xmlFilePath.Contains("\\Data\\skills\\")) continue;
+                //    if (xmlFilePath.Contains("\\Data\\sounds\\")) continue;
+                //    if (xmlFilePath.Contains("\\Data\\states\\")) continue;
+                //    if (xmlFilePath.Contains("\\Data\\units\\items\\")) continue;
+                //    if (xmlFilePath.Contains("\\Data\\units\\missiles\\")) continue;
+                //    if (xmlFilePath.Contains("\\Data\\units\\monsters\\")) continue;
+                //    if (xmlFilePath.Contains("\\Data\\units\\npc\\")) continue;
+                //    if (xmlFilePath.Contains("\\Data\\units\\objects\\")) continue;
+                //}
 
                 String path = xmlFilePath;
                 String fileName = Path.GetFileName(path);
@@ -1817,31 +1925,34 @@ namespace Reanimator
                 //    int bp = 0;
                 //}
 
-                XmlCookedFile xmlCookedFile1 = new XmlCookedFile(fileManager, fileName);
+                //XmlCookedFile xmlCookedFile1 = new XmlCookedFile(fileManager, fileName);
                 XmlCookedFile xmlCookedFile2 = new XmlCookedFile(fileManager, fileName);
-                byte[] data = File.ReadAllBytes(path);
+                //byte[] data = File.ReadAllBytes(path);
+                byte[] data = fileManager.GetFileBytes(fileEntry);
+                Debug.Assert(data != null && data.Length > 0);
 
                 //Console.WriteLine("Uncooking: " + fileName);
 
-                xmlCookedFile2.ParseFileBytes(data, true);
+                //xmlCookedFile2.ParseFileBytes(data, true);
                 try
                 {
                     //xmlCookedFile1.ParseFileBytes(data);
-                    //xmlCookedFile2.ParseFileBytes(data, fileManager);
+                    xmlCookedFile2.ParseFileBytes(data, true);
                 }
                 catch (Exception e)
                 {
-                    Console.WriteLine("Failed to uncooked!\n" + e);
+                    Console.WriteLine("Failed to uncooked file \"" + path + "\"\n" + e + "\n");
                     continue;
                 }
 
-                String newPath = path.Replace(".xml.cooked", ".obj.xml");
+                //String newPath = path.Replace(".xml.cooked", ".obj.xml");
                 //xmlCookedFile1.SaveXml(newPath);
                 byte[] newXmlBytes = xmlCookedFile2.ExportAsDocument();
+                Debug.Assert(newXmlBytes != null);
                 //File.WriteAllBytes(newPath, newXmlBytes);
                 count++;
 
-                byte[] origXmlBytes = File.ReadAllBytes(path.Replace(".cooked", ""));
+                //byte[] origXmlBytes = File.ReadAllBytes(path.Replace(".cooked", ""));
                 //if (!origXmlBytes.SequenceEqual(newXmlBytes))
                 //{
                 //    int bp = 0;
@@ -1857,20 +1968,20 @@ namespace Reanimator
                 //    int bp = 0;
                 //}
 
-                XmlCookedFile recookedXmlFile = new XmlCookedFile(fileManager, fileName) { CookExcludeResurrection = false };
-                byte[] origXmlCookedBytes = recookedXmlFile.ParseFileBytes(origXmlBytes);
+                XmlCookedFile recookedXmlFile = new XmlCookedFile(fileManager, fileName);// { CookExcludeResurrection = false };
+                //byte[] origXmlCookedBytes = recookedXmlFile.ParseFileBytes(origXmlBytes);
                 byte[] newXmlCookedBytes = recookedXmlFile.ParseFileBytes(newXmlBytes);
                 //byte[] recookedData = recookedXmlFile.CookXmlDocument(xmlCookedFile1.XmlDoc);
                 //byte[] recookedData = recookedXmlFile.ToByteArray();
 
                 // check if *cooking method* is working. i.e. is the cook from the *original* XML format == the original.cooked
-                bool identicalOrig = data.SequenceEqual(origXmlCookedBytes);
+                //bool identicalOrig = data.SequenceEqual(origXmlCookedBytes);
 
                 // check if *cooking method* is working. i.e. is the cook from the *new* XML format == the original.cooked
                 bool identicalNew = data.SequenceEqual(newXmlCookedBytes);
 
                 // if file passes byte-byte test, then continue
-                if (identicalOrig && identicalNew)
+                if (/*identicalOrig &&*/ identicalNew)
                 {
                     Console.WriteLine("{0} passed checks...", path);
                     continue;
@@ -1889,9 +2000,9 @@ namespace Reanimator
                     continue;
                 }
 
-                File.WriteAllBytes(newPath, newXmlBytes);
-                if (!identicalOrig) File.WriteAllBytes(path + "dataFROMorig", origXmlCookedBytes);
-                if (!identicalNew) File.WriteAllBytes(path + "dataFROMnew", newXmlCookedBytes);
+                //File.WriteAllBytes(newPath, newXmlBytes);
+                //if (!identicalOrig) File.WriteAllBytes(path + "dataFROMorig", origXmlCookedBytes);
+                //if (!identicalNew) File.WriteAllBytes(path + "dataFROMnew", newXmlCookedBytes);
 
                 Console.WriteLine("{0} failed!", path);
             }

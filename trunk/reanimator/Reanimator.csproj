@@ -219,6 +219,9 @@
     <Compile Include="Forms\PatchForm.Designer.cs">
       <DependentUpon>PatchForm.cs</DependentUpon>
     </Compile>
+    <Compile Include="Forms\ReanimatorUtil.cs">
+      <SubType>Form</SubType>
+    </Compile>
     <Compile Include="Forms\SavegameOverviewControl.cs">
       <SubType>UserControl</SubType>
     </Compile>

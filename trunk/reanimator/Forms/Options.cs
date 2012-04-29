@@ -20,12 +20,7 @@ namespace Reanimator.Forms
             InitializeComponent();
         }
 
-        private void _OptionsOnLoad(object sender, EventArgs e)
-        {
-            _LoadOptions();
-        }
-
-        private void _LoadOptions()
+        private void _OptionsLoad(object sender, EventArgs e)
         {
             // General - Path Settings
             hglDir_TextBox.Text = Config.HglDir; // restart required
@@ -34,6 +29,7 @@ namespace Reanimator.Forms
 
             // General - Load Options
             _tcv4_CheckBox.Checked = Config.LoadTCv4DataFiles; // restart required
+            _showFileExplorer.Checked = Config.ShowFileExplorer;
 
             // General - Language Files
             _UpdateStringsLanguages(); // restart required
@@ -53,13 +49,12 @@ namespace Reanimator.Forms
             bool optionsSaved = _SaveOptions(); // apply changes and check if want/need to restart
             if (!optionsSaved) return; // hit cancel
 
-            Hide();
+            Close();
         }
 
         private void _CancelButtonClick(object sender, EventArgs e)
         {
-            _LoadOptions(); // undo changes
-            Hide();
+            Close();
         }
 
         private bool _SaveOptions()
@@ -95,6 +90,7 @@ namespace Reanimator.Forms
 
             // load options
             Config.LoadTCv4DataFiles = _tcv4_CheckBox.Checked; // restart required
+            Config.ShowFileExplorer = _showFileExplorer.Checked;
 
             // editor options
             Config.TxtEditor = txtEditor_TextBox.Text;

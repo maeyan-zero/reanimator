@@ -830,21 +830,18 @@ namespace Revival.Common
             return outputString;
         }
 
-        public static Object StringToObject(string str, string delimiter, Type type)
+        public static T StringToObject<T>(String str, String delimiter, FieldInfo[] fieldInfos) where T : new()
         {
-            string[] strFields = str.Split(delimiter.ToCharArray());
-            FieldInfo[] fieldInfo = type.GetFields(BindingFlags.Instance | BindingFlags.Public | BindingFlags.NonPublic);
-            // Check strFields has the same amount of fields
-            if (strFields.Length != fieldInfo.Length) return null;
-
-            Object obj = Activator.CreateInstance(type);
-            for (int i = 0; i < fieldInfo.Length; i++)
+            String[] strFields = str.Split(delimiter.ToCharArray());
+            if (strFields.Length != fieldInfos.Length) return default(T);
+            Object obj = Activator.CreateInstance(typeof(T)); // do not cast this to T here - will fail on struct types when trying to SetValue
+            for (int i = 0; i < fieldInfos.Length; i++)
             {
-                Object value = FileTools.StringToObject(strFields[i], fieldInfo[i].FieldType);
-                fieldInfo[i].SetValue(obj, value);
+                Object value = StringToObject(strFields[i], fieldInfos[i].FieldType);
+                fieldInfos[i].SetValue(obj, value);
             }
 
-            return obj;
+            return (T)obj;
         }
 
         public static string ByteArrayToDelimitedASCIIString(byte[] data, char delimiter, Type castAs)

@@ -66,10 +66,27 @@ namespace Revival.Common
         }
 
         private readonly Dictionary<String, FieldDelegate> _fieldDelegatesDict = new Dictionary<String, FieldDelegate>();
+        public readonly List<FieldDelegate> FieldDelegatesList = new List<FieldDelegate>();
         public readonly List<FieldDelegate> FieldDelegatesPublicList = new List<FieldDelegate>();
 
         public int FieldCount { get { return _fieldDelegatesDict.Count; } }
         public int PublicFieldCount { get { return FieldDelegatesPublicList.Count; } }
+
+        /// <summary>
+        /// Create field delegators for every field in a type.
+        /// The delegators will be created for all Public, NonPublic, and Instance fields.
+        /// </summary>
+        /// <param name="type">The type to create the deletes from.</param>
+        public ObjectDelegator(Type type)
+        {
+            if (type == null) throw new ArgumentNullException("type", "Cannot be null!");
+
+            FieldInfo[] fieldInfos = type.GetFields(BindingFlags.Public | BindingFlags.NonPublic | BindingFlags.Instance);
+            foreach (FieldInfo fieldInfo in fieldInfos)
+            {
+                AddField(fieldInfo);
+            }
+        }
 
         /// <summary>
         /// Create field delegators from an array of field infos.
@@ -100,6 +117,7 @@ namespace Revival.Common
 
             _fieldDelegatesDict.Add(fieldInfo.Name, fieldDelegate);
 
+            FieldDelegatesList.Add(fieldDelegate);
             if (fieldInfo.IsPublic) FieldDelegatesPublicList.Add(fieldDelegate);
         }
 
