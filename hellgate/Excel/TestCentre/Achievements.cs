@@ -5,7 +5,7 @@ using ExcelOutput = Hellgate.ExcelFile.OutputAttribute;
 namespace Hellgate.Excel.TestCentre
 {
     // size = 0x00000000000000F8 (not including header)
-    [StructLayout(LayoutKind.Sequential, Pack = 1)]
+    [Serializable, StructLayout(LayoutKind.Sequential, Pack = 1)]
     class AchievementsTCv4
     {
         ExcelFile.RowHeader header;

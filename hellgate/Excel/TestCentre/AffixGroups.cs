@@ -29,7 +29,7 @@ namespace Hellgate.Excel.TestCentre
      * 00 00 00 00
      */
 
-    [StructLayout(LayoutKind.Sequential, Pack = 1)]
+    [Serializable, StructLayout(LayoutKind.Sequential, Pack = 1)]
     class AffixGroupsTCv4
     {
         RowHeader header;
