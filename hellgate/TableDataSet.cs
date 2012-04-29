@@ -39,6 +39,7 @@ namespace Hellgate
             }
             dataTable = XlsDataSet.Tables.Add(tableName);
             dataTable.TableName = tableName;
+            dataTable.ExtendedProperties.Add("FileHeader", excelFile._excelFileHeader.DeepClone());
 
             Type dataType = excelFile.Attributes.RowType;
             List<OutputAttribute> outputAttributes = new List<OutputAttribute>();

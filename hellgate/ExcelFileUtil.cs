@@ -23,6 +23,7 @@ namespace Hellgate
         private byte[] _backupStringBuffer; // as above
 
         #region Excel Types
+        [Serializable]
         [StructLayout(LayoutKind.Sequential, Pack = 1)]
         public struct ExcelHeader
         {
@@ -37,7 +38,7 @@ namespace Hellgate
             public Int16 Unknown166;
         }                                // structures don't work on ObjectDelegators yet
         private static readonly FieldInfo[] FileHeaderFields = typeof(ExcelHeader).GetFields(BindingFlags.Public | BindingFlags.NonPublic | BindingFlags.Instance);
-        private static readonly ObjectDelegator FileHeaderDelegator = new ObjectDelegator(typeof(ExcelHeader));//typeof(ExcelHeader).GetFields(BindingFlags.Public | BindingFlags.NonPublic | BindingFlags.Instance);
+        //private static readonly ObjectDelegator FileHeaderDelegator = new ObjectDelegator(typeof(ExcelHeader));//typeof(ExcelHeader).GetFields(BindingFlags.Public | BindingFlags.NonPublic | BindingFlags.Instance);
 
 
         [Serializable]
@@ -52,7 +53,8 @@ namespace Hellgate
             public Int16 Reserved2;
         }                                // structures don't work on ObjectDelegators yet
         private static readonly FieldInfo[] RowHeaderFields = typeof(RowHeader).GetFields(BindingFlags.Public | BindingFlags.NonPublic | BindingFlags.Instance);
-        private static readonly ObjectDelegator RowHeaderDelegator = new ObjectDelegator(typeof(RowHeader));
+        //private static readonly ObjectDelegator RowHeaderDelegator = new ObjectDelegator(typeof(RowHeader));
+
 
         [AttributeUsage(AttributeTargets.Field, AllowMultiple = false)]
         public class OutputAttribute : Attribute

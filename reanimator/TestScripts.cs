@@ -21,67 +21,157 @@ namespace Reanimator
         /// <summary>
         /// Function to test saving/importing/exported/etc relating to DataTables (i.e. actions from WITHIN Reanimator etc.)
         /// </summary>
-        public static void TestDataTableExportAndImport()
+        public static void TestDataTableExportAndImport(bool doTCv4 = false)
         {
-            FileManager fileManager = new FileManager(Config.HglDir);
+            String root = @"C:\excel_datatable_debug";
+            FileManager.ClientVersions clientVersion = FileManager.ClientVersions.SinglePlayer;
+            if (doTCv4)
+            {
+                root = Path.Combine(root, "tcv4");
+                clientVersion = FileManager.ClientVersions.TestCenter;
+            }
+            root += @"\"; // lazy
+            Directory.CreateDirectory(root);
+
+
+            FileManager fileManager = new FileManager(Config.HglDir, clientVersion);
             fileManager.BeginAllDatReadAccess();
             fileManager.LoadTableFiles();
-            fileManager.EndAllDatAccess();
 
-            List<String> sequenceEqual = new List<String>();
-            List<String> sequenceFail = new List<String>();
+            List<String> sequenceFailed = new List<String>();
+            List<String> sequenceChecked = new List<String>();
             foreach (KeyValuePair<String, DataFile> keyValuePair in fileManager.DataFiles)
             {
                 String stringId = keyValuePair.Key;
                 DataFile dataFile = keyValuePair.Value;
                 if (dataFile.IsStringsFile) continue;
 
-                if (stringId == "PROPERTIES" || stringId == "SKILLS") continue; // doesn't really matter - we'll fix it in the next version
+                //if (stringId != "WARDROBE_LAYER") continue;
+                //if (stringId == "WARDROBE_LAYER")
+                //{
+                //    int bp = 0;
+                //}
 
-                DataTable dataTable = fileManager.GetDataTable(stringId);
 
-                // Parse the DataTable object
-                DataFile parseDataTable = new ExcelFile(dataFile.FilePath, fileManager.ClientVersion);
-                if (parseDataTable.ParseDataTable(dataTable, fileManager) != true)
+                Debug.Write("Checking " + stringId + "... ");
+                ExcelFile bytesXls = (ExcelFile)dataFile;
+                byte[] bytes = fileManager.GetFileBytes(bytesXls.FilePath, true);
+                sequenceChecked.Add(stringId);
+                sequenceFailed.Add(stringId);
+
+                if (stringId == "PROPERTIES") continue; // can't do this atm - need to export Properties script table to DataTable etc.
+
+                Debug.Write("DataTable... ");
+                DataTable bytesXlsTable = fileManager.GetDataTable(stringId);
+                if (bytesXlsTable == null)
                 {
-                    Debug.WriteLine("Error: ParseDataTable failed for StringId = " + stringId);
+                    Debug.WriteLine("FAILED!");
                     continue;
                 }
 
-                // Export it to a CSV stream
-                byte[] buffer = parseDataTable.ExportCSV(fileManager);
-                if (buffer == null)
+                // parse as DataTable
+                Debug.Write("new Excel... ");
+                DataFile bytesXlsTableXls = new ExcelFile(bytesXls.FilePath, fileManager.ClientVersion);
+                if (!bytesXlsTableXls.ParseDataTable(bytesXlsTable, fileManager))
                 {
-                    Debug.WriteLine("Error: ExportCSV failed for StringId = " + stringId);
+                    Debug.WriteLine("FAILED!");
                     continue;
                 }
 
-                // Import CSV
-                DataFile parseCSV = new ExcelFile(dataFile.FilePath, fileManager.ClientVersion);
-                parseCSV.ParseCSV(buffer, fileManager);
 
-                // Export original and imported as cooked and do byte compare
-                byte[] dataFileExported = dataFile.ToByteArray();
-                byte[] dataTableExported = parseCSV.ToByteArray();
-                
-
-                if (dataFileExported.SequenceEqual(dataTableExported))
+                // check just data table import/export
+                byte[] bytesXlsBytes = bytesXls.ToByteArray();
+                byte[] bytesXlsTableXlsBytes = bytesXlsTableXls.ToByteArray();
+                if (bytesXls.ScriptBuffer == null && // can't check this as ScriptBuffer[0] is NOT always 0x00 (even though it's unused and means no script normally when pointed to)
+                    !bytesXls.HasStringBuffer) // as above - gets re-arranged etc (only consistant comparint CSV->XLS->DATA
                 {
-                    Debug.WriteLine("Byte sequence equal for StringId = " + dataFile.StringId);
-                    sequenceEqual.Add(dataFile.StringId);
+                    Debug.Write("bytesXlsBytes==bytesXlsTableXlsBytes... ");
+                    if (!bytesXlsBytes.SequenceEqual(bytesXlsTableXlsBytes))
+                    {
+                        Debug.WriteLine("FALSE!");
+                        File.WriteAllBytes(root + bytesXls.StringId + "0.bytes", bytes);
+                        File.WriteAllBytes(root + bytesXls.StringId + "1.bytesXlsBytes", bytesXlsBytes);
+                        File.WriteAllBytes(root + bytesXls.StringId + "2.bytesXlsTableXlsBytes", bytesXlsTableXlsBytes);
+                        continue;
+                    }
                 }
-                else
-                {
-                    Debug.WriteLine("Error: Sequences are not equal for StringId = " + dataFile.StringId);
-                    sequenceFail.Add(dataFile.StringId);
 
-                    Debug.Assert(dataFileExported.Length == dataTableExported.Length);
+
+                // export CSV
+                Debug.Write("ExportCSV... ");
+                byte[] bytesXlsTableXlsCsv = bytesXlsTableXls.ExportCSV(fileManager);
+                if (bytesXlsTableXlsCsv == null)
+                {
+                    Debug.WriteLine("FAILED!");
+                    continue;
                 }
+
+                Debug.Write("bytesXlsCsv==bytesXlsTableXlsCsv... ");
+                byte[] bytesXlsCsv = bytesXls.ExportCSV(fileManager);
+                if (!bytesXlsCsv.SequenceEqual(bytesXlsTableXlsCsv))
+                {
+                    Debug.WriteLine("FALSE!");
+                    File.WriteAllBytes(root + bytesXls.StringId + "0.bytes", bytes);
+                    File.WriteAllBytes(root + bytesXls.StringId + "1.bytesXlsBytes", bytesXlsBytes);
+                    File.WriteAllBytes(root + bytesXls.StringId + "1a.bytesXlsCsv.csv", bytesXlsCsv);
+                    File.WriteAllBytes(root + bytesXls.StringId + "2.bytesXlsTableXlsBytes", bytesXlsTableXlsBytes);
+                    File.WriteAllBytes(root + bytesXls.StringId + "3.bytesXlsTableXlsCsv.csv", bytesXlsTableXlsCsv);
+                    continue;
+                }
+
+                Debug.Write("bytesXlsCsvXlsBytes==bytesXlsTableXlsBytes... ");
+                DataFile bytesXlsCsvXls = new ExcelFile(bytesXls.FilePath, fileManager.ClientVersion);
+                bytesXlsCsvXls.ParseCSV(bytesXlsCsv, fileManager);
+                byte[] bytesXlsCsvXlsBytes = bytesXlsCsvXls.ToByteArray();
+                if (!bytesXlsCsvXlsBytes.SequenceEqual(bytesXlsTableXlsBytes) &&
+                    stringId != "ITEMDISPLAY" && stringId != "LEVEL") // ITEMDISPLAY has weird single non-standard ASCII char that is lost (from using MS Work on their part lol)
+                {                                                       // and LEVEL references blank TREASURE rows and hence rowId references differ on recooks
+                    
+                    Debug.WriteLine("FALSE!");
+                    File.WriteAllBytes(root + bytesXls.StringId + "0.bytes", bytes);
+                    File.WriteAllBytes(root + bytesXls.StringId + "1.bytesXlsBytes", bytesXlsBytes);
+                    File.WriteAllBytes(root + bytesXls.StringId + "1a.bytesXlsCsv.csv", bytesXlsCsv);
+                    File.WriteAllBytes(root + bytesXls.StringId + "1b.bytesXlsCsvXlsBytes", bytesXlsCsvXlsBytes);
+                    File.WriteAllBytes(root + bytesXls.StringId + "2.bytesXlsTableXlsBytes", bytesXlsTableXlsBytes);
+                    File.WriteAllBytes(root + bytesXls.StringId + "3.bytesXlsTableXlsCsv.csv", bytesXlsTableXlsCsv);
+                    continue;
+                }
+
+
+                // import CSV
+                Debug.Write("ParseCSV... ");
+                DataFile bytesXlsTableXlsCsvXls = new ExcelFile(bytesXls.FilePath, fileManager.ClientVersion);
+                if (!bytesXlsTableXlsCsvXls.ParseCSV(bytesXlsTableXlsCsv, fileManager))
+                {
+                    Debug.WriteLine("FAILED!");
+                    continue;
+                }
+
+
+                // export imported as cooked and do byte compare
+                Debug.Write("ToByteArray... ");
+                byte[] bytesXlsTableXlsCsvXlsBytes = bytesXlsTableXlsCsvXls.ToByteArray();
+                Debug.Write("bytesXlsCsvXlsBytes==bytesXlsTableXlsCsvXlsBytes... ");
+                if (!bytesXlsCsvXlsBytes.SequenceEqual(bytesXlsTableXlsCsvXlsBytes))
+                {
+                    Debug.WriteLine("FALSE!");
+                    File.WriteAllBytes(root + bytesXls.StringId + "0.bytes", bytes);
+                    File.WriteAllBytes(root + bytesXls.StringId + "1.bytesXlsBytes", bytesXlsBytes);
+                    File.WriteAllBytes(root + bytesXls.StringId + "2.bytesXlsTableXlsBytes", bytesXlsTableXlsBytes);
+                    File.WriteAllBytes(root + bytesXls.StringId + "3.bytesXlsTableXlsCsv", bytesXlsTableXlsCsv);
+                    File.WriteAllBytes(root + bytesXls.StringId + "4.bytesXlsTableXlsCsvXlsBytes", bytesXlsTableXlsCsvXlsBytes);
+                    continue;
+                }
+
+
+                // yay
+                Debug.WriteLine("OK!");
+                sequenceFailed.RemoveAt(sequenceFailed.Count - 1);
             }
 
-            Debug.WriteLine("Totals: {0} sequence matches, {1} fails.", sequenceEqual.Count, sequenceFail.Count);
-            Debug.Write("Failed Tables: PROPERTIES, SKILLS, ");
-            foreach (String stringIdFailed in sequenceFail)
+            Debug.WriteLine("Totals: {0} sequence checks, {1} fails. ({2}% failed!)", sequenceChecked.Count, sequenceFailed.Count, (float)sequenceFailed.Count*100f / sequenceChecked.Count);
+            Debug.Write("Failed Tables: ");
+            foreach (String stringIdFailed in sequenceFailed)
             {
                 Debug.Write(stringIdFailed + ", ");
             }
@@ -597,7 +687,7 @@ namespace Reanimator
                 ExcelFile excelFile = bytesXls as ExcelFile;
                 if (excelFile == null) continue;
 
-                if (excelFile.StringId != "SKILLS") continue;
+                //if (excelFile.StringId != "SKILLS") continue;
 
                 if (excelFile.StringId == "SKILLS")
                 {

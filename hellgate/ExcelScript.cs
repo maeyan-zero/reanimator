@@ -127,7 +127,7 @@ namespace Hellgate
                 _debugOutput = String.Format(DebugFormat, _debugRow, _debugCol, _debugColName, _debugStringId, _debugScriptByteString);
             }
 
-            //if (script == "SetStat673('stamina_feed', (int)(double)GetStat666('strength_bonus'));")
+            //if (debugRow == 31 && debugColName == "statsServerOnStateSet") // col=160
             //{
             //    int bp = 0;
             //}
@@ -384,7 +384,12 @@ namespace Hellgate
                         break;
 
                     case '-':
-                        if (scriptByteCode.Count == 0 || operatorStack.Count > 0)
+                        //if (operatorStack.Count > 0)
+                        //{
+                        //    int bp = 0;
+                        //}
+
+                        if (scriptByteCode.Count == 0 && operatorStack.Count == 0)
                         {
                             // is is a negative number
                             if (_IsNumber())
@@ -1072,7 +1077,7 @@ namespace Hellgate
                                     String statementString = stackObject1.Value;
                                     if (!stackObject1.IsIf && stackObject1.StatementCount <= 1)
                                     {
-                                        statementString = "\t" + statementString;
+                                        statementString = "    " + statementString;
                                     }
 
                                     ifElseBlock = addNewLine + String.Format(ternaryTrueFormat, stackObject2.Value, byteOffset, statementString + addSemiColon) + ifElseBlock;
@@ -1106,8 +1111,8 @@ namespace Hellgate
                                 }
                                 else
                                 {
-                                    const String onlyTrueRel = "if ({0})\n{{\n\t{2}\n}}";
-                                    const String onlyTrueDebug = "if ({0})[{1}]\n{{\n\t{2}\n}}";
+                                    const String onlyTrueRel = "if ({0})\n{{\n    {2}\n}}";
+                                    const String onlyTrueDebug = "if ({0})[{1}]\n{{\n    {2}\n}}";
                                     ternaryTrueFormat = _debugFormatConditionalByteCounts ? onlyTrueDebug : onlyTrueRel;
                                 }
 
@@ -1133,11 +1138,11 @@ namespace Hellgate
                                     ternaryTrueFormat = _debugFormatConditionalByteCounts ? trueFalseDebug : trueFalseRel;
 
                                     String[] code = trueObj.Value.Split(new[] { ";", "\n" }, StringSplitOptions.RemoveEmptyEntries);
-                                    String codeStr = code.Aggregate(String.Empty, (current, line) => current + ("\t" + line + ";\n"));
+                                    String codeStr = code.Aggregate(String.Empty, (current, line) => current + ("    " + line + ";\n"));
                                     trueObj.Value = codeStr;
 
                                     code = falseObj.Value.Split(new[] { ";", "\n" }, StringSplitOptions.RemoveEmptyEntries);
-                                    codeStr = code.Aggregate(String.Empty, (current, line) => current + ("\t" + line + ";\n"));
+                                    codeStr = code.Aggregate(String.Empty, (current, line) => current + ("    " + line + ";\n"));
                                     falseObj.Value = codeStr;
                                 }
 
