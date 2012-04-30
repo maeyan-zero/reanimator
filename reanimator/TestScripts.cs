@@ -145,7 +145,7 @@ namespace Reanimator
                 if (!bytesXlsCsvXlsBytes.SequenceEqual(bytesXlsTableXlsBytes) &&
                     stringId != "ITEMDISPLAY" && stringId != "LEVEL") // ITEMDISPLAY has weird single non-standard ASCII char that is lost (from using MS Work on their part lol)
                 {                                                       // and LEVEL references blank TREASURE rows and hence rowId references differ on recooks
-                    
+
                     Debug.WriteLine("FALSE!");
                     File.WriteAllBytes(root + bytesXls.StringId + "0.bytes", bytes);
                     File.WriteAllBytes(root + bytesXls.StringId + "1.bytesXlsBytes", bytesXlsBytes);
@@ -188,7 +188,7 @@ namespace Reanimator
                 sequenceFailed.RemoveAt(sequenceFailed.Count - 1);
             }
 
-            Debug.WriteLine("Totals: {0} sequence checks, {1} fails. ({2}% failed!)", sequenceChecked.Count, sequenceFailed.Count, (float)sequenceFailed.Count*100f / sequenceChecked.Count);
+            Debug.WriteLine("Totals: {0} sequence checks, {1} fails. ({2}% failed!)", sequenceChecked.Count, sequenceFailed.Count, (float)sequenceFailed.Count * 100f / sequenceChecked.Count);
             Debug.Write("Failed Tables: ");
             foreach (String stringIdFailed in sequenceFailed)
             {
@@ -248,7 +248,7 @@ namespace Reanimator
                 foreach (FieldDelegate fieldDelegate in excelFile.Delegator)
                 {
                     colIndex++;
-                    ExcelAttributes excelAtributes = (ExcelAttributes)fieldDelegate.Info.GetCustomAttributes(typeof (ExcelAttributes), true).FirstOrDefault();
+                    ExcelAttributes excelAtributes = (ExcelAttributes)fieldDelegate.Info.GetCustomAttributes(typeof(ExcelAttributes), true).FirstOrDefault();
                     if (excelAtributes == null || !excelAtributes.IsScript) continue;
 
                     String currentColumn = String.Format("\tColumn[{0}] = {1}", colIndex, fieldDelegate.Name);
@@ -889,7 +889,7 @@ namespace Reanimator
                             excelFailed.Add(bytesXls.StringId);
                             continue;
                         }
-                    
+
                         Debug.Write("BytesXlsBytes==BytesXlsCsvXlsBytes... ");
                         if (!bytesXlsBytes.SequenceEqual(bytesXlsCsvXlsBytes))
                         {
@@ -976,7 +976,7 @@ namespace Reanimator
                     byte[] bytesXlsBytesXlsCsvXlsBytesXlsBytes = bytesXlsBytesXlsCsvXlsBytesXls.ToByteArray();
                     if (excelFile.StringId == "SKILLS") Debug.Assert(bytesXlsBytesXlsCsvXlsBytesXlsBytes.Length + 12 == bytesXlsBytes.Length);
                     else Debug.Assert(bytesXlsBytesXlsCsvXlsBytesXlsBytes.Length == bytesXlsBytes.Length || doTCv4);
-                    
+
                     if (!bytesXlsBytesXlsCsv.SequenceEqual(bytesXlsBytesXlsCsvXlsBytesXlsCsv))
                     {
                         Debug.WriteLine("csvBytes.SequenceEqual failed!");
@@ -1996,7 +1996,7 @@ namespace Reanimator
             }
         }
 
-        public static void TestAllXml()
+        public static void TestAllXml(bool doTCv4 = false)
         {
             //System.Security.Cryptography.MD5CryptoServiceProvider md5 = new System.Security.Cryptography.MD5CryptoServiceProvider();
             //const String root = @"D:\Games\Hellgate\Data\";
@@ -2004,14 +2004,20 @@ namespace Reanimator
             //const String root = @"D:\Games\Hellgate London\data\mp_hellgate_1.10.180.3416_1.0.86.4580\data\background\";
             //List<String> xmlFiles = new List<String>(Directory.GetFiles(root, "*.xml.cooked", SearchOption.AllDirectories));
 
-            FileManager fileManager = new FileManager(Config.HglDir);
+            String debugPath = @"C:\xml_debug\";
+            FileManager.ClientVersions clientVersion = FileManager.ClientVersions.SinglePlayer;
+            if (doTCv4)
+            {
+                debugPath = Path.Combine(debugPath, "tcv4");
+                clientVersion = FileManager.ClientVersions.TestCenter;
+            }
+            debugPath += @"\"; // lazy
+            Directory.CreateDirectory(debugPath);
+
+            FileManager fileManager = new FileManager(Config.HglDir, clientVersion);
             fileManager.BeginAllDatReadAccess();
             fileManager.LoadTableFiles();
-            //fileManager.EndAllDatAccess();
-            //XmlCookedFile.Initialize(fileManager);
 
-            String debugPath = @"C:\xml_debug\";
-            Directory.CreateDirectory(debugPath);
             int count = 0;
             List<XmlCookedFile> excelStringWarnings = new List<XmlCookedFile>();
             List<String> testCentreWarnings = new List<String>();
@@ -2023,16 +2029,16 @@ namespace Reanimator
 
                 String xmlFilePath = fileEntry.Path;
 
-                //const String debugStr = "shield09_appearance";
+                //const String debugStr = "buildintx_inside_env";
                 //if (!xmlFilePath.Contains(debugStr)) continue;
                 //if (xmlFilePath.Contains(debugStr))
                 //{
                 //    int bp = 0;
                 //}
-                
 
-            //foreach (String xmlFilePath in xmlFiles)
-            //{
+
+                //foreach (String xmlFilePath in xmlFiles)
+                //{
                 //bool skip = ((i++ % 23) > 0);
                 //if (skip)
                 //{
@@ -2065,11 +2071,11 @@ namespace Reanimator
                 //    int bp = 0;
                 //}
 
-                XmlCookedFile xmlCookedFile = new XmlCookedFile(fileManager, fileName);
+                XmlCookedFile xmlCookedFile = new XmlCookedFile(fileManager, fileName) { CookExcludeTestCentre = !doTCv4 };
                 byte[] data = fileManager.GetFileBytes(fileEntry);
                 Debug.Assert(data != null && data.Length > 0);
 
-                //Console.WriteLine("Uncooking: " + fileName);
+                Console.Write("Uncooking " + fileName + "... ");
 
                 try
                 {
@@ -2088,9 +2094,9 @@ namespace Reanimator
                 if (xmlCookedFile.HasExcelStringsMissing) excelStringWarnings.Add(xmlCookedFile);
                 if (xmlCookedFile.HasTestCentreElements) testCentreWarnings.Add(Path.GetFileName(fileName));
                 if (xmlCookedFile.HasResurrectionElements) resurrectionWarnings.Add(Path.GetFileName(fileName));
-                if (xmlCookedFile.HasExcelStringsMissing || xmlCookedFile.HasTestCentreElements || xmlCookedFile.HasResurrectionElements) continue;
+                //if (xmlCookedFile.HasExcelStringsMissing || xmlCookedFile.HasTestCentreElements || xmlCookedFile.HasResurrectionElements) continue;
 
-                XmlCookedFile recookedXmlFile = new XmlCookedFile(fileManager, fileName);// { CookExcludeResurrection = false };
+                XmlCookedFile recookedXmlFile = new XmlCookedFile(fileManager, fileName) { CookExcludeTestCentre = !doTCv4 };
                 byte[] newXmlCookedBytes = recookedXmlFile.ParseFileBytes(newXmlBytes);
 
                 // check if *cooking method* is working. i.e. is the cook from the *new* XML format == the original cooked
@@ -2099,7 +2105,7 @@ namespace Reanimator
                 // if file passes byte-byte test, then continue
                 if (identicalNew)
                 {
-                    Console.WriteLine("{0} passed checks...", path);
+                    Console.WriteLine("OK!");
                     continue;
                 }
 
@@ -2112,7 +2118,7 @@ namespace Reanimator
                     path.Contains("player dead.xml")
                  )
                 {
-                    Console.WriteLine("{0} passed checks...", path);
+                    Console.WriteLine("OK!");
                     continue;
                 }
 
@@ -2120,7 +2126,7 @@ namespace Reanimator
                 File.WriteAllBytes(debugPath + fileName + "recooked", newXmlCookedBytes);
                 File.WriteAllBytes(debugPath + fileName.Replace(".cooked", ""), newXmlBytes);
 
-                Console.WriteLine("{0} failed!", path);
+                Console.WriteLine("FAILED!");
             }
 
             TextWriter consoleOut = Console.Out;

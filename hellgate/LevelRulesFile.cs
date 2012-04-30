@@ -192,6 +192,16 @@ namespace Hellgate
         public String FilePath { get; private set; }
         public LevelRulesRow LevelRulesData { get; private set; }
 
+        /// <summary>
+        /// Default constructor if only wanting to convert to/from XML.
+        /// </summary>
+        public LevelRulesFile() { }
+
+        /// <summary>
+        /// Initiates the LevelRulesFile object with extra info for extended object usage.
+        /// </summary>
+        /// <param name="path">(optional) Provide path to file - used only for easier path access.</param>
+        /// <param name="levelRulesRow">(optional) Provide reference to table row - used only for easier object access.</param>
         public LevelRulesFile(String path, LevelRulesRow levelRulesRow)
         {
             FilePath = path;

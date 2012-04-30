@@ -83,7 +83,7 @@
             this.advancedCommands_tabPage = new System.Windows.Forms.TabPage();
             this.button1 = new System.Windows.Forms.Button();
             this.extractUncook_groupBox = new System.Windows.Forms.GroupBox();
-            this.tableLayoutPanel1 = new System.Windows.Forms.TableLayoutPanel();
+            this._quickExtractTableLayoutPanel = new System.Windows.Forms.TableLayoutPanel();
             this.quickXml_button = new System.Windows.Forms.Button();
             this.label5 = new System.Windows.Forms.Label();
             this._quickExcel_button = new System.Windows.Forms.Button();
@@ -93,6 +93,8 @@
             this._quickExcelBrowse_button = new System.Windows.Forms.Button();
             this._quickExcelDir_textBox = new System.Windows.Forms.TextBox();
             this._quckExcel_label = new System.Windows.Forms.Label();
+            this._quickLevelRulesButton = new System.Windows.Forms.Button();
+            this._quickLevelRulesLabel = new System.Windows.Forms.Label();
             this._fileEntry_contextMenu.SuspendLayout();
             this.tabControl1.SuspendLayout();
             this.fileExplorer_tabPage.SuspendLayout();
@@ -110,7 +112,7 @@
             this.options_tableLayoutPanel.SuspendLayout();
             this.advancedCommands_tabPage.SuspendLayout();
             this.extractUncook_groupBox.SuspendLayout();
-            this.tableLayoutPanel1.SuspendLayout();
+            this._quickExtractTableLayoutPanel.SuspendLayout();
             this.tableLayoutPanel2.SuspendLayout();
             this.tableLayoutPanel3.SuspendLayout();
             this.SuspendLayout();
@@ -338,7 +340,7 @@
             this._selectedFile_groupBox.Controls.Add(this._files_listView);
             this._selectedFile_groupBox.Location = new System.Drawing.Point(4, 3);
             this._selectedFile_groupBox.Name = "_selectedFile_groupBox";
-            this._selectedFile_groupBox.Size = new System.Drawing.Size(460, 157);
+            this._selectedFile_groupBox.Size = new System.Drawing.Size(424, 157);
             this._selectedFile_groupBox.TabIndex = 6;
             this._selectedFile_groupBox.TabStop = false;
             this._selectedFile_groupBox.Text = "Selected File Details (Right Click for Options (TODO))";
@@ -361,7 +363,7 @@
             this._files_listView.Location = new System.Drawing.Point(5, 22);
             this._files_listView.Margin = new System.Windows.Forms.Padding(2, 3, 2, 3);
             this._files_listView.Name = "_files_listView";
-            this._files_listView.Size = new System.Drawing.Size(447, 129);
+            this._files_listView.Size = new System.Drawing.Size(411, 129);
             this._files_listView.TabIndex = 5;
             this._files_listView.UseCompatibleStateImageBehavior = false;
             this._files_listView.View = System.Windows.Forms.View.Details;
@@ -407,7 +409,7 @@
             this._fileActions_groupBox.Controls.Add(this._fileActionsPatch_checkBox);
             this._fileActions_groupBox.Location = new System.Drawing.Point(4, 166);
             this._fileActions_groupBox.Name = "_fileActions_groupBox";
-            this._fileActions_groupBox.Size = new System.Drawing.Size(460, 289);
+            this._fileActions_groupBox.Size = new System.Drawing.Size(424, 289);
             this._fileActions_groupBox.TabIndex = 5;
             this._fileActions_groupBox.TabStop = false;
             this._fileActions_groupBox.Text = "Checked File Actions";
@@ -478,7 +480,7 @@
             // _fileActionsBrowse_button
             // 
             this._fileActionsBrowse_button.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Right)));
-            this._fileActionsBrowse_button.Location = new System.Drawing.Point(356, 49);
+            this._fileActionsBrowse_button.Location = new System.Drawing.Point(320, 49);
             this._fileActionsBrowse_button.Name = "_fileActionsBrowse_button";
             this._fileActionsBrowse_button.Size = new System.Drawing.Size(75, 23);
             this._fileActionsBrowse_button.TabIndex = 3;
@@ -492,7 +494,7 @@
             | System.Windows.Forms.AnchorStyles.Right)));
             this._fileActionsPath_textBox.Location = new System.Drawing.Point(7, 49);
             this._fileActionsPath_textBox.Name = "_fileActionsPath_textBox";
-            this._fileActionsPath_textBox.Size = new System.Drawing.Size(343, 23);
+            this._fileActionsPath_textBox.Size = new System.Drawing.Size(307, 23);
             this._fileActionsPath_textBox.TabIndex = 2;
             // 
             // _fileActionsExtract_checkBox
@@ -525,7 +527,7 @@
             this.groupBox3.Margin = new System.Windows.Forms.Padding(2, 3, 2, 3);
             this.groupBox3.Name = "groupBox3";
             this.groupBox3.Padding = new System.Windows.Forms.Padding(2, 3, 2, 3);
-            this.groupBox3.Size = new System.Drawing.Size(457, 98);
+            this.groupBox3.Size = new System.Drawing.Size(421, 98);
             this.groupBox3.TabIndex = 3;
             this.groupBox3.TabStop = false;
             this.groupBox3.Text = "Cooking";
@@ -548,7 +550,7 @@
             this.tableLayoutPanel4.RowCount = 2;
             this.tableLayoutPanel4.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Percent, 50F));
             this.tableLayoutPanel4.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Percent, 50F));
-            this.tableLayoutPanel4.Size = new System.Drawing.Size(439, 70);
+            this.tableLayoutPanel4.Size = new System.Drawing.Size(403, 70);
             this.tableLayoutPanel4.TabIndex = 0;
             // 
             // uncook_button
@@ -573,7 +575,7 @@
             this.cook_label.Location = new System.Drawing.Point(163, 0);
             this.cook_label.Margin = new System.Windows.Forms.Padding(2, 0, 2, 0);
             this.cook_label.Name = "cook_label";
-            this.cook_label.Size = new System.Drawing.Size(274, 35);
+            this.cook_label.Size = new System.Drawing.Size(238, 35);
             this.cook_label.TabIndex = 1;
             this.cook_label.Text = "Uncook checked file/folders that can be uncooked.\r\nThey will be placed in their a" +
     "pplicable \\data\\ location.";
@@ -601,7 +603,7 @@
             this.uncook_label.Location = new System.Drawing.Point(163, 35);
             this.uncook_label.Margin = new System.Windows.Forms.Padding(2, 0, 2, 0);
             this.uncook_label.Name = "uncook_label";
-            this.uncook_label.Size = new System.Drawing.Size(274, 35);
+            this.uncook_label.Size = new System.Drawing.Size(238, 35);
             this.uncook_label.TabIndex = 3;
             this.uncook_label.Text = "Cook checked files/folders that can be cooked.\r\nWARNING: Cooked files will be pla" +
     "ced in \\data\\ location overwriting previous versions.\r\n(files in .dat will be un" +
@@ -618,7 +620,7 @@
             this.groupBox2.Margin = new System.Windows.Forms.Padding(2, 3, 2, 3);
             this.groupBox2.Name = "groupBox2";
             this.groupBox2.Padding = new System.Windows.Forms.Padding(2, 3, 2, 3);
-            this.groupBox2.Size = new System.Drawing.Size(460, 154);
+            this.groupBox2.Size = new System.Drawing.Size(424, 154);
             this.groupBox2.TabIndex = 2;
             this.groupBox2.TabStop = false;
             this.groupBox2.Text = "Options";
@@ -647,7 +649,7 @@
             this.options_tableLayoutPanel.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Percent, 25F));
             this.options_tableLayoutPanel.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Percent, 25F));
             this.options_tableLayoutPanel.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Percent, 25F));
-            this.options_tableLayoutPanel.Size = new System.Drawing.Size(438, 125);
+            this.options_tableLayoutPanel.Size = new System.Drawing.Size(402, 125);
             this.options_tableLayoutPanel.TabIndex = 1;
             // 
             // revertFile_label
@@ -658,7 +660,7 @@
             this.revertFile_label.Location = new System.Drawing.Point(163, 93);
             this.revertFile_label.Margin = new System.Windows.Forms.Padding(2, 0, 2, 0);
             this.revertFile_label.Name = "revertFile_label";
-            this.revertFile_label.Size = new System.Drawing.Size(273, 32);
+            this.revertFile_label.Size = new System.Drawing.Size(237, 32);
             this.revertFile_label.TabIndex = 9;
             this.revertFile_label.Text = "Re-Patch necessary index files to have the game to load original unmodified check" +
     "ed files/folders.";
@@ -672,7 +674,7 @@
             this.extractPatch_label.Location = new System.Drawing.Point(163, 31);
             this.extractPatch_label.Margin = new System.Windows.Forms.Padding(2, 0, 2, 0);
             this.extractPatch_label.Name = "extractPatch_label";
-            this.extractPatch_label.Size = new System.Drawing.Size(273, 31);
+            this.extractPatch_label.Size = new System.Drawing.Size(237, 31);
             this.extractPatch_label.TabIndex = 5;
             this.extractPatch_label.Text = "Extract checked files/folders to game data location, then patch necessary index f" +
     "iles forcing the game to load extracted files.\r\nNote: Non-patchable files (e.g. " +
@@ -687,7 +689,7 @@
             this.extract_label.Location = new System.Drawing.Point(163, 0);
             this.extract_label.Margin = new System.Windows.Forms.Padding(2, 0, 2, 0);
             this.extract_label.Name = "extract_label";
-            this.extract_label.Size = new System.Drawing.Size(273, 31);
+            this.extract_label.Size = new System.Drawing.Size(237, 31);
             this.extract_label.TabIndex = 4;
             this.extract_label.Text = "Extract checked files/folders to a selected location.";
             this.extract_label.TextAlign = System.Drawing.ContentAlignment.MiddleLeft;
@@ -741,7 +743,7 @@
             this.packPatch_label.Location = new System.Drawing.Point(163, 62);
             this.packPatch_label.Margin = new System.Windows.Forms.Padding(2, 0, 2, 0);
             this.packPatch_label.Name = "packPatch_label";
-            this.packPatch_label.Size = new System.Drawing.Size(273, 31);
+            this.packPatch_label.Size = new System.Drawing.Size(237, 31);
             this.packPatch_label.TabIndex = 7;
             this.packPatch_label.Text = "Pack checked files/folders into a custom dat/idx to have the game load the files " +
     "from an isolated .dat.";
@@ -781,7 +783,7 @@
             this.button1.Name = "button1";
             this.button1.Size = new System.Drawing.Size(146, 62);
             this.button1.TabIndex = 1;
-            this.button1.Text = "Patch out all files";
+            this.button1.Text = "Patch out all files\r\n(dev. tool - you have been warned)";
             this.button1.UseVisualStyleBackColor = true;
             this.button1.Click += new System.EventHandler(this.button1_Click);
             // 
@@ -789,34 +791,39 @@
             // 
             this.extractUncook_groupBox.Anchor = ((System.Windows.Forms.AnchorStyles)(((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Left) 
             | System.Windows.Forms.AnchorStyles.Right)));
-            this.extractUncook_groupBox.Controls.Add(this.tableLayoutPanel1);
+            this.extractUncook_groupBox.Controls.Add(this._quickExtractTableLayoutPanel);
             this.extractUncook_groupBox.Location = new System.Drawing.Point(9, 7);
             this.extractUncook_groupBox.Margin = new System.Windows.Forms.Padding(2, 3, 2, 3);
             this.extractUncook_groupBox.Name = "extractUncook_groupBox";
             this.extractUncook_groupBox.Padding = new System.Windows.Forms.Padding(2, 3, 2, 3);
-            this.extractUncook_groupBox.Size = new System.Drawing.Size(844, 194);
+            this.extractUncook_groupBox.Size = new System.Drawing.Size(876, 268);
             this.extractUncook_groupBox.TabIndex = 0;
             this.extractUncook_groupBox.TabStop = false;
             this.extractUncook_groupBox.Text = "Quick Extract && Uncook";
             // 
-            // tableLayoutPanel1
+            // _quickExtractTableLayoutPanel
             // 
-            this.tableLayoutPanel1.ColumnCount = 2;
-            this.tableLayoutPanel1.ColumnStyles.Add(new System.Windows.Forms.ColumnStyle(System.Windows.Forms.SizeType.Percent, 11.77199F));
-            this.tableLayoutPanel1.ColumnStyles.Add(new System.Windows.Forms.ColumnStyle(System.Windows.Forms.SizeType.Percent, 88.228F));
-            this.tableLayoutPanel1.Controls.Add(this.quickXml_button, 0, 0);
-            this.tableLayoutPanel1.Controls.Add(this.label5, 1, 0);
-            this.tableLayoutPanel1.Controls.Add(this._quickExcel_button, 0, 1);
-            this.tableLayoutPanel1.Controls.Add(this.tableLayoutPanel2, 1, 1);
-            this.tableLayoutPanel1.Dock = System.Windows.Forms.DockStyle.Fill;
-            this.tableLayoutPanel1.Location = new System.Drawing.Point(2, 19);
-            this.tableLayoutPanel1.Margin = new System.Windows.Forms.Padding(2, 3, 2, 3);
-            this.tableLayoutPanel1.Name = "tableLayoutPanel1";
-            this.tableLayoutPanel1.RowCount = 2;
-            this.tableLayoutPanel1.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Percent, 50F));
-            this.tableLayoutPanel1.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Percent, 50F));
-            this.tableLayoutPanel1.Size = new System.Drawing.Size(840, 172);
-            this.tableLayoutPanel1.TabIndex = 0;
+            this._quickExtractTableLayoutPanel.AutoSize = true;
+            this._quickExtractTableLayoutPanel.AutoSizeMode = System.Windows.Forms.AutoSizeMode.GrowAndShrink;
+            this._quickExtractTableLayoutPanel.ColumnCount = 2;
+            this._quickExtractTableLayoutPanel.ColumnStyles.Add(new System.Windows.Forms.ColumnStyle(System.Windows.Forms.SizeType.Percent, 11.77199F));
+            this._quickExtractTableLayoutPanel.ColumnStyles.Add(new System.Windows.Forms.ColumnStyle(System.Windows.Forms.SizeType.Percent, 88.22801F));
+            this._quickExtractTableLayoutPanel.Controls.Add(this.quickXml_button, 0, 0);
+            this._quickExtractTableLayoutPanel.Controls.Add(this.label5, 1, 0);
+            this._quickExtractTableLayoutPanel.Controls.Add(this._quickExcel_button, 0, 1);
+            this._quickExtractTableLayoutPanel.Controls.Add(this.tableLayoutPanel2, 1, 1);
+            this._quickExtractTableLayoutPanel.Controls.Add(this._quickLevelRulesButton, 0, 2);
+            this._quickExtractTableLayoutPanel.Controls.Add(this._quickLevelRulesLabel, 1, 2);
+            this._quickExtractTableLayoutPanel.Dock = System.Windows.Forms.DockStyle.Fill;
+            this._quickExtractTableLayoutPanel.Location = new System.Drawing.Point(2, 19);
+            this._quickExtractTableLayoutPanel.Margin = new System.Windows.Forms.Padding(2, 3, 2, 3);
+            this._quickExtractTableLayoutPanel.Name = "_quickExtractTableLayoutPanel";
+            this._quickExtractTableLayoutPanel.RowCount = 3;
+            this._quickExtractTableLayoutPanel.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Percent, 33.33333F));
+            this._quickExtractTableLayoutPanel.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Percent, 33.33333F));
+            this._quickExtractTableLayoutPanel.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Percent, 33.33333F));
+            this._quickExtractTableLayoutPanel.Size = new System.Drawing.Size(872, 246);
+            this._quickExtractTableLayoutPanel.TabIndex = 0;
             // 
             // quickXml_button
             // 
@@ -824,20 +831,20 @@
             this.quickXml_button.Location = new System.Drawing.Point(2, 3);
             this.quickXml_button.Margin = new System.Windows.Forms.Padding(2, 3, 2, 3);
             this.quickXml_button.Name = "quickXml_button";
-            this.quickXml_button.Size = new System.Drawing.Size(94, 80);
+            this.quickXml_button.Size = new System.Drawing.Size(98, 75);
             this.quickXml_button.TabIndex = 0;
-            this.quickXml_button.Text = "XML Files";
+            this.quickXml_button.Text = "XML Files\r\n(*.xml.cooked)";
             this.quickXml_button.UseVisualStyleBackColor = true;
-            this.quickXml_button.Click += new System.EventHandler(this._QuickXmlButton_Click);
+            this.quickXml_button.Click += new System.EventHandler(this._QuickXmlButtonClick);
             // 
             // label5
             // 
             this.label5.AutoSize = true;
             this.label5.Dock = System.Windows.Forms.DockStyle.Fill;
-            this.label5.Location = new System.Drawing.Point(100, 0);
+            this.label5.Location = new System.Drawing.Point(104, 0);
             this.label5.Margin = new System.Windows.Forms.Padding(2, 0, 2, 0);
             this.label5.Name = "label5";
-            this.label5.Size = new System.Drawing.Size(738, 86);
+            this.label5.Size = new System.Drawing.Size(766, 81);
             this.label5.TabIndex = 1;
             this.label5.Text = "Will uncook all .xml.cooked files from entire HGL filesystem to a user specified " +
     "location.\r\n(requires ~800 MB free space)";
@@ -846,12 +853,12 @@
             // _quickExcel_button
             // 
             this._quickExcel_button.Dock = System.Windows.Forms.DockStyle.Fill;
-            this._quickExcel_button.Location = new System.Drawing.Point(2, 89);
+            this._quickExcel_button.Location = new System.Drawing.Point(2, 84);
             this._quickExcel_button.Margin = new System.Windows.Forms.Padding(2, 3, 2, 3);
             this._quickExcel_button.Name = "_quickExcel_button";
-            this._quickExcel_button.Size = new System.Drawing.Size(94, 80);
+            this._quickExcel_button.Size = new System.Drawing.Size(98, 75);
             this._quickExcel_button.TabIndex = 2;
-            this._quickExcel_button.Text = "Excel Files";
+            this._quickExcel_button.Text = "Excel Files\r\n(*.txt.cooked)";
             this._quickExcel_button.UseVisualStyleBackColor = true;
             this._quickExcel_button.Click += new System.EventHandler(this._QuickExcel_Button_Click);
             // 
@@ -864,13 +871,13 @@
             this.tableLayoutPanel2.ColumnStyles.Add(new System.Windows.Forms.ColumnStyle(System.Windows.Forms.SizeType.Percent, 50F));
             this.tableLayoutPanel2.Controls.Add(this.tableLayoutPanel3, 0, 1);
             this.tableLayoutPanel2.Controls.Add(this._quckExcel_label, 0, 0);
-            this.tableLayoutPanel2.Location = new System.Drawing.Point(100, 89);
+            this.tableLayoutPanel2.Location = new System.Drawing.Point(104, 84);
             this.tableLayoutPanel2.Margin = new System.Windows.Forms.Padding(2, 3, 2, 3);
             this.tableLayoutPanel2.Name = "tableLayoutPanel2";
             this.tableLayoutPanel2.RowCount = 2;
             this.tableLayoutPanel2.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Percent, 50F));
             this.tableLayoutPanel2.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Percent, 50F));
-            this.tableLayoutPanel2.Size = new System.Drawing.Size(738, 80);
+            this.tableLayoutPanel2.Size = new System.Drawing.Size(766, 75);
             this.tableLayoutPanel2.TabIndex = 3;
             // 
             // tableLayoutPanel3
@@ -885,29 +892,29 @@
             this.tableLayoutPanel3.Controls.Add(this._quickExcelTCv4_checkBox, 2, 0);
             this.tableLayoutPanel3.Controls.Add(this._quickExcelBrowse_button, 1, 0);
             this.tableLayoutPanel3.Controls.Add(this._quickExcelDir_textBox, 0, 0);
-            this.tableLayoutPanel3.Location = new System.Drawing.Point(2, 43);
+            this.tableLayoutPanel3.Location = new System.Drawing.Point(2, 40);
             this.tableLayoutPanel3.Margin = new System.Windows.Forms.Padding(2, 3, 2, 3);
             this.tableLayoutPanel3.Name = "tableLayoutPanel3";
             this.tableLayoutPanel3.RowCount = 1;
             this.tableLayoutPanel3.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Percent, 50F));
-            this.tableLayoutPanel3.Size = new System.Drawing.Size(734, 34);
+            this.tableLayoutPanel3.Size = new System.Drawing.Size(762, 32);
             this.tableLayoutPanel3.TabIndex = 0;
             // 
             // _quickExcelTCv4_checkBox
             // 
             this._quickExcelTCv4_checkBox.AutoSize = true;
             this._quickExcelTCv4_checkBox.Dock = System.Windows.Forms.DockStyle.Fill;
-            this._quickExcelTCv4_checkBox.Location = new System.Drawing.Point(357, 3);
+            this._quickExcelTCv4_checkBox.Location = new System.Drawing.Point(368, 3);
             this._quickExcelTCv4_checkBox.Margin = new System.Windows.Forms.Padding(2, 3, 2, 3);
             this._quickExcelTCv4_checkBox.Name = "_quickExcelTCv4_checkBox";
-            this._quickExcelTCv4_checkBox.Size = new System.Drawing.Size(375, 28);
+            this._quickExcelTCv4_checkBox.Size = new System.Drawing.Size(392, 26);
             this._quickExcelTCv4_checkBox.TabIndex = 7;
             this._quickExcelTCv4_checkBox.Text = "Include TCv4 Files (requires TCv4 loading option enabled)";
             this._quickExcelTCv4_checkBox.UseVisualStyleBackColor = true;
             // 
             // _quickExcelBrowse_button
             // 
-            this._quickExcelBrowse_button.Location = new System.Drawing.Point(254, 3);
+            this._quickExcelBrowse_button.Location = new System.Drawing.Point(265, 3);
             this._quickExcelBrowse_button.Margin = new System.Windows.Forms.Padding(2, 3, 2, 3);
             this._quickExcelBrowse_button.Name = "_quickExcelBrowse_button";
             this._quickExcelBrowse_button.Size = new System.Drawing.Size(86, 25);
@@ -932,12 +939,39 @@
             this._quckExcel_label.Location = new System.Drawing.Point(2, 0);
             this._quckExcel_label.Margin = new System.Windows.Forms.Padding(2, 0, 2, 0);
             this._quckExcel_label.Name = "_quckExcel_label";
-            this._quckExcel_label.Size = new System.Drawing.Size(734, 40);
+            this._quckExcel_label.Size = new System.Drawing.Size(762, 37);
             this._quckExcel_label.TabIndex = 1;
             this._quckExcel_label.Text = "Uncook all excel files to the specified location, maintinaing their directory str" +
     "ucture.\r\nIf applicable, the TCv4 files will be placed in an initial directory /T" +
     "Cv4/";
             this._quckExcel_label.TextAlign = System.Drawing.ContentAlignment.MiddleLeft;
+            // 
+            // _quickLevelRulesButton
+            // 
+            this._quickLevelRulesButton.Anchor = ((System.Windows.Forms.AnchorStyles)((((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Bottom) 
+            | System.Windows.Forms.AnchorStyles.Left) 
+            | System.Windows.Forms.AnchorStyles.Right)));
+            this._quickLevelRulesButton.Location = new System.Drawing.Point(3, 165);
+            this._quickLevelRulesButton.Name = "_quickLevelRulesButton";
+            this._quickLevelRulesButton.Size = new System.Drawing.Size(96, 78);
+            this._quickLevelRulesButton.TabIndex = 4;
+            this._quickLevelRulesButton.Text = "Level Rule Files\r\n(*.drl)";
+            this._quickLevelRulesButton.UseVisualStyleBackColor = true;
+            this._quickLevelRulesButton.Click += new System.EventHandler(this._QuickLevelRulesButtonClick);
+            // 
+            // _quickLevelRulesLabel
+            // 
+            this._quickLevelRulesLabel.Anchor = ((System.Windows.Forms.AnchorStyles)((((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Bottom) 
+            | System.Windows.Forms.AnchorStyles.Left) 
+            | System.Windows.Forms.AnchorStyles.Right)));
+            this._quickLevelRulesLabel.AutoSize = true;
+            this._quickLevelRulesLabel.Location = new System.Drawing.Point(105, 162);
+            this._quickLevelRulesLabel.Name = "_quickLevelRulesLabel";
+            this._quickLevelRulesLabel.Size = new System.Drawing.Size(764, 84);
+            this._quickLevelRulesLabel.TabIndex = 5;
+            this._quickLevelRulesLabel.Text = "Will convert and save all Level Rule files (*.drl) from entire HGL filesystem to " +
+    "a user-specified location.\r\n(requires ~3 MB free space)";
+            this._quickLevelRulesLabel.TextAlign = System.Drawing.ContentAlignment.MiddleLeft;
             // 
             // FileExplorer
             // 
@@ -973,8 +1007,9 @@
             this.options_tableLayoutPanel.PerformLayout();
             this.advancedCommands_tabPage.ResumeLayout(false);
             this.extractUncook_groupBox.ResumeLayout(false);
-            this.tableLayoutPanel1.ResumeLayout(false);
-            this.tableLayoutPanel1.PerformLayout();
+            this.extractUncook_groupBox.PerformLayout();
+            this._quickExtractTableLayoutPanel.ResumeLayout(false);
+            this._quickExtractTableLayoutPanel.PerformLayout();
             this.tableLayoutPanel2.ResumeLayout(false);
             this.tableLayoutPanel2.PerformLayout();
             this.tableLayoutPanel3.ResumeLayout(false);
@@ -1019,7 +1054,7 @@
         private System.Windows.Forms.TabPage advancedCommands_tabPage;
         private System.Windows.Forms.Button button1;
         private System.Windows.Forms.GroupBox extractUncook_groupBox;
-        private System.Windows.Forms.TableLayoutPanel tableLayoutPanel1;
+        private System.Windows.Forms.TableLayoutPanel _quickExtractTableLayoutPanel;
         private System.Windows.Forms.Button quickXml_button;
         private System.Windows.Forms.Label label5;
         private System.Windows.Forms.Button _quickExcel_button;
@@ -1049,6 +1084,8 @@
         private System.Windows.Forms.CheckBox checkBoxPreview;
         private System.Windows.Forms.Button buttonCopy;
         private System.Windows.Forms.TextBox textBoxPath;
+        private System.Windows.Forms.Button _quickLevelRulesButton;
+        private System.Windows.Forms.Label _quickLevelRulesLabel;
 
     }
 }

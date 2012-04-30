@@ -1119,10 +1119,10 @@ namespace Reanimator.Forms
             }
         }
 
-        private void _QuickXmlButton_Click(object sender, EventArgs e)
+        private void _QuickXmlButtonClick(object sender, EventArgs e)
         {
             // where do we want to save it
-            FolderBrowserDialog folderBrowserDialog = new FolderBrowserDialog { SelectedPath = Config.HglDir };
+            FolderBrowserDialog folderBrowserDialog = new FolderBrowserDialog { SelectedPath = Config.HglDir, Description = "Select folder to save uncooked XML files..."};
             if (folderBrowserDialog.ShowDialog(this) != DialogResult.OK) return;
 
             ExtractPackPatchArgs extractPatchArgs = new ExtractPackPatchArgs
@@ -1131,7 +1131,7 @@ namespace Reanimator.Forms
             };
 
             ProgressForm progressForm = new ProgressForm(_QuickXmlWorker, extractPatchArgs);
-            progressForm.SetLoadingText("Extracting an Uncooking .xml.cooked files...");
+            progressForm.SetLoadingText("Extracting and uncooking *.xml.cooked files...");
             progressForm.Show(this);
         }
 
@@ -1148,13 +1148,13 @@ namespace Reanimator.Forms
 
 
             // get all .xml.cooked
-            IEnumerable<PackFileEntry> xmlCookedFiles = _fileManager.FileEntries.Values.Where(fileEntry => fileEntry.Name.EndsWith(XmlCookedFile.Extension));
+            List<PackFileEntry> xmlCookedFiles = _fileManager.FileEntries.Values.Where(fileEntry => fileEntry.Name.EndsWith(XmlCookedFile.Extension)).ToList();
             _fileManager.BeginAllDatReadAccess();
 
             // loop through file entries
             int count = xmlCookedFiles.Count();
             progressForm.ConfigBar(1, count, progressStepRate);
-            progressForm.SetCurrentItemText("Extracting and Uncooking .xml.cooked files... (" + count + ")");
+            progressForm.SetLoadingText("Extracting and uncooking .xml.cooked files... (" + count + ")");
             int i = 0;
             int uncooked = 0;
             int readFailed = 0;
@@ -1248,6 +1248,149 @@ namespace Reanimator.Forms
             if (testCentreWarnings > 0) Console.WriteLine(testCentreWarnings + " file(s) had TestCentre-specific XML elements which wont be included when recooked.");
             if (resurrectionWarnings > 0) Console.WriteLine(resurrectionWarnings + " file(s) had Resurrection-specific XML elements which wont be included when recooked.");
             if (excelWarnings > 0) Console.WriteLine(excelWarnings + " file(s) had excel warnings and cannot be safely recooked.");
+            textWriter.Close();
+            Console.SetOut(consoleOut);
+
+            try
+            {
+                Process process = new Process { StartInfo = { FileName = Config.TxtEditor, Arguments = outputResultsName } };
+                process.Start();
+            }
+            catch (Exception e)
+            {
+                MessageBox.Show(
+                    "Failed to open results!\nThe " + outputResultsName + " can be found in your Reanimator folder.\n" +
+                    e, "Error", MessageBoxButtons.OK, MessageBoxIcon.Error);
+            }
+        }
+
+        private void _QuickLevelRulesButtonClick(object sender, EventArgs e)
+        {
+            // where do we want to save it
+            FolderBrowserDialog folderBrowserDialog = new FolderBrowserDialog { SelectedPath = Config.HglDir, Description = "Select folder to save converted Level Rule files..."};
+            if (folderBrowserDialog.ShowDialog(this) != DialogResult.OK) return;
+
+            ExtractPackPatchArgs extractPatchArgs = new ExtractPackPatchArgs
+            {
+                RootDir = folderBrowserDialog.SelectedPath
+            };
+
+            ProgressForm progressForm = new ProgressForm(_QuickLevelRulesWorker, extractPatchArgs);
+            progressForm.SetLoadingText("Converting *.drl files...");
+            progressForm.Show(this);
+        }
+
+        private void _QuickLevelRulesWorker(ProgressForm progressForm, Object param)
+        {
+            const int progressStepRate = 50;
+            const String outputResultsName = "conversion_results_drl.txt";
+            ExtractPackPatchArgs extractPatchArgs = (ExtractPackPatchArgs)param;
+
+            TextWriter consoleOut = Console.Out;
+            TextWriter textWriter = new StreamWriter(outputResultsName);
+            Console.SetOut(textWriter);
+            Console.WriteLine("Results of most recent conversion of *.drl files. Please scroll to end for tallied results.");
+
+            // get files
+            List<PackFileEntry> drlFiles = _fileManager.FileEntries.Values.Where(fileEntry => fileEntry.Name.EndsWith(LevelRulesFile.Extension)).ToList();
+            _fileManager.BeginAllDatReadAccess();
+
+            // loop through file entries
+            int count = drlFiles.Count();
+            progressForm.ConfigBar(1, count, progressStepRate);
+            progressForm.SetLoadingText("Converting *.drl files... (" + count + ")");
+            int i = 0;
+            int successful = 0;
+            int readFailed = 0;
+            int exportFailed = 0;
+            int saveFailed = 0;
+            int failed = 0;
+            foreach (PackFileEntry fileEntry in drlFiles)
+            {
+                // update progress
+                if (i % progressStepRate == 0)
+                {
+                    progressForm.SetCurrentItemText(fileEntry.Path);
+                }
+                i++;
+
+                // get file and convert
+                Console.WriteLine("Processing file " + fileEntry.Path + "...");
+                byte[] fileBytes;
+                LevelRulesFile levelRulesFile = new LevelRulesFile();
+
+                try
+                {
+                    fileBytes = _fileManager.GetFileBytes(fileEntry);
+                }
+                catch (Exception ex)
+                {
+                    Debug.WriteLine(ex.ToString());
+                    Console.WriteLine("Error: FileManager failed to read file!\n");
+                    readFailed++;
+                    continue;
+                }
+
+                try
+                {
+                    levelRulesFile.ParseFileBytes(fileBytes);
+                }
+                catch (Exception ex)
+                {
+                    Debug.WriteLine(ex.ToString());
+                    Console.WriteLine("Warning: Failed to convert file: " + fileEntry.Name + "\n");
+                    failed++;
+                    continue;
+                }
+
+                // generate file
+                String savePath = Path.Combine(extractPatchArgs.RootDir, fileEntry.Path);
+
+                byte[] documentBytes;
+                try
+                {
+                    documentBytes = levelRulesFile.ExportAsDocument();
+                }
+                catch (Exception ex)
+                {
+                    Debug.WriteLine(ex.ToString());
+                    Console.WriteLine("Warning: ExportAsDocument() failed for file: " + savePath + "\n");
+                    exportFailed++;
+                    continue;
+                }
+
+                // save file
+                String filePath = savePath.Replace(LevelRulesFile.Extension, LevelRulesFile.ExtensionDeserialised);
+                try
+                {
+                    String directoryName = Path.GetDirectoryName(savePath);
+                    Debug.Assert(directoryName != null);
+
+                    Directory.CreateDirectory(directoryName);
+                    
+                    // FormTools.WriteFileWithRetry(filePath, documentBytes); should use this - but want a way to "cancel all" first, or will get endless questions for big failures
+                    File.WriteAllBytes(filePath, documentBytes);
+                }
+                catch (Exception ex)
+                {
+                    Debug.WriteLine(ex.ToString());
+                    Console.WriteLine("Warning: WriteAllBytes() failed for file: " + filePath + "\n");
+                    saveFailed++;
+                    continue;
+                }
+
+                successful++;
+            }
+
+            _fileManager.EndAllDatAccess();
+
+            // output final results
+            Console.WriteLine("\nFiles Found: " + count);
+            Console.WriteLine("\nFiles Created: " + successful);
+            if (readFailed > 0) Console.WriteLine(readFailed + " file(s) could not be read from the data files.");
+            if (exportFailed > 0) Console.WriteLine(readFailed + " file(s) could not be exported.");
+            if (saveFailed > 0) Console.WriteLine(readFailed + " file(s) could not be saved.");
+            if (failed > 0) Console.WriteLine(failed + " file(s) failed.");
             textWriter.Close();
             Console.SetOut(consoleOut);
 
