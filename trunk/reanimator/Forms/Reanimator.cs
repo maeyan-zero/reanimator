@@ -46,6 +46,7 @@ namespace Reanimator.Forms
             //TestScripts.TestAllExcelScripts();
             //TestScripts.TestExcelCooking(true);
             //TestScripts.TestDataTableExportAndImport();
+            //TestScripts.TestAllLevelRules();
             //ExcelScript.GlobalDebug(true);
             //XlsFile.GenerateExcelTables();
             if (true) return;

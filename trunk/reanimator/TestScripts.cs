@@ -1952,48 +1952,88 @@ namespace Reanimator
             }
         }
 
-        public static void LoadAllLevelRules()
+        public static void TestAllLevelRules(bool doTCv4=false)
         {
-            const String root = @"D:\Games\Hellgate London\data\background\";
-            List<String> drlFiles = new List<String>(Directory.GetFiles(root, "*.drl", SearchOption.AllDirectories));
+            //const String root = @"D:\Games\Hellgate London\data\background\";
+            //List<String> drlFiles = new List<String>(Directory.GetFiles(root, "*.drl", SearchOption.AllDirectories));
 
-            foreach (String drlFilePath in drlFiles)
+            String debugPath = @"C:\drl_debug\";
+            FileManager.ClientVersions clientVersion = FileManager.ClientVersions.SinglePlayer;
+            if (doTCv4)
             {
-                String path = drlFilePath;
+                debugPath = Path.Combine(debugPath, "tcv4");
+                clientVersion = FileManager.ClientVersions.TestCenter;
+            }
+            debugPath += @"\"; // lazy
+            Directory.CreateDirectory(debugPath);
+
+            FileManager fileManager = new FileManager(Config.HglDir, clientVersion);
+            fileManager.BeginAllDatReadAccess();
+            fileManager.LoadTableFiles();
+
+
+            int tested = 0;
+            int failed = 0;
+            //foreach (String drlFilePath in drlFiles)
+            foreach (PackFileEntry fileEntry in fileManager.FileEntries.Values)
+            {
+                if (!fileEntry.Path.EndsWith(LevelRulesFile.Extension)) continue;
+                tested++;
+                failed++;
+
+                //String path = drlFilePath;
+                String path = fileEntry.Path;
                 //path = @"D:\Games\Hellgate London\data\background\catacombs\ct_rule_100.drl";
                 //path = @"D:\Games\Hellgate London\data\background\city\rule_pmt02.drl";
 
-                byte[] levelRulesBytes = File.ReadAllBytes(path);
-                LevelRulesFile levelRulesFile = new LevelRulesFile(path, null);
+                //byte[] levelRulesBytes = File.ReadAllBytes(path);
+                byte[] bytes = fileManager.GetFileBytes(fileEntry);
+                LevelRulesFile bytesObj = new LevelRulesFile();
 
-                String fileName = path.Replace(@"D:\Games\Hellgate London\data\background\", "");
+                //String fileName = path.Replace(@"D:\Games\Hellgate London\data\background\", "");
+                String fileName = Path.GetFileName(path);
                 String xmlPath = path.Replace(LevelRulesFile.Extension, LevelRulesFile.ExtensionDeserialised);
                 Console.WriteLine("Loading: " + fileName);
                 try
                 {
-                    levelRulesFile.ParseFileBytes(levelRulesBytes);
-                    byte[] xmlBytes = levelRulesFile.ExportAsDocument();
-                    File.WriteAllBytes(xmlPath, xmlBytes);
+                    bytesObj.ParseFileBytes(bytes);
+                    byte[] bytesObjXml = bytesObj.ExportAsDocument();
+                    MemoryStream ms = new MemoryStream(bytesObjXml);
+                    //File.WriteAllBytes(xmlPath, xmlBytes);
 
                     XmlDocument xmlDocument = new XmlDocument();
-                    xmlDocument.Load(xmlPath);
-                    LevelRulesFile levelRulesFile2 = new LevelRulesFile(xmlPath, null);
-                    levelRulesFile2.ParseXmlDocument(xmlDocument);
-                    byte[] bytes = levelRulesFile2.ToByteArray();
+                    xmlDocument.Load(ms);//.Load(xmlPath);
+                    LevelRulesFile bytesObjXmlObj = new LevelRulesFile();
+                    bytesObjXmlObj.ParseXmlDocument(xmlDocument);
+                    byte[] bytesObjXmlObjXml = bytesObjXmlObj.ExportAsDocument();
+                    byte[] bytesObjXmlObjXmlBytes = bytesObjXmlObj.ToByteArray();
+
+                    if (!bytesObjXml.SequenceEqual(bytesObjXmlObjXml))
+                    {
+                        File.WriteAllBytes(debugPath + fileName + "0.bytesObjXml.xml", bytesObjXml);
+                        File.WriteAllBytes(debugPath + fileName + "1.bytesObjXmlObjXml.xml", bytesObjXmlObjXml);
+                    }
 
                     // note: ct_rule_100.drl has unreferenced rules (only one found out of all files)
-                    if (levelRulesBytes.Length != bytes.Length)
+                    if (bytes.Length != bytesObjXmlObjXmlBytes.Length && !path.Contains("ct_rule_100"))
                     {
-                        File.WriteAllBytes(path + "2", bytes);
+                        File.WriteAllBytes(debugPath + fileName + "0.bytesObjXml.xml", bytesObjXml);
+                        File.WriteAllBytes(debugPath + fileName + "1.bytesObjXmlObjXml.xml", bytesObjXmlObjXml);
+                        File.WriteAllBytes(debugPath + fileName + "2.bytes", bytes);
+                        File.WriteAllBytes(debugPath + fileName + "3.bytesObjXmlObjXmlBytes", bytesObjXmlObjXmlBytes);
                     }
+
+                    failed--;
                 }
                 catch (Exception e)
                 {
                     Console.WriteLine("Failed to load file!\n" + e);
                     continue;
                 }
-
             }
+
+            Console.WriteLine("Tested: " + tested);
+            Console.WriteLine("Failed: " + failed);
         }
 
         public static void TestAllXml(bool doTCv4 = false)
