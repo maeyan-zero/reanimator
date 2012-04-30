@@ -51,7 +51,7 @@ namespace Revival
             {
                 //_fileManager = new FileManager(@"D:\Games\Hellgate London");
                 //_fileManager.LoadTableFiles();
-                
+
 
                 ////byte[] buffer = fileManager.DataFiles["SOUNDS"].ExportCSV();
                 ////return;
@@ -89,7 +89,7 @@ namespace Revival
                 //byte[] excelCsvBytes = excelFile.ToByteArray();
                 //stopwatch.Stop();
                 //Console.WriteLine("Elapsed: {0}", stopwatch.Elapsed);
-                
+
 
                 //const String path = @"data\excel\strings\english\strings_revival.xls.uni2";
                 //byte[] cookedBytes = File.ReadAllBytes(path);
@@ -100,7 +100,7 @@ namespace Revival
                 //    File.WriteAllBytes(path + "2", csvBytes);
                 //    int bp = 0;
                 //}
-                
+
 
                 //doSearchCd = true;
                 //doCookTxt = true;
@@ -178,7 +178,7 @@ namespace Revival
             }
             #endregion
 
-            Console.WriteLine("Hellpack - the Hellgate London compiler.\nWritten by the Revival Team, 2010\nhttp://www.hellgateaus.net");
+            Console.WriteLine("Hellpack - the Hellgate London compiler.\nWritten by the Revival Team, 2012\nhttp://www.hellgateaus.net");
             Console.WriteLine(String.Empty);
 
             #region Command Line Arugements
@@ -302,7 +302,8 @@ namespace Revival
             // Search for .drl Level Rules files to cook
             if (doSearchCd && doLevelRules)
             {
-                // todo
+                IEnumerable<String> drlXmlToCompile = _SearchForDrlXmlFiles(currentDir);
+                if (drlXmlToCompile != null) levelRulesFilesToSerialize.AddRange(drlXmlToCompile);
             }
 
             // Search for .rom Level Rules files to cook
@@ -311,11 +312,15 @@ namespace Revival
                 // todo
             }
 
+
             // need for code/name -> row index lookups
+            Console.WriteLine("Loading FileManager...");
             _fileManager = new FileManager(hellgatePath);
             _fileManager.BeginAllDatReadAccess();
+            Console.WriteLine("Loading strings and tables...");
             _fileManager.LoadTableFiles();
             _fileManager.EndAllDatAccess();
+
 
             // Cook Txt files)
             if (doCookTxt)
@@ -413,7 +418,6 @@ namespace Revival
             return stringPaths;
         }
 
-
         public static string[] SearchForXmlFiles(string hellgatePath)
         {
             string[] xmlPaths = null;
@@ -423,10 +427,21 @@ namespace Revival
             {
                 string xmlWildCard = String.Format("*{0}", XmlCookedFile.ExtensionDeserialised);
                 xmlPaths = Directory.GetFiles(dataDir, xmlWildCard, SearchOption.AllDirectories);
-                xmlPaths = xmlPaths.Where(str => !str.Contains("uix")).ToArray(); // remove uix xml files
+                xmlPaths = xmlPaths.Where(str => !str.Contains("uix") && !str.EndsWith(LevelRulesFile.ExtensionDeserialised)).ToArray(); // remove uix xml files and .drl.xml files
             }
 
             return xmlPaths;
+        }
+
+
+        private static IEnumerable<String> _SearchForDrlXmlFiles(String hellgatePath)
+        {
+            String dataDir = Path.Combine(hellgatePath, "data");
+            if (!Directory.Exists(dataDir)) return null;
+
+            String xmlWildCard = String.Format("*{0}", LevelRulesFile.ExtensionDeserialised);
+            String[] paths = Directory.GetFiles(dataDir, xmlWildCard, SearchOption.AllDirectories);
+            return paths;
         }
 
         public static string[] SearchForFilesToPack(string hellgatePath, bool excludeRaw)
@@ -532,6 +547,7 @@ namespace Revival
         // really should make a base for .drl and .rom
         public static void CookLevelRulesFiles(IEnumerable<String> levelRulesFiles)
         {
+            Console.WriteLine("Processing level rules...");
             foreach (String filePath in levelRulesFiles)
             {
                 try
@@ -596,7 +612,7 @@ namespace Revival
                     ExceptionLogger.LogException(e);
 
                     Console.WriteLine("\nFailed to read file contents!\nIgnore and Continue? [Y/N]: ");
-                    char c = (char) Console.Read();
+                    char c = (char)Console.Read();
                     if (c == 'y' || c == 'Y') continue;
 
                     return;
@@ -612,7 +628,7 @@ namespace Revival
                     ExceptionLogger.LogException(e);
 
                     Console.WriteLine("\nFailed to load CSV contents!\nIgnore and Continue? [Y/N]: ");
-                    char c = (char) Console.Read();
+                    char c = (char)Console.Read();
                     if (c == 'y' || c == 'Y') continue;
 
                     return;
@@ -637,7 +653,7 @@ namespace Revival
                     ExceptionLogger.LogException(e);
 
                     Console.WriteLine("Failed to parse CSV data!\nIgnore and Continue? [Y/N]: ");
-                    char c = (char) Console.Read();
+                    char c = (char)Console.Read();
                     if (c == 'y' || c == 'Y') continue;
 
                     return;
@@ -646,7 +662,7 @@ namespace Revival
                 if (excelFile.HasIntegrity == false)
                 {
                     Console.WriteLine("Failed to parse CSV data!\nIgnore and Continue? [Y/N]: ");
-                    char c = (char) Console.Read();
+                    char c = (char)Console.Read();
                     if (c == 'y' || c == 'Y') continue;
 
                     return;
