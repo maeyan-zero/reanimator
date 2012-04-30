@@ -16,7 +16,7 @@ namespace Hellgate.Xml
             ENVIRONMENTDEF_FLAG_FLASHLIGHT_EMISSIVE = (1 << 4),
 
             [XmlCookedAttribute(IsTestCentre = true)]
-            ENVIRONMENTDEF_FLAG_USE_BLOB_SHADOWS = (1 << 5)
+            ENVIRONMENTDEF_FLAG_USE_BLOB_SHADOWS = (1 << 5) // this appears to only be written in the cooked header iff it is present in the XML file...
         }
 
         [XmlCookedAttribute(

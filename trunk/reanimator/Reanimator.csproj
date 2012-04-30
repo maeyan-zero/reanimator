@@ -648,9 +648,14 @@
   <PropertyGroup>
     <PostBuildEvent>
     </PostBuildEvent>
-    <PreBuildEvent>if $(PlatformName) == x86 copy "$(ProjectDir)..\dlls\ZLib\zlibwapi86.dll" "$(TargetDir)zlibwapi86.dll"
-if $(PlatformName) == x64 copy "$(ProjectDir)..\dlls\ZLib\zlibwapi64.dll" "$(TargetDir)zlibwapi64.dll"
-if $(PlatformName) == x86 copy "$(ProjectDir)..\dlls\FreeImage\x86\FreeImage.dll" "$(TargetDir)FreeImage.dll"
-if $(PlatformName) == x64 copy "$(ProjectDir)..\dlls\FreeImage\x64\FreeImage.dll" "$(TargetDir)FreeImage.dll"</PreBuildEvent>
+    <PreBuildEvent>ECHO Copy zlib DLL...
+if '$(PlatformName)' == 'x86' copy "$(ProjectDir)..\dlls\ZLib\zlibwapi86.dll" "$(TargetDir)zlibwapi86.dll"
+if '$(PlatformName)' == 'AnyCPU' copy "$(ProjectDir)..\dlls\ZLib\zlibwapi86.dll" "$(TargetDir)zlibwapi86.dll"
+if '$(PlatformName)' == 'x64' copy "$(ProjectDir)..\dlls\ZLib\zlibwapi64.dll" "$(TargetDir)zlibwapi64.dll"
+
+ECHO Copy FreeImage lib DLL...
+if '$(PlatformName)' == 'x86' copy "$(ProjectDir)..\dlls\FreeImage\x86\FreeImage.dll" "$(TargetDir)FreeImage.dll"
+if '$(PlatformName)' == 'AnyCPU' copy "$(ProjectDir)..\dlls\FreeImage\x86\FreeImage.dll" "$(TargetDir)FreeImage.dll"
+if '$(PlatformName)' == 'x64' copy "$(ProjectDir)..\dlls\FreeImage\x64\FreeImage.dll" "$(TargetDir)FreeImage.dll"</PreBuildEvent>
   </PropertyGroup>
 </Project>

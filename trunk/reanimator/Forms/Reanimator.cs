@@ -41,7 +41,7 @@ namespace Reanimator.Forms
             //Config.HglDir = @"D:\Projects\Hellgate London\Flagshipped\ServerTest\bin\Debug";
             //Config.HglDir = @"D:\Games\Hellgate London"; // SP dir
             //Config.HglDir = @"D:\Games\Hellgate London.fresh"; // virgin SP dir
-            //TestScripts.TestAllXml();
+            //TestScripts.TestAllXml(true);
             //TestScripts.ExtractFunctionList();
             //TestScripts.TestAllExcelScripts();
             //TestScripts.TestExcelCooking(true);
