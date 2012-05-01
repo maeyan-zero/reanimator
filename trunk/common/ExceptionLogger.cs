@@ -126,7 +126,12 @@ namespace Revival.Common
             _exceptionsLog = new ExceptionsLog();
         }
 
-        public static void LogException(Exception exception, bool logSilent = false, String customMessage = "")
+        public static void LogException(Exception exception, String extraDetails)
+        {
+            LogException(exception, false, extraDetails);
+        }
+
+        public static void LogException(Exception exception, bool logSilent = false, String extraDetails = "")
         {
             _logger = _GetInstance();
             if (_logger._isReadOnly) return;
@@ -146,7 +151,7 @@ namespace Revival.Common
                 }
             }
 
-            ExceptionFormat exceptionFormat = new ExceptionFormat(exception, customMessage);
+            ExceptionFormat exceptionFormat = new ExceptionFormat(exception, extraDetails);
 
             lock (Lock)
             {
