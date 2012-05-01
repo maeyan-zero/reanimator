@@ -90,6 +90,7 @@ namespace Hellgate
         public readonly int SinglePlayerElementCount;
         public readonly int TestCentreElementCount;
         public readonly int ResurrectionElementCount;
+        public bool DefaultsLoaded;
 
         public int Count { get { return Elements.Count; } }
         public UInt32 Hash { get { return Attributes.NameHash; } }

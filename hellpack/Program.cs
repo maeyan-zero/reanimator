@@ -341,7 +341,7 @@ namespace Revival
                     }
                     else
                     {
-                        CookXmlFiles(xmlFilesToCook.ToArray(), _fileManager);
+                        _CookXmlFiles(xmlFilesToCook.ToArray(), _fileManager);
                     }
                 }
                 else
@@ -816,22 +816,19 @@ namespace Revival
             return true;
         }
 
-        public static void CookXmlFiles(string[] xmlFilesToCook, FileManager fileManager)
+        private static void _CookXmlFiles(String[] xmlFilesToCook, FileManager fileManager)
         {
-            if (xmlFilesToCook.Length > 0)
+            if (xmlFilesToCook.Length <= 0) return;
+
+            Console.WriteLine("Cooking XML Files... Loading Data Tables...");
+
+            foreach (String xmlPath in xmlFilesToCook)
             {
-                //if (XmlCookedFile.IsInitialized == false) XmlCookedFile.Initialize(fileManager);
-
-                Console.WriteLine("Cooking XML Files... Loading Data Tables...");
-
-                foreach (String xmlPath in xmlFilesToCook)
-                {
-                    CookXmlFile(xmlPath, fileManager);
-                }
+                CookXmlFile(xmlPath, fileManager);
             }
         }
 
-        public static bool CookXmlFile(string xmlPath, FileManager fileManager)
+        public static void CookXmlFile(String xmlPath, FileManager fileManager)
         {
             try
             {
@@ -840,16 +837,15 @@ namespace Revival
                 XmlDocument xmlDocument = new XmlDocument();
                 xmlDocument.Load(xmlPath);
 
-                XmlCookedFile cookedXmlFile = new XmlCookedFile(fileManager);
+                XmlCookedFile cookedXmlFile = new XmlCookedFile(fileManager, xmlPath);
                 byte[] xmlCookedData = cookedXmlFile.CookXmlDocument(xmlDocument);
                 File.WriteAllBytes(xmlPath + ".cooked", xmlCookedData);
-                return true;
             }
             catch (Exception ex)
             {
-                ExceptionLogger.LogException(ex);
-                Console.WriteLine("Error: Failed to cook XML file: " + ex.Message);
-                return false;
+                String error = "Error: Failed to cook XML file: " + ex.Message;
+                ExceptionLogger.LogException(ex, error);
+                Console.WriteLine(error);
             }
         }
     }

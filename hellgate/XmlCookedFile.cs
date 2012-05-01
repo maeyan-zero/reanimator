@@ -582,7 +582,7 @@ namespace Hellgate
 
         private byte[] _ParseXmlBytes(byte[] xmlBytes, XmlDocument xmlDocument)
         {
-            if (xmlBytes == null && (xmlDocument == null || xmlDocument.HasChildNodes)) return null;
+            if (xmlBytes == null && (xmlDocument == null || !xmlDocument.HasChildNodes)) return null;
 
             if (xmlDocument == null)
             {
@@ -601,6 +601,34 @@ namespace Hellgate
 
             XmlCookedDefinition xmlDefinition = _GetXmlDefinition(xmlDefinitionHash);
             if (xmlDefinition == null) throw new Exceptions.NotSupportedFileDefinitionException();
+
+            // the defaults are usually loaded when reading the .cooked format (from header)
+            // if loading XML via. Hellpack, we may not have read any .cooked yet - hence no defaults loaded
+            // todo: this is a dodgy fix - but will do for now
+            if (!xmlDefinition.DefaultsLoaded)
+            {
+                try
+                {
+                    // we need the *relative* path for file manager
+                    String cookedPath = FileName;
+                    if (cookedPath.IndexOf(':') != -1)
+                    {
+                        int dataFldIndex = cookedPath.LastIndexOf(@"\data\") + 1; // don't want first slash when generating director hash
+                        cookedPath = cookedPath.Substring(dataFldIndex, cookedPath.Length - dataFldIndex) + ".cooked";
+                    }
+
+                    _fileManager.BeginAllDatReadAccess(); // we can't even End properly because it might've already been open...
+                    byte[] origCookedBytes = _fileManager.GetFileBytes(cookedPath);
+                    XmlCookedFile xmlCookedFile = new XmlCookedFile(_fileManager, FileName);
+                    xmlCookedFile.ParseFileBytes(origCookedBytes, true);
+
+                    xmlDefinition.DefaultsLoaded = true;
+                }
+                catch (Exception ex)
+                {
+                    throw new Exception("Failed trying to load defaults!\nMake sure XML files are in the correct folder structure.", ex);
+                }
+            }
 
             _offset = 0;
             _buffer = new byte[1024];
