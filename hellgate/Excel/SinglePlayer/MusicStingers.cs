@@ -26,6 +26,7 @@ namespace Hellgate.Excel
 
         public enum Type
         {
+            Null = -1,
             Layer = 0,
             Interrupt_Breakdown = 1,
             Override = 2

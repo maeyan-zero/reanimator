@@ -121,6 +121,7 @@ namespace Hellgate.Excel
         }
         public enum Ctrl
         {
+            Null = -1,
             ScriptNoprint = 0,
             Script = 1,
             ScriptPlusminus = 2,

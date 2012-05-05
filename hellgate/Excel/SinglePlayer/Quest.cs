@@ -368,10 +368,8 @@ namespace Hellgate.Excel
         public Int32 logOverrideState;
         [ExcelOutput(IsStringIndex = true)]
         public Int32 logOverrideString;
-        [ExcelOutput(IsTableIndex = true, TableStringId = "SUBLEVEL")]
-        public Int32 subLevelTypeTruthOld;
-        [ExcelOutput(IsTableIndex = true, TableStringId = "SUBLEVEL")]
-        public Int32 subLevelTypeTruthNew;
+        public SubLevelTypeTruth subLevelTypeTruthOld;
+        public SubLevelTypeTruth subLevelTypeTruthNew;
         [ExcelOutput(IsTableIndex = true, TableStringId = "QUEST_STATE")]
         public Int32 questStateAdvanceToAtSubLevelTruth;//idx
         [ExcelOutput(IsTableIndex = true, TableStringId = "MONSTERS")]
@@ -380,13 +378,31 @@ namespace Hellgate.Excel
         public Int32 globalthemeRequired;//idx
         public Int32 undefined8;
 
-        public enum Style : uint
+        public enum Style //: uint
         {
-            StoryLine,
-            Optional,
-            _2,
-            Truth,
-            Adventure
+            Null = -1,
+            StoryLine = 0,
+            Optional = 1,
+            _2 = 2,
+            Truth = 3,
+            Adventure = 4
+        }
+
+        public enum SubLevelTypeTruth
+        {
+            Null = -1,
+            None = 0,
+            Hellrift = 1,
+            TruthAOld = 2,
+            TruthANew = 3,
+            TruthBOld = 4,
+            TruthBNew = 5,
+            TruthCOld = 6,
+            TruthCNew = 7,
+            TruthDOld = 8,
+            TruthDNew = 9,
+            TruthEOld = 10,
+            TruthENew = 11
         }
     }
 }

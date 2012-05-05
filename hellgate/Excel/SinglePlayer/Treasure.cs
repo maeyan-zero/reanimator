@@ -18,7 +18,7 @@ namespace Hellgate.Excel
         [ExcelOutput(IsTableIndex = true, TableStringId = "GLOBAL_THEMES")]
         public Int32 globalThemeRequired;
         Int32 unknown02;
-        public Int32 pickType; // XLS_ReadInternalIndex_PickType (XLS_TREASURE_DATA+1D5), 0x08 /* 0 = one, 1 = all, 2 = modifiers_only, 3 = ind_percent, 4 = one_eliminate, 5 = first_valid */
+        public PickTypes pickType; // XLS_ReadInternalIndex_PickType (XLS_TREASURE_DATA+1D5), 0x08 /* 0 = one, 1 = all, 2 = modifiers_only, 3 = ind_percent, 4 = one_eliminate, 5 = first_valid */
         [MarshalAs(UnmanagedType.ByValArray, SizeConst = 20)]
         public Int32[] picks;
         public float noDrop;
@@ -77,6 +77,17 @@ namespace Hellgate.Excel
             StackTreasure = (1 << 6),
             MultiplayerOnly = (1 << 7),
             SinglePlayerOnly = (1 << 8)
+        }
+
+        public enum PickTypes
+        {
+            Null = -1,
+            one = 0,
+            all = 1,
+            modifiers_only = 2,
+            ind_percent = 3,
+            one_eliminate = 4,
+            first_valid = 5
         }
     }
 }
