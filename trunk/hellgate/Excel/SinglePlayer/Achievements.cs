@@ -47,7 +47,7 @@ namespace Hellgate.Excel
         public Int32 playerClass8;
         [ExcelOutput(IsTableIndex = true, TableStringId = "UNITTYPES")]
         public Int32 playerClass9;
-        public AchievementType type;
+        public Int32 type;
         [ExcelOutput(IsTableIndex = true, TableStringId = "ACHIEVEMENTS")]
         public Int32 notActiveTillParentComplete;
         public Int32 completeNumber;
@@ -98,37 +98,39 @@ namespace Hellgate.Excel
         [ExcelOutput(IsScript = true)]
         public Int32 rewardScript;
 
-        public enum RevealCondition : uint
+        public enum RevealCondition
         {
-            Always,
-            Value,
-            Completion
+            Always = 0,
+            AmtComplete = 1,
+            Completion = 2,
+            ParentComplete = 3
         }
 
-        public enum AchievementType : uint
+        public enum AchievementType
         {
-            KillMonsters,
-            KillWithWeapon,
-            EquipItems,
-            KillWithSkill,
-            KillWithinTime,
-            StatTarget,
-            _6,
-            CompleteQuests,
-            WinMinigame,
-            UseItems,
-            ModifyItems,
-            CraftItems,
-            UpgradeItems,
-            IdentifyItems,
-            DismantleItems,
-            SpeedLevel,
-            PointsInSkill,
-            LearnAllSkills,
-            FindLevel,
-            _19,
-            _20,
-            FillInventory
+            Null = -1,
+            Kill = 0,
+            WeaponKill = 1,
+            Equip = 2,
+            SkillKill = 3,
+            TimedKills = 4,
+            StatValue = 5,
+            Collect = 6,
+            QuestComplete = 7,
+            WinMinigame = 8,
+            ItemUse = 9,
+            ItemMod = 10,
+            ItemCraft = 11,
+            ItemUpgrade = 12,
+            ItemIdentify = 13,
+            ItemDismantle = 14,
+            LevelTime = 15,
+            SkillToLevel = 16,
+            FinishSkillTree = 17,
+            LevelFind = 18,
+            PartyInvite = 19,
+            PartyAccept = 20,
+            InventoryFill = 21
         }
     }
 }

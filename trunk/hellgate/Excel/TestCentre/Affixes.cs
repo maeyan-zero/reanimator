@@ -69,7 +69,7 @@ namespace Hellgate.Excel.TestCentre
         public Int32 suffix;
         [ExcelOutput(SortColumnOrder = 4, IsTableIndex = true, TableStringId = "AFFIX_GROUPS")] // not secondary string like SP version
         public Int32 group;
-        public Int32 style;
+        public Style style;
         [ExcelOutput(IsBool = true)]
         public Int32 useWhenAugmenting;
         [ExcelOutput(IsBool = true)]
@@ -140,5 +140,12 @@ namespace Hellgate.Excel.TestCentre
         [ExcelOutput(IsTableIndex = true, TableStringId = "UNITTYPES")]
         public Int32 onlyOnItemsRequiringUnitType;
         public Int32 undefined_tcv4;
+
+        public enum Style
+        {
+            Null = -1,
+            Stat = 0,
+            Proc = 1
+        }
     }
 }

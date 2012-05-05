@@ -18,7 +18,7 @@ namespace Hellgate.Excel.TestCentre
         [ExcelOutput(IsTableIndex = true, TableStringId = "GLOBAL_THEMES")]
         public Int32 globalThemeRequired;
         Int32 unknown02;
-        public Int32 pickType;  // XLS_ReadInternalIndex_PickType
+        public PickTypes pickType;  // XLS_ReadInternalIndex_PickType
         [MarshalAs(UnmanagedType.ByValArray, SizeConst = 20)]
         public Int32[] picks;
         public float noDrop;
@@ -84,6 +84,17 @@ namespace Hellgate.Excel.TestCentre
             RecipientRequiresStateTcv4 = (1 << 10),
             Undefined2 = (1 << 11),
             SinglePlayerOnly = (1 << 12)
-        };
+        }
+
+        public enum PickTypes
+        {
+            Null = -1,
+            one = 0,
+            all = 1,
+            modifiers_only = 2,
+            ind_percent = 3,
+            one_eliminate = 4,
+            first_valid = 5
+        }
     }
 }

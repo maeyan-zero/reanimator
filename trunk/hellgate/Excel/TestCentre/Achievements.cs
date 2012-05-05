@@ -26,7 +26,7 @@ namespace Hellgate.Excel.TestCentre
         public Int32 icon;
         [MarshalAs(UnmanagedType.ByValArray, SizeConst = 15)]
         Int32[] undefined_TCV4_1;
-        public Int32 revealCondition;                                                           // 7        0x0000000000000058      XLS_ReadInternalIndex             .text:00000001402F0AAF mov     dword ptr [rsp+58h+var_30], 5        (Default = Always)
+        public RevealCondition revealCondition;                                                           // 7        0x0000000000000058      XLS_ReadInternalIndex             .text:00000001402F0AAF mov     dword ptr [rsp+58h+var_30], 5        (Default = Always)
         public Int32 revealValue;                                                               // 8        0x000000000000005C      XLS_ReadInt32
         [ExcelOutput(IsTableIndex = true, TableStringId = "ACHIEVEMENTS")]
         public Int32 revealParentAchievement;                                                   // 9        0x0000000000000060      XLS_ReadIndex,0xB4
@@ -50,7 +50,7 @@ namespace Hellgate.Excel.TestCentre
         public Int32 playerClass8;                                                                     // 11       0x0000000000000084
         [ExcelOutput(IsTableIndex = true, TableStringId = "UNITTYPES")]
         public Int32 playerClass9;                                                                     // 11       0x0000000000000088
-        public Int32 type;                                                                      // 12       0x000000000000008C      XLS_ReadInternalIndex             .text:00000001402F0B74 mov     dword ptr [rsp+58h+var_30], 17h      (Default = Kill)
+        public AchievementType type;                                                                      // 12       0x000000000000008C      XLS_ReadInternalIndex             .text:00000001402F0B74 mov     dword ptr [rsp+58h+var_30], 17h      (Default = Kill)
         [ExcelOutput(IsTableIndex = true, TableStringId = "UNITTYPES")]
         public Int32 notActiveTillParentComplete;                                               // 10       0x0000000000000090      XLS_ReadIndex,0xB4
         public Int32 completeNumber;                                                            // 13       0x0000000000000094      XLS_ReadInt32
@@ -122,5 +122,42 @@ namespace Hellgate.Excel.TestCentre
         public Int32 rewardTitle_tcv4;
         [ExcelOutput(IsScript = true)]
         public Int32 rewardScript;                                                                     // 29       0x00000000000000F8      XLS_ReadIntPtr
+
+        public enum RevealCondition
+        {
+            Always = 0,
+            AmtComplete = 1,
+            Completion = 2,
+            ParentComplete = 3
+        }
+
+        public enum AchievementType
+        {
+            Null = -1,
+            Kill = 0,
+            KilledBy = 1,
+            WeaponKill = 2,
+            Equip = 3,
+            SkillKill = 4,
+            TimedKills = 5,
+            unknown = 6,
+            StatValue = 7,
+            Collect = 8,
+            QuestComplete = 10,
+            MinigameWin = 11,
+            ItemUse = 12,
+            ItemMod = 13,
+            ItemCraft = 14,
+            ItemUpgrade = 15,
+            ItemIdentify = 16,
+            ItemDismantle = 17,
+            LevelTime = 18,
+            SkillToLevel = 19,
+            FinishSkillTree = 20,
+            LevelFind = 21,
+            PartyInvite = 22,
+            PartyAccept = 23,
+            InventoryFill = 24,
+        }
     }
 }
