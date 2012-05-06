@@ -15,8 +15,8 @@ namespace Hellgate.Excel
         [ExcelOutput(SortColumnOrder = 2)]
         [MarshalAs(UnmanagedType.ByValTStr, SizeConst = 256)]
         public string fxFile;
-        public Int32 folder;
-        public Int32 subFolder;
+        public Folder folder;
+        public SubFolder subFolder;
         public Int32 undefined1;
         public float rangeToFallBack;
         [ExcelOutput(IsTableIndex = true, TableStringId = "EFFECTS")]
@@ -25,8 +25,8 @@ namespace Hellgate.Excel
         public Int32 undefined3;
         [ExcelOutput(IsBitmask = true, DefaultBitmask = 0)]
         public EffectsFiles.BitMask01 bitmask01;
-        public Int32 vertexFormat;
-        public Int32 techniqueGroup;
+        public VertexFormat vertexFormat;
+        public TechniqueGroup techniqueGroup;
         public Int32 sBranchDepthUS;
         public Int32 sBranchDepthPS;
 
@@ -59,6 +59,39 @@ namespace Hellgate.Excel
             requiresHavokFx = 8388608,
             directionalInSH = 16777216,
             emissivediffuse = 33554432
+        }
+
+        public enum Folder
+        {
+            Common = 0,
+            Hellgate = 1,
+            Tugboat = 2
+        }
+        public enum SubFolder
+        {
+            Null = 0,
+            OneX = 1
+        }
+        public enum VertexFormat
+        {
+            Null = -1,
+            Rigid64 = 1,
+            Rigid32 = 2,
+            Rigid16 = 3,
+            Animated = 4,
+            Animated11 = 5,
+            Particle = 6,
+            Particale11 = 7
+        }
+
+        public enum TechniqueGroup
+        {
+            Null = -1,
+            Model = 0,
+            Particle = 1,
+            Blur = 2,
+            General = 3,
+            List = 5
         }
     }
 }
