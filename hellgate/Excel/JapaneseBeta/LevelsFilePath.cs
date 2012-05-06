@@ -67,6 +67,11 @@ namespace Hellgate.Excel.JapaneseBeta
             SoundLow = 4,
             SoundMusic = 5,
             Localized = 6,
+            unknown7 = 7,
+            unknown8 = 8,
+            unknown9 = 9,
+            unknown10 = 10,
+            unknown11 = 11,
             Advert = 12,
             AdvertLocalized = 13
         }
