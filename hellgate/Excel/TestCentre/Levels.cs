@@ -124,7 +124,7 @@ namespace Hellgate.Excel.TestCentre
         public Int32 useTeamColors;
         [ExcelOutput(IsTableIndex = true, TableStringId = "OBJECTS")]
         public Int32 waypoint;//index
-        public Int32 srvLevelType;
+        public SrvLevelType srvLevelType;
         public Int32 playerMax;
         [ExcelOutput(IsScript = true)]
         public Int32 monsterLevel;
@@ -169,7 +169,7 @@ namespace Hellgate.Excel.TestCentre
         public string worldMapFrameUnexplored;
         [ExcelOutput(IsTableIndex = true, TableStringId = "FONTCOLORS")]
         public Int32 worldMapColor;
-        public Int32 worldMapLabelPos;
+        public WorldMapLabelPos worldMapLabelPos;
         public float worldMapLabelXOffs;
         public float worldMapLabelYOffs;
         [ExcelOutput(IsTableIndex = true, TableStringId = "LEVEL")]
@@ -204,5 +204,31 @@ namespace Hellgate.Excel.TestCentre
         public Int32 allowOverworldTravel;
         [MarshalAs(UnmanagedType.ByValArray, SizeConst = 4)]
         Int32[] unknown4;
+
+        public enum SrvLevelType
+        {
+            Null = -1,
+            Default = 0,
+            Soloinst = 1,
+            Minitown = 2,
+            Bigtown = 3,
+            Custom = 4,
+            unknown = 5,//one level uses this Duel Arena City
+            CTF = 6//Abyss, so probably not CTF
+        }
+
+        public enum WorldMapLabelPos
+        {
+            Null = -1,
+            TopLeft = 0,
+            Top = 1,
+            TopRight = 2,
+            Right = 3,
+            Center = 4,
+            Left = 5,
+            BottomLeft = 6,
+            Bottom = 7,
+            BottomRight = 8
+        }
     }
 }

@@ -107,7 +107,7 @@ namespace Hellgate.Excel
         public Int32 useTeamColors;
         [ExcelOutput(IsTableIndex = true, TableStringId = "OBJECTS")]
         public Int32 waypoint;//index
-        public Int32 srvLevelType; // XLS_InternalIndex_SrvLevelType (XLS_LEVEL_DEFINITION+576), 0x07
+        public SrvLevelType srvLevelType; // XLS_InternalIndex_SrvLevelType (XLS_LEVEL_DEFINITION+576), 0x07
         public Int32 playerMax;
         [ExcelOutput(IsScript = true)]
         public Int32 monsterLevel;
@@ -152,7 +152,7 @@ namespace Hellgate.Excel
         public string worldMapFrameUnexplored;
         [ExcelOutput(IsTableIndex = true, TableStringId = "FONTCOLORS")]
         public Int32 worldMapColor;
-        public Int32 worldMapLabelPos; // XLS_InternalIndex_WorldMapLabelPos (XLS_LEVEL_DEFINITION+A61), 0x0C
+        public WorldMapLabelPos worldMapLabelPos; // XLS_InternalIndex_WorldMapLabelPos (XLS_LEVEL_DEFINITION+A61), 0x0C
         public float worldMapLabelXOffs;
         public float worldMapLabelYOffs;
         [ExcelOutput(IsTableIndex = true, TableStringId = "LEVEL")]
@@ -188,5 +188,34 @@ namespace Hellgate.Excel
         [MarshalAs(UnmanagedType.ByValArray, SizeConst = 4)]
         Int32[] unknown4;
         Int32 unknown5;
+
+        public enum SrvLevelType
+        {
+            Null = -1,
+            Default = 0,
+            Soloinst = 1,
+            Minitown = 2,
+            Bigtown = 3,
+            Custom = 4,
+            unknown = 5,
+            CTF = 6,
+            TDM = 7,
+            CTL = 8,
+            ELM = 9
+        }
+
+        public enum WorldMapLabelPos
+        {
+            Null = -1,
+            TopLeft = 0,
+            Top = 1,
+            TopRight = 2,
+            Right = 3,
+            Center = 4,
+            Left = 5,
+            BottomLeft = 6,
+            Bottom = 7,
+            BottomRight = 8
+        }
     }
 }

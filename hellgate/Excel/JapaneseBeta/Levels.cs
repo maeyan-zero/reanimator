@@ -122,7 +122,6 @@ namespace Hellgate.Excel.JapaneseBeta
         public Int32 unknown3;
         [ExcelOutput(IsBool = true)]
         public Int32 monsterLevelFromParentLevel;
-        [ExcelOutput(IsBool = true)]
         public MonsterLevelFromActivator monsterLevelFromActivator;
 		public Int32 monsterMaxLevelLimit;
 		public Int32 monsterMinLevelLimit;
@@ -212,6 +211,7 @@ namespace Hellgate.Excel.JapaneseBeta
             Minitown = 2,
             Bigtown = 3,
             Custom = 4,
+            unknown = 5,
             CTF = 6,
             TDM = 7,
             CTL = 8,
@@ -221,6 +221,7 @@ namespace Hellgate.Excel.JapaneseBeta
         public enum MonsterLevelFromActivator
         {
             Null = -1,
+            Zero = 0,
             None = 1,
             First = 2,
             OverDiff = 3,
