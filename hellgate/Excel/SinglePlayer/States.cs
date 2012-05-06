@@ -85,7 +85,7 @@ namespace Hellgate.Excel
         public Int32 assocState3;            // always -1
         [ExcelOutput(IsBitmask = true, DefaultBitmask = 0)]
         public BitMask01 bitmask01;
-        public Int32 gameFlag;
+        public GameFlag gameFlag;
         [ExcelOutput(IsBitmask = true, DefaultBitmask = 0)]
         public BitMask02 bitmask02;
         Int32 unknown48;            // always 0
@@ -125,5 +125,12 @@ namespace Hellgate.Excel
         saveInUnitfileHeader = 524288,
         updateChatServerOnChange = 1048576,
         triggerDigestSave = 2097152
+    }
+    public enum GameFlag
+    {
+        Null = -1,
+        Hardcore = 0,
+        Elite = 1,
+        RolePlay = 2
     }
 }
