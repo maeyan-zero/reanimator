@@ -14,7 +14,7 @@ namespace Hellgate.Excel.TestCentre
         public string stat;
         [ExcelOutput(SortColumnOrder = 2)]
         public Int32 code;
-        public Int32 type;
+        public Type type;
         [ExcelOutput(IsTableIndex = true, TableStringId = "STATS")]
         public Int32 assocStat1;
         [ExcelOutput(IsTableIndex = true, TableStringId = "STATS")]
@@ -89,9 +89,9 @@ namespace Hellgate.Excel.TestCentre
         [MarshalAs(UnmanagedType.ByValArray, SizeConst = 32)]
         byte[] undefined9;
         public Int32 minTicksBetweenDbCommand;
-        public Int32 databaseUnitField;
+        public DatabaseUnitField databaseUnitField;
         public Int32 databaseOperationContext_tcv4;
-        public Int32 specFunc;
+        public SpecFunc specFunc;
         [ExcelOutput(IsTableIndex = true, TableStringId = "STATS")]
         public Int32 sfStat1;
         [ExcelOutput(IsTableIndex = true, TableStringId = "STATS")]
@@ -152,6 +152,43 @@ namespace Hellgate.Excel.TestCentre
             _undefined5_tcv4 = (1 << 24),
             clearOnItemRestore_tcv4 = (1 << 25),
             exposeInDataService_tcv4 = (1 << 26)
+        }
+
+        public enum Type
+        {
+            None = 0,
+            Regen = 1,
+            Feed = 2,
+            Req = 3,
+            ReqLimit = 4,
+            PctDegen = 5,
+            Alloc = 6,
+            Max = 7,
+            MaxRatio = 8,
+            MaxRatioDecrease = 9,
+            MaxPure = 10,
+            Degen = 11,
+            PctRegen = 12,
+            RegenClient = 13,
+            DegenCLient = 14
+        }
+        public enum SpecFunc
+        {
+            Null = -1,
+            None = 0,
+            RegenOnGet = 1,
+            PctRegenOnGet = 4
+        }
+
+        public enum DatabaseUnitField
+        {
+            Null = -1,
+            None = 0,
+            Experience = 1,
+            Money = 2,
+            Quantity = 3,
+            InventoryLocation = 4,
+            RankExp = 5
         }
     }
 }

@@ -69,7 +69,7 @@ namespace Hellgate.Excel.TestCentre
         [ExcelOutput(IsTableIndex = true, TableStringId = "WARDROBE_LAYER")]
         public Int32 offHandlayer;//idx;
         public Int32 undefined2;
-        public Int32 attachType;
+        public AttachType attachType;
         [MarshalAs(UnmanagedType.ByValArray, SizeConst = 2)]
         Int32[] undefined4;
         [MarshalAs(UnmanagedType.ByValTStr, SizeConst = 256)]
@@ -85,8 +85,26 @@ namespace Hellgate.Excel.TestCentre
         public Int32 undefined_tcv4_3;
         [ExcelOutput(IsBool = true)]
         public Int32 hasBoneIndex;//bool
-        public Int32 boneIndex;
+        public BoneIndex boneIndex;
         [ExcelOutput(IsTableIndex = true, TableStringId = "STATES")]
         public Int32 state;//idx
+
+        public enum BoneIndex
+        {
+            Null = -1,
+            None = 0,
+            Slot_fuel = 1,
+            Slot_rocketclip = 2,
+            Slot_battery = 3,
+            Slot_relic = 4,
+            Slot_tech = 5,
+        }
+        public enum AttachType
+        {
+            Null = -1,
+            Light = 0,
+            Particle = 1,
+            Model = 2
+        }
     }
 }
