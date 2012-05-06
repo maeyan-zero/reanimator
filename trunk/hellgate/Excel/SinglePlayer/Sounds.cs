@@ -19,14 +19,14 @@ namespace Hellgate.Excel
         public Int32 lqExtension; //pchar
         Int32 undefined3a;
         Int32 undefined3b;
-        public Int32 pickType;//unk
+        public PickType pickType;//unk
         [ExcelOutput(IsTableIndex = true, TableStringId = "LANGUAGE")]
         public Int32 language;//idx
         public Int32 volume;
         public float undefined2a;
         public float minRange;
         public float maxRange;
-        public Int32 rollOffType;
+        public RollOffType rollOffType;
         public Int32 reverbSend;
         [ExcelOutput(IsBitmask = true, DefaultBitmask = 0)]
         public BitMask01 bitmask01;
@@ -299,6 +299,21 @@ namespace Hellgate.Excel
             requiresHavokFx = (1 << 23),
             directionalInSH = (1 << 24),
             emissivediffuse = (1 << 25)
+        }
+
+        public enum PickType
+        {
+            Null = -1,
+            Rand = 0,
+            All = 1
+        }
+        public enum RollOffType
+        {
+            Null = -1,
+            None = 0,
+            Log = 1,
+            Linear = 2,
+            Inverse = 3
         }
     }
 }
