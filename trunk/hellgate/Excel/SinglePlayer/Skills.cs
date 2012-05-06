@@ -320,7 +320,7 @@ namespace Hellgate.Excel
         public Int32 skillOnpulse;//idx
         [ExcelOutput(IsTableIndex = true, TableStringId = "STATS")]
         public Int32 selectCheckStat;//idx
-        public Int32 startFunc;
+        public StartFunc startFunc;
         public Int32 targetFunc;
         [MarshalAs(UnmanagedType.ByValArray, SizeConst = 8)]
         byte[] unknown8;
@@ -328,7 +328,7 @@ namespace Hellgate.Excel
         public Int32 givesSkill;//idx
         [ExcelOutput(IsTableIndex = true, TableStringId = "SKILLS")]
         public Int32 extraSkillToTurnOn;//idx
-        public Int32 playerInputOverride;
+        public PlayerInputOverride playerInputOverride;
         [ExcelOutput(IsTableIndex = true, TableStringId = "UNITTYPES")]
         public Int32 requiresUnitType;//idx
         [ExcelOutput(IsTableIndex = true, TableStringId = "UNITTYPES")]
@@ -363,7 +363,7 @@ namespace Hellgate.Excel
         [ExcelOutput(IsTableIndex = true, TableStringId = "SOUNDS")]
         public Int32 coolDownFinishedSound;//idx
         public Int32 coolDownMinPercent;
-        public Int32 activatorKey;
+        public ActivatorKey activatorKey;
         [ExcelOutput(IsTableIndex = true, TableStringId = "UNITMODES")]
         public Int32 activateMode;//idx
         [ExcelOutput(IsTableIndex = true, TableStringId = "SKILLS")]
@@ -385,8 +385,8 @@ namespace Hellgate.Excel
         public float reflectiveLifeTimeInSeconds;
         public float Param1;
         public float Param2;
-        public Int32 usage;
-        public Int32 family;
+        public Usage usage;
+        public Family family;
         [ExcelOutput(IsTableIndex = true, TableStringId = "UNIT_EVENT_TYPES")]
         public Int32 unitEventTrigger0;
         [ExcelOutput(IsTableIndex = true, TableStringId = "UNIT_EVENT_TYPES")]
@@ -610,6 +610,50 @@ namespace Hellgate.Excel
             transferDamageToPets = 256,
             dontStagger = 512,
             doesNotActivelyUseWeapon = 1024
+        }
+
+        public enum StartFunc
+        {
+            Neg = -1,
+            Null = 0,
+            Generic = 1,
+            NoModes = 2,
+            WarmUp = 3,
+            NoModes2 = 4
+        }
+        public enum PlayerInputOverride
+        {
+            Null = -1,
+            None = 0,
+            Forward = 1,
+            Back = 2,
+            Left = 4,
+            ForwardLeft = 5,
+            BackLeft = 6,
+            Right = 8,
+            ForwardRight = 9,
+            BackRight = 10
+        }
+        public enum ActivatorKey
+        {
+            Null = -1,
+            Shift = 0,
+            Potion = 1,
+            Melee = 2
+        }
+        public enum Usage
+        {
+            Null = -1,
+            Active = 0,
+            Passive = 1,
+            Toggle = 2
+        }
+
+        public enum Family
+        {
+            Null = -1,
+            TurretGround = 0,
+            TurretFlying = 1
         }
 
         public static class Mysh
