@@ -14,7 +14,7 @@ namespace Hellgate.Excel
         public string stat;
         [ExcelOutput(SortColumnOrder = 2)]
         public Int32 code;
-        public Int32 type;
+        public Type type;
         [ExcelOutput(IsTableIndex = true, TableStringId = "STATS")]
         public Int32 assocStat1;
         [ExcelOutput(IsTableIndex = true, TableStringId = "STATS")]
@@ -92,8 +92,8 @@ namespace Hellgate.Excel
         [MarshalAs(UnmanagedType.ByValArray, SizeConst = 32)]
         byte[] undefined9;
         public Int32 minTicksBetweenDbCommand;
-        public Int32 databaseUnitField;
-        public Int32 specFunc;
+        public DatabaseUnitField databaseUnitField;
+        public SpecFunc specFunc;
         [ExcelOutput(IsTableIndex = true, TableStringId = "STATS")]
         public Int32 sfStat1;
         [ExcelOutput(IsTableIndex = true, TableStringId = "STATS")]
@@ -148,6 +148,42 @@ namespace Hellgate.Excel
             calc = (1 << 20),
             updateDatabase = (1 << 21),
             dontTranferToNonWeaponMissile = (1 << 22)
+        }
+
+        public enum Type
+        {
+            None = 0,
+            Regen = 1,
+            Feed = 2,
+            Req = 3,
+            ReqLimit = 4,
+            PctDegen = 5,
+            Alloc = 6,
+            Max = 7,
+            MaxRatio = 8,
+            MaxRatioDecrease = 9,
+            MaxPure = 10,
+            Degen = 11,
+            PctRegen = 12,
+            RegenClient = 13,
+            DegenCLient = 14
+        }
+        public enum SpecFunc
+        {
+            Null = -1,
+            None = 0,
+            RegenOnGet = 1,
+            PctRegenOnGet = 4
+        }
+
+        public enum DatabaseUnitField
+        {
+            Null = -1,
+            None = 0,
+            Experience = 1,
+            Money = 2,
+            Quantity = 3,
+            InventoryLocation = 4
         }
     }
 }

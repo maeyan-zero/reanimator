@@ -102,7 +102,7 @@ namespace Hellgate.Excel.TestCentre
         Int32[] undefined4;
         [ExcelOutput(IsTableIndex = true, TableStringId = "UNITMODES")]
         public Int32 endMode;//idx
-        public Int32 velocityName; // XLS_InternalIndex_VelocityName (XLS_UNITMODE_DATA+3DB), 0x09
+        public Int32 velocityName; // XLS_InternalIndex_VelocityName (XLS_UNITMODE_DATA+3DB), 0x09 : Has different variables compared to single player.
         public Int32 velocityPriority;
         public Int32 animPriority;
         public Int32 loadPriorityPercent;
@@ -158,5 +158,6 @@ namespace Hellgate.Excel.TestCentre
         public Int32 emoteAllowedHellgate_tcv4;
         public Int32 emoteAllowedMythos_tcv4;
         public Int32 undefined5;
+
     }
 }
