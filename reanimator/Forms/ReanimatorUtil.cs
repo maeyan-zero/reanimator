@@ -12,12 +12,13 @@ namespace Reanimator.Forms
     {
         /// <summary>
         /// Checks the Windows Version and sets the coresponding icon
+        /// For version numbers, see: http://msdn.microsoft.com/en-us/library/windows/desktop/ms724834%28v=vs.85%29.aspx
         /// </summary>
         private void _SetIcon()
         {
             OperatingSystem osInfo = Environment.OSVersion;
-            Icon pathName = Resources.icon2;
 
+            Icon pathName; // must not set this until sure of OS version (XP et al. cannot handle large icons)
             if (osInfo.Platform == PlatformID.Win32NT)
             {
                 switch (osInfo.Version.Major)
@@ -26,7 +27,7 @@ namespace Reanimator.Forms
                         pathName = Resources.icon1;
                         break;
 
-                    case 6: // 6 = Vista
+                    case 6: // 6 = Vista/7/8
                         pathName = Resources.icon2;
                         break;
 
@@ -34,6 +35,10 @@ namespace Reanimator.Forms
                         pathName = Resources.icon2;
                         break;
                 }
+            }
+            else
+            {
+                pathName = Resources.icon2;
             }
 
             Icon = pathName;
