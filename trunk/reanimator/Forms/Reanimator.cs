@@ -1,14 +1,11 @@
 using System;
 using System.Collections.Generic;
 using System.Diagnostics;
-using System.Drawing;
 using System.Linq;
-using System.Text;
 using System.Windows.Forms;
 using System.IO;
 using Hellgate;
 using Revival.Common;
-using Reanimator.Properties;
 using Reanimator.Forms.DropOverviewForm;
 using Reanimator.Forms.ItemQualityCalculatorForm;
 using Reanimator.Forms.HeroEditorFunctions;

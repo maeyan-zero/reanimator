@@ -10,9 +10,17 @@ Release thread: http://www.hellgateaus.net/forum/hellgate-london-download-reanim
 
 ==== Changes/Background ====
 
-    The most significant changes relate to whatever Nagahaku needed/requested of me at the time - I'd fix, Nagahaku would test and report any bugs and etc. rinse and repeat heh.
-    These were mainly related to game XML resources (uncooking and cooking) and also the level rules, as well as Hellpack integration and fixes of these... As far as I'm aware (and can remember :-[), it was all working and crash free last we spoke.
-    For those interested in the details, you can check out the SVN change logs on the Google Code site (http://code.google.com/p/reanimator/), but otherwise, enjoy.
+	r1135:
+		Fix Win XP x86 Icon size limitation.
+		Add unhandled exception handler.
+		
+	r1134:
+		Add release readme.txt.
+		
+	r1133:
+		The most significant changes relate to whatever Nagahaku needed/requested of me at the time - I'd fix, Nagahaku would test and report any bugs and etc. rinse and repeat heh.
+		These were mainly related to game XML resources (uncooking and cooking) and also the level rules, as well as Hellpack integration and fixes of these... As far as I'm aware (and can remember :-[), it was all working and crash free last we spoke.
+		For those interested in the details, you can check out the SVN change logs on the Google Code site (http://code.google.com/p/reanimator/), but otherwise, enjoy.
 
 
 ==== Requirements ====
