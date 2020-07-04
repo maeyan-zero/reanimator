@@ -1017,12 +1017,15 @@ namespace Hellgate
             CallPropery = 2,                // 0x02
             Call = 3,                       // 0x03
             TernaryFalse = 4,               // 0x04     the result/script returned of original (prior to TernaryTrue) stack object boolean evaluation result of false
+            AllocateGlobal = 5,
             AllocateVar = 6,                // 0x06
             Unknown9 = 9,                   // 0x09     seen in properties function "holy_radius_enemies": 707,0,714,666,1228931072,26,8,707,0,714,666,1237319680,399,26,8,3,58,26,0,3,59,3,58,9,0
             TernaryTrue = 14,               // 0x0E     the result/script returned of the previous stack object boolean evaluation result of true
             Push = 26,                      // 0x1A
+            PushGlobalVarInt32 = 38,
             PushLocalVarInt32 = 50,         // 0x32     .rdata:0000000140606B18     aPushLocalVar_3 db 'push local variable at offset %u  value = %d  type = int'
             PushLocalVarPtr = 57,           // 0x39     .rdata:0000000140606D08     aPushLocalVa_10 db 'push local variable at offset %u  value = %x  type = pointer'
+            AssignGlobalVarInt32 = 86,
             AssignLocalVarInt32 = 98,       // 0x62     .rdata:0000000140607988     aAssignLocalV_3 db 'assign local variable at offset %u  value = %d  type = int'
             AssignLocalVarPtr = 105,        // 0x69     .rdata:0000000140607B90     aAssignLocal_10 db 'assign local variable at offset %u  value = %x  type = pointer'
             Complement = 320,               // 0x140
@@ -1032,6 +1035,7 @@ namespace Hellgate
             Div = 369,                      // 0x171
             Add = 388,                      // 0x184
             Sub = 399,                      // 0x18F
+            Unknown418 = 418,               // None existent opcode? Seen is TCv4 SKILLS (42) Paperdoll_Guardian infoScript
             LessThan = 426,                 // 0x1AA
             GreaterThan = 437,              // 0x1B5
             LessThanOrEqual = 448,          // 0x1C0
@@ -1091,6 +1095,7 @@ namespace Hellgate
             public bool IsFunction;
             public bool IsVarAssign;            // for local vars
             public uint ByteOffset;             // for local vars
+            public bool IsGlobal;               // for vars
             public ArgType Type;
             public int StatementCount = -1;
             public int OperatorCount = -1;
@@ -1369,7 +1374,7 @@ namespace Hellgate
             _stack.Push(conditionObject);
         }
 
-        private void _PushLocalVar(int byteOffset, ArgType argType)
+        private void _PushLocalVar(int byteOffset, ArgType argType, bool isGlobal = false)
         {
             String argName = null;
             if (_excelFunction != null)
@@ -1388,11 +1393,16 @@ namespace Hellgate
 
                 int index = byteOffset / 4;
                 argName = "var" + index;
+
+                if (isGlobal)
+                {
+                    argName = "g" + argName;
+                }
             }
             Debug.Assert(argName != null);
 
 
-            _stack.Push(new StackObject { Value = argName, Type = argType });
+            _stack.Push(new StackObject { Value = argName, Type = argType, IsGlobal = isGlobal });
 
         }
 

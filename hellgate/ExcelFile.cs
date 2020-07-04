@@ -1072,7 +1072,7 @@ namespace Hellgate
                             if (fileManager != null && (firstComma == -1 || firstComma > 3)) // biggest opcode is 3 digits (this doesn't account for white space, but meh for now)
                             {
                                 ExcelScript excelScript = new ExcelScript(fileManager);
-                                scriptByteCode = excelScript.Compile(strValue);
+                                scriptByteCode = excelScript.Compile(strValue, null, StringId, row, col, fieldDelegate.Name);
                             }
                             else
                             {

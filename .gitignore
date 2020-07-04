@@ -1,0 +1,13 @@
+﻿################################################################################
+# This .gitignore file was automatically created by Microsoft(R) Visual Studio.
+################################################################################
+
+/.vs
+/bin
+/wiki/obj/x86
+/common/obj
+/CookVerify
+/hellgate/obj
+/hellpack/obj
+/launcher/obj
+/reanimator/obj

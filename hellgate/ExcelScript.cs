@@ -389,17 +389,17 @@ namespace Hellgate
                         //    int bp = 0;
                         //}
 
+                        // is is a negative number
+                        if (_IsNumber())
+                        {
+                            int scriptNum = _GetNumber();
+
+                            scriptByteCode.AddRange(new[] { (Int32)ScriptOpCodes.Push, scriptNum });
+                            break;
+                        }
+
                         if (scriptByteCode.Count == 0 && operatorStack.Count == 0)
                         {
-                            // is is a negative number
-                            if (_IsNumber())
-                            {
-                                int scriptNum = _GetNumber();
-
-                                scriptByteCode.AddRange(new[] { (Int32)ScriptOpCodes.Push, scriptNum });
-                                break;
-                            }
-
                             _CompileOperators(operatorStack, scriptByteCode, 3);    // 320  0x140
                             operatorStack.Push(new StackObject { Value = "-", Precedence = 3, OpCode = ScriptOpCodes.Complement });
 
@@ -470,6 +470,16 @@ namespace Hellgate
                         _CompileOperators(operatorStack, scriptByteCode, 3);        // 339  0x153
                         operatorStack.Push(new StackObject { Value = "!", Precedence = 3, OpCode = ScriptOpCodes.Not });
                         _offset++;
+                        continue;
+
+                    // workaround for the illusive '418' opcode
+                    case '#':
+                        if (_offset + 1 >= _script.Length) throw new Exceptions.ScriptUnexpectedScriptTerminationException();
+ 
+                        _offset++;
+
+                        int opcodeRaw = _GetNumber();
+                        scriptByteCode.Add(opcodeRaw);
                         continue;
 
                     default:        // must be number, function, or variable
@@ -581,8 +591,16 @@ namespace Hellgate
                         // get our function/var name
                         int nameStrStart = _offset;
                         String nameStr = _GetNameStr();
-
                         _SkipWhite();
+
+                        // handle global variable allocation
+                        bool isGlobalAllocation = nameStr == "global";
+                        if (isGlobalAllocation)
+                        {
+                            nameStrStart = _offset;
+                            nameStr = _GetNameStr();
+                            _SkipWhite();
+                        }
 
                         int functionStartOffset = _offset;
                         if (_script[_offset] == '(') // we have a function
@@ -744,15 +762,23 @@ namespace Hellgate
                                 if (_GetVar(varName) != null) throw new Exceptions.ScriptVariableAlreadyDefinedException(varName, _offset);
                                 Int32[] variableDefCode = _Compile(';', null, false, _GetByteOffset(scriptByteCode), false);
 
+                                // local or global allocation
+                                ScriptOpCodes allocatorOpCode = isGlobalAllocation ? ScriptOpCodes.AllocateGlobal : ScriptOpCodes.AllocateVar;
+
                                 int varByteOffset = _vars.Count * 4;
-                                scriptByteCode.AddRange(new[] { (Int32)ScriptOpCodes.AllocateVar, varByteOffset });
+                                scriptByteCode.AddRange(new[] { (Int32)allocatorOpCode, varByteOffset });
                                 scriptByteCode.AddRange(variableDefCode);
-                                scriptByteCode.Add((Int32)ScriptOpCodes.AssignLocalVarInt32);
+
+                                // local or global assign
+                                bool isGlobalVar = varName.StartsWith("gvar");
+                                ScriptOpCodes assignmentOpCode = isGlobalVar ? ScriptOpCodes.AssignGlobalVarInt32 : ScriptOpCodes.AssignLocalVarInt32;
+                                scriptByteCode.Add((Int32)assignmentOpCode);
 
                                 varObj = new StackObject
                                 {
                                     Value = varName,
-                                    ByteOffset = (uint)varByteOffset
+                                    ByteOffset = (uint)varByteOffset,
+                                    IsGlobal = isGlobalVar
                                 };
                                 _vars.Add(varObj);
                                 break;
@@ -924,7 +950,7 @@ namespace Hellgate
                     switch (_debugStringId)
                     {
                         case "DAMAGE_EFFECTS":
-                            debugOutputParsed = true;
+                            debugOutputParsed = false;
                             break;
 
                         case "ITEMDISPLAY":
@@ -1003,6 +1029,14 @@ namespace Hellgate
                             processStackOnReturn = (trueStatementCount > 1); // if more than 1 true statement, then we need to amalgamte them before returning for processing in the TernaryTrue block
 
                             if (!String.IsNullOrEmpty(stackObject1.Value)) _stack.Push(stackObject1);
+                            break;
+
+                        case ScriptOpCodes.AllocateGlobal:           // 5    0x05
+                            byteOffset = FileTools.ByteArrayToUInt32(scriptBytes, ref _offset);
+                            Debug.Assert((byteOffset % 4) == 0);
+
+                            value1 = String.Format(" gvar{0} = ", byteOffset / 4);
+                            _stack.Push(new StackObject { Value = value1, ByteOffset = byteOffset, IsGlobal = true });
                             break;
 
                         case ScriptOpCodes.AllocateVar:              // 6    0x06
@@ -1157,6 +1191,11 @@ namespace Hellgate
                             _stack.Push(new StackObject { Value = value.ToString() });
                             break;
 
+                        case ScriptOpCodes.PushGlobalVarInt32:       // 38,
+                            byteOffset = FileTools.ByteArrayToUInt32(scriptBytes, ref _offset);
+                            _PushLocalVar((int)byteOffset, ArgType.Int32, true);
+                            break;
+
                         case ScriptOpCodes.PushLocalVarInt32:        // 50   0x32
                             byteOffset = FileTools.ByteArrayToUInt32(scriptBytes, ref _offset);
                             _PushLocalVar((int)byteOffset, ArgType.Int32);
@@ -1165,6 +1204,20 @@ namespace Hellgate
                         case ScriptOpCodes.PushLocalVarPtr:          // 57   0x39
                             byteOffset = FileTools.ByteArrayToUInt32(scriptBytes, ref _offset);
                             _PushLocalVar((int)byteOffset, ArgType.Ptr);
+                            break;
+
+                        case ScriptOpCodes.AssignGlobalVarInt32:     // 86
+                            _CheckStack(2, opCode);
+
+                            stackObject2 = _stack.Pop();
+                            stackObject1 = _stack.Pop();
+
+                            Debug.Assert(stackObject2.Type == ArgType.Int32);
+                            stackObject2.ByteOffset = stackObject1.ByteOffset;
+                            _vars.Add(stackObject2);
+
+                            value1 = String.Format("int{0}{1}", stackObject1.Value, stackObject2.Value);
+                            _stack.Push(new StackObject { Value = value1, IsVarAssign = true, Type = ArgType.Int32, IfLevel = ifLevel, IsGlobal = true });
                             break;
 
                         case ScriptOpCodes.AssignLocalVarInt32:      // 98   0x62
@@ -1241,6 +1294,14 @@ namespace Hellgate
 
                         case ScriptOpCodes.Sub:                      // 399  0x18F
                             _DoOperator(" - ", 6, opCode, ifLevel);
+                            break;
+
+                        case ScriptOpCodes.Unknown418:
+                            _CheckStack(1, opCode);
+                            stackObject1 = _stack.Pop();
+                            stackObject1.Value = String.Format("#{0}", stackObject1.Value);
+                            stackObject1.OpCode = opCode;
+                            _stack.Push(stackObject1);
                             break;
 
                         case ScriptOpCodes.LessThan:                 // 426  0x1AA
